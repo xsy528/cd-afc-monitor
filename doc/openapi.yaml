@@ -1,0 +1,382 @@
+openapi: 3.0.2
+servers:
+  - url: 'http://localhost/afc-monitor'
+info:
+  description: >-
+    AFC监控系统前后台接口。主要包含以下几部分：节点编辑、路网监控、客流监控、断面客流、各类查询。
+  version: 1.0.0
+  title: AFC监控系统前后台接口
+  contact:
+    name: Open Data Portal
+    url: 'https://developer.uspto.gov'
+    email: developer@uspto.gov
+tags:
+  - name: 路网监控
+  - name: 客流监控
+  - name: 断面客流
+  - name: 节点管理
+  - name: 各类查询
+
+paths:
+  /editor/config/devTypeList:
+    post:
+      tags:
+        - 节点管理
+      operationId: editor-config-devTypeList
+      summary: 获取系统中可用的设备列表据
+      responses:
+        '200':
+          description: 返回设备列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/devTypes'
+                
+  /editor/map/list:
+    post:
+      tags:
+        - 节点管理
+      operationId: editor-map-list
+      summary: 获取系统中所有节点的地图数据
+      responses:
+        '200':
+          description: 返回系统中所有需要编辑的地图数据。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mapData'
+                
+  /editor/map/save:
+    post:
+      tags:
+        - 节点管理
+      summary: >-
+        保存节点地图。
+      description: >-
+        保存节点地图。
+      operationId: editor-map-save
+      requestBody:
+        description: 需要保存的地图数据。应该只提交修改后的节点。
+        content: 
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/mapSaveItem'
+      responses:
+        default:
+          description: 保存的结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/simpleResp'
+                
+  /editor/node/create:
+    post:
+      tags:
+        - 节点管理
+      summary: >-
+        创建新节点。
+      description: >-
+        创建新节点。
+      operationId: editor-node-create
+      requestBody:
+        description: 新建的节点数据。
+        content: 
+            multipart/form-data: 
+              schema: 
+                type: object
+                properties:
+                  data: 
+                    oneOf:
+                      - $ref: '#/components/schemas/nodeLine'
+                      - $ref: '#/components/schemas/nodeStation'
+                      - $ref: '#/components/schemas/nodeDevice'
+                  img: 
+                    type: string
+                    format: binary
+      responses:
+        default:
+          description: 创建结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/simpleResp'
+                
+  /editor/node/remove:
+    post:
+      tags:
+        - 节点管理
+      summary: >-
+        删除节点。
+      description: >-
+        删除节点。
+      operationId: editor-node-remove
+      requestBody:
+        description: 需要删除的节点数据。
+        content: 
+          'application/json':
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/nodeLine'
+                - $ref: '#/components/schemas/nodeStation'
+                - $ref: '#/components/schemas/nodeDevice'
+      responses:
+        default:
+          description: 创建结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/simpleResp'
+  
+  /editor/node/query:
+    post:
+      tags:
+        - 节点管理
+      summary: >-
+        查询节点属性。
+      description: >-
+        查询节点属性。
+      operationId: editor-node-query
+      responses:
+        default:
+          description: 查询的节点数据。
+          content: 
+            'application/json':
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/nodeAcc'
+                  - $ref: '#/components/schemas/nodeLine'
+                  - $ref: '#/components/schemas/nodeStation'
+                  - $ref: '#/components/schemas/nodeDevice'
+      
+      
+  /editor/node/update:
+    post:
+      tags:
+        - 节点管理
+      summary: >-
+        修改节点属性。
+      description: >-
+        修改节点属性。
+      operationId: editor-node-update
+      requestBody:
+        description: 需要更新的节点数据。
+        content: 
+          'application/json':
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/nodeAcc'
+                - $ref: '#/components/schemas/nodeLine'
+                - $ref: '#/components/schemas/nodeStation'
+                - $ref: '#/components/schemas/nodeDevice'
+      responses:
+        default:
+          description: 更新结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/simpleResp'    
+      
+components:
+  schemas:
+    mapData:
+      description: 系统中所有的地图信息。
+      type: object
+      properties:
+        root:
+          $ref: '#/components/schemas/mapItem'
+        imagePaths:
+          description: 地图树中所有可用的image地址数组。
+          type: array
+          items:
+            type: string
+            
+    mapItem:
+      description: 一张地图，和下级地图构成了多层树形结构。
+      type: object
+      properties:
+        text:
+          description: 地图名称，比如“温州ACC”、“温州S1线”、“动车南站”
+          type: string
+        mapId:
+          description: 地图ID。实际上就是acc、lc、sc、device等节点的节点id。
+          type: integer
+        mapType:
+          description: 地图类型。
+          type: string
+          enum:
+           - ACC
+           - Line
+           - Station
+           - Device
+        imageUrl:
+          description: 地图地图地址。
+          type: string
+        mapItems:
+          description: 下级地图列表。
+          type: array
+          items:
+            $ref: '#/components/schemas/mapItem'
+        icon:
+          description: 当前节点在上级地图中的icon图片位置。
+          type: object
+          properties:
+            angle: 
+              type: number
+            x: 
+              type: integer
+            y:
+              type: integer
+            editorImg:
+              type: integer
+            monitorImgs:
+              type: array
+              items:
+                type: integer
+        name:
+          description: 当前节点在上级地图中的名称文本的位置。
+          type: object
+          properties:
+            angle: 
+              type: number
+            x: 
+              type: integer
+            y:
+              type: integer
+            text:
+              type: string
+              
+    mapSaveItem:
+      description: 用户调整后的节点位置信息。
+      type: array
+      items:
+        description: 对应一个mapItem，但是只包含部分字段。
+        type: object
+        properties:
+          mapId:
+            type: integer
+          icon:
+            type: object
+            properties:
+              angle: 
+                type: number
+              x: 
+                type: integer
+              y:
+                type: integer
+          name:
+            type: object
+            properties:
+              angle: 
+                type: number
+              x: 
+                type: integer
+              y:
+                type: integer
+              text:
+                type: string  
+                
+    nodeAcc:
+      description: ACC节点属性
+      type: object
+      properties:
+        nodeName:
+          description: 清分名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+
+    nodeLine:
+      description: 线路节点属性
+      type: object
+      properties:
+        ownerMapId:
+          description: 所属地图的id。
+          type: integer
+        id:
+          description: 线路编号
+          type: integer
+        name:
+          description: 线路名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+        isActive:
+          description: 启用状态
+          type: boolean
+
+
+    nodeStation:
+      description: 车站节点属性
+      type: object
+      properties:
+        ownerMapId:
+          description: 所属地图的id。
+          type: integer
+        id:
+          description: 车站编号
+          type: integer
+        name:
+          description: 车站名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+        isActive:
+          description: 启用状态
+          type: boolean
+          
+    nodeDevice:
+      description: 设备节点属性
+      type: object
+      properties:
+        ownerMapId:
+          description: 所属地图的id。
+          type: integer
+        id:
+          description: 设备编号
+          type: integer
+        name:
+          description: 设备名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+        logicalAddr:
+          description: 逻辑地址
+          type: string
+        isActive:
+          description: 启用状态
+          type: boolean
+        devType:
+          description: 设备类型的value，参见devType.value类型。
+          type: integer
+          
+    simpleResp:
+      description: 服务器返回的简单应答信息
+      type: object
+      properties:
+        result:
+          description: 错误码。0表示成功，其他表示失败。
+          type: integer
+        errorMsg:
+          type: string
+          
+    devTypes:
+      description: 系统中可用的设备类型列表。
+      type: array
+      items:
+        $ref: '#/components/schemas/devType'
+
+    devType:
+      description: 设备类型。
+      type: object
+      properties:
+        value: 
+          type: integer
+          description: 设备类型id，用于向服务器提交数据。
+        name:
+          type: string
+          description: 设备类型名称，用于展示到用户界面。
+            

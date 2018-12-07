@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="taskService"
+		class="com.insigma.commons.taskserver.service.impl.TaskScheduleService">
+		<property name="commonDao">
+			<ref bean="commonDAO" />
+		</property>
+	</bean>
+
+	<bean id="databaseTaskJobProvider"
+		class="com.insigma.commons.taskserver.standard.DatabaseTaskJobProvider">
+		<property name="taskScheduleService" ref="taskService"></property>
+	</bean>
+
+	<bean id="taskDefinitionRespository"
+		class="com.insigma.commons.taskserver.service.TaskManageService"
+		factory-method="getInstance">
+		<property name="taskScheduleService" ref="taskService"></property>
+	</bean>
+
+</beans>
+

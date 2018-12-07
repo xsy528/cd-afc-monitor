@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="res"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/WZACC_LIB"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.framework"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCApplication"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.application"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCUI"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCMonitor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCODMonitor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.ui"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.editorframework"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCParameter"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCParameterEditor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCEODManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.taskserver"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.persistence"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCFileManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCLog"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.validator"/>
+	<classpathentry kind="src" path="/WZACCApplication"/>
+	<classpathentry kind="src" path="/WZMonitor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WZACCParameterManager"/>
+	<classpathentry kind="src" path="/WZTicket"/>
+	<classpathentry kind="src" path="/WZACCSAMCard"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WZACCXML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCOPTManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WZMessageServer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCAuthority"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.authority"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCDailyHandle"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WZDailyHandler"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ACCDailyClear"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WZACCTicketManager"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

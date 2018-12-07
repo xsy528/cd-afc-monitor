@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="example"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.draw2d-3.2.100.v20070529.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl-debug.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl_test.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.ui"/>
+	<classpathentry kind="lib" path="lib/swt-win64-3.7.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

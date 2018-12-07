@@ -1,0 +1,23 @@
+<OptFunctionConfig>
+	<OptFunction text="更换票箱" function="0x11114101"></OptFunction>
+	<OptFunction text="部件复位" function="0x11114102"></OptFunction>
+	<OptFunction text="查询本机设置" function="0x11114201"></OptFunction>
+	<OptFunction text="查询设备状态" function="0x11024202"></OptFunction>
+	<OptFunction text="查询交易数据" function="0x11024203"></OptFunction>
+	<OptFunction text="查询版本数据" function="0x11024204"></OptFunction>
+	<OptFunction text="查询日志数据" function="0x11094205"></OptFunction>
+	<OptFunction text="查询收益数据" function="0x11094206"></OptFunction>
+	<OptFunction text="查询寄存器值" function="0x11094207"></OptFunction>
+	<OptFunction text="扇门测试" function="0x11094301"></OptFunction>
+	<OptFunction text="回收模块测试" function="0x11114302"></OptFunction>
+	<OptFunction text="IO模块测试" function="0x11114303"></OptFunction>
+	<OptFunction text="读写器测试" function="0x11114304"></OptFunction>
+	<OptFunction text="光电管测试" function="0x11114305"></OptFunction>
+	<OptFunction text="到位开关测试" function="0x11114306"></OptFunction>
+	<OptFunction text="工作模式设置" function="0x10114401"></OptFunction>
+	<OptFunction text="通道设置" function="0x10094402"></OptFunction>
+	<OptFunction text="程序设置" function="0x10094403"></OptFunction>
+	<OptFunction text="数据导入" function="0x10094501"></OptFunction>
+	<OptFunction text="数据导出" function="0x10094502"></OptFunction>
+	<OptFunction text="BOM售卡" function="0x20102002"></OptFunction>
+</OptFunctionConfig>

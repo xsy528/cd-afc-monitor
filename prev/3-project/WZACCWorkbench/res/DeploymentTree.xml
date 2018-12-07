@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DeploymentTree>
+	<!-- <Deployment name="清分中心" type="1">
+        <DeploymentPoint name="温州ACC清分管理工作台">0</DeploymentPoint>
+    </Deployment> -->
+	<Deployment name="线路" type="1">
+        <DeploymentPoint name="温州S1线">1</DeploymentPoint>
+        <DeploymentPoint name="温州S2线">2</DeploymentPoint>
+        <DeploymentPoint name="温州S3线">3</DeploymentPoint>
+    </Deployment>
+	<Deployment name="车站" type="2">
+        <DeploymentPoint name="桐岭站">305</DeploymentPoint>
+        <DeploymentPoint name="潘桥站">306</DeploymentPoint>
+        <DeploymentPoint name="动车南站">307</DeploymentPoint>
+        <DeploymentPoint name="秀屿站">308</DeploymentPoint>
+        <DeploymentPoint name="新桥站">309</DeploymentPoint>
+        <DeploymentPoint name="德政站">310</DeploymentPoint>
+        <DeploymentPoint name="龙霞路站">311</DeploymentPoint>
+        <DeploymentPoint name="温州火车站">312</DeploymentPoint>
+        <DeploymentPoint name="惠民路站">313</DeploymentPoint>
+        <DeploymentPoint name="上江路站">320</DeploymentPoint>
+        <DeploymentPoint name="文昌路站">321</DeploymentPoint>
+        <DeploymentPoint name="龙腾路站">322</DeploymentPoint>
+        <DeploymentPoint name="科技城站">323</DeploymentPoint>
+        <DeploymentPoint name="瑶溪站">324</DeploymentPoint>
+        <DeploymentPoint name="奥体中心站">325</DeploymentPoint>
+        <DeploymentPoint name="永中站">326</DeploymentPoint>
+        <DeploymentPoint name="机场站">327</DeploymentPoint>
+        <DeploymentPoint name="灵昆站">328</DeploymentPoint>
+        <DeploymentPoint name="瓯江口站">329</DeploymentPoint>
+        <DeploymentPoint name="瓯华站">336</DeploymentPoint>
+        <DeploymentPoint name="双瓯大道站">337</DeploymentPoint>
+    </Deployment>
+
+</DeploymentTree>

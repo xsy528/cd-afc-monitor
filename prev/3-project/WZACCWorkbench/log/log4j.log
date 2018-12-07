@@ -1,0 +1,347 @@
+2018-12-06 17:18:58,091 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 17:18:58,531 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 17:18:58,672 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 17:18:58,672 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 17:18:58,672 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 17:18:58,673 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:18:58,673 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 17:18:58,673 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:18:58,673 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 17:18:58,673 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 17:18:58,749 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 17:19:00,756 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 17:53:30,166 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 17:53:30,446 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 17:53:30,579 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 17:53:30,580 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 17:53:30,580 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 17:53:30,580 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:53:30,580 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 17:53:30,580 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:53:30,580 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 17:53:30,580 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 17:53:30,635 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 17:53:32,817 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 17:55:48,827 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 17:55:49,122 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 17:55:49,255 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 17:55:49,256 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 17:55:49,256 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 17:55:49,256 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:55:49,256 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 17:55:49,256 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:55:49,256 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 17:55:49,256 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 17:55:49,304 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 17:55:51,257 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 17:57:39,338 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 17:57:39,642 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 17:57:39,779 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 17:57:39,779 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 17:57:39,779 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 17:57:39,779 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:57:39,780 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 17:57:39,780 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:57:39,780 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 17:57:39,780 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 17:57:39,837 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 17:57:42,128 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 17:58:39,084 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 17:58:39,420 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 17:58:39,566 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 17:58:39,567 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 17:58:39,567 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 17:58:39,567 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:58:39,567 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 17:58:39,567 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 17:58:39,567 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 17:58:39,567 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 17:58:39,632 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 17:58:41,937 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:00:41,675 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:00:41,962 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:00:42,087 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:00:42,087 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:00:42,088 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:00:42,088 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:00:42,088 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:00:42,088 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:00:42,088 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:00:42,088 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:00:42,161 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:00:44,316 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:03:18,227 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:03:18,822 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:03:19,098 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:03:19,098 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:03:19,099 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:03:19,099 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:03:19,099 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:03:19,099 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:03:19,099 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:03:19,099 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:03:19,261 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:03:22,214 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:14:45,990 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:14:46,351 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:14:46,512 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:14:46,512 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:14:46,513 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:14:46,513 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:14:46,513 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:14:46,513 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:14:46,513 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:14:46,513 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:14:46,588 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:14:49,183 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:15:02,878 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:15:03,520 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:15:03,722 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:15:03,723 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:15:03,723 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:15:03,723 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:15:03,723 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:15:03,723 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:15:03,723 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:15:03,723 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:15:03,794 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:15:05,858 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:15:33,429 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:15:33,735 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:15:33,885 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:15:33,885 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:15:33,886 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:15:33,886 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:15:33,886 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:15:33,886 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:15:33,886 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:15:33,886 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:15:33,957 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:15:36,071 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:19:19,405 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:19:19,766 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:19:19,953 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:19:19,953 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:19:19,954 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:19:19,954 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:19:19,955 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:19:19,955 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:19:19,955 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:19:19,955 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:19:20,052 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:19:22,506 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:23:26,795 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:23:27,141 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:23:27,304 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:23:27,304 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:23:27,304 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:23:27,304 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:23:27,304 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:23:27,305 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:23:27,305 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:23:27,305 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:23:27,383 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:23:29,986 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-06 18:28:00,833 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-06 18:28:01,169 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-06 18:28:01,321 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-06 18:28:01,321 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-06 18:28:01,321 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-06 18:28:01,322 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:28:01,322 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-06 18:28:01,322 [main] DEBUG StringFilterReader - value: 0
+2018-12-06 18:28:01,322 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-06 18:28:01,322 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-06 18:28:01,400 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-06 18:28:03,522 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 09:06:16,540 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 09:06:17,028 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 09:06:17,220 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 09:06:17,293 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 09:06:41,600 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 09:06:42,071 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 09:06:42,316 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 09:06:42,316 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 09:06:42,317 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 09:06:42,317 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:06:42,317 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 09:06:42,317 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:06:42,317 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 09:06:42,317 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 09:06:42,394 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 09:06:44,488 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 09:09:05,112 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 09:09:05,550 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 09:09:05,718 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 09:09:05,718 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 09:09:05,718 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 09:09:05,719 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:09:05,719 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 09:09:05,719 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:09:05,723 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 09:09:05,723 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 09:09:05,805 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 09:09:07,722 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 09:11:07,835 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 09:11:08,142 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 09:11:08,261 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 09:11:08,319 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 09:11:10,244 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 09:12:02,792 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 09:12:03,096 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 09:12:03,246 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 09:12:03,246 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 09:12:03,247 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 09:12:03,247 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:12:03,247 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 09:12:03,247 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:12:03,247 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 09:12:03,247 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 09:12:03,308 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 09:12:05,619 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 09:21:32,378 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 09:21:32,801 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 09:21:33,133 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 09:21:33,134 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 09:21:33,134 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 09:21:33,134 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:21:33,134 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 09:21:33,134 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 09:21:33,134 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 09:21:33,138 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 09:21:33,232 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 09:21:36,050 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 10:18:56,144 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 10:18:56,439 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 10:18:56,644 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 10:18:56,645 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 10:18:56,645 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 10:18:56,645 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:18:56,645 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 10:18:56,645 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:18:56,645 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 10:18:56,645 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 10:18:56,726 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 10:18:58,879 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 10:21:50,675 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 10:21:50,989 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 10:21:51,179 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 10:21:51,179 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 10:21:51,179 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 10:21:51,179 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:21:51,180 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 10:21:51,180 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:21:51,180 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 10:21:51,180 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 10:21:51,269 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 10:21:53,979 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 10:27:31,443 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 10:27:31,754 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 10:27:31,917 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 10:27:31,917 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 10:27:31,917 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 10:27:31,917 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:27:31,917 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 10:27:31,917 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:27:31,918 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 10:27:31,918 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 10:27:31,994 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 10:27:34,694 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 10:34:10,425 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 10:34:10,882 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 10:34:11,192 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 10:34:11,192 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 10:34:11,192 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 10:34:11,192 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:34:11,192 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 10:34:11,193 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:34:11,193 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 10:34:11,193 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 10:34:11,306 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 10:34:13,816 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 10:34:34,805 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 10:34:35,103 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 10:34:35,238 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 10:34:35,238 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 10:34:35,239 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 10:34:35,239 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:34:35,239 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 10:34:35,239 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:34:35,240 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 10:34:35,240 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 10:34:35,309 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 10:34:37,585 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 10:36:04,170 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 10:36:04,467 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 10:36:04,612 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 10:36:04,613 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 10:36:04,613 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 10:36:04,613 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:36:04,613 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 10:36:04,613 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 10:36:04,613 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 10:36:04,613 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 10:36:04,667 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 10:36:07,188 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 11:17:40,920 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 11:17:41,259 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 11:17:41,452 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 11:17:41,452 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 11:17:41,452 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 11:17:41,453 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:17:41,453 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 11:17:41,453 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:17:41,453 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 11:17:41,453 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 11:17:41,521 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 11:17:43,626 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 11:19:17,386 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 11:19:17,672 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 11:19:17,849 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 11:19:17,849 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 11:19:17,850 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 11:19:17,850 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:19:17,850 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 11:19:17,850 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:19:17,850 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 11:19:17,850 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 11:19:17,926 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 11:19:20,002 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 11:50:47,723 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 11:50:48,149 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 11:50:48,351 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 11:50:48,352 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 11:50:48,352 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 11:50:48,352 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:50:48,352 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 11:50:48,352 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:50:48,352 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 11:50:48,352 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 11:50:48,449 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 11:50:51,593 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化
+2018-12-07 11:55:38,044 [main]  WARN DefaultDecryptAlgorithmHandler - 密钥文件未配置
+2018-12-07 11:55:38,335 [main] DEBUG ConfigLoadSystemInitor - 读取配置文件：config/Config.xml
+2018-12-07 11:55:38,478 [main] DEBUG StringFilterReader - start: 18 end: 35 Key: applicationName replaceStr: ${applicationName}
+2018-12-07 11:55:38,478 [main] DEBUG StringFilterReader - value: 温州ACC工作台
+2018-12-07 11:55:38,479 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: lineNo replaceStr: ${lineNo}
+2018-12-07 11:55:38,479 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:55:38,479 [main] DEBUG StringFilterReader - start: 13 end: 24 Key: stationNo replaceStr: ${stationNo}
+2018-12-07 11:55:38,479 [main] DEBUG StringFilterReader - value: 0
+2018-12-07 11:55:38,479 [main] DEBUG StringFilterReader - start: 10 end: 18 Key: nodeNo replaceStr: ${nodeNo}
+2018-12-07 11:55:38,480 [main] DEBUG StringFilterReader - value: 0x00000000
+2018-12-07 11:55:38,538 [main] DEBUG ApplicationInitor - 读取配置文件：spring-config.xml
+2018-12-07 11:55:41,529 [main] DEBUG ApplicationInitor - 读取配置文件[spring-config.xml]完成，完成Spring初始化

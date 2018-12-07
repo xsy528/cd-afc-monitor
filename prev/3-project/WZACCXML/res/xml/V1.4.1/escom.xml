@@ -1,0 +1,259 @@
+<XDR>
+	<Package>
+		<Struct name='ESLogin_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='LoginTime' type='AFCTime64_t' comment=' 签到时间 ' />
+		</Struct>
+		<Struct name='ESLogin_Ans_t'>
+			<Field name='VerifyTime' type='AFCTime64_t' comment=' 校验时钟 ' />
+			<Field name='PeriodOfStatusReport' type='Seconds_t' comment=' 设备状态报告间隔 ' />
+			<Field name='PeriodOfGetTask' type='Seconds_t' comment=' ES取任务间隔 ' />
+		</Struct>
+		<Struct name='ESLogout_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='LogoutTime' type='AFCTime64_t' comment=' 签退时间 ' />
+		</Struct>
+		<Struct name='OperatorLogin_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='OperatorPassword' type='string' comment=' 用户密码 ' />
+			<Field name='LoginTime' type='AFCTime64_t' comment=' 签到时间 ' />
+		</Struct>
+		<Struct name='OperatorLogin_Ans_t'>
+			<Field name='OperatorName' type='UnicodeString_t' comment=' 操作员姓名 ' />
+			<Field name='OperatorProperty' type='OperatorProperty_t'
+				comment=' 操作员属性 ' />
+		</Struct>
+		<Struct name='OperatorLogout_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='LogoutTime' type='AFCTime64_t' comment=' 签退时间 ' />
+		</Struct>
+		<Struct name='Task_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='TaskDate' type='Date2_t' comment=' 请求任务的日期 ' />
+		</Struct>
+		<Struct name='TaskAttribute_t'>
+			<Field name='TaskType' type='TaskType_t' comment=' 任务类型 ' />
+			<Field name='TaskID' type='TaskID_t' comment=' 任务标识 ' />
+			<Field name='TicketQuantity' type='TicketQuantity_t' comment=' 票卡数量 ' />
+		</Struct>
+		<Struct name='TaskOfSJTInit_t'>
+			<Field name='TaskAttribute' type='TaskAttribute_t' comment=' 任务属性结构 ' />
+			<Field name='ChipType' type='ChipType_t' comment=' 芯片类型 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 车票类型 ' />
+			<Field name='CardInitDate' type='Date2_t' comment=' 票卡初始化日期 ' />
+			<Field name='InitBatchCode' type='InitBatchCode_t' comment=' 票卡初始化批次 ' />
+			<Field name='LanguageFlag' type='LanguageFlag_t' comment=' 语言标记 ' />
+			<Field name='TestFlag' type='TestFlag_t' comment=' 测试标记 ' />
+			<Field name='Reserve1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserve2' type='U32_t' comment=' 预留2 ' />
+			<Field name='TicketValue' type='ValueCent_t' comment=' 票卡初始余额/次 ' />
+			<Field name='FareTier' type='FareTier_t' comment=' 费率等级代码 ' />
+			<Field name='ValidStartDate' type='Date2_t' comment=' 有效开始日期 ' />
+			<Field name='ValidEndDate' type='Date2_t' comment=' 有效结束日期 ' />
+			<Field name='Duration' type='Duration_t' comment='有效天数' />
+		</Struct>
+		<Struct name='SVTInitComm_t'>
+			<Field name='TaskAttribute' type='TaskAttribute_t' comment=' 任务属性结构 ' />
+			<Field name='ChipType' type='ChipType_t' comment=' 芯片类型 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 车票类型 ' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录 ' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment=' 发卡方代码 ' />
+			<Field name='TradeCode' type='TradeCode_t' comment=' 行业代码 ' />
+			<Field name='CityCode' type='CityCode_t' comment='城市代码' />
+			<Field name='CardInitDate' type='Date2_t' comment='票卡初始化日期' />
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment='票卡大类类型' />
+			<Field name='TicketDepositValue' type='ValueCent_t' comment=' 押金金额 ' />
+			<Field name='CardValidDate' type='Date2_t' comment=' 卡有效日期 ' />
+			<Field name='Reserve' type='U32_t' comment=' 预留 ' />
+			<Field name='TestFlag' type='TestFlag_t' comment=' 测试标记 ' />
+			<Field name='AppVersion' type='AppVersion_t' comment=' 应用版本 ' />
+			<Field name='AppStartDate' type='Date2_t' comment=' 应用有效开始日期 ' />
+			<Field name='AppValidDate' type='Date2_t' comment=' 应用有效结束日期 ' />
+			<Field name='AreaTicketFlag' type='AreaTicketFlag_t' comment='范围标志' />
+			<Field name='BitMap1' type='BitMap_t' comment='线路车站位图' />
+			<Field name='BitMap2' type='BitMap_t' comment='车站位图' />
+			<Field name='TicketValue' type='ValueCent_t' comment=' 票卡初始余额/次 ' />
+			<Field name='Reserve1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserve2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='TaskOfSVTInit_t'>
+			<Field name='SVTInitComm' type='SVTInitComm_t' comment=' 储值票初始化公共结构 ' />
+		</Struct>
+		<Struct name='TaskOfTicketCancel_t'>
+			<Field name='TaskAttribute' type='TaskAttribute_t' comment=' 任务属性结构 ' />
+			<Field name='ChipType' type='ChipType_t' comment=' 芯片类型 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 车票类型 ' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录 ' />
+			<Field name='KeyVersion' type='KeyVersion_t' comment=' 版本号 ' />
+			<Field name='UseDate' type='Date2_t' comment=' 使用时间 ' />
+			<Field name='UseTimes' type='Times_t' comment=' 使用次数 ' />
+			<Field name='Reserve1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserve2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='TaskOfTicketEncoding_t'>
+			<Field name='TaskAttribute' type='TaskAttribute_t' comment=' 任务属性结构 ' />
+			<Field name='ChipType' type='ChipType_t' comment=' 芯片类型 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 车票类型 ' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录 ' />
+			<Field name='KeyVersion' type='KeyVersion_t' comment=' 版本号 ' />
+			<Field name='UseTimes' type='Times_t' comment=' 使用次数 ' />
+			<Field name='Reserve1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserve2' type='U32_t' comment=' 预留2 ' />
+			<Field name='CardInitDate' type='Date2_t' comment=' 票卡初始化日期 ' />
+			<Field name='InitBatchCode' type='InitBatchCode_t' comment=' 票卡初始化批次 ' />
+			<Field name='TicketValue' type='ValueCent_t' comment=' 分拣票价 ' />
+		</Struct>
+		<Struct name='SVTPersonalList_t'>
+			<Field name='ApplyNo' type='string' comment=' 申请单号 ' />
+			<Field name='PassengerTypeID' type='PassengerTypeID_t' comment='持卡人类型标识' />
+			<Field name='PassengerStaffFlag' type='StaffFlag_t' comment='持卡人职工标记' />
+			<Field name='PassengerCNName' type='UnicodeString_t' comment='姓名' />
+			<Field name='PassengerCNSex' type='Gender_t' comment='性别' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment='证件类型' />
+			<Field name='IdentificationCode' type='string' comment='证件号码' />
+			<Field name='StaffId' type='string' comment='员工号' />
+			<Field name='AllowRightType' type='AllowRightType_t' comment='权利控制' />
+			<Field name='MultiRideNumber' type='MultiRideNumber_t' comment='乘坐次数' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment='车票物理卡号' />
+			<Field name='TicketLogicID' type='string' comment='车票逻辑卡号' />
+		</Struct>
+		<Struct name='TaskOfSVTPersonal_t'>
+			<Field name='SVTInitComm' type='SVTInitComm_t' comment=' 储值票初始化公共结构 ' />
+			<Field name='PersonalFileName' type='string' comment=' 个性化资料文件 ' />
+			<Field name='IssueType' type='U8_t' comment=' 制卡方式：0-顺序制卡，1-关联制卡 ' />
+		</Struct>
+		<Struct name='PersonalFile_t'>
+			<Field name='TaskID' type='TaskID_t' comment=' 任务标识 ' />
+			<Field name='SVTPersonalList' type='SVTPersonalList_t'
+				arrayType='VAR' comment=' 储值票个性化列表结构 ' />
+			<Field name='MD5Value' type='MD5_t' comment='MD5签名' />
+		</Struct>
+		<Struct name='TaskOfSJTOffset_t'>
+			<Field name='TaskAttribute' type='TaskAttribute_t' comment=' 任务属性结构 ' />
+			<Field name='ChipType' type='ChipType_t' comment=' 芯片类型 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 车票类型 ' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录 ' />
+			<Field name='CardInitDate' type='Date2_t' comment=' 票卡初始化日期 ' />
+			<Field name='InitBatchCode' type='InitBatchCode_t' comment=' 票卡初始化批次 ' />
+			<Field name='KeyVersion' type='KeyVersion_t' comment=' 版本号 ' />
+			<Field name='TicketValue' type='ValueCent_t' comment=' 票卡初始余额/次 ' />
+			<Field name='ValidStartDate' type='Date2_t' comment=' 有效开始日期 ' />
+			<Field name='ValidEndDate' type='Date2_t' comment=' 有效结束日期 ' />
+		</Struct>
+		<Struct name='TaskOfCancel_t'>
+			<Field name='TaskAttribute' type='TaskAttribute_t' comment=' 任务属性结构 ' />
+			<Field name='CancelTaskIDList' type='TaskID_t' arrayType='VAR'
+				comment=' 被取消的任务标识 ' />
+		</Struct>
+		<Union name='Task_t' caseType='ESTaskType_t'>
+			<Field caseValue='EST_SJT_INIT' name='TaskOfSJTInit' type='TaskOfSJTInit_t'
+				comment=' 单程票初始化 ' />
+			<Field caseValue='EST_SVT_INIT' name='TaskOfSVTInit' type='TaskOfSVTInit_t'
+				comment=' 储值票初始化 ' />
+			<Field caseValue='EST_TICKET_CANCEL' name='TaskOfTicketCancel'
+				type='TaskOfTicketCancel_t' comment=' 票卡注销 ' />
+			<Field caseValue='EST_TICKET_ENCODING' name='TaskOfTicketEncoding'
+				type='TaskOfTicketEncoding_t' comment=' 票卡分拣 ' />
+			<Field caseValue='EST_TICKET_PERSONAL' name='TaskOfSVTPersonal'
+				type='TaskOfSVTPersonal_t' comment=' 票卡个性化 ' />
+			<Field caseValue='EST_SVT_OFFSET' name='TaskOfSJTOffset' type='TaskOfSJTOffset_t'
+				comment=' 预付值单程票抵销 ' />
+			<Field caseValue='EST_TASK_CANCEL' name='TaskOfCancel' type='TaskOfCancel_t'
+				comment=' 任务取消 ' />
+		</Union>
+		<Struct name='Task_Ans_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='TaskStatus' type='TaskStatus_t' comment=' 工作任务状态 ' />
+			<Field name='TaskNumber' type='RecordsNum_t' comment=' 任务数 ' />
+			<Field name='Task' type='Task_t' arrayType='VAR' comment=' 工作任务 ' />
+		</Struct>
+		<Struct name='TaskReport_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='TaskAttribute' type='TaskAttribute_t' comment=' 任务属性结构 ' />
+			<Field name='TaskChangeFlag' type='TaskChangeFlag_t' comment=' 任务变更标记 ' />
+			<Field name='ChipType' type='ChipType_t' comment=' 芯片类型 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 车票类型 ' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录 ' />
+			<Field name='CompleteQuantity' type='TicketQuantity_t' comment=' 完成数量 ' />
+			<Field name='ValidTicketQuantity' type='TicketQuantity_t'
+				comment=' 成功完成数量 ' />
+			<Field name='InvalidTicketQuantity' type='TicketQuantity_t'
+				comment=' 废票数量 ' />
+			<Field name='TaskStartTime' type='AFCTime64_t' comment=' 任务开始时间 ' />
+			<Field name='TaskEndTime' type='AFCTime64_t' comment=' 任务结束时间 ' />
+		</Struct>
+		<Struct name='StatusReport_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 编码机标识 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='ESWorkStatus' type='ESWorkStatus_t' comment=' 设备工作状态 ' />
+			<Field name='CurrentTaskID' type='TaskID_t' comment=' 当前任务标识 ' />
+			<Field name='CurrentTaskType' type='TaskType_t' comment=' 当前任务类型 ' />
+			<Field name='TicketQuantity' type='TicketQuantity_t' comment=' 当前任务数 ' />
+			<Field name='CompleteQuantity' type='TicketQuantity_t' comment=' 当前任务完成数量 ' />
+			<Field name='ValidTicketQuantity' type='TicketQuantity_t'
+				comment=' 当前任务成功完成数量 ' />
+			<Field name='InvalidTicketQuantity' type='TicketQuantity_t'
+				comment=' 当前任务废票数量 ' />
+			<Field name='TaskStartDate' type='AFCTime64_t' comment=' 当前任务开始时间 ' />
+			<Field name='TaskEndDate' type='AFCTime64_t' comment=' 当前任务结束时间 ' />
+		</Struct>
+		<Struct name='ESMack_Ans_t'>
+			<Field name='MackCode' type='MACK_t' comment=' 应答码 ' />
+		</Struct>
+		<Union name='ESREQMessage_t' caseType='ComType_t'>
+			<Field caseValue='COM_ES_LOGIN' name='ESLogin_Req' type='ESLogin_Req_t'
+				comment=' (1A01) 设备签到请求 ' />
+			<Field caseValue='COM_ES_LOGOUT' name='ESLogout_Req' type='ESLogout_Req_t'
+				comment=' (1A02) 设备签退 ' />
+			<Field caseValue='COM_OPERATOR_LOGIN' name='OperatorLogin_Req'
+				type='OperatorLogin_Req_t' comment=' (1A03) 操作员签到请求 ' />
+			<Field caseValue='COM_OPERATOR_LOGOUT' name='OperatorLogout_Req'
+				type='OperatorLogout_Req_t' comment=' (1A04) 操作员签退 ' />
+			<Field caseValue='COM_WORK_TASK' name='Task_Req' type='Task_Req_t'
+				comment=' (1A05)设备工作任务请求 ' />
+			<Field caseValue='COM_TASK_REPORT' name='TaskReport_Req' type='TaskReport_Req_t'
+				comment=' (1A06) 工作任务报告 ' />
+			<Field caseValue='COM_STATUS_REPORT' name='StatusReport_Req'
+				type='StatusReport_Req_t' comment=' (1A07) 设备状态报告 ' />
+		</Union>
+		<Union name='ESANSMessage_t' caseType='ComType_t'>
+			<Field caseValue='COM_ES_LOGIN' name='ESLogin_Ans' type='ESLogin_Ans_t'
+				comment=' (1A01) 设备签到请求 ' />
+			<Field caseValue='COM_OPERATOR_LOGIN' name='OperatorLogin_Ans'
+				type='OperatorLogin_Ans_t' comment=' (1A03) 操作员签到请求 ' />
+			<Field caseValue='COM_WORK_TASK' name='Task_Ans' type='Task_Ans_t'
+				comment=' (1A05)设备工作任务请求 ' />
+			<Field caseValue='DEFAULT' name='Mack_Ans' type='ESMack_Ans_t' />
+		</Union>
+		<Union name='ESComMessage_t' caseType='MessageType_t'>
+			<Field caseValue='MT_REQMESSAGE' name='ESREQMessage' type='ESREQMessage_t'
+				comment=' 请求报文 ' />
+			<Field caseValue='MT_ANSMESSAGE' name='ESANSMessage' type='ESANSMessage_t'
+				comment=' 应答报文 ' />
+		</Union>
+		<Struct name='ESPackHead_t'>
+			<Field name='ProtocolVer' type='ProtocolVer_t' comment=' 报文协议字 ' />
+			<Field name='ComType' type='ComType_t' comment=' 消息类型码 ' />
+			<Field name='SendDeviceID' type='DeviceID_t' comment=' 发送方标识码 ' />
+			<Field name='ReceiveDeviceID' type='DeviceID_t' comment=' 接受方标识码 ' />
+			<Field name='RouterTag' type='RouterTag_t' comment=' 路由标记 ' />
+			<Field name='SendTime' type='AFCTime64_t' comment=' 发送时间 ' />
+			<Field name='SessionSN' type='SN_t' comment=' 会话流水号 ' />
+			<Field name='MessageType' type='MessageType_t' comment=' 请求应答标志 ' />
+			<Field name='MACK' type='MACK_t' comment=' 应答码 ' />
+			<Field name='AlgorithmicType' type='AlgorithmicType_t' comment=' 压缩加密算法 ' />
+		</Struct>
+		<Struct name='ESPack_t'>
+			<Field name='PackLength' type='PackLength_t' comment=' 包长度 ' />
+			<Field name='PackHead' type='ESPackHead_t' comment=' 包头 ' />
+			<Field name='PackBody' type='ESComMessage_t' comment=' 包体 ' />
+			<Field name='MD5Value' type='MD5_t' comment=' MD5，验证包头和包体 ' />
+		</Struct>
+	</Package>
+</XDR>

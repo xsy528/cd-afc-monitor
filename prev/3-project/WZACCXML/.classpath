@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="res"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCApplication"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCParameter"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AFCSimulator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.application"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.binary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.persistence"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.tools.xdr.viewer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.ui"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/WZACC_LIB"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.insigma.commons.messageserver.virtualconn"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

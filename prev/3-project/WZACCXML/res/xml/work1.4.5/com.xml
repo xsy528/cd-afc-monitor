@@ -1,0 +1,898 @@
+<XDR>
+	<Package>
+		<Struct name='Ping_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+		</Struct>
+		<Struct name='Text_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+			<Field name='ShowTime' type='AFCTime64_t' comment=' 显示时间 ' />
+			<Field name='Content' type='UnicodeString_t' comment=' 文本内容 ' />
+		</Struct>
+		<Struct name='SleControlCmd_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+			<Field name='ControlCmd' type='ControlCmd_t' comment=' 设备控制命令 ' />
+		</Struct>
+		<Struct name='SyncTime_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+			<Field name='NowTime' type='AFCTime64_t' comment=' 当前时间 ' />
+		</Struct>
+		<Struct name='Eventbody_t'>
+			<Field name='EventCode' type='EventCode_t' comment=' 事件代码 ' />
+			<Field name='EventValue' type='EventValue_t' comment=' 事件值 ' />
+		</Struct>
+		<Struct name='EventUpload_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 事件源节点标识码 ' />
+			<Field name='OccurTime' type='AFCTime64_t' comment=' 发生时间 ' />
+			<Field name='DeviceType' type='DeviceType_t' comment=' 设备类型 ' />
+			<Field name='DeviceStatus' type='DeviceStatus_t' comment=' 设备状态 ' />
+			<Field name='Eventbodys' type='Eventbody_t' arrayType='VAR'
+				comment=' 设备事件列表 ' />
+		</Struct>
+		<Struct name='QueryEODVersion_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+			<Field name='VersionQueryType' type='VersionQueryType_t'
+				comment=' 版本查询类型（0－查询设备本机 1－查询设备读写器 2－查询设备读写器） ' />
+		</Struct>
+		<Struct name='QuerySN_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+		</Struct>
+		<Struct name='EODBigVersion_t'>
+			<Field name='EODVersionType' type='EODVersionType_t' comment=' 参数版本类型 ' />
+			<Field name='BigEODVersion' type='FileVersionID_t' comment=' EOD大版本 ' />
+			<Field name='FutureInureTime' type='AFCTime64_t' comment=' EOD生效时间 ' />
+		</Struct>
+		<Struct name='ParamFileVersionList_t'>
+			<Field name='FileHeaderTag' type='FileHeaderTag_t' comment=' 文件类型码 ' />
+			<Field name='FileVersionID' type='FileVersionID_t' comment=' 文件版本号 ' />
+		</Struct>
+		<Struct name='EODVersion_t'>
+			<Field name='EODBigVersion' type='EODBigVersion_t' comment=' EOD参数大版本信息 ' />
+			<Field name='ParamFileVersionList' type='ParamFileVersionList_t'
+				arrayType='VAR' comment=' EOD参数组件版本 ' />
+		</Struct>
+		<Struct name='EODVersionList_t'>
+			<Field name='VersionKind' type='VersionKind_t' comment=' 版本性质  0-设备本机 1-读写器1 2-读写器2 ' />
+			<Field name='ACCEODVersion' type='EODVersion_t' comment=' EOD参数版本信息 ' />
+		</Struct>
+		<Struct name='QueryEODVersion_Ans_t'>
+			<Field name='MackCode' type='MACK_t' comment=' 应答码 ' />
+			<Field name='EODVersionList' type='EODVersionList_t' arrayType='VAR'
+				comment=' EOD参数版本列表 ' />
+		</Struct>
+		<Struct name='QueryFileVersion_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+			<Field name='VersionQueryType' type='VersionQueryType_t'
+				comment=' 版本查询类型（0－查询设备本机 1－查询设备读写器 2－查询设备读写器） ' />
+		</Struct>
+		<Struct name='FileVersionList_t'>
+			<Field name='FileHeaderTag' type='FileHeaderTag_t' comment='文件类型码 ' />
+			<Field name='SPCode' type='SPCode_t' comment='服务商编码' />
+			<Field name='FileVersionID' type='FileVersionID_t' comment='文件版本号' />
+		</Struct>
+		<Struct name='ParameterVersionList_t'>
+			<Field name='VersionKind' type='VersionKind_t' comment=' 版本性质  0-设备本机 1-读写器1 2-读写器2' />
+			<Field name='FileVersionList' type='FileVersionList_t'
+				arrayType='VAR' comment=' 运营参数组件版本 ' />
+		</Struct>
+		<Struct name='UploadEODVersion_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='UploadTime' type='AFCTime64_t' comment=' 上传时间 ' />
+			<Field name='EODVersionList' type='EODVersionList_t' arrayType='VAR'
+				comment=' EOD参数版本列表 ' />
+		</Struct>
+		<Struct name='UploadParameterVersion_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='UploadTime' type='AFCTime64_t' comment=' 上传时间 ' />
+			<Field name='ParameterVersionList' type='ParameterVersionList_t'
+				arrayType='VAR' comment=' 运营参数版本信息 ' />
+		</Struct>
+		<Struct name='ReaderSAMInfo_t'>
+			<Field name='YPTSAMID' type='SAMID_t' comment=' 一票通PSAM/ISAM卡号 ' />
+			<Field name='YKTSAMID' type='SAMID_t' comment=' 一卡通SAM卡号 ' />
+			<Field name='MobileSAMID' type='SAMID_t' comment=' 移动SAM卡号 ' />
+			<Field name='SAMID1' type='SAMID_t' comment=' 预留1 ' />
+			<Field name='SAMID2' type='SAMID_t' comment=' 预留2 ' />
+			<Field name='SAMID3' type='SAMID_t' comment=' 预留3 ' />
+			<Field name='SAMID4' type='SAMID_t' comment=' 预留4 ' />
+			<Field name='SAMID5' type='SAMID_t' comment=' 预留5 ' />
+		</Struct>
+		<Struct name='UploadSAM_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='UploadTime' type='AFCTime64_t' comment=' 上传时间 ' />
+			<Field name='Reader1SAMInfo' type='ReaderSAMInfo_t' comment=' 读卡器1 SAM卡信息 ' />
+			<Field name='Reader2SAMInfo' type='ReaderSAMInfo_t' comment=' 读卡器2 SAM卡信息 ' />
+		</Struct>
+		<Struct name='UploadSN_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='UploadTime' type='AFCTime64_t' comment=' 上传时间 ' />
+			<Field name='YPTUSDN' type='SN_t' comment=' 一票通交易流水号 ' />
+			<Field name='YKTUSDN' type='SN_t' comment=' 一卡通交易流水号 ' />
+			<Field name='MobileUSDN' type='SN_t' comment=' 手机票交易流水号 ' />
+			<Field name='USDN1' type='SN_t' comment=' 预留卡1流水号 ' />
+			<Field name='USDN2' type='SN_t' comment=' 预留卡2流水号 ' />
+		</Struct>
+		<Struct name='SetRuntime_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='Runtime' type='SecondsSinceMidNight_t' comment=' 运营结束时间 ' />
+		</Struct>
+		<Struct name='OperatorWork_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='DeviceIP' type='IPAddress_t' comment=' 设备IP地址 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' 班次号 ' />
+			<Field name='EventType' type='EventType_t'
+				comment=' 事件：0登录、1签退、2临时签退（BOM）、3自动签退、4签退恢复（BOM） ' />
+		</Struct>
+		<Struct name='CommConnectApply_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='DeviceIP' type='IPAddress_t' comment=' 设备IP地址 ' />
+		</Struct>
+		<Struct name='ModeList_t'>
+			<Field name='StationID' type='StationID_t' comment=' 模式发生变化的车站节点编号 ' />
+			<Field name='ModeChangeTime' type='AFCTime64_t' comment=' 模式发生变化时间 ' />
+			<Field name='ModeCode' type='ModeCode_t' comment=' 车站当前运营模式代码 ' />
+		</Struct>
+		<Struct name='FTPFileDir_t'>
+			<Field name='FileHeaderTag' type='FileHeaderTag_t' comment=' 文件类型码 ' />
+			<Field name='FtpServerIPAdress' type='IPAddress_t' comment=' FTP服务器IP地址 ' />
+			<Field name='FTPUserID' type='string' comment=' FTP访问用户编号 ' />
+			<Field name='FTPPassword' type='string' comment=' FTP访问用户密码 ' />
+			<Field name='FTPFileDirectory' type='string' comment=' FTP工作目录 ' />
+		</Struct>
+		<Struct name='CommConnectApply_Ans_t'>
+			<Field name='MackCode' type='MACK_t' comment=' 应答码 ' />
+			<Field name='SpCode' type='SPCode_t' comment=' 服务商编号 ' />
+			<Field name='LineID' type='LineID_t' comment=' 线路编号 ' />
+			<Field name='LineCNName' type='UnicodeString_t' comment=' 线路中文名称 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='StationCNName' type='UnicodeString_t' comment=' 车站中文名称 ' />
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='ModeCode' type='ModeCode_t' comment=' 当前车站运营模式 ' />
+			<Field name='ModeList' type='ModeList_t' arrayType='VAR'
+				comment=' 全路网车站模式列表 ' />
+			<Field name='FTPFileDir' type='FTPFileDir_t' arrayType='VAR'
+				comment=' FTP目录列表' />
+		</Struct>
+		<Struct name='TicketBoxOperate_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='ContainerID' type='ContainerID_t' comment=' 票箱编号 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' 班次号 ' />
+			<Field name='OperateFlag' type='OperateFlag_t' comment=' 操作方向（0装入，1取出）' />
+			<Field name='TicketQuantity' type='TicketQuantity_t' comment=' 票卡数量 ' />
+		</Struct>
+		<Struct name='MoneyInBankNoteBox_t'>
+			<Field name='NoteFaceValue' type='NoteFaceValue_t' comment=' 纸币面值 ' />
+			<Field name='NoteQuantity' type='RMBQuantity_t' comment=' 纸币数量 ' />
+			<Field name='NoteMoney' type='ValueCent_t' comment=' 纸币金额 ' />
+		</Struct>
+		<Struct name='BankNoteBoxOperate_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='NoteOperatePos' type='NoteOperatePos_t' comment=' 操作位置 ' />
+			<Field name='BankNoteBoxID' type='ContainerID_t' comment=' 纸币钱箱编号 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='OperateTag' type='OperateFlag_t' comment=' 操作方向 0装入，1取出' />
+			<Field name='TotalMoney' type='ValueCent_t' comment=' 钱箱总金额 ' />
+			<Field name='MoneyInBankNoteBoxs' type='MoneyInBankNoteBox_t'
+				arrayType='VAR' comment=' 纸币钱箱分类金额 ' />
+		</Struct>
+		<Struct name='MoneyInCoinBox_t'>
+			<Field name='CoinFaceValue' type='CoinFaceValue_t' comment=' 硬币面值 ' />
+			<Field name='CoinQuantity' type='RMBQuantity_t' comment=' 硬币数量 ' />
+			<Field name='CoinMoney' type='ValueCent_t' comment=' 硬币金额 ' />
+		</Struct>
+		<Struct name='MoneyInBox_t'>
+			<Field name='FaceValue' type='FaceValue_t' comment=' 钱币面值 ' />
+			<Field name='CashQuantity' type='RMBQuantity_t' comment=' 钱币数量 ' />
+			<Field name='CashMoney' type='ValueCent_t' comment=' 钱币金额 ' />
+		</Struct>
+		<Struct name='CoinBoxInfo_t'>
+			<Field name='CoinBoxType' type='CoinBoxType_t' comment=' 硬币钱箱类型 ' />
+			<Field name='CoinBoxID' type='ContainerID_t' comment=' 硬币钱箱编号 ' />
+			<Field name='MoneyInCoinBoxs' type='MoneyInCoinBox_t' comment=' 硬币钱箱分类金额 ' />
+		</Struct>
+		<Struct name='NoteBoxInfo_t'>
+			<Field name='NoteBoxType' type='NoteBoxType_t' comment=' 纸币钱箱类型 ' />
+			<Field name='NoteBoxID' type='ContainerID_t' comment=' 纸币钱箱编号 ' />
+			<Field name='MoneyInBankNoteBoxs' type='MoneyInBankNoteBox_t'
+				comment=' 纸币钱箱分类金额 ' />
+		</Struct>
+		<Struct name='CashBoxInfo_t'>
+			<Field name='CashBoxType' type='CashBoxType_t' comment=' 钱箱类型 ' />
+			<Field name='CashBoxID' type='ContainerID_t' comment=' 钱箱编号 ' />
+			<Field name='MoneyInBoxs' type='MoneyInBox_t' comment=' 钱箱分类金额 ' />
+		</Struct>
+		<Struct name='CoinBoxOperate_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='CoinOperatePos' type='CoinOperatePos_t' comment=' 操作位置 ' />
+			<Field name='CoinBoxID' type='ContainerID_t' comment=' 硬币钱箱编号 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='OperateTag' type='OperateFlag_t' comment=' 操作方向 0装入，1取出' />
+			<Field name='TotalMoney' type='ValueCent_t' comment=' 钱箱总金额 ' />
+			<Field name='MoneyInCoinBox' type='MoneyInCoinBox_t' arrayType='VAR'
+				comment=' 硬币钱箱分类金额 ' />
+		</Struct>
+		<Struct name='CoinBoxClear_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='CoinBoxInfos' type='CoinBoxInfo_t' arrayType='VAR'
+				comment=' 硬币钱箱信息 ' />
+		</Struct>
+		<Struct name='NoteBoxClear_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='NoteBoxInfos' type='NoteBoxInfo_t' arrayType='VAR'
+				comment=' 纸币钱箱信息 ' />
+		</Struct>
+		<Struct name='CASHBOXQuery_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+		</Struct>
+		<Struct name='CASHBOXUPLoad_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='CashBoxInfo' type='CashBoxInfo_t' arrayType='VAR'
+				comment=' 钱箱信息 ' />
+		</Struct>
+		<Struct name='FTPApply_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标节点标识码 ' />
+		</Struct>
+		<Struct name='FTPApply_Ans_t'>
+			<Field name='MackCode' type='MACK_t' comment=' 应答码 ' />
+			<Field name='FTPFileDir' type='FTPFileDir_t' arrayType='VAR'
+				comment=' FTP目录列表' />
+		</Struct>
+		<Struct name='FileUpdateNotify_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标设备节点标识码 ' />
+			<Field name='DownLoadCode' type='DownLoadCode_t' comment=' 更新类型 0-普通 1-强制 ' />
+			<Field name='FileHeaderTag' type='FileHeaderTag_t' arrayType='VAR'
+				comment=' 文件类型码 ' />
+		</Struct>
+		<Struct name='CurFileUploadNotify_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标设备节点标识码 ' />
+			<Field name='UploadFileBits' type='UploadFileBits_t' comment=' 上传的文件位信息 ' />
+		</Struct>
+		<Struct name='SpecFileUploadNotify_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标设备节点标识码 ' />
+			<Field name='FileType' type='FileHeaderTag_t' comment=' 文件类型信息 ' />
+			<Field name='TransactionDate' type='Date2_t' comment=' 交易日期 ' />
+			<Field name='StartUSDN' type='SN_t'
+				comment=' 开始流水号，如果是交易数据，为索取交易数据记录的开始流水号，否则为开始文件序列号 ' />
+			<Field name='EndUSDN' type='SN_t'
+				comment=' 结束流水号，如果是交易数据，为索取交易数据记录的结束流水号，否则为结束文件序列号 ' />
+		</Struct>
+		<Struct name='SendEmergencyMode_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标设备节点标识码 ' />
+			<Field name='EmergencyModeCode' type='ModeCode_t' comment=' 系统紧急运营模式代码 ' />
+			<Field name='ModeEnabledTag' type='Boolean_t' comment=' 模式标志：0启动，1解除 ' />
+		</Struct>
+		<Struct name='SendOtherMode_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标设备节点标识码 ' />
+			<Field name='ModeCode' type='ModeCode_t' comment=' 运营模式代码 ' />
+		</Struct>
+		<Struct name='ModeStatusUpload_Req_t'>
+			<Field name='StationID' type='StationID_t' comment=' 模式发生变化的车站节点编号 ' />
+			<Field name='ModeOccurTime' type='AFCTime64_t' comment=' 模式发生时间 ' />
+			<Field name='ModeCode' type='ModeCode_t' comment=' 改变后的运营模式代码 ' />
+		</Struct>
+		<Struct name='StationModeChange_t'>
+			<Field name='StationID' type='StationID_t' comment=' 模式发生变化的车站节点编号 ' />
+			<Field name='ModeOccurTime' type='AFCTime64_t' comment=' 模式发生时间 ' />
+			<Field name='ModeCode' type='ModeCode_t' comment=' 改变后的运营模式代码 ' />
+		</Struct>
+		<Struct name='ModeChangeBroadcast_Req_t'>
+			<Field name='StationModeChanges' type='StationModeChange_t'
+				arrayType='VAR' comment=' 模式发生变化的车站列表 ' />
+		</Struct>
+		<Struct name='QueryMode_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标设备节点标识码 ' />
+		</Struct>
+		<Struct name='TicketAllocList_t'>
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录编号 ' />
+			<Field name='TicketAllocQuantity' type='TicketQuantity_t'
+				comment=' 票卡调拨数量 ' />
+			<Field name='TicketWasteQuantity' type='TicketQuantity_t'
+				comment=' 废票数量 ' />
+		</Struct>
+		<Struct name='TicketAllocApply_Req_t'>
+			<Field name='SourceStationID' type='DeviceID_t' comment=' 源车站节点编号 ' />
+			<Field name='AimStationID' type='DeviceID_t' comment=' 目标车站节点编号 ' />
+			<Field name='Operator1ID' type='OperatorID_t' comment=' 操作员 ' />
+			<Field name='ApplyBillCode' type='string' comment=' 申请单编号 ' />
+			<Field name='ApplyTime' type='AFCTime64_t' comment=' 申请时间 ' />
+			<Field name='TicketAllocType' type='TicketAllocType_t' comment=' 票卡调拨类型 ' />
+			<Field name='TicketAllocList' type='TicketAllocList_t'
+				arrayType='VAR' comment=' 申请票卡目录列表 ' />
+		</Struct>
+		<Struct name='TicketAllocOrder_Req_t'>
+			<Field name='SourceStationID' type='DeviceID_t' comment=' 源节点编号 ' />
+			<Field name='AimStationID' type='DeviceID_t' comment=' 目标节点编号 ' />
+			<Field name='ApplyBillCode' type='string' comment=' 命令单编号 ' />
+			<Field name='AllocTime' type='AFCTime64_t' comment=' 调拨时间 ' />
+			<Field name='TicketAllocType' type='TicketAllocType_t' comment=' 票卡调拨类型 ' />
+			<Field name='TicketAllocList' type='TicketAllocList_t'
+				arrayType='VAR' comment=' 调拨票卡目录列表 ' />
+		</Struct>
+		<Struct name='UploadTicketStockNotify_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' 目标设备节点标识码 ' />
+		</Struct>
+		<Struct name='TicketStockList_t'>
+			<Field name='ContainerID' type='ContainerID_t' comment=' 票箱编号 ' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录编号 ' />
+			<Field name='TicketQuantity' type='TicketQuantity_t' comment=' 票卡数量 ' />
+			<Field name='InvalidTicketQuantity' type='TicketQuantity_t'
+				comment=' 废票数量 ' />
+		</Struct>
+		<Struct name='UploadTicketStock_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='UploadTime' type='AFCTime64_t' comment=' 上传时间 ' />
+			<Field name='TicketStockList' type='TicketStockList_t'
+				arrayType='VAR' comment=' 票卡库存清单列表 ' />
+		</Struct>
+		<Struct name='SleInfoList_t'>
+			<Field name='SLEID' type='DeviceID_t' comment='设备编号' />
+			<Field name='OperatorID' type='OperatorID_t' comment='BOM售票员和客值操作员编号' />
+			<Field name='BillInfoList' type='BillInfoList_t' arrayType='VAR'
+				comment=' 单据信息列表 ' />
+		</Struct>
+		<Struct name='BillInfoList_t'>
+			<Field name='ticketFamilyType' type='U8_t' comment=' 票款大类 ' />
+			<Field name='ticketType' type='U8_t' comment=' 票卡类型 ' />
+			<Field name='TicketStatus' type='U8_t' comment=' 票卡状态 ' />
+			<Field name='ContainerID' type='ContainerID_t' comment=' 钱箱、票箱编号 ' />
+			<Field name='OperAmount' type='U32_t' comment=' 操作数量 ' />
+			<Field name='OperMoney' type='S32_t' comment=' 操作金额 ' />
+			<Field name='TicketDirClassID' type='U16_t' comment=' 票卡分类目录 ' />
+			<Field name='Remark' type='UnicodeString_t' comment=' 备注 ' />
+		</Struct>
+		<Struct name='UploadTicketIncome_Req_t'>
+			<Field name='NodeID' type='U32_t' comment='节点标识码 ' />
+			<Field name='UploadTime' type='AFCTime64_t' comment=' 上传时间 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='BillCode' type='string' comment=' 单据编号 ' />
+			<Field name='BillType' type='BillType_t' comment=' 单据类型 ' />
+			<Field name='BillStatus' type='BillStatus_t' comment=' 单据状态' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='AuditorID' type='OperatorID_t' comment=' 审核人员编号 ' />
+			<Field name='AuditorTime' type='AFCTime64_t' comment=' 审核时间 ' />
+			<Field name='BankCode' type='string' comment=' 银行编码 ' />
+			<Field name='SpareGoldAllocation' type='StationID_t' comment='备用金来源/去向' />
+			<Field name='SpareGoldBillCode' type='string' comment='备用金调配的单据编号' />
+			<Field name='SpeIncomeReason' type='U8_t' comment='特殊收入原因' />
+			<Field name='Remark' type='UnicodeString_t' comment=' 备注 ' />
+			<Field name='SleInfoList' type='SleInfoList_t' arrayType='VAR'
+				comment='设备信息列表' />
+		</Struct>
+		<Struct name='ChangeShiftsBillInfoList_t'>
+			<Field name='TicketFamilyType' type='U8_t' comment='票卡大类' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment='票卡目录编号' />
+			<Field name='TicketType' type='U8_t' comment='票卡类型' />
+			<Field name='TicketValue' type='U32_t' comment='车票面值' />
+			<Field name='TicketStatus' type='U8_t' comment='票卡状态' />
+			<Field name='StockAmount' type='U32_t' comment='库存数量' />
+			<Field name='OperMoney' type='S32_t' comment='库存金额' />
+			<Field name='SysAmount' type='U32_t' comment='系统数量' />
+			<Field name='SysMoney' type='S32_t' comment='系统金额' />
+			<Field name='Remark' type='UnicodeString_t' comment=' 备注 ' />
+		</Struct>
+		<Struct name='UploadChangeShiftsRecord_Req_t'>
+			<Field name='NodeID' type='U32_t' comment='节点标识码' />
+			<Field name='UploadTime' type='AFCTime64_t' comment='上传时间' />
+			<Field name='StationID' type='StationID_t' comment='车站编号' />
+			<Field name='BillCode' type='string' comment=' 单据编号 ' />
+			<Field name='BillType' type='BillType_t' comment='单据类型' />
+			<Field name='BillStatus' type='BillStatus_t' comment='单据状态' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='OperateTime' type='AFCTime64_t' comment='操作时间' />
+			<Field name='AuditorID' type='OperatorID_t' comment='审核人员编号' />
+			<Field name='AuditorTime' type='AFCTime64_t' comment='审核时间' />
+			<Field name='RelationOperatorID' type='OperatorID_t' comment='客值操作员编号' />
+			<Field name='RelationBillCode' type='string' comment='关联单据编号' />
+			<Field name='Remark' type='UnicodeString_t' comment=' 备注 ' />
+			<Field name='ChangeShiftsBillInfoList' type='ChangeShiftsBillInfoList_t' arrayType='VAR'
+				comment=' 单据信息列表 ' />
+		</Struct>
+		<Struct name='TicketFillingMoneyNotice_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment='设备节点标识码' />
+			<Field name='UploadTime' type='AFCTime64_t' comment='通知时间' />
+			<Field name='StationID' type='StationID_t' comment='车站编号' />
+			<Field name='BillCode' type='string' comment=' 单据编号 ' />
+			<Field name='BillType' type='BillType_t' comment='单据类型' />
+			<Field name='BillStatus' type='BillStatus_t' comment='单据状态' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='OperateTime' type='AFCTime64_t' comment='操作时间' />
+			<Field name='AuditorID' type='OperatorID_t' comment='审核人员编号' />
+			<Field name='AuditorTime' type='AFCTime64_t' comment='审核时间' />
+			<Field name='ExcuteStatus' type='ExcuteStatus_t' comment='执行状态' />
+			<Field name='TotalFillingMoneyValue' type='ValueCent_t' comment='短款总额' />
+			<Field name='RelationBillCode' type='string' comment='关联单据编号' />
+			<Field name='SettleStartTime' type='AFCTime64_t' comment='结算起始时间' />
+			<Field name='SettleEndTime' type='AFCTime64_t' comment='结算结束时间' />
+			<Field name='FillingMoneyEndDate' type='Date2_t' comment='短款补款截止日期' />
+			<Field name='ErrorType' type='ErrorType_t' comment=' 差错类型 ' />
+			<Field name='ErrorOperatorID' type='OperatorID_t' comment='差错操作员编号 ' />
+			<Field name='ErrorTime' type='AFCTime64_t' comment=' 差错时间 ' />
+			<Field name='Remark' type='UnicodeString_t' comment=' 备注 ' />
+		</Struct>
+		<Struct name='UploadTicketFillingMoney_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='UploadTime' type='AFCTime64_t' comment='上传时间 ' />
+			<Field name='StationID' type='StationID_t' comment='车站编号 ' />
+			<Field name='BillCode' type='string' comment='单据编号 ' />
+			<Field name='BillType' type='BillType_t' comment='单据类型 ' />
+			<Field name='BillStatus' type='BillStatus_t' comment='单据状态' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment='操作时间 ' />
+			<Field name='AuditorID' type='OperatorID_t' comment='审核人员编号 ' />
+			<Field name='AuditorTime' type='AFCTime64_t' comment='审核时间 ' />
+			<Field name='ExcuteStatus' type='ExcuteStatus_t' comment='执行状态' />
+			<Field name='FillingMoneyType' type='FillingMoneyType_t' comment='补款类型' />
+			<Field name='TotalFillingMoneyValue' type='ValueCent_t' comment='短款总额' />
+			<Field name='RelateBillCode' type='string' comment='关联单号' />
+			<Field name='SettleStartTime' type='AFCTime64_t' comment='结算起始时间' />
+			<Field name='SettleEndTime' type='AFCTime64_t' comment='结算结束时间' />
+			<Field name='FillingMoneyEndDate' type='Date2_t' comment='短款补款截止日期' />
+			<Field name='Remark' type='UnicodeString_t' comment=' 备注 ' />
+			<Field name='ErrorOperatorID' type='OperatorID_t' comment='差错操作员编号 ' />
+			<Field name='ErrorTime' type='AFCTime64_t' comment=' 差错时间 ' />
+			<Field name='ErrorType' type='ErrorType_t' comment=' 差错类型 ' />
+			<Field name='ErrorReason' type='UnicodeString_t' comment='差错原因' />
+			<Field name='ErrorExplain' type='UnicodeString_t' comment='差错说明' />
+			<Field name='FillingMoneyValue' type='ValueCent_t' comment='补款金额' />
+		</Struct>
+		<Struct name='SleCashList_t'>
+			<Field name='SleType' type='U8_t' comment='设备类型 0-TVM 1-ISM' />
+			<Field name='DeviceID' type='DeviceID_t' comment='设备节点标识码 ' />
+			<Field name='AddCoinMoney' type='U32_t' comment='硬币补币金额 ' />
+			<Field name='AddNoteMoney' type='U32_t' comment='纸币补币金额 ' />
+			<Field name='PointMoney' type='U32_t' comment='实点金额 ' />
+			<Field name='ReceiptMoney' type='U32_t' comment='实收金额 ' />
+		</Struct>
+		<Struct name='UploadCashForm_Req_t'>
+			<Field name='NodeID' type='U32_t' comment='节点标识码' />
+			<Field name='UploadTime' type='AFCTime64_t' comment='上传时间' />
+			<Field name='StationID' type='StationID_t' comment='车站编号' />
+			<Field name='BusinessDate' type='Date2_t' comment='运营日 ' />
+			<Field name='SleCashList_t' type='SleCashList_t' arrayType='VAR'
+				comment='设备现金列表 ' />
+		</Struct>
+		<Struct name='UploadSellerStatements_Req_t'>
+			<Field name='NodeID' type='U32_t' comment='节点标识码' />
+			<Field name='UploadTime' type='AFCTime64_t' comment='上传时间' />
+			<Field name='StationID' type='StationID_t' comment='车站编号' />
+			<Field name='DeviceID' type='DeviceID_t' comment='设备编号 ' />
+			<Field name='BusinessDate' type='Date2_t' comment='运营日 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号 ' />
+			<Field name='OperateTime' type='AFCTime64_t' comment='操作时间 ' />
+			<Field name='AuditorID' type='OperatorID_t' comment='审核人员编号 ' />
+			<Field name='AuditorTime' type='AFCTime64_t' comment='审核时间 ' />
+			<Field name='SellerID' type='OperatorID_t' comment='售票员编号 ' />
+			<Field name='SpareGoldUseMoney' type='U32_t' comment='备用金领用金额 ' />
+			<Field name='TransactionValue' type='U32_t' comment='充值金额 ' />
+			<Field name='SurchargeValue' type='U32_t' comment='更新金额 ' />
+			<Field name='RefundValue' type='U32_t' comment='退款金额 ' />
+			<Field name='SpecialIncome' type='U32_t' comment='特殊收入 ' />
+			<Field name='StatementsMoney' type='U32_t' comment='交班金额 ' />
+			<Field name='BomTicketInfoList' type='BomTicketInfoList_t' arrayType='VAR'
+				comment='车票信息列表 ' />
+		</Struct>
+		<Struct name='BomTicketInfoList_t'>
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment='票卡目录编号' />
+			<Field name='TicketType' type='U8_t' comment='票卡类型 ' />
+			<Field name='TicketValue' type='U32_t' comment='车票面值 ' />
+			<Field name='TicketStatus' type='U32_t' comment='票卡状态 ' />
+			<Field name='CollarAmount' type='U32_t' comment='领用数量 ' />
+			<Field name='HandInMoney' type='U32_t' comment='上缴金额 ' />
+			<Field name='SaleAmount' type='U32_t' comment='发售数量 ' />
+			<Field name='SaleMoney' type='U32_t' comment='发售金额 ' />
+			<Field name='Remark' type='UnicodeString_t' comment='备注 ' />
+		</Struct>
+		<Struct name='UploadChangeShiftsRecord_Req_t'>
+			<Field name='NodeID' type='U32_t' comment='节点标识码' />
+			<Field name='UploadTime' type='AFCTime64_t' comment='上传时间' />
+			<Field name='StationID' type='StationID_t' comment='车站编号' />
+			<Field name='DeviceID' type='DeviceID_t' comment='设备节点标识码 ' />
+			<Field name='BusinessDate' type='Date2_t' comment='运营日 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='OperateTime' type='AFCTime64_t' comment='操作时间' />
+			<Field name='AuditorID' type='OperatorID_t' comment='审核人员编号' />
+			<Field name='AuditorTime' type='AFCTime64_t' comment='审核时间' />
+			<Field name='SellerID' type='OperatorID_t' comment='售票员编号' />
+			<Field name='SpareGoldUseMoney' type='U32_t' comment='备用金领用金额' />
+			<Field name='TransactionValue' type='U32_t' comment='充值金额' />
+			<Field name='SurchargeValue' type='U32_t' comment='更新金额' />
+			<Field name='RefundValue' type='U32_t' comment='退款金额' />
+			<Field name='SpecialIncome' type='U32_t' comment='特殊收入' />
+			<Field name='StatementsMoney' type='U32_t' comment='交班金额' />
+			<Field name='BomTicketInfoList' type='BomTicketInfoList_t' arrayType='VAR'
+				comment='车票信息列表 ' />
+		</Struct>
+		<Struct name='UploadStationRevenuedaily_Req_t'>
+			<Field name='NodeID' type='U32_t' comment='节点标识码' />
+			<Field name='UploadTime' type='AFCTime64_t' comment='上传时间' />
+			<Field name='StationID' type='StationID_t' comment='车站编号' />
+			<Field name='BusinessDate' type='Date2_t' comment='运营日 ' />
+			<Field name='YesterdayBankMoney' type='U32_t' comment='前日解行票款' />
+			<Field name='YesterdayRetainMoney' type='U32_t' comment='前日留存票款' />
+			<Field name='TodayBankMoney' type='U32_t' comment='本日解行票款' />
+			<Field name='TodayRetainMoney' type='U32_t' comment='本日留存票款' />
+			<Field name='BankFillingMoney' type='U32_t' comment='解行补交票款' />
+			<Field name='SpecialIncome' type='U32_t' comment='特殊收入' />
+			<Field name='IsmIncome' type='U32_t' comment='ISM合计收入' />
+			<Field name='TvmIncome' type='U32_t' comment='TVM合计收入' />
+			<Field name='BomIncome' type='U32_t' comment='BOM合计收入' />
+			<Field name='IsmFillingMoney' type='U32_t' comment='ISM补短款收入' />
+			<Field name='TvmFillingMoney' type='U32_t' comment='TVM补短款收入' />
+			<Field name='BomFillingMoney' type='U32_t' comment='BOM补短款收入' />
+			<Field name='SpareGoldRetain' type='U32_t' comment='备用金留存' />
+			<Field name='DiffMoney' type='U32_t' comment='差额' />
+		</Struct>
+		<Struct name='BOMAddValueAuth_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' BOM设备节点标识码 ' />
+			<Field name='SAMID' type='SAMID_t' comment=' SAM卡标识码 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' BOM班次号 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment=' 发卡方代码 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketAppSerialID' type='TicketAppSerialID_t'
+				comment=' 票卡应用序列号 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 票种代码 ' />
+			<Field name='TicketSN' type='SN_t' comment=' 充值前卡交易计数器 ' />
+			<Field name='PreValue' type='ValueCent_t' comment=' 充值前票卡余额 ' />
+			<Field name='AddValueTime' type='AFCTime64_t' comment=' 充值时间 ' />
+			<Field name='AddValue' type='ValueCent_t' comment=' 充值金额 ' />
+			<Field name='OnlineTransSN' type='SN_t' comment=' 电子钱包联机交易序号 ' />
+			<Field name='KeyVersion' type='KeyVersion_t' comment=' 密钥版本 ' />
+			<Field name='AlgorithmicType' type='AlgorithmicType_t' comment=' 算法标识 ' />
+			<Field name='RandomNum' type='RandomNum_t' comment=' 用户卡随机数 ' />
+			<Field name='MAC1' type='MAC_t'
+				comment=' ISAM卡对用户卡号、用户卡随机数等信息计算得到的MAC，ACC也需要计算，并验证是否一致 ' />
+		</Struct>
+		<Struct name='BOMAddValueAuth_Ans_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' BOM设备节点标识码 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' BOM班次号 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketAppSerialID' type='TicketAppSerialID_t'
+				comment=' 票卡应用序列号 ' />
+			<Field name='TransTime' type='AFCTime64_t' comment=' 交易时间（主机） ' />
+			<Field name='MAC2' type='MAC_t' comment=' ACC计算所得MAC2 ' />
+		</Struct>
+		<Struct name='BOMAddValueAffirm_Req_t'>
+			<Field name='AimDeviceID' type='DeviceID_t' comment=' BOM设备节点标识码 ' />
+			<Field name='SAMID' type='SAMID_t' comment=' SAM卡标识码 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' BOM班次号 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment=' 发卡方代码 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketAppSerialID' type='TicketAppSerialID_t'
+				comment=' 票卡应用序列号 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 票种代码 ' />
+			<Field name='TicketSN' type='SN_t' comment=' 充值前卡交易计数器 ' />
+			<Field name='PreValue' type='ValueCent_t' comment=' 充值前票卡余额 ' />
+			<Field name='AddValueTime' type='AFCTime64_t' comment=' 充值时间 ' />
+			<Field name='AddValue' type='ValueCent_t' comment=' 充值金额 ' />
+			<Field name='OnlineTransSN' type='SN_t' comment=' 电子钱包联机交易序号 ' />
+			<Field name='KeyVersion' type='KeyVersion_t' comment=' 密钥版本 ' />
+			<Field name='AlgorithmicType' type='AlgorithmicType_t' comment=' 算法标识 ' />
+			<Field name='RandomNum' type='RandomNum_t' comment=' 用户卡随机数 ' />
+			<Field name='MAC1' type='MAC_t'
+				comment=' ISAM卡对用户卡号、用户卡随机数等信息计算得到的MAC，ACC也需要计算，并验证是否一致 ' />
+			<Field name='WriteStatus' type='Boolean_t' comment=' 写卡状态 0-写卡成功 1-写卡失败' />
+			<Field name='TAC' type='TAC_t' />
+		</Struct>
+		<Struct name='PassengerComm_t'>
+			<Field name='PassengerName' type='UnicodeString_t' comment=' 乘客姓名 ' />
+			<Field name='PassengerSex' type='Gender_t' comment=' 乘客性别 ' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment=' 证件类型 ' />
+			<Field name='IDCode' type='string' comment=' 证件编号 ' />
+			<Field name='TelNumber' type='string' comment=' 联系电话 ' />
+			<Field name='FaxNumber' type='string' comment=' 传真电话 ' />
+			<Field name='Address' type='UnicodeString_t' comment=' 住址 ' />
+		</Struct>
+		<Struct name='PersonalCardApply_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 申请BOM设备节点标识码 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' BOM班次号 ' />
+			<Field name='ApplyTableCode' type='string'
+				comment=' 申请单编号:4字节节点编号＋YYYYMMDD＋4位序列号（BCD） ' />
+			<Field name='ApplyTime' type='AFCTime64_t' comment=' 申请时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='PassengerComm' type='PassengerComm_t' comment=' 乘客结构 ' />
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment=' 票种归类代码 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 票种代码 ' />
+			<Field name='DepositValue' type='ValueCent_t' comment=' 押金金额 ' />
+		</Struct>
+		<Struct name='NonImmediateRefundApply_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 申请BOM设备节点标识码 ' />
+			<Field name='ApplyBillCode' type='string'
+				comment=' 申请单编号:4字节节点编号＋YYYYMMDD＋4位序列号（BCD） ' />
+			<Field name='ApplyTime' type='AFCTime64_t' comment=' 申请时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketPrintID' type='string' comment=' 用户印刷卡编号 ' />
+			<Field name='PassengerComm' type='PassengerComm_t' comment=' 乘客结构 ' />
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment=' 票种归类代码 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 票种代码 ' />
+		</Struct>
+		<Struct name='NonImmediateRefundQuery_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 申请BOM设备节点标识码 ' />
+			<Field name='ApplyTime' type='AFCTime64_t' comment=' 操作时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='ApplyBillCode' type='string' comment=' 申请单编号 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketPrintID' type='string' comment=' 用户印刷卡编号 ' />
+		</Struct>
+		<Struct name='NonImmediateRefundSend_Req_t'>
+			<Field name='QueryDeviceID' type='DeviceID_t' comment=' 查询BOM设备节点标识码 ' />
+			<Field name='QueryTime' type='AFCTime64_t' comment=' 查询时间 ' />
+			<Field name='DeviceID' type='DeviceID_t' comment=' 申请BOM设备节点标识码 ' />
+			<Field name='ApplyTime' type='AFCTime64_t' comment=' 申请时间 ' />
+			<Field name='BOMOperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='ACCConfirmTime' type='AFCTime64_t' comment=' 确认时间 ' />
+			<Field name='ACCOperatorID' type='OperatorID_t' comment=' ACC确认操作员编号 ' />
+			<Field name='TicketACCStatus' type='TicketACCStatus_t' comment=' ACC票卡帐号状态 ' />
+			<Field name='RefundStatus' type='RefundStatus_t' comment=' 退款处理状态  0-处理中 1-已处理' />
+			<Field name='TicketACCValidDate' type='Date2_t' comment=' ACC票卡有效日期至 ' />
+			<Field name='DealResult' type='DealResult_t' comment=' 处理结果 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketPrintID' type='string' comment=' 用户印刷卡编号 ' />
+			<Field name='PassengerComm' type='PassengerComm_t' comment=' 乘客结构 ' />
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment=' 票种大类 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 票种代码 ' />
+			<Field name='ReaminingValue' type='ValueCent_t' comment=' 票卡余额 ' />
+			<Field name='DepositValue' type='ValueCent_t' comment=' 押金金额 ' />
+			<Field name='FeeValue' type='ValueCent_t' comment=' 退款手续费 ' />
+			<Field name='DepreciateValue' type='ValueCent_t' comment=' 票卡折旧费 ' />
+			<Field name='DeserveValue' type='ValueCent_t' comment=' 应退金额 ' />
+		</Struct>
+		<Struct name='TicketLost_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 挂失BOM设备节点标识码 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' BOM班次号 ' />
+			<Field name='HangTime' type='AFCTime64_t' comment=' 挂失时间 ' />
+			<Field name='BOMOperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketPrintID' type='string' comment=' 用户印刷卡编号 ' />
+			<Field name='PassengerName' type='UnicodeString_t' comment=' 乘客姓名 ' />
+			<Field name='PassengerSex' type='Gender_t' comment=' 乘客性别 ' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment=' 证件类型 ' />
+			<Field name='IDCode' type='string' comment=' 证件编号 ' />
+		</Struct>
+		<Struct name='TicketDisLost_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 挂失BOM设备节点标识码 ' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment=' BOM班次号 ' />
+			<Field name='DisLostTime' type='AFCTime64_t' comment=' 解挂时间 ' />
+			<Field name='BOMOperatorID' type='OperatorID_t' comment=' BOM操作员编号 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketPrintID' type='string' comment=' 用户印刷卡编号 ' />
+			<Field name='PassengerName' type='UnicodeString_t' comment=' 乘客姓名 ' />
+			<Field name='PassengerSex' type='Gender_t' comment=' 乘客性别 ' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment=' 证件类型 ' />
+			<Field name='IDCode' type='string' comment=' 证件编号 ' />
+		</Struct>
+		<Struct name='CardAccountQuery_Req_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点标识码 ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketPrintID' type='string' comment=' 用户印刷卡编号 ' />
+			<Field name='PassengerName' type='UnicodeString_t' comment=' 乘客姓名 ' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment=' 证件类型 ' />
+			<Field name='IDCode' type='string' comment=' 证件编号 ' />
+		</Struct>
+		<Struct name='CardAccounList_t'>
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 用户物理卡编号 ' />
+			<Field name='TicketPrintID' type='string' comment=' 用户印刷卡编号 ' />
+			<Field name='TicketSellDate' type='Date2_t' comment=' 票卡发售日期 ' />
+			<Field name='TicketStatus' type='TicketStatus_t' comment=' 票卡状态  ' />
+			<Field name='PassengerComm' type='PassengerComm_t' comment=' 乘客结构 ' />
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment=' 票种大类代码 ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 票种代码 ' />
+			<Field name='RemainingValue' type='ValueCent_t' comment=' 票卡剩余金额 对计程票' />
+			<Field name='RemainingTimes' type='MultiRideNumber_t' comment=' 票卡剩余次数 对计次票' />
+			<Field name='StartValidDate' type='Date2_t' comment=' 票卡有效开始日期 ' />
+			<Field name='EndValidDate' type='Date2_t' comment=' 票卡有效结束日期 ' />
+		</Struct>
+		<Struct name='CardAccountSend_Req_t'>
+			<Field name='QueryDeviceID' type='DeviceID_t' comment=' 查询设备节点标识码 ' />
+			<Field name='QueryTime' type='AFCTime64_t' comment=' 查询时间 ' />
+			<Field name='CardAccounList' type='CardAccounList_t' arrayType='VAR'
+				comment=' 持有票卡账户列表结构 ' />
+		</Struct>
+		<Struct name='Station_Maintain_Apply_Req_t'>
+			<Field name='StationID' type='StationID_t' comment=' 报修车站编号 ' />
+			<Field name='MaintainTime' type='AFCTime64_t' comment=' 报修时间 ' />
+			<Field name='MaintainBillCode' type='string' comment=' 报修单号 ' />
+			<Field name='DeviceID' type='DeviceID_t' comment=' 报修设备节点标识码 ' />
+			<Field name='MaintainOperatorID' type='OperatorID_t' comment=' 报修员工编号 ' />
+			<Field name='MaintainOperatorName' type='UnicodeString_t'
+				comment=' 报修员工姓名 ' />
+			<Field name='Faultlevel' type='Faultlevel_t' comment=' 故障等级 ' />
+			<Field name='FaultCode' type='UnicodeString_t' comment=' 故障代码 ' />
+			<Field name='FaultCase' type='UnicodeString_t' comment=' 故障现象 ' />
+		</Struct>
+		<Struct name='Station_Maintain_Affirm_Req_t'>
+			<Field name='StationID' type='StationID_t' comment=' 报修车站编号 ' />
+			<Field name='AffirmTime' type='AFCTime64_t' comment=' 确认时间 ' />
+			<Field name='MaintainBillCode' type='string' comment=' 报修单号 ' />
+			<Field name='AffirmOperatorID' type='OperatorID_t' comment=' 确认人员编号 ' />
+			<Field name='AffirmOperatorName' type='UnicodeString_t'
+				comment=' 确认人员姓名 ' />
+			<Field name='MaintainResult' type='MaintainResult_t' comment=' 维修结果 ' />
+			<Field name='Remark' type='UnicodeString_t' comment=' 备注 ' />
+		</Struct>
+		<Struct name='UpdatePassword_Req_t'>
+			<Field name='NodeID' type='U32_t' comment='申请点编号 当申请节点为设备时，节点类型为DeviceID_t，当申请节点为车站时，节点高字节U16表示StationID_t，低字节补零 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号 ' />
+			<Field name='PasswordUpdateTime' type='AFCTime64_t' comment=' 密码更新时间 ' />
+			<Field name='OldPassword' type='string' comment=' 旧密码 ' />
+			<Field name='NewPassword' type='string' comment=' 新密码 ' />
+		</Struct>
+		<Struct name='UpdatePassword_Ans_t'>
+			<Field name='MackCode' type='MACK_t' comment=' 应答码 ' />
+			<Field name='NodeID' type='U32_t' comment='申请点编号 当申请节点为设备时，节点类型为DeviceID_t，当申请节点为车站时，节点高字节U16表示StationID_t，低字节补零' />
+			<Field name='DealResult' type='DealResult_t' comment=' 更新结果 ' />
+			<Field name='FailReason' type='FailReason_t' comment=' 失败原因 ' />
+		</Struct>
+		<Struct name='Mack_Ans_t'>
+			<Field name='MackCode' type='MACK_t' comment=' 应答码 ' />
+		</Struct>
+		<Union name='REQMessage_t' caseType='ComType_t'>
+			<Field caseValue='COM_COMM_CONNECT_APPLY' name='CommConnectApply_Req'
+				type='CommConnectApply_Req_t' comment=' (1001) 通讯链接申请 ' />
+			<Field caseValue='COM_PING' name='Ping_Req' type='Ping_Req_t'
+				comment=' (1101) PING请求报文 ' />
+			<Field caseValue='COM_TEXT' name='Text_Req' type='Text_Req_t'
+				comment=' (1102) 文本消息 ' />
+			<Field caseValue='COM_SLE_CONTROL_CMD' name='SleControlCmd_Req'
+				type='SleControlCmd_Req_t' comment=' (1103) 设备控制命令 ' />
+			<Field caseValue='COM_TIME_SYNC' name='SyncTime_Req' type='SyncTime_Req_t'
+				comment=' (1104)强制时钟同步命令 ' />
+			<Field caseValue='COM_EVENT_UPLOAD' name='EventUpload_Req'
+				type='EventUpload_Req_t' comment=' (1201) 设备事件上传 ' />
+			<Field caseValue='COM_QUERY_EOD_VERSION' name='QueryEODVersion_Req'
+				type='QueryEODVersion_Req_t' comment=' (1202) 查询下级参数版本 ' />
+			<Field caseValue='COM_QUERY_FILE_VERSION' name='QueryFileVersion_Req'
+				type='QueryFileVersion_Req_t' comment=' (1203) 查询下级文件版本 ' />
+			<Field caseValue='COM_QUERY_TRANS_SN' name='QuerySN_Req' type='QuerySN_Req_t'
+				comment=' (1205) 查询设备交易流水号 ' />
+			<Field caseValue='COM_UPLOAD_EOD_VERSION' name='UploadEODVersion_Req'
+				type='UploadEODVersion_Req_t' comment=' (1206) EOD版本上传 ' />
+			<Field caseValue='COM_UPLOAD_FILE_VERSION' name='UploadParameterVersion_Req'
+				type='UploadParameterVersion_Req_t' comment=' (1207) 文件版本上传 ' />
+			<Field caseValue='COM_UPLOAD_SAM' name='UploadSAM_Req' type='UploadSAM_Req_t'
+				comment=' (1208) 设备SAM信息上传 ' />
+			<Field caseValue='COM_UPLOAD_SN' name='UploadSN_Req' type='UploadSN_Req_t'
+				comment=' (1210) 设备最新流水号上传 ' />
+			<Field caseValue='COM_EndTime_SET' name='SetRuntime_Req' type='SetRuntime_Req_t'
+				comment=' (1211)  设置运营结束时间 ' />
+			<Field caseValue='COM_OPERATOR_WORK' name='OperatorWork_Req'
+				type='OperatorWork_Req_t' comment=' (1301) 操作员登录、暂停、恢复和退出等操作 ' />
+			<Field caseValue='COM_TICKETBOX_OPERATE' name='TicketBoxOperate_Req'
+				type='TicketBoxOperate_Req_t' comment=' (1303) 票箱操作数据上传 ' />
+			<Field caseValue='COM_BANKNOTEBOX_OPERATE' name='BankNoteBoxOperate_Req'
+				type='BankNoteBoxOperate_Req_t' comment=' (1304) 纸币钱箱操作数据上传 ' />
+			<Field caseValue='COM_COINBOX_OPERATE' name='CoinBoxOperate_Req'
+				type='CoinBoxOperate_Req_t' comment=' (1305) 硬币钱箱操作数据上传 ' />
+			<Field caseValue='COM_COINBOX_CLEAR' name='CoinBoxClear_Req'
+				type='CoinBoxClear_Req_t' comment=' (1306) TVM硬币钱箱清空数据上传 ' />
+			<Field caseValue='COM_NOTEBOX_CLEAR' name='NoteBoxClear_Req'
+				type='NoteBoxClear_Req_t' comment=' (1307) TVM纸币钱箱清空数据上传 ' />
+			<Field caseValue='COM_CASHBOX_QUERY' name='CashBoxQuery_Req'
+				type='CASHBOXQuery_Req_t' comment=' (1308) 查询设备钱箱数据 ' />
+			<Field caseValue='COM_CASHBOX_UPLOAD' name='CashBoxUpload_Req'
+				type='CASHBOXUPLoad_Req_t' comment=' (1309) 设备钱箱数据上传 ' />
+			<Field caseValue='COM_FTP_APPLY' name='FTPApply_Req' type='FTPApply_Req_t'
+				comment=' (1401) FTP申请 ' />
+			<Field caseValue='COM_FILE_UPDATE_NOTIFY' name='FileUpdateNotify_Req'
+				type='FileUpdateNotify_Req_t' comment=' (1402) 文件下载通知 ' />
+			<Field caseValue='COM_CURFILE_UPLOAD_NOTIFY' name='CurFileUploadNotity_Req'
+				type='CurFileUploadNotify_Req_t' comment=' (1403) 当前文件上载通知 ' />
+			<Field caseValue='COM_SPECFILE_UPLOAD_NOTIFY' name='SpecFileUploadNotify_Req'
+				type='SpecFileUploadNotify_Req_t' comment=' (1404) 指定文件上载通知 ' />
+			<Field caseValue='COM_SEND_EMERGENCY_MODE' name='SendEmergencyModeReq'
+				type='SendEmergencyMode_Req_t' comment=' (1501) 启动/解除紧急运营模式 ' />
+			<Field caseValue='COM_SEND_OTHER_MODE' name='SendOtherMode_Req'
+				type='SendOtherMode_Req_t' comment=' (1502) 发送其他运营模式命令 ' />
+			<Field caseValue='COM_MODE_STATUS_UPLOAD' name='ModeStatusUpload_Req'
+				type='ModeStatusUpload_Req_t' comment=' (1503) 模式状态上传 ' />
+			<Field caseValue='COM_MODE_CHANGE_BROADCAST' name='ModeChangeBroadcast_Req'
+				type='ModeChangeBroadcast_Req_t' comment=' (1504) 模式变更广播 ' />
+			<Field caseValue='COM_MODE_QUERY' name='QueryMode_Req' type='QueryMode_Req_t'
+				comment=' (1505) 车站模式查询 ' />
+			<Field caseValue='COM_TICKET_ALLOC_APPLY' name='TicketAllocApply_Req'
+				type='TicketAllocApply_Req_t' comment=' (1601) 票卡调拨申请 ' />
+			<Field caseValue='COM_TICKET_ALLOC_ORDER' name='TicketAllocOrder_Req'
+				type='TicketAllocOrder_Req_t' comment=' (1602) 票卡调拨命令 ' />
+			<Field caseValue='COM_UPLOAD_TICKET_STOCK_NOTIFY' name='UploadTicketStockNotify_Req'
+				type='UploadTicketStockNotify_Req_t' comment=' (1603) 通知下级上传票卡库存信息 ' />
+			<Field caseValue='COM_UPLOAD_TICKET_STOCK' name='UploadTicketStock_Req'
+				type='UploadTicketStock_Req_t' comment=' (1604) 上传票卡库存信息 ' />
+			<Field caseValue='COM_UPLOAD_TICKET_INCOME' name='UploadTicketIncome_Req'
+				type='UploadTicketIncome_Req_t' comment=' (1605) 上传票款收益信息 ' />
+			<Field caseValue='COM_UPLOAD_CHANGESHIFTS_RECORD' name='UploadChangeShiftsRecord_Req'
+				type='UploadChangeShiftsRecord_Req_t' comment=' (1606) 客值交接班信息上报 ' />
+			<Field caseValue='COM_TICKET_FILLINGMONEY_NOTICE' name='TicketFillingMoneyNotice_Req'
+				type='TicketFillingMoneyNotice_Req_t' comment='(1607) 短款补款信息通知' />	
+			<Field caseValue='COM_UPLOAD_TICKET_FILLINGMONEY' name='UploadTicketFillingMoney_Req'
+				type='UploadTicketFillingMoney_Req_t' comment=' (1608) 短款补款信息上报 ' />
+			<Field caseValue='COM_UPLOAD_CASH_FORM' name='UploadCashForm_Req'
+				type='UploadCashForm_Req_t' comment=' (1609) 设备现金登记日报上报 ' />
+			<Field caseValue='COM_UPLOAD_SELLER_STATEMENTS' name='UploadSellerStatements_Req'
+				type='UploadSellerStatements_Req_t' comment=' (1610) BOM售票员结算单上报' />	
+			<Field caseValue='COM_UPLOAD_STATION_REVENUEDAILY' name='UploadStationRevenuedaily_Req'
+				type='UploadStationRevenuedaily_Req_t' comment=' (1611) 车站营收日报上报' />		
+			<Field caseValue='COM_BOM_ADDVALUE_AUTH' name='BOMAddValueAuth_Req'
+				type='BOMAddValueAuth_Req_t' comment=' (1701) BOM在线充值认证 ' />
+			<Field caseValue='COM_BOM_ADDVALUE_AFFIRM' name='BOMAddValueAffirm_Req'
+				type='BOMAddValueAffirm_Req_t' comment=' (1702) 充值确认 ' />
+			<Field caseValue='COM_PERSONAL_CARD_APPLY' name='PersonalCardApply_Req'
+				type='PersonalCardApply_Req_t' comment=' (1703) 个性化卡申请 ' />
+			<Field caseValue='COM_NONIMMEDIATE_REFUND_APPLY' name='NonImmediateRefundApply_Req'
+				type='NonImmediateRefundApply_Req_t' comment=' (1704) 非即时退款申请 ' />
+			<Field caseValue='COM_NONIMMEDIATE_REFUND_QUERY' name='NonImmediateRefundQuery_Req'
+				type='NonImmediateRefundQuery_Req_t' comment=' (1705) 非即时退款查询 ' />
+			<Field caseValue='COM_TICKET_LOST' name='TicketLost_Req' type='TicketLost_Req_t'
+				comment=' (1706) 票卡挂失 ' />
+			<Field caseValue='COM_TICKET_DISLOST' name='TicketDisLost_Req'
+				type='TicketDisLost_Req_t' comment=' (1707) 票卡解挂 ' />
+			<Field caseValue='COM_NONIMMEDIATE_REFUND_SEND' name='NonImmediateRefundSend_Req'
+				type='NonImmediateRefundSend_Req_t' comment=' (1708) 非即时退款信息下发 ' />
+			<Field caseValue='COM_CARD_ACCOUNT_QUERY' name='CardAccountQuery_Req'
+				type='CardAccountQuery_Req_t' comment=' (1709) 票卡账户查询 ' />
+			<Field caseValue='COM_CARD_ACCOUNT_SEND' name='CardAccountSend_Req'
+				type='CardAccountSend_Req_t' comment=' (1710) 票卡账户信息下发 ' />
+			<Field caseValue='COM_STATION_MAINTAIN_APPLY' name='Station_Maintain_Apply_Req'
+				type='Station_Maintain_Apply_Req_t' comment=' (1801) 车站报修申请 ' />
+			<Field caseValue='COM_STATION_MAINTAIN_AFFIRM' name='Station_Maintain_Affirm_Req'
+				type='Station_Maintain_Affirm_Req_t' comment=' (1802) 车站维修结果确认 ' />
+			<Field caseValue='COM_UPDATE_PASSWORD' name='UpdatePassword_Req'
+				type='UpdatePassword_Req_t' comment=' (1901) 操作员密码更新 ' />
+		</Union>
+		<Union name='ANSMessage_t' caseType='ComType_t'>
+			<Field caseValue='COM_COMM_CONNECT_APPLY' name='CommConnectApply_Ans'
+				type='CommConnectApply_Ans_t' comment=' (1001) 通讯链接申请 ' />
+			<Field caseValue='COM_FTP_APPLY' name='FTPApply_Ans' type='FTPApply_Ans_t'
+				comment=' (1401) FTP申请 ' />
+			<Field caseValue='COM_BOM_ADDVALUE_AUTH' name='BOMAddValueAuth_Ans'
+				type='BOMAddValueAuth_Ans_t' comment=' (1701) BOM在线充值认证 ' />
+			<Field caseValue='COM_UPDATE_PASSWORD' name='UpdatePassword_Ans'
+				type='UpdatePassword_Ans_t' comment=' (1901) 操作员密码更新 ' />
+			<Field caseValue='DEFAULT' name='MackAns' type='Mack_Ans_t' />
+		</Union>
+		<Union name='Message_t' caseType='MessageType_t'>
+			<Field caseValue='MT_REQMESSAGE' name='REQMessage' type='REQMessage_t'
+				comment=' 请求报文 ' />
+			<Field caseValue='MT_ANSMESSAGE' name='ANSMessage' type='ANSMessage_t'
+				comment=' 应答报文 ' />
+		</Union>
+		<Struct name='PackHead_t'>
+			<Field name='ProtocolVer' type='ProtocolVer_t' comment=' 报文协议字 ' />
+			<Field name='ComType' type='ComType_t' comment=' 消息类型码 ' />
+			<Field name='SendDeviceID' type='DeviceID_t' comment=' 发送方标识码 ' />
+			<Field name='ReceiveDeviceID' type='DeviceID_t' comment=' 接受方标识码 ' />
+			<Field name='RouterTag' type='RouterTag_t' comment=' 路由标记 ' />
+			<Field name='SendTime' type='AFCTime64_t' comment=' 发送时间 ' />
+			<Field name='SessionSN' type='SN_t' comment=' 会话流水号 ' />
+			<Field name='MessageType' type='MessageType_t' comment=' 请求应答标志 ' />
+			<Field name='MACK' type='MACK_t' comment=' 应答码 ' />
+			<Field name='AlgorithmicType' type='AlgorithmicType_t' comment=' 压缩加密算法 ' />
+		</Struct>
+		<Struct name='Pack_t'>
+			<Field name='PackLength' type='PackLength_t' comment=' 包长度 ' />
+			<Field name='PackHead' type='PackHead_t' comment=' 包头 ' />
+			<Field name='PackBody' type='Message_t' comment=' 包体 ' />
+			<Field name='MD5Value' type='MD5_t' comment=' MD5，验证包头和包体 ' />
+		</Struct>
+	</Package>
+</XDR>

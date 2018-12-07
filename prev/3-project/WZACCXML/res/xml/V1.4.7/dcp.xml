@@ -1,0 +1,1036 @@
+<XDR>
+	<Package>
+		<Struct name='UDComm_t'>
+			<Field name='TransactionType' type='TransactionType_t' />
+			<Field name='TransactionDateTime' type='AFCTime64_t' comment=' 交易产生时间 ' />
+			<Field name='LineID' type='LineID_t' comment=' 线路编号 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点号 ' />
+			<Field name='TACSAMID' type='SAMID_t' comment=' SAM卡号 ' />
+			<Field name='ModeCode' type='ModeCode_t' comment=' 车站运营模式 ' />
+			<Field name='UDSN' type='SN_t' comment=' 设备交易流水号 ' />
+		</Struct>
+		<Struct name='YKTUDComm_t'>
+			<Field name='TransactionType' type='TransactionType_t' />
+			<Field name='TransactionDateTime' type='AFCTime64_t' comment=' 交易产生时间 ' />
+			<Field name='LineID' type='LineID_t' comment=' 线路编号 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点号 ' />
+			<Field name='TACSAMID' type='SAMID_t' comment=' SAM卡号 ' />
+			<Field name='ModeCode' type='ModeCode_t' comment=' 车站运营模式 ' />
+			<Field name='UDSN' type='SN_t' comment=' 设备交易流水号 ' />
+			<Field name='TerminateNumber' type='TerminateNumber_t' comment=' 终端机编号 ' />
+			<Field name='SAMSN' type='SN_t' comment=' SAM卡流水号' />
+			<Field name='IssueNumber' type='string' comment=' 发行流水号' />
+			<Field name='WalletTransactionNumber' type='U32_t' comment=' 电子钱包交易序号' />
+			<Field name='CardType' type='U16_t' comment='卡类型 直接取卡上数据' />
+			<Field name='ApplicationEnableDate' type='Date2_t' comment=' 应用启用日期' />
+			<Field name='ApplicationValidDate' type='Date2_t' comment=' 应用有效日期' />
+		</Struct>
+		<Struct name='TicketComm_t'>
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment='票卡大类类型' />
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment='票卡目录,读写器返回时填0' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment='车票物理卡号 ' />
+			<Field name='TicketLogicID' type='string'
+				comment='票卡逻辑号公交CPU卡取应用序列号8个字节，M1卡取卡号(城市代码2个字节+行业代码2个字节+发行流水号4个字节)' />
+			<Field name='TicketStatus' type='TicketStatus_t' comment='票卡状态 直接取票卡上的状态' />
+			<Field name='Reserved' type='U32_t' comment=' 预留 ' />
+			<Field name='TestFlag' type='TestFlag_t' comment='测试标记 一卡通交易该字段为0即默认为非测试票' />
+			<Field name='TicketSN' type='SN_t'
+				comment='票卡交易计数(单程票指交易序列号,CPU卡指电子钱包联机脱机交易序列号,M1指钱包累计交易次数)' />
+			<Field name='RemainingValue' type='ValueCent_t' comment='票卡剩余金额/次数' />
+		</Struct>
+		<Struct name='BankCardTicketComm_t'>
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment='票卡归类类型' />
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment='票卡目录' />
+			<Field name='PrimaryAccount' type='string' comment='主账户 ' count='32' />
+			<Field name='BankCode' type='string' comment='银行代码' count='32' />
+			<Field name='PosNo' type='string' comment='检索参考号' count='32' />
+			<Field name='TerminNo' type='U32_t' comment='终端流水号' />
+		</Struct>
+		<Struct name='QRCodeTicketComm_t'>
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment='票卡归类类型' />
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment='票卡目录' />
+			<Field name='Uid' type='string' comment='用户ID ' count='32' />
+			<Field name='QRCodeID' type='string' comment='卡号' count='32' />
+		</Struct>
+		<Struct name='SJTInitComm_t'>
+			<Field name='CardInitDate' type='Date2_t' comment='票卡初始化日期' />
+			<Field name='InitBatchCode' type='InitBatchCode_t' comment='票卡初始化批次' />
+		</Struct>
+		<Struct name='SJTSale_t'>
+			<Field name='Paymentmeans' type='Paymentmeans_t' comment='支付方式' />
+			<Field name='LanguageFlag' type='LanguageFlag_t' comment='语言标记' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='交易金额' />
+			<Field name='TicketPriceValue' type='ValueCent_t' comment='票价金额' />
+			<Field name='ChangeValue' type='ValueCent_t' comment='找零金额' />
+			<Field name='OriginalValue' type='ValueCent_t'
+				comment='原始金额 TVM和BOM乘客投入的金额 用于乘客购票事务分析' />
+			<Field name='TransactionStatus' type='TransactionStatus_t'
+				comment='交易后状态' />
+			<Field name='ValidStartDate' type='Date2_t'
+				comment='有效开始日期 普通单程票、出站票、福利票等BOM发售只取交易产生时间中年月日，ES发售的其他单程票取票卡中字段售票时间开始有效日期' />
+			<Field name='ValidEndDate' type='Date2_t'
+				comment='有效结束日期 普通单程票、出站票、福利票等BOM发售该值同有效开始日期，ES发售的其他单程票取票卡中字段售票时间结束有效日期' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='CPUInitComm_t'>
+			<Field name='IssuerCode' type='IssuerCode_t' comment='发卡方代码' />
+			<Field name='CardIssueDate' type='Date2_t' comment='票卡发行日期（应用启用日期）' />
+		</Struct>
+		<Struct name='CPUCardSale_t'>
+			<Field name='Paymentmeans' type='Paymentmeans_t' comment='支付方式' />
+			<Field name='LanguageFlag' type='LanguageFlag_t' comment='语言标记' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='交易金额（押金）一卡通（维护费）' />
+			<Field name='TransactionStatus' type='TransactionStatus_t'
+				comment='交易后状态' />
+			<Field name='ValidStartDate' type='Date2_t' comment='有效开始日期' />
+			<Field name='ValidEndDate' type='Date2_t' comment='有效结束日期' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='TicketPassengerComm_t'>
+			<Field name='PassengerTypeID' type='PassengerTypeID_t' comment='持卡人类型标识' />
+			<Field name='PassengerStaffFlag' type='StaffFlag_t' comment='持卡人职工标记' />
+			<Field name='PassengerCNName' type='UnicodeString_t' comment='姓名' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment='证件类型' />
+			<Field name='IdentificationCode' type='string' comment='证件号码' />
+		</Struct>
+		<Struct name='YKTTicketPassengerComm_t'>
+			<Field name='PassengerCNName' type='UnicodeString_t' comment='姓名' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment='证件类型' />
+			<Field name='IdentificationCode' type='string' comment='证件号码' />
+			<Field name='TelephoneCode' type='string' comment='电话号码' />
+			<Field name='Address' type='UnicodeString_t' comment='地址' />
+			<Field name='CompanyName' type='UnicodeString_t' comment='工作单位' />
+		</Struct>
+		<!-- <Struct name='BankCardPayment_t'>
+			<Field name='BankCode' type='string' comment='银行代码' />
+			<Field name='BIZCode' type='string' comment='商户号' />
+			<Field name='PosNo' type='string' comment='终端编号' />
+			<Field name='BankCardCode' type='string' comment='银行卡号' />
+			<Field name='BankTransSN' type='SN_t' comment='银行交易流水号' />
+		</Struct> -->
+		<Struct name='CPUCardAddValue_t'>
+			<Field name='Paymentmeans' type='Paymentmeans_t' comment='支付方式' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='充值金额' />
+			<Field name='ValidDateBeforeAddValue' type='Date2_t' comment='交易前票卡有效日期至' />
+			<Field name='ValidDateAfterAddValue' type='Date2_t' comment='交易后票卡有效日期至' />
+			<Field name='NewRemainingValue' type='ValueCent_t' comment='充值后卡内余额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+			<Field name='TerminateNumber' type='TerminateNumber_t' comment=' 终端机编号 ' />
+			<Field name='HostTransactionTime' type='AFCTime64_t' comment='主机交易时间' />
+		</Struct>
+		<Struct name='CPUCardDeduction_t'>
+			<Field name='TransactionValue' type='ValueCent_t' comment='扣值金额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='MobileDeduction_t'>
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment='票卡大类类型' />
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='Reserved' type='U32_t' comment=' 预留 ' />
+			<Field name='TestFlag' type='TestFlag_t' comment='测试标记' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment='发卡方代码' />
+			<Field name='IssuerSN' type='SN_t' comment='发行流水号' />
+			<Field name='CityCode' type='CityCode_t' comment='城市代码' />
+			<Field name='SIMType' type='SIMType_t' comment='手机SIM卡类型' />
+			<Field name='SIMStatus' type='SIMStatus_t' comment='手机SIM卡状态' />
+			<Field name='SIMID' type='string' comment='手机SIM卡号' />
+			<Field name='MobileNo' type='string' comment='手机号码' />
+			<Field name='SIMTransSN' type='SN_t' comment='SIM卡交易计数' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='扣值金额' />
+			<Field name='SIMStatusAfterTrans' type='SIMStatus_t' comment='交易后手机SIM卡状态' />
+			<Field name='RemainingValueAfterTrans' type='ValueCent_t'
+				comment='交易后SIM卡内余额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='BankCardDeduction_t'>
+			<Field name='TransactionValue' type='ValueCent_t' comment='扣值金额' />
+			<Field name='RemainingValueAfterTrans' type='ValueCent_t'
+				comment='交易后银行卡内余额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='BankCardSurcharge_t'>
+			<Field name='PreAuthValue' type='ValueCent_t' comment='预付款金额' />
+			<Field name='AuthCode' type='string' comment='授权码' count='32' />
+			<Field name='SurchargeCode' type='SurchargeCode_t' comment='更新方式' />
+			<Field name='Paymentmeans' type='Paymentmeans_t' comment='支付方式' />
+			<Field name='SaleDeviceID' type='DeviceID_t' comment='发售设备节点' />
+			<Field name='TicketSaleValue' type='ValueCent_t' comment='发售金额' />
+			<Field name='SurchargeArea' type='SurchargeArea_t' comment='更新区域' />
+			<Field name='SurchargeValue' type='ValueCent_t' comment='更新金额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+			<Field name='ReserveOne' type='U32_t' comment='自定义域1' />
+			<Field name='ReserveTwo' type='U32_t' comment='自定义域2' />
+		</Struct>
+		<Struct name='BankCardEntry_t'>
+			<Field name='PreAuthValue' type='ValueCent_t' comment='预付款金额' />
+			<Field name='AuthCode' type='string' comment='授权码' count='32' />
+			<Field name='ReserveOne' type='U32_t' comment='自定义域1' />
+			<Field name='ReserveTwo' type='U32_t' comment='自定义域2' />
+		</Struct>
+		<Struct name='BankCardExit_t'>
+			<Field name='TransValue' type='ValueCent_t' comment='优惠前交易金额' />
+			<Field name='StartDevice' type='DeviceID_t' comment='进站设备编号' />
+			<Field name='StartTime' type='AFCTime64_t' comment='进站时间' />
+			<Field name='ReserveOne' type='U32_t' comment='自定义域1' />
+			<Field name='ReserveTwo' type='U32_t' comment='自定义域2' />
+		</Struct>
+		<Struct name='QRCodeExit_t'>
+			<Field name='TransValue' type='ValueCent_t' comment='交易金额' />
+			<Field name='StartDevice' type='DeviceID_t' comment='进站设备编号' />
+			<Field name='StartTime' type='AFCTime64_t' comment='进站时间' />
+			<Field name='ReserveOne' type='U32_t' comment='自定义域1' />
+			<Field name='ReserveTwo' type='U32_t' comment='自定义域2' />
+		</Struct>
+		<Struct name='QRCodeSurcharge_t'>
+			<Field name='SurchargeCode' type='SurchargeCode_t' comment='更新方式' />
+			<Field name='Paymentmeans' type='Paymentmeans_t' comment='支付方式' />
+			<Field name='SaleDeviceID' type='DeviceID_t' comment='发售设备节点' />
+			<Field name='TicketSaleValue' type='ValueCent_t' comment='发售金额' />
+			<Field name='SurchargeArea' type='SurchargeArea_t' comment='更新区域' />
+			<Field name='SurchargeValue' type='ValueCent_t' comment='更新金额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+			<Field name='ReserveOne' type='U32_t' comment='自定义域1' />
+			<Field name='ReserveTwo' type='U32_t' comment='自定义域2' />
+		</Struct>
+		<Struct name='SJTRefund_t'>
+			<Field name='PriceValue' type='ValueCent_t' comment='票卡售买时金额' />
+			<Field name='RefundReason' type='RefundReason_t' comment='退票原因' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='实际退票金额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='CPUCardImmediateRefund_t'>
+			<Field name='ValidDate' type='Date2_t' comment='票卡有效日期至' />
+			<Field name='RemainingValue' type='ValueCent_t' comment='票卡余额/次' />
+			<Field name='CardDepositValue' type='ValueCent_t' comment='票卡押金' />
+			<Field name='RefundReason' type='RefundReason_t' comment='退票原因' />
+			<Field name='CardDepreciationValue' type='ValueCent_t' comment='票卡折旧费' />
+			<Field name='ChargeValue' type='ValueCent_t' comment='退票手续费' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='实际退票金额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='CPUCardNonImmediateRefund_t'>
+			<Field name='ConfirmTimeAtAcc' type='AFCTime64_t' comment='ACC确认时间' />
+			<Field name='OperatorIDAtAcc' type='OperatorID_t' comment='ACC确认人' />
+			<Field name='ApplyBillNo' type='string' comment='申请单号' />
+			<Field name='PassengerCNName' type='UnicodeString_t' comment='姓名' />
+			<Field name='Gender' type='Gender_t' comment='性别' />
+			<Field name='IdentificationType' type='IdentificationType_t'
+				comment='证件类型' />
+			<Field name='IdentificationCode' type='string' comment='证件号码' />
+			<Field name='TelephoneCode' type='string' comment='电话号码' />
+			<Field name='Address' type='UnicodeString_t' comment='地址' />
+			<Field name='AccTicketStatus' type='TicketStatus_t' comment='ACC票卡状态' />
+			<Field name='ValidDateAtACC' type='Date2_t' comment='ACC确认票卡有效日期至' />
+			<Field name='RemainingValueAtACC' type='ValueCent_t' comment='ACC确认余额/次' />
+			<Field name='CardDepositValueAtACC' type='ValueCent_t' comment='ACC确认押金' />
+			<Field name='RefundReason' type='RefundReason_t' comment='退票原因' />
+			<Field name='CardDepreciationValue' type='ValueCent_t' comment='票卡折旧费' />
+			<Field name='ChargeValue' type='ValueCent_t' comment='退票手续费' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='实际退票金额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='CPUCardValidityPeriod_t'>
+			<Field name='OldValidDate' type='Date2_t' comment='票卡原有效日期至' />
+			<Field name='NewValidDate' type='Date2_t' comment='票卡新有效日期至' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='手续费' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='CPUCardBlock_t'>
+			<Field name='BlockReasonCode' type='BlockReasonCode_t' comment='锁卡原因' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='CPUCardUnblock_t'>
+			<Field name='UnblockReasonCode' type='UnblockReasonCode_t'
+				comment='解锁原因' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='TicketSurcharge_t'>
+			<Field name='SurchargeCode' type='SurchargeCode_t' comment='更新方式' />
+			<Field name='Paymentmeans' type='Paymentmeans_t' comment='支付方式' />
+			<Field name='TransStatusBeforeTrans' type='TransactionStatus_t'
+				comment='交易前票卡交易状态' />
+			<Field name='TransStatusAfterTrans' type='TransactionStatus_t'
+				comment='交易后票卡交易状态' />
+			<Field name='SaleDeviceID' type='DeviceID_t' comment='售票设备节点编号 只应用于单程票' />
+			<Field name='TicketSaleValue' type='ValueCent_t' comment='发售金额 只应用于单程票' />
+			<Field name='SurchargeArea' type='SurchargeArea_t' comment='更新区域（0-非付费区 1-付费区）' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='更新金额' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='BOMShiftID' type='BOMShiftID_t' comment='BOM班次号' />
+		</Struct>
+		<Struct name='TicketEntry_t'>
+			<Field name='TransStatusBeforeTrans' type='TransactionStatus_t'
+				comment='交易前票卡交易状态' />
+			<Field name='TransStatusAfterTrans' type='TransactionStatus_t'
+				comment='交易后票卡交易状态' />
+			<Field name='RemainingValue' type='ValueCent_t'
+				comment='单程票为发售金额 储值票、一卡通、手机票为票卡余额，余次' />
+		</Struct>
+		<Struct name='TicketExit_t'>
+			<Field name='EntryDeviceID' type='DeviceID_t' comment='进站设备节点编号' />
+			<Field name='EntryTime' type='AFCTime64_t' comment='进站时间' />
+			<Field name='TransStatusBeforeTrans' type='TransactionStatus_t'
+				comment='交易前票卡交易状态' />
+			<Field name='TransStatusAfterTrans' type='TransactionStatus_t'
+				comment='交易后票卡交易状态' />
+			<Field name='RemainingValueBeforeTrans' type='ValueCent_t'
+				comment='交易前卡内余额' />
+			<Field name='RemainingValueAfterTrans' type='ValueCent_t'
+				comment='交易后卡内余额' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='交易金额' />
+			<Field name='OriginalValue' type='ValueCent_t' comment='应收金额' />
+			<Field name='SJTRecycleFlag' type='SJTRecycleFlag_t' comment='单程票回收标记' />
+			<Field name='DeduceLocation' type='DeduceLocation_t'
+				comment='扣费位置（0－公用钱包 1－地铁专用钱包1 2－地铁专用钱包2 3－员工出站，不扣费 4－单程票）' />
+		</Struct>
+		<Struct name='YKTTicketExit_t'>
+			<Field name='EntryDeviceID' type='DeviceID_t' comment='进站设备节点编号' />
+			<Field name='EntryTime' type='AFCTime64_t' comment='进站时间' />
+			<Field name='TransStatusBeforeTrans' type='TransactionStatus_t'
+				comment='交易前票卡交易状态' />
+			<Field name='TransStatusAfterTrans' type='TransactionStatus_t'
+				comment='交易后票卡交易状态' />
+			<Field name='RemainingValueBeforeTrans' type='ValueCent_t'
+				comment='交易前卡内余额' />
+			<Field name='RemainingValueAfterTrans' type='ValueCent_t'
+				comment='交易后卡内余额' />
+			<Field name='TransactionValue' type='ValueCent_t' comment='交易金额' />
+			<Field name='OriginalValue' type='ValueCent_t' comment='应收金额' />
+		</Struct>
+		<Struct name='RebateScheme_t'>
+			<Field name='JoinConcessionID' type='ConcessionID_t' comment='联乘优惠代码' />
+			<Field name='JoinConcessionType' type='JoinConcessionType_t'
+				comment='联乘优惠方式' />
+			<Field name='JoinConcessionValue' type='ValueCent_t' comment='联乘优惠金额' />
+			<Field name='JoinConcessionPercentage' type='Percentage_t'
+				comment='联乘优惠比例' />
+			<Field name='PileConcessionID' type='ConcessionID_t' comment='累计优惠代码' />
+			<Field name='PileConcessionType' type='JoinConcessionType_t'
+				comment='累计优惠方式' />
+			<Field name='PileConcessionValue' type='ValueCent_t' comment='累积优惠金额' />
+			<Field name='PileConcessionPercentage' type='Percentage_t'
+				comment='累计优惠比例' />
+			<Field name='CurrentBonus' type='ValueCent_t' comment='当笔交易积分' />
+			<Field name='AccumulationBonus' type='ValueCent_t' comment='累计优惠积分' />
+		</Struct>
+		<Struct name='SJTSale_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='SJTInitComm' type='SJTInitComm_t' comment='单程票卡初始化结构' />
+			<Field name='SJTSale' type='SJTSale_t' comment='单程票发售结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUSale_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票卡初始化结构' />
+			<Field name='CPUCardSale' type='CPUCardSale_t' comment='储值票发售结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='NamedCPUSale_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票卡初始化结构' />
+			<Field name='CPUCardSale' type='CPUCardSale_t' comment='储值票发售结构' />
+			<Field name='TicketPassengerComm' type='TicketPassengerComm_t'
+				comment='记名卡乘客结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUCardAddValue_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票卡初始化结构' />
+			<Field name='CPUCardAddValue' type='CPUCardAddValue_t' comment='储值票充值结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUCardDeduction_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票卡初始化结构' />
+			<Field name='CPUCardDeduction' type='CPUCardDeduction_t'
+				comment='储值票扣款结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='MobileDeduction_TX'>
+			<Field name='MobileDeduction' type='MobileDeduction_t' comment='手机卡扣款结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='BankCardDeduction_TX'>
+			<Field name='BankCardTicketComm' type='BankCardTicketComm_t'
+				comment='银行卡票卡公共结构' />
+			<Field name='BankCardDeduction' type='BankCardDeduction_t'
+				comment='银行卡扣款结构' />
+		</Struct>
+		<Struct name='BankCardSurcharge_TX'>
+			<Field name='BankCardTicketComm' type='BankCardTicketComm_t'
+				comment='银行卡票卡公共结构' />
+			<Field name='BankCardSurcharge' type='BankCardSurcharge_t'
+				comment='银行卡更新结构' />
+		</Struct>
+		<Struct name='BankCardEntry_TX'>
+			<Field name='BankCardTicketComm' type='BankCardTicketComm_t'
+				comment='银行卡票卡公共结构' />
+			<Field name='BankCardEntry' type='BankCardEntry_t'
+				comment='银行卡进站结构' />
+		</Struct>
+		<Struct name='BankCardExit_TX'>
+			<Field name='BankCardTicketComm' type='BankCardTicketComm_t'
+				comment='银行卡票卡公共结构' />
+			<Field name='BankCardExit' type='BankCardExit_t'
+				comment='银行卡出站结构' />
+		</Struct>
+		<Struct name='QRCodeSurcharge_TX'>
+			<Field name='QRCodeTicketComm' type='QRCodeTicketComm_t'
+				comment='二维码票卡公共结构' />
+			<Field name='QRCodeSurcharge' type='QRCodeSurcharge_t'
+				comment='二维码更新结构' />
+			<Field name='ReserveOne' type='U32_t' comment='自定义域1' />
+			<Field name='ReserveTwo' type='U32_t' comment='自定义域2' />
+		</Struct>
+		<Struct name='QRCodeEntry_TX'>
+			<Field name='QRCodeTicketComm' type='QRCodeTicketComm_t'
+				comment='二维码票卡公共结构' />
+			<Field name='ReserveOne' type='U32_t' comment='自定义域1' />
+			<Field name='ReserveTwo' type='U32_t' comment='自定义域2' />
+		</Struct>
+		<Struct name='QRCodeExit_TX'>
+			<Field name='QRCodeTicketComm' type='QRCodeTicketComm_t'
+				comment='二维码票卡公共结构' />
+			<Field name='QRCodeExit' type='QRCodeExit_t' comment='二维码出站结构' />
+		</Struct>
+		<Struct name='SJTRefund_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='SJTInitComm' type='SJTInitComm_t' comment='单程票初始化结构' />
+			<Field name='SJTRefund' type='SJTRefund_t' comment='单程票退票结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUCardImmediateRefund_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票初始化结构' />
+			<Field name='CPUCardImmediateRefund' type='CPUCardImmediateRefund_t'
+				comment='储值票即时退票结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUCardNonImmediateRefund_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票初始化结构' />
+			<Field name='CPUCardNonImmediateRefund' type='CPUCardNonImmediateRefund_t'
+				comment='储值票非即时退票结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUCardValidityPeriod_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票初始化结构' />
+			<Field name='CPUCardValidityPeriod' type='CPUCardValidityPeriod_t'
+				comment='储值票续期结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUCardBlock_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票初始化结构' />
+			<Field name='CPUCardBlock' type='CPUCardBlock_t' comment='储值票锁卡结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='CPUCardUnblock_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票初始化结构' />
+			<Field name='CPUCardUnblock' type='CPUCardUnblock_t' comment='储值票解锁结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='TicketSurcharge_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='TicketSurcharge' type='TicketSurcharge_t' comment='票卡更新结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='TicketEntry_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='TicketEntry' type='TicketEntry_t' comment='票卡进站结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='TicketExit_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='TicketExit' type='TicketExit_t' comment='票卡出站结构' />
+			<Field name='RebateScheme' type='RebateScheme_t' comment='出站积分优惠结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='YKTTicketExit_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='TicketExit' type='YKTTicketExit_t' comment='一卡通票卡出站结构' />
+			<Field name='RebateScheme' type='RebateScheme_t' comment='出站积分优惠结构' />
+			<Field name='Reserved1' type='U32_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='U32_t' comment=' 预留2 ' />
+		</Struct>
+		<Struct name='YKTSale_TX'>
+			<Field name='TicketComm' type='TicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUCardSale' type='CPUCardSale_t' comment='储值票售卖结构' />
+			<Field name='YKTTicketPassengerComm' type='YKTTicketPassengerComm_t'
+				comment='一卡通乘客结构' />
+		</Struct>
+		<Struct name='ARComm_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment='设备节点编号' />
+			<Field name='ARFileTag' type='ARFileTag_t' comment=' 审计方式' />
+			<Field name='ACCUDSNStart' type='SN_t' comment='上一个寄存器文件关联的最后一笔交易记录的UDSN+1' />
+			<Field name='ACCUDSNEnd' type='SN_t' comment='当前寄存器文件关闭时所关联的最后一笔交易记录的UDSN' />
+			<Field name='YKTUDSNStart' type='SN_t'
+				comment='上一个寄存器文件关联的最后一笔市民卡、公交卡交易记录的UDSN+1' />
+			<Field name='YKTUDSNEnd' type='SN_t'
+				comment='当前寄存器文件关闭时所关联的最后一笔市民卡、公交卡交易记录的UDSN' />
+			<Field name='MobileUDSNStart' type='SN_t'
+				comment='上一个寄存器文件关联的最后一笔手机支付交易记录的UDSN+1' />
+			<Field name='MobileUDSNEnd' type='SN_t'
+				comment='当前寄存器文件关闭时所关联的最后一笔手机支付交易记录的UDSN' />
+			<Field name='BankUDSNStart' type='SN_t'
+				comment='上一个寄存器文件关联的最后一笔手机支付交易记录的UDSN+1' />
+			<Field name='BankUDSNEnd' type='SN_t'
+				comment='当前寄存器文件关闭时所关联的最后一笔手机支付交易记录的UDSN' />
+		</Struct>
+		<Struct name='AGMTicketFareInfo_t'>
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment='发卡方代码' />
+			<Field name='NbofEntries' type='ARCount_t' comment='进站人数' />
+			<Field name='NbofExit' type='ARCount_t' comment='出站人数' />
+			<Field name='ValueCollected' type='ValueCent_t' comment='交易金额' />
+			<Field name='NbofBlocked' type='ARCount_t' comment='被拒黑名单数' />
+		</Struct>
+		<Struct name='AGMSnapshotInfo_t'>
+			<Field name='TotalNbofSJTRead' type='ARCount_t' comment='单程票读写次数' />
+			<Field name='TotalNbofACCCSCRead' type='ARCount_t' comment='储值票读写次数' />
+			<Field name='TotalNbofYKTCSCRead' type='ARCount_t' comment='一卡通读写次数' />
+			<Field name='TotalNbofMobileRead' type='ARCount_t' comment='手机卡读写次数' />
+			<Field name='TotalNbofSJTEntry' type='ARCount_t' comment='单程票进站次数' />
+			<Field name='TotalNbofACCCSCEntry' type='ARCount_t' comment='储值票进站次数' />
+			<Field name='TotalNbofYKTCSCEntry' type='ARCount_t' comment='一卡通进站次数' />
+			<Field name='TotalNbofMobileEntry' type='ARCount_t' comment='手机卡进站次数' />
+			<Field name='TotalNbofSJTExit' type='ARCount_t' comment='单程票出站次数' />
+			<Field name='TotalNbofACCCSCExit' type='ARCount_t' comment='储值票出站次数' />
+			<Field name='TotalNbofYKTCSCExit' type='ARCount_t' comment='一卡通出站次数' />
+			<Field name='TotalNbofMobileExit' type='ARCount_t' comment='手机卡出站次数' />
+			<Field name='TotalValueCollectedbySJT' type='ValueCent_t'
+				comment='单程票交易金额' />
+			<Field name='TotalValueCollectedbyACCCSC' type='ValueCent_t'
+				comment='储值票交易金额' />
+			<Field name='TotalValueCollectedbyYKTCSC' type='ValueCent_t'
+				comment='一卡通交易金额' />
+			<Field name='TotalValueCollectedbyMobile' type='ValueCent_t'
+				comment='手机卡交易金额' />
+			<Field name='TotalNbofSJTCallback' type='ARCount_t' comment='单程票回收张数' />
+			<Field name='TotalNbofInvalidSJT' type='ARCount_t' comment='无效单程票数量' />
+			<Field name='TotalNbofInvalidACCCSC' type='ARCount_t' comment='无效储值票数量' />
+			<Field name='TotalNbofInvalidYKTCSC' type='ARCount_t' comment='无效一卡通数量' />
+			<Field name='TotalNbofInvalidMobile' type='ARCount_t' comment='无效手机卡数量' />
+			<Field name='NbofSJTBlocked' type='ARCount_t' comment='被锁单程票黑名单数量' />
+			<Field name='NbofACCCSCBlocked' type='ARCount_t' comment='被锁储值票黑名单数量' />
+			<Field name='NbofYKTBlocked' type='ARCount_t' comment='被锁一卡通黑名单数量' />
+			<Field name='NbofMobileBlocked' type='ARCount_t' comment='被锁手机卡黑名单数量' />
+			<Field name='TotalNbofTestEntry' type='ARCount_t' comment='测试票进站数' />
+			<Field name='TotalNbofTestExit' type='ARCount_t' comment='测试票出站数' />
+			<Field name='TotalValueTestCollectedbySJT' type='ValueCent_t'
+				comment='单程票测试票交易金额（预留）' />
+			<Field name='TotalValueTestCollectedbyACCCSC' type='ValueCent_t'
+				comment='储值票测试票交易金额（预留）' />
+			<Field name='TotalValueTestCollectedbyYKTCSC' type='ValueCent_t'
+				comment='一卡通测试票交易金额（预留）' />
+			<Field name='TotalValueTestCollectedbyMobile' type='ValueCent_t'
+				comment='手机卡测试票交易金额（预留）' />
+			<Field name='TotalNbofManualOpeningClosedFlaps' type='ARCount_t'
+				comment='扇门强制打开次数' />
+			<Field name='TotalNbofIntrusionEntries' type='ARCount_t'
+				comment='进站闯入次数' />
+			<Field name='TotalNbofIntrusionExit' type='ARCount_t' comment='出站闯入次数' />
+			<Field name='TotalNbofSJTJams' type='ARCount_t' comment='单程票阻塞张数' />
+			<Field name='Reserved1' type='ARCount_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='ARCount_t' comment=' 预留2 ' />
+			<Field name='Reserved3' type='ARCount_t' comment=' 预留3 ' />
+		</Struct>
+		<Struct name='AGMAuditInfo_t'>
+			<Field name='AGMSnapshotInfo' type='AGMSnapshotInfo_t' comment='自动检票机综合快照审计寄存器' />
+			<Field name='AGMTicketFareInfo' type='AGMTicketFareInfo_t'
+				arrayType='VAR' comment='自动检票机票种信息审计寄存器' />
+		</Struct>
+		<Struct name='BOMTicketFareInfo_t'>
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment='发卡方代码' />
+			<Field name='NbofIssue' type='ARCount_t' comment='发售数量' />
+			<Field name='TotalValueofIssue' type='ValueCent_t' comment='发售金额' />
+			<Field name='TotalValueofDeposit' type='ValueCent_t' comment='押金金额' />
+			<Field name='NbofAddValue' type='ARCount_t' comment='充值数量' />
+			<Field name='TotalValueofAddValue' type='ValueCent_t' comment='充值金额' />
+			<Field name='NbofSurcharge' type='ARCount_t' comment='更新数量' />
+			<Field name='TotalValueofSurcharge' type='ValueCent_t' comment='更新金额' />
+			<Field name='NbofImmediateRefund' type='ARCount_t' comment='即时退款数量' />
+			<Field name='TotalValueofImmediateRefund' type='ValueCent_t'
+				comment='即时退票金额' />
+			<Field name='TotalValueofImmediateRefundCharge' type='ValueCent_t'
+				comment='即时退票手续费' />
+			<Field name='NbofNonImmediateRefund' type='ARCount_t' comment='非即时退票数量' />
+			<Field name='TotalValueofNonImmediateRefund' type='ValueCent_t'
+				comment='非即时退票金额' />
+			<Field name='TotalValueofNonImmediateRefundCharge' type='ValueCent_t'
+				comment='非即时退票手续费' />
+			<Field name='TotalValueofRefundDeposit' type='ValueCent_t'
+				comment='退押金金额' />
+			<Field name='NbofBlacklistBlocked' type='ARCount_t' comment='黑名单阻止数量' />
+			<Field name='NbofUnblocked' type='ARCount_t' comment='解锁数量' />
+			<Field name='NbofCardLossDeclaration' type='ARCount_t' comment='卡挂失数量' />
+			<Field name='NbofCardLossDeclarationCancel' type='ARCount_t'
+				comment='卡解挂数量' />
+			<Field name='NbofTicketValidityPeriodExtension' type='ARCount_t'
+				comment='延期数量' />
+		</Struct>
+		<Struct name='TicketCatalogDetails_t'>
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment='票卡目录' />
+			<Field name='RemainingTicketQuantity' type='TicketQuantity_t'
+				comment='票卡库存数量' />
+		</Struct>
+		<Struct name='BOMSnapshotInfo_t'>
+			<Field name='TotalNbofIssueSJT' type='ARCount_t' comment='单程票发售数量' />
+			<Field name='TotalValueofIssueSJT' type='ValueCent_t' comment='单程票发售金额' />
+			<Field name='TotalNbofIssueACCCSC' type='ARCount_t' comment='储值票发售数量' />
+			<Field name='TotalValueofIssueACCCSC' type='ValueCent_t'
+				comment='储值票发售金额' />
+			<Field name='NbofAddValue' type='ARCount_t' comment='充值数量' />
+			<Field name='TotalValueofAddValue' type='ValueCent_t' comment='充值金额' />
+			<Field name='NbofSurcharge' type='ARCount_t' comment='更新数量' />
+			<Field name='TotalValueofSurcharge' type='ValueCent_t' comment='更新金额' />
+			<Field name='NbofImmediateRefund' type='ARCount_t' comment='即时退款数量' />
+			<Field name='TotalValueofImmediateRefund' type='ValueCent_t'
+				comment='即时退票金额' />
+			<Field name='TotalValueofImmediateRefundCharge' type='ValueCent_t'
+				comment='即时退票手续费' />
+			<Field name='NbofNonImmediateRefund' type='ARCount_t' comment='非即时退票数量' />
+			<Field name='TotalValueofNonImmediateRefund' type='ValueCent_t'
+				comment='非即时退票金额' />
+			<Field name='TotalValueofNonImmediateRefundCharge' type='ValueCent_t'
+				comment='非即时退票手续费' />
+			<Field name='TotalValueofRefundDeposit' type='ValueCent_t'
+				comment='退押金金额' />
+			<Field name='NbofBlacklistBlocked' type='ARCount_t' comment='黑名单阻止数量' />
+			<Field name='NbofUnblocked' type='ARCount_t' comment='解锁数量' />
+			<Field name='NbofCardLossDeclaration' type='ARCount_t' comment='卡挂失数量' />
+			<Field name='NbofCardLossDeclarationCancel' type='ARCount_t'
+				comment='卡解挂数量' />
+			<Field name='NbofTicketValidityPeriodExtension' type='ARCount_t'
+				comment='延期数量' />
+			<Field name='TotalNbofTestIssueSJT' type='ARCount_t' comment='测试单程票发售数量' />
+			<Field name='TotalValueofTestIssueSJT' type='ValueCent_t'
+				comment='测试单程票发售金额' />
+			<Field name='TotalNbofTestIssueACCCSC' type='ARCount_t'
+				comment='测试储值票发售数量' />
+			<Field name='TotalValueofTestIssueACCCSC' type='ValueCent_t'
+				comment='测试储值票发售金额' />
+			<Field name='TotalValueofTestDeposit' type='ValueCent_t'
+				comment='测试储值票押金金额' />
+			<Field name='NbofTestAddValue' type='ARCount_t' comment='测试票充值数量' />
+			<Field name='TotalValueofTestAddValue' type='ValueCent_t'
+				comment='测试票充值金额' />
+			<Field name='NbofTestSurcharge' type='ARCount_t' comment='测试更新数量' />
+			<Field name='TotalValueofTestSurcharge' type='ValueCent_t'
+				comment='测试更新金额' />
+			<Field name='NbofTestRefund' type='ARCount_t' comment='测试退票数量' />
+			<Field name='TotalValueofTestRefund' type='ValueCent_t'
+				comment='测试退票金额' />
+			<Field name='TotalNbofValidSJTCSCRead' type='ARCount_t'
+				comment='单程票有效读写次数' />
+			<Field name='TotalNbofValidACCCSCRead' type='ARCount_t'
+				comment='储值票有效读写次数' />
+			<Field name='TotalNbofValidYKTCSCRead' type='ARCount_t'
+				comment='一卡通有效读写次数' />
+			<Field name='Reserved1' type='ARCount_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='ARCount_t' comment=' 预留2 ' />
+			<Field name='Reserved3' type='ARCount_t' comment=' 预留3 ' />
+			<Field name='TicketCatalogDetails' type='TicketCatalogDetails_t'
+				arrayType='VAR' comment='票卡库存明细' />
+		</Struct>
+		<Struct name='BOMAuditInfo_t'>
+			<Field name='BOMSnapshotInfo' type='BOMSnapshotInfo_t' comment='半自动售票机综合快照审计寄存器' />
+			<Field name='BOMTicketFareInfo' type='BOMTicketFareInfo_t'
+				arrayType='VAR' comment='半自动售票机票种审计寄存器' />
+		</Struct>
+		<Struct name='TVMSnapshotInfo_t'>
+			<Field name='TotalNbofStockInSJT' type='ARCount_t' comment='单程票入库数量' />
+			<Field name='TotalNbofStockOutSJT' type='ARCount_t' comment='单程票出库数量' />
+			<Field name='TotalNbofIssuedSJT' type='ARCount_t' comment='单程票发售数量' />
+			<Field name='TotalValueofIssueSJT' type='ValueCent_t' comment='单程票发售金额' />
+			<Field name='TotalNbofRejectedSJT' type='ARCount_t' comment='单程票废票数量' />
+			<Field name='TotalValueofOverCashPayment' type='ValueCent_t'
+				comment='多付发售金额' />
+			<Field name='TotalValueofChangeGiven' type='ValueCent_t'
+				comment='找零金额' />
+			<Field name='TotalValueofCashIn' type='ValueCent_t' comment='加币金额' />
+			<Field name='TotalValueofCashOut' type='ValueCent_t' comment='导出钱箱金额' />
+			<Field name='NbofCashAddValue' type='ARCount_t' comment='现金充值数量' />
+			<Field name='TotalValueofCashAddValue' type='ValueCent_t'
+				comment='现金充值金额' />
+			<Field name='NbofBankAddValue' type='ARCount_t' comment='银行卡充值数量' />
+			<Field name='TotalValueofBankAddValue' type='ValueCent_t'
+				comment='银行卡充值金额' />
+			<Field name='ContainerID' type='ContainerID_t' comment='纸币废币箱编号' />
+			<Field name='TotalNbofWasteMoney' type='ARCount_t' comment='纸币废币箱纸币总张数' />
+			<Field name='TotalNbofCoinInsert' type='ARCount_t' comment='接受硬币个数' />
+			<Field name='TotalValuebyInsertedCoins' type='ValueCent_t'
+				comment='硬币交易金额' />
+			<Field name='TotalNbofBNAInsert' type='ARCount_t' comment='接受纸币张数' />
+			<Field name='TotalValuebyInsertedBanknote' type='ValueCent_t'
+				comment='纸币交易金额' />
+			<Field name='TotalNbofValidSJTCSCRead' type='ARCount_t'
+				comment='单程票有效读写次数' />
+			<Field name='TotalNbofValidACCCSCRead' type='ARCount_t'
+				comment='储值票有效读写次数' />
+			<Field name='TotalNbofValidYKTCSCRead' type='ARCount_t'
+				comment='一卡通有效读写次数' />
+			<Field name='Reserved1' type='ARCount_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='ARCount_t' comment=' 预留2 ' />
+			<Field name='Reserved3' type='ARCount_t' comment=' 预留3 ' />
+			<Field name='CashBoxInfos' type='CashBoxInfo_t' arrayType='VAR'
+				comment='钱箱信息列表' />
+		</Struct>
+		<Struct name='SJTAuditInfo_t'>
+			<Field name='SJTFaceValue' type='ValueCent_t' comment=' 发售面值' />
+			<Field name='NbofCash' type='ARCount_t' comment=' 钱币数量' />
+			<Field name='TotalValueofCash' type='ValueCent_t' comment=' 钱币金额' />
+		</Struct>
+		<Struct name='TVMTicketFareInfo_t'>
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment='发卡方代码' />
+			<Field name='NbofCashAddValue' type='ARCount_t' comment='现金充值数量' />
+			<Field name='TotalValueofCashAddValue' type='ValueCent_t'
+				comment='现金充值金额' />
+			<Field name='NbofBankAddValue' type='ARCount_t' comment='银行卡充值数量' />
+			<Field name='TotalValueofBankAddValue' type='ValueCent_t'
+				comment='银行卡充值金额' />
+		</Struct>
+		<Struct name='TVMAuditInfo_t'>
+			<Field name='TVMSnapshotInfos' type='TVMSnapshotInfo_t' />
+			<Field name='SJTAuditInfos' type='SJTAuditInfo_t' arrayType='VAR'
+				comment='单程票发售审计寄存器' />
+			<Field name='TVMTicketFareInfo' type='TVMTicketFareInfo_t'
+				arrayType='VAR' comment='自动售票机票种审计寄存器' />
+		</Struct>
+		<Struct name='ISMTicketFareInfo_t'>
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment='发卡方代码' />
+			<Field name='NbofAddValueByCash' type='ARCount_t' comment='现金充值数量' />
+			<Field name='TotalValueofAddValueByCash' type='ValueCent_t'
+				comment='现金充值金额' />
+			<Field name='NbofAddValueByBankCard' type='ARCount_t' comment='银行卡充值数量' />
+			<Field name='TotalValueofAddValueByBankCard' type='ValueCent_t'
+				comment='银行卡充值金额' />
+		</Struct>
+		<Struct name='ISMSnapshotInfo_t'>
+			<Field name='NbofAddValueByCash' type='ARCount_t' comment='现金充值数量' />
+			<Field name='TotalValueofAddValueByCash' type='ValueCent_t'
+				comment='现金充值金额' />
+			<Field name='NbofAddValueByBankCard' type='ARCount_t' comment='银行卡充值数量' />
+			<Field name='TotalValueofAddValueByBankCard' type='ValueCent_t'
+				comment='银行卡充值金额' />
+			<Field name='BankNoteBoxID' type='ContainerID_t' comment='纸币箱编号' />
+			<Field name='TotalValueofBankNotebox' type='ValueCent_t'
+				comment='纸币箱总金额' />
+			<Field name='TotalNbofBNAInsert' type='ARCount_t' comment='接受纸币张数' />
+			<Field name='TotalValuebyInsertedBanknote' type='ValueCent_t'
+				comment='纸币交易金额' />
+			<Field name='TotalNbofValidACCCSCRead' type='ARCount_t'
+				comment='储值票有效读写次数' />
+			<Field name='TotalNbofValidBankCardRead' type='ARCount_t'
+				comment='银行卡有效读写次数' />
+			<Field name='TotalNbofValidYKTCSCRead' type='ARCount_t'
+				comment='一卡通有效读写次数' />
+			<Field name='Reserved1' type='ARCount_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='ARCount_t' comment=' 预留2 ' />
+			<Field name='Reserved3' type='ARCount_t' comment=' 预留3 ' />
+			<Field name='MoneyInBankNoteBox_t' type='MoneyInBankNoteBox_t'
+				arrayType='VAR' comment='纸币信息列表' />
+		</Struct>
+		<Struct name='ISMAuditInfo_t'>
+			<Field name='ISMSnapshotInfo' type='ISMSnapshotInfo_t' comment='查询充值机综合快照结构' />
+			<Field name='ISMTicketFareInfo' type='ISMTicketFareInfo_t'
+				arrayType='VAR' comment='查询充值机票种审计寄存器' />
+		</Struct>
+		<Struct name='PCATicketFareInfo_t'>
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='IssuerCode' type='IssuerCode_t' comment='发卡方代码' />
+			<Field name='NbofEntries' type='ARCount_t' comment='进站人数' />
+			<Field name='NbofExit' type='ARCount_t' comment='出站人数' />
+			<Field name='ValueCollected' type='ValueCent_t' comment='交易金额' />
+			<Field name='NbofBlocked' type='ARCount_t' comment='被拒黑名单数' />
+		</Struct>
+		<Struct name='PCASnapshotInfo_t'>
+			<Field name='TotalNbofSJTRead' type='ARCount_t' comment='单程票读写次数' />
+			<Field name='TotalNbofACCCSCRead' type='ARCount_t' comment='储值票读写次数' />
+			<Field name='TotalNbofYKTCSCRead' type='ARCount_t' comment='一卡通读写次数' />
+			<Field name='TotalNbofMobileRead' type='ARCount_t' comment='手机卡读写次数' />
+			<Field name='TotalNbofSJTEntry' type='ARCount_t' comment='单程票进站次数' />
+			<Field name='TotalNbofACCCSCEntry' type='ARCount_t' comment='储值票进站次数' />
+			<Field name='TotalNbofYKTCSCEntry' type='ARCount_t' comment='一卡通进站次数' />
+			<Field name='TotalNbofMobileEntry' type='ARCount_t' comment='手机卡进站次数' />
+			<Field name='TotalNbofSJTExit' type='ARCount_t' comment='单程票出站次数' />
+			<Field name='TotalNbofACCCSCExit' type='ARCount_t' comment='储值票出站次数' />
+			<Field name='TotalNbofYKTCSCExit' type='ARCount_t' comment='一卡通出站次数' />
+			<Field name='TotalNbofMobileExit' type='ARCount_t' comment='手机卡出站次数' />
+			<Field name='TotalValueCollectedbySJT' type='ValueCent_t'
+				comment='单程票交易金额' />
+			<Field name='TotalValueCollectedbyACCCSC' type='ValueCent_t'
+				comment='储值票交易金额' />
+			<Field name='TotalValueCollectedbyYKTCSC' type='ValueCent_t'
+				comment='一卡通交易金额' />
+			<Field name='TotalValueCollectedbyMobile' type='ValueCent_t'
+				comment='手机卡交易金额' />
+			<Field name='TotalNbofInvalidSJT' type='ARCount_t' comment='无效单程票数量' />
+			<Field name='TotalNbofInvalidACCCSC' type='ARCount_t' comment='无效储值票数量' />
+			<Field name='TotalNbofInvalidYKTCSC' type='ARCount_t' comment='无效一卡通数量' />
+			<Field name='TotalNbofInvalidMobile' type='ARCount_t' comment='无效手机卡数量' />
+			<Field name='NbofACCCSCBlocked' type='ARCount_t' comment='被锁储值票黑名单数量' />
+			<Field name='NbofYKTBlocked' type='ARCount_t' comment='被锁一卡通黑名单数量' />
+			<Field name='NbofMobileBlocked' type='ARCount_t' comment='被锁手机卡黑名单数量' />
+			<Field name='TotalNbofTestEntry' type='ARCount_t' comment='测试票进站数' />
+			<Field name='TotalNbofTestExit' type='ARCount_t' comment='测试票出站数' />
+			<Field name='TotalValueTestCollectedbySJT' type='ValueCent_t'
+				comment='单程票测试票交易金额' />
+			<Field name='TotalValueTestCollectedbyACCCSC' type='ValueCent_t'
+				comment='储值票测试票交易金额' />
+			<Field name='TotalValueTestCollectedbyYKTCSC' type='ValueCent_t'
+				comment='一卡通测试票交易金额' />
+			<Field name='TotalValueTestCollectedbyMobile' type='ValueCent_t'
+				comment='手机卡测试票交易金额' />
+			<Field name='Reserved1' type='ARCount_t' comment=' 预留1 ' />
+			<Field name='Reserved2' type='ARCount_t' comment=' 预留2 ' />
+			<Field name='Reserved3' type='ARCount_t' comment=' 预留3 ' />
+		</Struct>
+		<Struct name='PCAAuditInfo_t'>
+			<Field name='PCASnapshotInfo' type='PCASnapshotInfo_t' comment='手持式检票机综合快照结构' />
+			<Field name='PCATicketFareInfo' type='PCATicketFareInfo_t'
+				arrayType='VAR' comment='手持式检票机票种审计寄存器' />
+		</Struct>
+		<Struct name='TicketStockPointList_t'>
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录编号 ' />
+			<Field name='TicketQuantity' type='TicketQuantity_t' comment=' 车票数量 ' />
+			<Field name='InvalidTicketQuantity' type='TicketQuantity_t'
+				comment=' 废票数量 ' />
+		</Struct>
+		<Struct name='TicketStockInOutDetailList_t'>
+			<Field name='BillCode' type='string' comment=' 单据编号 ' />
+			<Field name='OccurTime' type='AFCTime64_t' comment=' 发生时间 ' />
+			<Field name='OperatorID' type='OperatorID_t' comment='  操作员  ' />
+			<Field name='Operator1ID' type='OperatorID_t' comment='  配送员  ' />
+			<Field name='Station1ID' type='StationID_t' comment=' 来源/目的车站编号 ' />
+			<Field name='AllocateQuantity' type='TicketQuantity_t' comment=' 调配数量 ' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录编号 ' />
+			<Field name='InOutFlag' type='InOutFlag_t' comment=' 出入库标记 ' />
+			<Field name='InOutType' type='InOutType_t' comment=' 出入库类型 ' />
+			<Field name='TicketQuantity' type='TicketQuantity_t' comment=' 车票数量 ' />
+			<Field name='TicketValue' type='U32_t' comment='车票面值' />
+			<Field name='InvalidTicketQuantity' type='TicketQuantity_t'
+				comment=' 废票数量 ' />
+		</Struct>
+		<Struct name='TicketStockInOutBillFile_t'>
+			<Field name='LineID' type='LineID_t' comment=' 线路编号 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='TicketStockInOutDetailList' type='TicketStockInOutDetailList_t'
+				arrayType='VAR' comment=' 车票出入库列表结构 ' />
+		</Struct>
+		<Struct name='TicketStockSnapshotFile_t'>
+			<Field name='LineID' type='LineID_t' comment=' 线路编号 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='BusinessDate' type='Date2_t' comment=' 运营日 ' />
+			<Field name='TicketStockPointList' type='TicketStockPointList_t'
+				arrayType='VAR' comment=' 车票库存结构 ' />
+		</Struct>
+		<Struct name='TicketDifferenceStockList_t'>
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment=' 票卡目录编号 ' />
+			<Field name='TicketQuantity' type='TicketQuantity_t' comment=' SC车票数量 ' />
+			<Field name='InvalidTicketQuantity' type='TicketQuantity_t'
+				comment=' SC废票数量 ' />
+			<Field name='ACCStatTicketQuantity' type='TicketQuantity_t'
+				comment=' ACC统计车票数量 ' />
+			<Field name='ACCStatInvalidTicketQuantity' type='TicketQuantity_t'
+				comment=' ACC统计废票数量 ' />
+		</Struct>
+		<Struct name='SettlementFileList_t'>
+			<Field name='UDFileName' type='string' comment=' 交易文件名 ' />
+			<Field name='UDRecordsNum' type='RecordsNum_t' comment=' 结算交易数 ' />
+			<Field name='TransMoney' type='ValueCent_t' comment=' 结算交易金额 ' />
+		</Struct>
+		<Struct name='SettlementDoubtfulRecordList_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点编号 ' />
+			<Field name='UDSN' type='SN_t' comment=' 交易记录流水号 ' />
+			<Field name='DoubtfulType' type='FileDealResult_t' comment=' 可疑类型 ' />
+		</Struct>
+		<Struct name='SettlementDoubtfulFileList_t'>
+			<Field name='SettlementDoubtfulFileList' type='SettlementFileList_t'
+				comment=' 结算可疑文件列表结构 ' />
+			<Field name='SettlementStatus' type='SettlementStatus_t'
+				comment=' 文件解析代码 ' />
+			<Field name='SettlementDoubtfulRecordList' type='SettlementDoubtfulRecordList_t'
+				arrayType='VAR' comment=' 结算可疑交易记录列表结构 ' />
+		</Struct>
+		<Struct name='TransactionAccountFile_t'>
+			<Field name='LineID' type='LineID_t' comment=' 线路编号 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='SettlementDate' type='Date2_t' comment=' 结算日 ' />
+			<Field name='CardSeries' type='CardSeries_t' comment=' 卡系 ' />
+			<Field name='TotalNbOfUDNormal' type='RecordsNum_t' comment=' 结算正常交易记录总数 ' />
+			<Field name='TotalValueOfNormal' type='ValueCent64_t' comment=' 结算正常交易金额总数 ' />
+			<Field name='TotalNbOfDoubtful' type='RecordsNum_t' comment=' 结算可疑交易记录总数 ' />
+			<Field name='TotalValueOfDoubtful' type='ValueCent64_t'
+				comment=' 结算可疑交易金额总数 ' />
+			<Field name='SettlementNormalFileList' type='SettlementFileList_t'
+				arrayType='VAR' comment=' 结算正常文件列表结构 ' />
+			<Field name='SettlementDoubtfulFileList' type='SettlementDoubtfulFileList_t'
+				arrayType='VAR' comment=' 结算可疑文件列表结构 ' />
+		</Struct>
+		<Struct name='DoubtfulUDList_t'>
+			<Field name='DeviceID' type='DeviceID_t' comment=' 设备节点编号 ' />
+			<Field name='UDSN' type='SN_t' comment=' 交易记录流水号 ' />
+			<Field name='DealResultOfDoubtful' type='Boolean_t' comment=' 处理结果 ' />
+		</Struct>
+		<Struct name='DoubtfulAdjustFileList_t'>
+			<Field name='UDFileName' type='string' comment=' 可疑交易文件名 ' />
+			<Field name='DoubtfulUDList' type='DoubtfulUDList_t' arrayType='VAR'
+				comment=' 可疑交易记录列表结构 ' />
+		</Struct>
+		<Struct name='TransactionDoubtfulFile_t'>
+			<Field name='LineID' type='LineID_t' comment=' 线路编号 ' />
+			<Field name='StationID' type='StationID_t' comment=' 车站编号 ' />
+			<Field name='SettlementDate' type='Date2_t' comment=' 结算日 ' />
+			<Field name='CardSeries' type='CardSeries_t' comment=' 卡系 ' />
+			<Field name='TotalNbOfDoubtfulAdjust' type='RecordsNum_t'
+				comment=' 可疑调整交易记录总数 ' />
+			<Field name='TotalNbOfAccept' type='RecordsNum_t' comment=' 接受交易记录总数 ' />
+			<Field name='TotalValueOfAccept' type='ValueCent64_t' comment=' 接受交易金额总数 ' />
+			<Field name='TotalNbOfReject' type='RecordsNum_t' comment=' 拒付交易记录总数 ' />
+			<Field name='TotalValueOfReject' type='ValueCent64_t' comment=' 拒付交易金额总数 ' />
+			<Field name='DoubtfulAdjustFileList' type='DoubtfulAdjustFileList_t'
+				arrayType='VAR' comment=' 可疑调整文件列表 ' />
+		</Struct>
+		<Struct name='ESTicketComm_t'>
+			<Field name='TicketFamilyType' type='TicketFamilyType_t'
+				comment='票卡大类类型' />
+			<Field name='TicketType' type='TicketType_t' comment='票种代码' />
+			<Field name='TicketCatalogID' type='TicketCatalogID_t' comment='票卡目录' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment='车票物理卡号' />
+			<Field name='TicketStatus' type='TicketStatus_t' comment='票卡状态' />
+		</Struct>
+		<Struct name='ESSJTInit_t'>
+			<Field name='IssueKeyVersion' type='KeyVersion_t' comment='发行密钥版本' />
+			<Field name='TestFlag' type='TestFlag_t' comment='测试标记' />
+			<Field name='LanguageFlag' type='LanguageFlag_t' comment='语言标记' />
+			<Field name='TicketValue' type='ValueCent_t' comment='票卡面值（预付值金额）' />
+			<Field name='ValidStartDate' type='Date2_t' comment='有效开始日期' />
+			<Field name='ValidEndDate' type='Date2_t' comment='有效结束日期' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+			<Field name='Duration' type='Duration_t' comment='有效天数' />
+		</Struct>
+		<Struct name='ESSJTInit_TX'>
+			<Field name='ESTicketComm' type='ESTicketComm_t' comment='票卡公共结构' />
+			<Field name='SJTInitComm' type='SJTInitComm_t' comment='单程票卡初始化公共结构' />
+			<Field name='ESSJTInit' type='ESSJTInit_t' comment='单程票初始化结构' />
+		</Struct>
+		<Struct name='ESCPUCardInit_t'>
+			<Field name='TestFlag' type='TestFlag_t' comment='测试标记' />
+			<Field name='LanguageFlag' type='LanguageFlag_t' comment='语言标记' />
+			<Field name='CityCode' type='CityCode_t' comment='城市代码' />
+			<Field name='TradeCode' type='TradeCode_t' comment='行业代码' />
+			<Field name='CardInitDate' type='Date2_t' comment='初始化日期' />
+			<Field name='TicketDepositValue' type='ValueCent_t' comment='押金金额' />
+			<Field name='CardValidDate' type='Date2_t' comment='卡有效日期' />
+			<Field name='AppSN' type='string' comment='应用序列号' />
+			<Field name='AppVersion' type='AppVersion_t' comment='应用版本' />
+			<Field name='AppValidDate' type='Date2_t' comment='应用有效日期' />
+			<Field name='AreaTicketFlag' type='AreaTicketFlag_t' comment='范围标志' />
+			<Field name='BitMap1' type='BitMap_t' comment='线路车站位图' />
+			<Field name='BitMap2' type='BitMap_t' comment='车站位图' />
+			<Field name='TicketValue' type='ValueCent_t' comment='票卡初始余额/次' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+		</Struct>
+		<Struct name='ESCPUCardInit_TX'>
+			<Field name='ESTicketComm' type='ESTicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票卡初始化公共结构' />
+			<Field name='ESCPUCardInit' type='ESCPUCardInit_t' comment='储值票初始化结构' />
+		</Struct>
+		<Struct name='ESTicketCancel_t'>
+			<Field name='TicketValue' type='ValueCent_t' comment='注销时票卡余额/次' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+		</Struct>
+		<Struct name='ESTicketCancel_TX'>
+			<Field name='ESTicketComm' type='ESTicketComm_t' comment='票卡公共结构' />
+			<Field name='ESTicketCancel' type='ESTicketCancel_t' comment='票卡注销结构' />
+		</Struct>
+		<Struct name='StaffTicketInfo_t'>
+			<Field name='StaffId' type='string' comment='员工号' />
+			<Field name='AllowRightType' type='AllowRightType_t' comment='权利控制' />
+			<Field name='MultiRideNumber' type='MultiRideNumber_t' comment='乘坐次数' />
+			<Field name='ValidDate' type='Date2_t' comment='员工票有效期' />
+		</Struct>
+		<Struct name='ESCPUCardPersonal_TX'>
+			<Field name='ESTicketComm' type='ESTicketComm_t' comment='票卡公共结构' />
+			<Field name='CPUInitComm' type='CPUInitComm_t' comment='储值票卡初始化公共结构' />
+			<Field name='ESCPUCardInit' type='ESCPUCardInit_t' comment='储值票初始化结构' />
+			<Field name='TicketPassengerComm' type='TicketPassengerComm_t'
+				comment='记名卡乘客结构' />
+			<Field name='StaffTicketInfo' type='StaffTicketInfo_t' comment='员工卡信息结构' />
+		</Struct>
+		<Struct name='PrePaySJTOffset_t'>
+			<Field name='TestFlag' type='TestFlag_t' comment='测试标记' />
+			<Field name='LanguageFlag' type='LanguageFlag_t' comment='语言标记' />
+			<Field name='TradeCode' type='TradeCode_t' comment='行业代码' />
+			<Field name='PrePayValue' type='ValueCent_t' comment='预付值金额' />
+			<Field name='ValidStartDate' type='Date2_t' comment='有效开始日期' />
+			<Field name='ValidEndDate' type='Date2_t' comment='有效结束日期' />
+			<Field name='OperatorID' type='OperatorID_t' comment='操作员编号' />
+		</Struct>
+		<Struct name='PrePaySJTOffset_TX'>
+			<Field name='ESTicketComm' type='ESTicketComm_t' comment='票卡公共结构' />
+			<Field name='SJTInitComm' type='SJTInitComm_t' comment='单程票卡初始化公共结构' />
+			<Field name='PrePaySJTOffset' type='PrePaySJTOffset_t' comment='预付值单程票抵销结构' />
+		</Struct>
+		<Struct name='TicketEncodingList_t'>
+			<Field name='EncodingTime' type='AFCTime64_t' comment=' 编码时间  ' />
+			<Field name='TicketPhyID' type='TicketPhyID_t' comment=' 车票序列号 ' />
+			<Field name='AppSN' type='string' comment='应用序列号' />
+		</Struct>
+		<Struct name='TicketEncodingReportFile_t'>
+			<Field name='OperatorID' type='OperatorID_t' comment=' 操作员编号   ' />
+			<Field name='TaskID' type='TaskID_t' comment=' 任务标识   ' />
+			<Field name='TaskType' type='TaskType_t' comment=' 任务类型   ' />
+			<Field name='TicketType' type='TicketType_t' comment=' 票种代码 ' />
+			<Field name='TicketEncodingList' type='TicketEncodingList_t'
+				arrayType='VAR' comment=' 车票编码信息列表结构 ' />
+		</Struct>
+	</Package>
+</XDR>

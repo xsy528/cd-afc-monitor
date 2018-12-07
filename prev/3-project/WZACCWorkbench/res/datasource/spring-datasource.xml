@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	
+	<!-- propertyConfigurer: 使Bean在配置时引用外部属性文件（包括系统属性文件） -->
+    <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	</bean>
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>oracle.jdbc.driver.OracleDriver</value>
+		</property>
+		<property name="url">
+			<value>${url}</value>
+		</property>
+		<property name="username">
+			<value>${username}</value> 
+		</property>
+		<property name="password">
+			<value>${password}</value>
+		</property>
+	</bean>
+
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+        <property name="lobHandler">
+            <ref local="lobHandler"/>
+        </property>
+		<property name="configLocations">
+		<list>
+			<value>datasource/hibernate.cfg.xml</value>
+			<value>datasource/hibernate.monitor.cfg.xml</value>
+		</list>
+		</property>
+		 <property name="mappingLocations">
+            <list>
+            	 <value>
+                    classpath*:/com/insigma/commons/authority/entity/*.hbm.xml
+                </value>
+			    <value>
+                    classpath*:/com/insigma/afc/log/entity/*g.hbm.xml
+                </value>
+                <value>
+                    classpath*:/com/insigma/afc/daily/entity/*.hbm.xml
+                </value>
+            </list>
+        </property>
+		
+	</bean>
+
+	<!-- lob数据类型配置-->
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true"></bean>
+</beans>

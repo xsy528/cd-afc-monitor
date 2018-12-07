@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <!-- propertyConfigurer: 使Bean在配置时引用外部属性文件（包括系统属性文件） -->
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    </bean>
+
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="url">
+            <value>${url}</value>
+        </property>
+        <property name="username">
+            <value>${username}</value>
+        </property>
+        <property name="password">
+            <value>${password}</value>
+        </property>
+    </bean>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource">
+            <ref local="dataSource" />
+        </property>
+        <property name="lobHandler">
+            <ref local="lobHandler"/>
+        </property>
+        <property name="configLocations">
+            <list>
+                <value>classpath:/datasource/hibernate.cfg.xml</value>
+                <value>classpath:/datasource/hibernate.clear.cfg.xml</value>
+                <value>classpath:/datasource/hibernate.eod.cfg.xml</value>
+                <value>classpath:/datasource/hibernate.monitor.cfg.xml</value>
+                <value>classpath:/datasource/hibernate.opt.cfg.xml</value>
+                <value>classpath:/datasource/hibernate.sam.cfg.xml</value>
+                <value>classpath:/datasource/hibernate.ticket.cfg.xml</value>
+            </list>
+        </property>
+        <property name="mappingLocations">
+            <list>
+                <value>
+                    classpath*:/com/insigma/commons/authority/entity/*.hbm.xml
+                </value>
+                <value>
+                    classpath*:/com/insigma/afc/daily/entity/*.hbm.xml
+                </value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- lob数据类型配置-->
+    <bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true"></bean>
+
+    <!-- 通用持久化服务 -->
+    <bean id="commonDAO" class="com.insigma.commons.service.CommonDAO">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+    </bean>
+
+    <!-- 业务相关服务(Service) -->
+    <bean id="sectionFlowMonitorService" class="com.insigma.acc.wz.web.service.impl.SectionFlowMonitorService">
+    	<property name="commonDAO" ref="commonDAO">	</property>
+    </bean>
+    
+    <bean id="webServerConfigService" class="com.insigma.acc.wz.web.service.impl.WebServerConfigService">
+    </bean>
+    
+    <!-- 业务相关控制器(Controller) -->
+    <bean id="sectionFlowMonitorController" class="com.insigma.acc.wz.web.controller.SectionFlowMonitorController">
+        <constructor-arg>
+            <ref bean="sectionFlowMonitorService"></ref>
+        </constructor-arg>
+       <constructor-arg>
+            <ref bean="webServerConfigService"></ref>
+        </constructor-arg>
+    </bean>
+  
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/*">sectionFlowMonitorController</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

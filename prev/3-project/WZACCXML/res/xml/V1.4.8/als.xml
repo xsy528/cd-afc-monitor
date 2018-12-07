@@ -1,0 +1,21 @@
+<XDR>
+	<Package>
+		<Union name='ALSMessage_t' caseType='FileHeaderTag_t'>
+			<Field caseValue='FILE_ENDOFDAY_STOCK_SANPSHOT' name='TicketStockSnapshotFile'
+				type='TicketStockSnapshotFile_t' comment='日终库存快照文件' />
+			<Field caseValue='FILE_STOCK_INOUT_BILL' name='TicketStockInOutBillFile'
+				type='TicketStockInOutBillFile_t' comment='出入库清单文件' />
+			<Field caseValue='FILE_TRANS_ACCOUNT' name='TransactionAccountFile'
+				type='TransactionAccountFile_t' comment='交易对账文件' />
+			<Field caseValue='FILE_DOUBTFULDEAL_RESULT' name='TransactionDoubtfulFile'
+				type='TransactionDoubtfulFile_t' comment='可疑交易处理文件' />
+		</Union>
+		<Struct name='ALSDataFile_t'>
+			<Field name='FileHeaderTag' type='FileHeaderTag_t' comment=' 文件类别' />
+			<Field name='FileCreationTime' type='AFCTime64_t' comment=' 文件创建时间 ' />
+			<Field name='FileName' type='string' comment=' 文件名 ' />
+			<Field name='ALSMessage' type='ALSMessage_t' comment=' 消息结构' />
+			<Field name='MD5Value' type='MD5_t' comment=' MD5签名' />
+		</Struct>
+	</Package>
+</XDR>

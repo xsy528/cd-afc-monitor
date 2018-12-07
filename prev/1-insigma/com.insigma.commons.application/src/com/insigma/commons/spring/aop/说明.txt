@@ -1,0 +1,69 @@
+三种方法的区别：
+ 1.TransactionInterceptor.java 
+      拦截以Service结尾的方法的所有类的方法，捕捉所有异常重新抛ApplicationException
+ 2.ThrowAdvice.java
+      只捕捉commit以及getTransaction方法所有抛的异常
+ 3.ExceptionAdvice.java
+      捕捉service包以及子包下的所有方法抛的异常
+ 4.再配置上第三中方法比较麻烦，还需要引入一个外包，改spring文件头，效果差不多；
+   <!-- Advice-around 拦截器实现自动代理拦截 -->
+	<bean id="transactionInterceptor"
+		class="com.insigma.spring.aop.TransactionInterceptor">
+		
+	</bean>
+	<bean id="autoProxy"
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>*Service</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<value>transactionInterceptor</value>
+		</property>
+	</bean>
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+	</bean>
+=======================================================	
+	<!-- 拦截器实现自动代理拦截    -->	
+	<bean id="ThrowAdvice"
+		class="com.insigma.spring.aop.ThrowAdvice">
+	</bean>
+	<bean id="LogAdvisor"
+		class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="mappedNames">
+		<list>
+			<value>commit</value>
+			<value>getTransaction</value>
+		</list>
+		</property>
+		<property name="advice">
+		  <ref bean="ThrowAdvice"/>
+		</property>
+	</bean>
+
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+	</bean>
+	
+	====================================================
+	
+	<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+<!-- =======< 拦截器实现自动代理拦截数据库异常 需要aspectj1.5.3.jar包>=begin=======-->
+	<bean id="exceptionAdvice" class="com.insigma.spring.aop.ExceptionAdvice"></bean>
+	<aop:config>
+		<aop:aspect id="throwAspect" ref="exceptionAdvice">
+			<aop:pointcut id="throwCut"
+				expression="execution(* com.insigma.*.*.service..*(..))" />
+			<aop:after-throwing pointcut-ref="throwCut" throwing="ex"
+				method="catchException" arg-names="ex" />
+		</aop:aspect>
+	</aop:config>
+	
+	

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- 定义必要参数 -->
+<AuthorityConfig>
+	<!-- 定义全局变量 -->
+	<GlobalParameters>
+		<!-- 定义部署点之间的约束条件 value=single or multiple-->
+		<property name="DeploymentPointConstraint" value="single" />
+		<!-- 定义默认用户密码 -->
+		<property name="DefaultUserPassword" value="000000" />
+		<!-- Form 类的定制 -->
+		<property name="TapUserForm" value="com.insigma.afc.authority.form.TapUserForm" />
+		<property name="TapModifyUserForm"
+			value="com.insigma.afc.authority.form.TapModifyUserForm" />
+		<property name="TapViewUserForm"
+			value="com.insigma.afc.authority.form.TapViewUserForm" /> 
+		<property name="TapRoleForm" value="com.insigma.afc.authority.form.TapRoleForm" />
+		<property name="TapUserSearchForm"
+			value="com.insigma.afc.authority.form.TapUserSearchForm" />
+		<property name="TapRoleSearchForm"
+			value="com.insigma.afc.authority.form.TapRoleSearchForm" />
+		<property name="TapModifyRoleForm"
+			value="com.insigma.afc.authority.form.TapModifyRoleForm" />
+		<property name="TapViewRoleForm"
+			value="com.insigma.afc.authority.form.TapViewRoleForm" />
+		<!-- 用于配置树形菜单的显示 默认获取配置文件中所有的部署点信息 defualt=false -->
+		<property name="SelectedFromXMLConfig" value="no" />
+		<property name="DefaultSelectedAllDeployments" value="no" />
+		<!-- 双击表格时'yes'则弹出对话框为查看模式，否则为编辑模式；defualt=false -->
+		<property name="DoubleClickTable4View" value="yes" />
+		<!-- 表格中的右键菜单显示状态 -->
+		<property name="TableMenuVisiable" value="no" />
+		<!-- 是否显示树形菜单项，不显示时选取所有部署点信息 -->
+		<property name="TreeVisiable" value="no" />
+		<!-- 用户表格显示条数 -->
+		<property name="UserTableRow" value="20" />
+		<!-- 角色表格显示条数 -->
+		<property name="RoleTableRow" value="20" />
+	</GlobalParameters>
+
+	<!-- 定义部署点所使用的提供器 -->
+	<!--
+	<GlobleDeploymentTreeProvider name="" />
+     -->
+	<GlobleDeploymentTreeProvider
+		name="com.insigma.commons.authority.provider.DeploymentXMLTreeProvider" />
+
+	<SpringContextProvider name="" />
+
+	<!-- 日志记录所使用的提供器 -->
+	<BusinessLogProvider
+		name="com.insigma.afc.authority.service.AuthorityLogService" value="1301" />
+
+	<!-- 部署点相关工具类 -->
+	<DeploymentTreeUtil name="" />
+
+	<GlobalActions>
+		<!-- 给权限系统本身功能设置对应的功能编号 -->
+	    <Action name="查询用户" functionID="130101"></Action>
+		<Action name="新建用户" functionID="130102"></Action>
+		<Action name="删除用户" functionID="130103"></Action>
+		<Action name="修改用户" functionID="130104"></Action>
+		<Action name="重置密码" functionID="130105"></Action>
+		<Action name="修改密码" functionID="130106"></Action>
+
+		<Action name="查询角色" functionID="130107"></Action>
+		<Action name="新建角色" functionID="130108"></Action>
+		<Action name="删除角色" functionID="130109"></Action>
+		<Action name="修改角色" functionID="130110"></Action>
+		<Action name="查看子系统" functionID="130111"></Action>
+	</GlobalActions>
+
+</AuthorityConfig>

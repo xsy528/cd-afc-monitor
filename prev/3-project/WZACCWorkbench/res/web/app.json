@@ -1,0 +1,12 @@
+{
+  "localIP": "127.0.0.1",
+  "localPort": 8090,
+  "remoteIP": "127.0.0.1",
+  "remotePort": 8060,
+  "resourceDirs": [
+    "web/h5"
+  ],
+  "webXmlDir": "web",
+  "mainUrl": "http://127.0.0.1:8060/index.html",
+  "requestLogEnable": false
+}

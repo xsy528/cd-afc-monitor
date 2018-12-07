@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/2-product/AFCApplication/AFCApplication.iml" filepath="$PROJECT_DIR$/2-product/AFCApplication/AFCApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2-product/AFCLog/AFCLog.iml" filepath="$PROJECT_DIR$/2-product/AFCLog/AFCLog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2-product/AFCMonitor/AFCMonitor.iml" filepath="$PROJECT_DIR$/2-product/AFCMonitor/AFCMonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2-product/AFCODMonitor/AFCODMonitor.iml" filepath="$PROJECT_DIR$/2-product/AFCODMonitor/AFCODMonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2-product/AFCUI/AFCUI.iml" filepath="$PROJECT_DIR$/2-product/AFCUI/AFCUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3-project/WZACCApplication/WZACCApplication.iml" filepath="$PROJECT_DIR$/3-project/WZACCApplication/WZACCApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3-project/WZACCLIB/WZACCLIB.iml" filepath="$PROJECT_DIR$/3-project/WZACCLIB/WZACCLIB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3-project/WZACCWorkbench/WZACCWorkbench.iml" filepath="$PROJECT_DIR$/3-project/WZACCWorkbench/WZACCWorkbench.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3-project/WZACCXML/WZACCXML.iml" filepath="$PROJECT_DIR$/3-project/WZACCXML/WZACCXML.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3-project/WZMonitor/WZMonitor.iml" filepath="$PROJECT_DIR$/3-project/WZMonitor/WZMonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.application/com.insigma.commons.application.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.application/com.insigma.commons.application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.binary/com.insigma.commons.binary.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.binary/com.insigma.commons.binary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.core/com.insigma.commons.core.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.core/com.insigma.commons.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.editorframework/com.insigma.commons.editorframework.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.editorframework/com.insigma.commons.editorframework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.framework/com.insigma.commons.framework.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.framework/com.insigma.commons.framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.graphic2d/com.insigma.commons.graphic2d.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.graphic2d/com.insigma.commons.graphic2d.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.persistence/com.insigma.commons.persistence.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.persistence/com.insigma.commons.persistence.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1-insigma/com.insigma.commons.ui/com.insigma.commons.ui.iml" filepath="$PROJECT_DIR$/1-insigma/com.insigma.commons.ui/com.insigma.commons.ui.iml" />
+    </modules>
+  </component>
+</project>

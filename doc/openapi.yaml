@@ -3,18 +3,15 @@ servers:
   - url: 'http://localhost/afc-monitor'
 info:
   description: >-
-    AFC监控系统前后台接口。主要包含以下几部分：节点编辑、路网监控、客流监控、断面客流、各类查询。
+    AFC监控系统前后台接口。主要包含以下几部分：路网监控、客流监控、断面客流、节点编辑、各类查询。
   version: 1.0.0
   title: AFC监控系统前后台接口
-  contact:
-    name: Open Data Portal
-    url: 'https://developer.uspto.gov'
-    email: developer@uspto.gov
 tags:
   - name: 路网监控
   - name: 客流监控
   - name: 断面客流
-  - name: 节点管理
+  - name: 节点管理。
+    description: 节点管理部分，就是对底图做增删改查。其中涉及到几个容易混淆的术语：节点Id、地图Id、用户输入节点Id。由于一个节点有1张或者0张地图，因此，对一张地图来说，地图Id就等于节点Id。 另外，节点Id一般包含多个层次。比如一台设备的节点id为0x01020304，这其中01是线路编号、02是车站编号，03是设备类型，04是设备编号。当编辑线路的时候，用户只会输入01。编辑车站的时候，用户只会输入02。编辑设备的时候，用户只会选择设备类型，并输入04。
   - name: 各类查询
 
 paths:
@@ -23,37 +20,51 @@ paths:
       tags:
         - 节点管理
       operationId: editor-config-devTypeList
-      summary: 获取系统中可用的设备列表据
+      summary: 获取系统中可用的设备列表，用于对设备编辑对话框中构造界面。
       responses:
-        '200':
+        default:
           description: 返回设备列表。
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/devTypes'
-                
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  data:
+                    $ref: '#/components/schemas/devTypes'
+                    
   /editor/map/list:
     post:
       tags:
         - 节点管理
       operationId: editor-map-list
-      summary: 获取系统中所有节点的地图数据
+      summary: 返回系统中所有需要编辑的地图数据
       responses:
-        '200':
+        default:
           description: 返回系统中所有需要编辑的地图数据。
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mapData'
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  data:
+                    $ref: '#/components/schemas/mapData'
                 
   /editor/map/save:
     post:
       tags:
         - 节点管理
-      summary: >-
-        保存节点地图。
-      description: >-
-        保存节点地图。
+      summary: 保存节点地图。
+      description: 保存节点地图。
       operationId: editor-map-save
       requestBody:
         description: 需要保存的地图数据。应该只提交修改后的节点。
@@ -73,10 +84,8 @@ paths:
     post:
       tags:
         - 节点管理
-      summary: >-
-        创建新节点。
-      description: >-
-        创建新节点。
+      summary: 创建新节点。
+      description: 创建新节点。
       operationId: editor-node-create
       requestBody:
         description: 新建的节点数据。
@@ -91,6 +100,7 @@ paths:
                       - $ref: '#/components/schemas/nodeStation'
                       - $ref: '#/components/schemas/nodeDevice'
                   img: 
+                    description: 底图图片。
                     type: string
                     format: binary
       responses:
@@ -99,29 +109,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/simpleResp'
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  mapId: 
+                    description: 创建的nodeid。
+                    type: number
                 
   /editor/node/remove:
     post:
       tags:
         - 节点管理
-      summary: >-
-        删除节点。
-      description: >-
-        删除节点。
+      summary: 删除节点。
+      description: 删除节点。删除的时候，会把所有的下级节点都删除。
       operationId: editor-node-remove
       requestBody:
         description: 需要删除的节点数据。
         content: 
           'application/json':
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/nodeLine'
-                - $ref: '#/components/schemas/nodeStation'
-                - $ref: '#/components/schemas/nodeDevice'
+              description: 要删除的节点id。 
+              type: object
+              properties:
+                nodeId:
+                  type: number
+                  
       responses:
         default:
-          description: 创建结果。
+          description: 删除结果。
           content:
             application/json:
               schema:
@@ -136,6 +155,16 @@ paths:
       description: >-
         查询节点属性。
       operationId: editor-node-query
+      requestBody:
+        description: 需要删除的节点数据。
+        content: 
+          'application/json':
+            schema:
+              description: 要查询的节点id。 
+              type: object
+              properties:
+                nodeId:
+                  type: number      
       responses:
         default:
           description: 查询的节点数据。
@@ -153,13 +182,11 @@ paths:
     post:
       tags:
         - 节点管理
-      summary: >-
-        修改节点属性。
-      description: >-
-        修改节点属性。
+      summary: 修改节点属性。
+      description: 修改节点属性。
       operationId: editor-node-update
       requestBody:
-        description: 需要更新的节点数据。
+        description: 需要更新的节点数据。有些字段，一旦创建好，就不能修改。客户端需要把这些字段设置为原值，但是服务器直接忽视。
         content: 
           'application/json':
             schema:
@@ -191,7 +218,9 @@ components:
             type: string
             
     mapItem:
-      description: 一张地图，和下级地图构成了多层树形结构。
+      description: >-
+        一张地图。可以包含下级地图。与下级地图构成了多层树形结构。
+        涉及到坐标的时候，都是以底图的左上角点为原点。x轴向右为正方向，y轴向下为正方向。
       type: object
       properties:
         text:
@@ -209,7 +238,7 @@ components:
            - Station
            - Device
         imageUrl:
-          description: 地图地图地址。
+          description: 地图底图的url地址。
           type: string
         mapItems:
           description: 下级地图列表。
@@ -221,32 +250,40 @@ components:
           type: object
           properties:
             angle: 
+              description: 图片旋转角度。比如45，表示旋转45度。-45表示旋转-45度。
               type: number
             x: 
+              description: 图片左上角x坐标。
               type: integer
             y:
+              description: 图片左上角y坐标。
               type: integer
             editorImg:
+              description: icon在节点编辑图中的url地址。mapData.imagePaths[editorImg]为需要显示的图片地址。
               type: integer
             monitorImgs:
+              description: icon在路网监控图中的url地址。使用的时候，如果节点状态为n，则mapData.imagePaths[mapItem.icon.monitorImgs[n]]为需要显示的图片地址。
               type: array
               items:
                 type: integer
         name:
-          description: 当前节点在上级地图中的名称文本的位置。
+          description: 当前节点在上级地图中的文本的位置。文本内容一般为节点名称。
           type: object
           properties:
             angle: 
+              description: 文字旋转角度。目前总是传0。
               type: number
             x: 
+              description: 文字左上角x坐标。
               type: integer
             y:
+              description: 文字左上角x坐标。
               type: integer
             text:
               type: string
               
     mapSaveItem:
-      description: 用户调整后的节点位置信息。
+      description: 节点位置信息。字段的含义与mapItem相同。
       type: array
       items:
         description: 对应一个mapItem，但是只包含部分字段。
@@ -294,7 +331,7 @@ components:
           description: 所属地图的id。
           type: integer
         id:
-          description: 线路编号
+          description: 线路短编号
           type: integer
         name:
           description: 线路名称
@@ -315,7 +352,7 @@ components:
           description: 所属地图的id。
           type: integer
         id:
-          description: 车站编号
+          description: 车站短编号
           type: integer
         name:
           description: 车站名称
@@ -335,7 +372,7 @@ components:
           description: 所属地图的id。
           type: integer
         id:
-          description: 设备编号
+          description: 设备短编号
           type: integer
         name:
           description: 设备名称
@@ -357,7 +394,7 @@ components:
       description: 服务器返回的简单应答信息
       type: object
       properties:
-        result:
+        error:
           description: 错误码。0表示成功，其他表示失败。
           type: integer
         errorMsg:

@@ -3,7 +3,7 @@ servers:
   - url: 'http://localhost/afc-monitor'
 info:
   description: AFC监控系统前后台接口-获取静态配置
-    version: 1.0.0
+  version: 1.0.0
   title: AFC监控系统前后台接口-获取静态配置
 tags:
   - name: 获取静态配置

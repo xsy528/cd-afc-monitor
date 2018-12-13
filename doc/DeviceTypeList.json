@@ -1,0 +1,17 @@
+{
+    "description": "系统中可用的设备类型列表。",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "description": "设备类型id，用于向服务器提交数据。"
+        },
+        "name": {
+          "type": "string",
+          "description": "设备类型名称，用于展示到用户界面。"
+        }
+      }
+    }
+}

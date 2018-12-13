@@ -1,0 +1,48 @@
+DeviceTypeList:
+  description: 系统中可用的设备类型列表。
+  type: array
+  items:
+    type: object
+    properties:
+      value: 
+        type: integer
+        description: 设备类型id，用于向服务器提交数据。
+      name:
+        type: string
+        description: 设备类型名称，用于展示到用户界面。
+      
+ModeTypeList:
+  description: 系统预定义的运营模式
+  type: array
+  items:
+    type: object
+    description: 每个元素表示一个运营模式类别，比如“正常运行模式”、“降级运行模式”、“紧急运行模式”、“列车故障模式”
+    properties:
+      groupName:
+        type: string
+        description: 模式类别名称。比如“正常运行模式”、“降级运行模式”、“紧急运行模式”、“列车故障模式”
+      modes:
+        type: array
+        items:
+          type: object
+          description: 表示一个模式。
+          properties:
+            value:
+              type: number 
+              description: 在数据库中保存的value
+            modeName:
+              type: string
+              description: 模式名称。比如“降级运行模式”中的“进站免检模式”、“出站免检模式”等。
+
+DeviceStatusList:
+  description: 系统预定义的设备状态列表
+  type: array
+  items:
+    type: object
+    properties:
+      value: 
+        type: number
+      name:
+        description: 正常、警告、报警、离线、停止服务、未启用等。
+        type: string
+ 

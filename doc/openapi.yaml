@@ -7,20 +7,22 @@ info:
   version: 1.0.0
   title: AFC监控系统前后台接口
 tags:
+  - name: 获取静态配置
+    description: 主要是用来AFC系统预定义的一些枚举值。比如设备类型、运行模式等。
   - name: 路网监控
   - name: 客流监控
   - name: 断面客流
-  - name: 节点管理。
-    description: 节点管理部分，就是对底图做增删改查。其中涉及到几个容易混淆的术语：节点Id、地图Id、用户输入节点Id。由于一个节点有1张或者0张地图，因此，对一张地图来说，地图Id就等于节点Id。 另外，节点Id一般包含多个层次。比如一台设备的节点id为0x01020304，这其中01是线路编号、02是车站编号，03是设备类型，04是设备编号。当编辑线路的时候，用户只会输入01。编辑车站的时候，用户只会输入02。编辑设备的时候，用户只会选择设备类型，并输入04。
+  - name: 节点管理
+    description: 节点管理部分，就是对底图做增删改查。
   - name: 各类查询
 
 paths:
-  /editor/config/devTypeList:
-    post:
+  /config/devTypeListList:
+    get:
       tags:
-        - 节点管理
+        - 获取静态配置
       operationId: editor-config-devTypeList
-      summary: 获取系统中可用的设备列表，用于对设备编辑对话框中构造界面。
+      summary: 获取系统中预定义的设备列表。
       responses:
         default:
           description: 返回设备列表。
@@ -35,14 +37,65 @@ paths:
                   errorMsg:
                     type: string              
                   data:
-                    $ref: '#/components/schemas/devTypes'
+                    $ref: '#/components/schemas/DeviceTypeList'
                     
-  /editor/map/list:
+  /config/modeTypeList:
+    get:
+      tags:
+        - 获取静态配置
+      operationId: editor-config-modeTypeList
+      summary: 获取系统中预定义的模式列表。
+      responses:
+        default:
+          description: 返回模式列表。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  data:
+                    $ref: '#/components/schemas/ModeTypeList'
+                    
+  /config/deviceStatusList:
+    get:
+      tags:
+        - 获取静态配置
+      operationId: editor-config-deviceStatusList
+      summary: 获取系统中预定义的设备状态列表。
+      responses:
+        default:
+          description: 返回模式列表。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  data:
+                    $ref: '#/components/schemas/DeviceStatusList'
+                    
+
+  /editor/node/list:
     post:
       tags:
         - 节点管理
-      operationId: editor-map-list
-      summary: 返回系统中所有需要编辑的地图数据
+      operationId: editor-node-list
+      summary: 返回系统中所有需要编辑的节点树。该接口会被多个界面调用。
+      parameters: 
+        - name: inEditor
+          in: query
+          description: true表示需要处于节点编辑界面，应答中的MapData，需要带上地图相关字段。false或者不填，表示不需要地图相关字段。
+          schema:
+            type: boolean
       responses:
         default:
           description: 返回系统中所有需要编辑的地图数据。
@@ -57,7 +110,7 @@ paths:
                   errorMsg:
                     type: string              
                   data:
-                    $ref: '#/components/schemas/mapData'
+                    $ref: '#/components/schemas/MapData'
                 
   /editor/map/save:
     post:
@@ -71,14 +124,14 @@ paths:
         content: 
           'application/json':
             schema:
-              $ref: '#/components/schemas/mapSaveItem'
+              $ref: '#/components/schemas/MapSaveItem'
       responses:
         default:
           description: 保存的结果。
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/simpleResp'
+                $ref: '#/components/schemas/SimpleResp'
                 
   /editor/node/create:
     post:
@@ -96,9 +149,9 @@ paths:
                 properties:
                   data: 
                     oneOf:
-                      - $ref: '#/components/schemas/nodeLine'
-                      - $ref: '#/components/schemas/nodeStation'
-                      - $ref: '#/components/schemas/nodeDevice'
+                      - $ref: '#/components/schemas/NodeLine'
+                      - $ref: '#/components/schemas/NodeStation'
+                      - $ref: '#/components/schemas/NodeDevice'
                   img: 
                     description: 底图图片。
                     type: string
@@ -116,7 +169,7 @@ paths:
                     type: integer
                   errorMsg:
                     type: string              
-                  mapId: 
+                  nodeId: 
                     description: 创建的nodeid。
                     type: number
                 
@@ -144,7 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/simpleResp'
+                $ref: '#/components/schemas/SimpleResp'
   
   /editor/node/query:
     post:
@@ -172,10 +225,10 @@ paths:
             'application/json':
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/nodeAcc'
-                  - $ref: '#/components/schemas/nodeLine'
-                  - $ref: '#/components/schemas/nodeStation'
-                  - $ref: '#/components/schemas/nodeDevice'
+                  - $ref: '#/components/schemas/NodeAcc'
+                  - $ref: '#/components/schemas/NodeLine'
+                  - $ref: '#/components/schemas/NodeStation'
+                  - $ref: '#/components/schemas/NodeDevice'
       
       
   /editor/node/update:
@@ -191,62 +244,344 @@ paths:
           'application/json':
             schema:
               oneOf:
-                - $ref: '#/components/schemas/nodeAcc'
-                - $ref: '#/components/schemas/nodeLine'
-                - $ref: '#/components/schemas/nodeStation'
-                - $ref: '#/components/schemas/nodeDevice'
+                - $ref: '#/components/schemas/NodeAcc'
+                - $ref: '#/components/schemas/NodeLine'
+                - $ref: '#/components/schemas/NodeStation'
+                - $ref: '#/components/schemas/NodeDevice'
       responses:
         default:
           description: 更新结果。
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/simpleResp'    
-      
+                $ref: '#/components/schemas/SimpleResp'    
+                
+######  以下为路网监控界面    ######
+  /monitor/query/node:
+    post:
+      tags:
+        - 路网监控
+      summary: 查询节点状态。
+      description: 查询节点属性。
+      operationId: monitor-node-query
+      responses:
+        default:
+          description: >-
+             节点状态查询结果。需要包含ACC、lc、sc、sle的状态。不需要包含模块状态。
+             浏览器要定时发起查询。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeItem'    
+
+  /monitor/changeMode:
+    post:
+      tags:
+        - 路网监控
+      summary: 发送运营模式。
+      description: 发送运营模式
+      operationId: monitor-changeMode
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'    
+                
+  /monitor/queryMode:
+    post:
+      tags:
+        - 路网监控
+      summary: 查询运营模式。
+      description: 查询运营模式
+      operationId: monitor-changeMode
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'    
+                
+  /monitor/timeSync:
+    post:
+      tags:
+        - 路网监控
+      summary: 时钟同步。
+      description: 时钟同步
+      operationId: monitor-time-sync
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'   
+                
+  /monitor/nodeControl:
+    post:
+      tags:
+        - 路网监控
+      summary: 发送控制命令。
+      description: 发送控制命令
+      operationId: monitor-nodeControl
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'   
+                
+  /monitor/query/deviceDetail/{deviceId}:
+    post:
+      tags:
+        - 路网监控
+      summary: 发送控制命令。
+      description: 发送控制命令
+      operationId: monitor-query-deviceDetail
+      parameters:
+        - name: 'deviceId' 
+          in: 'path'
+          required: true
+          description: 设备的Id
+          schema: 
+            type: number
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceDetail'   
+                
+  /monitor/query/box/{deviceId}:
+    post:
+      tags:
+        - 路网监控
+      summary: 查询票箱或者钱箱信息。
+      description: 查询票箱或者钱箱信息
+      operationId: monitor-query-box
+      parameters:
+        - name: 'deviceId' 
+          in: 'path'
+          required: true
+          description: 设备的Id
+          schema: 
+            type: number
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandBoxQueryResult'   
+
+  /monitor/refresh:
+    post:
+      tags:
+        - 路网监控
+      summary: 刷新数据。
+      description: 刷新数据
+      operationId: monitor-refresh
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleResp' 
+
+  /monitor/config:
+    get:
+      tags:
+        - 路网监控
+      summary: 获取配置数据。
+      description: 获取配置数据。
+      operationId: monitor-config-get
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetMonitorConfig' 
+    post:
+      tags:
+        - 路网监控
+      summary: 更新配置数据。
+      description: 更新配置数据
+      operationId: monitor-config-post
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/NetMonitorConfig' 
+      responses:
+        default:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleResp' 
+                
+  /monitor/query/stationStatus:
+    post:
+      tags:
+        - 路网监控
+      summary: 车站状态列表。浏览器端需要定时调用。监控配置界面中，可以设置调用间隔。
+      operationId: monitor-query-stationStatus
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/StatusFilter'       
+      responses:
+        default:
+          description: 返回车站状态列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusList' 
+
+  /monitor/query/deviceStatus:
+    post:
+      tags:
+        - 路网监控
+      summary: 设备状态列表。定时调用。
+      operationId: monitor-query-deviceStatus
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/StatusFilter'       
+      responses:
+        default:
+          description: 返回设备状态列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquStatusList' 
+                
+  /monitor/query/modeUpload:
+    post:
+      tags:
+        - 路网监控
+      summary: 模式上传信息。定时调用。
+      operationId: monitor-query-modeUpload
+      responses:
+        default:
+          description: 返回模式上传信息。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoModeUploadInfoList' 
+                
+  /monitor/query/modeBroadcast:
+    post:
+      tags:
+        - 路网监控
+      summary: 模式广播信息。定时调用。
+      operationId: monitor-query-modeBroadcast
+      responses:
+        default:
+          description: 返回模式广播信息。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoModeBroadcastList' 
+                
+
+  /monitor/query/deviceEvent:
+    post:
+      tags:
+        - 路网监控
+      summary: 设备事件列表。定时调用。
+      operationId: monitor-query-deviceEvent
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/EventFilter'       
+      responses:
+        default:
+          description: 返回设备事件列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoEquStatusCurList' 
+
 components:
   schemas:
-    mapData:
+    MapData:
       description: 系统中所有的地图信息。
       type: object
       properties:
         root:
-          $ref: '#/components/schemas/mapItem'
+          $ref: '#/components/schemas/NodeItem'
         imagePaths:
           description: 地图树中所有可用的image地址数组。
           type: array
           items:
             type: string
-            
-    mapItem:
+
+          
+    NodeItem:
       description: >-
-        一张地图。可以包含下级地图。与下级地图构成了多层树形结构。
+        一张地图。可以包含下级地图。与下级地图构成了多层树形结构。ACC-LC-SC-SLE。不包含模块。
         涉及到坐标的时候，都是以底图的左上角点为原点。x轴向右为正方向，y轴向下为正方向。
       type: object
+      required:
+       - text
+       - nodeId
+       - nodeType
+       - subItems
       properties:
         text:
           description: 地图名称，比如“温州ACC”、“温州S1线”、“动车南站”
           type: string
-        mapId:
-          description: 地图ID。实际上就是acc、lc、sc、device等节点的节点id。
+        nodeId:
+          description: acc、lc、sc、device等节点的节点id。
           type: integer
-        mapType:
-          description: 地图类型。
+        nodeType:
+          description: 节点类型。
           type: string
           enum:
            - ACC
            - Line
            - Station
            - Device
-        imageUrl:
-          description: 地图底图的url地址。
-          type: string
-        mapItems:
-          description: 下级地图列表。
+        subItems:
+          description: 下级节点列表。
           type: array
           items:
-            $ref: '#/components/schemas/mapItem'
+            $ref: '#/components/schemas/NodeItem'
+        imageUrl:
+          description: 地图底图的url地址。在节点编辑界面需要带上此字段。其他请求，此字段不需要填写。
+          type: string
         icon:
-          description: 当前节点在上级地图中的icon图片位置。
+          description: 当前节点在上级地图中的icon图片位置。在节点编辑界面需要带上此字段。其他请求，此字段不需要填写。
           type: object
           properties:
             angle: 
@@ -259,15 +594,15 @@ components:
               description: 图片左上角y坐标。
               type: integer
             editorImg:
-              description: icon在节点编辑图中的url地址。mapData.imagePaths[editorImg]为需要显示的图片地址。
+              description: icon在节点编辑图中的url地址。MapData.imagePaths[editorImg]为需要显示的图片地址。
               type: integer
             monitorImgs:
-              description: icon在路网监控图中的url地址。使用的时候，如果节点状态为n，则mapData.imagePaths[mapItem.icon.monitorImgs[n]]为需要显示的图片地址。
+              description: icon在路网监控图中的url地址。使用的时候，如果节点状态为n，则MapData.imagePaths[NodeItem.icon.monitorImgs[n]]为需要显示的图片地址。
               type: array
               items:
                 type: integer
         name:
-          description: 当前节点在上级地图中的文本的位置。文本内容一般为节点名称。
+          description: 当前节点在上级地图中的文本的位置。在节点编辑界面需要带上此字段。其他请求，此字段不需要填写。
           type: object
           properties:
             angle: 
@@ -281,15 +616,21 @@ components:
               type: integer
             text:
               type: string
-              
-    mapSaveItem:
-      description: 节点位置信息。字段的含义与mapItem相同。
+        status:
+          description: 节点状态。这个数值可以作为索引，去查找icon的底图。
+          type: number
+        statusStr:
+          description: 节点状态字符串
+          type: string
+
+    MapSaveItem:
+      description: 节点位置信息。字段的含义与nodeItem相同。
       type: array
       items:
-        description: 对应一个mapItem，但是只包含部分字段。
+        description: 对应一个nodeItem，但是只包含部分字段。
         type: object
         properties:
-          mapId:
+          nodeId:
             type: integer
           icon:
             type: object
@@ -312,7 +653,7 @@ components:
               text:
                 type: string  
                 
-    nodeAcc:
+    NodeAcc:
       description: ACC节点属性
       type: object
       properties:
@@ -323,15 +664,15 @@ components:
           description: 网络地址，比如192.168.144.183
           type: string
 
-    nodeLine:
+    NodeLine:
       description: 线路节点属性
       type: object
       properties:
-        ownerMapId:
+        ownerNodeId:
           description: 所属地图的id。
           type: integer
         id:
-          description: 线路短编号
+          description: 线路短编号(假设完整id为0x01020304，此处短编号只是指01)
           type: integer
         name:
           description: 线路名称
@@ -344,15 +685,15 @@ components:
           type: boolean
 
 
-    nodeStation:
+    NodeStation:
       description: 车站节点属性
       type: object
       properties:
-        ownerMapId:
+        ownerNodeId:
           description: 所属地图的id。
           type: integer
         id:
-          description: 车站短编号
+          description: 车站短编号(假设完整id为0x01020304，此处短编号只是指02)
           type: integer
         name:
           description: 车站名称
@@ -364,15 +705,15 @@ components:
           description: 启用状态
           type: boolean
           
-    nodeDevice:
+    NodeDevice:
       description: 设备节点属性
       type: object
       properties:
-        ownerMapId:
+        ownerNodeId:
           description: 所属地图的id。
           type: integer
         id:
-          description: 设备短编号
+          description: 设备短编号(假设完整id为0x01020304，此处短编号只是指04)
           type: integer
         name:
           description: 设备名称
@@ -390,7 +731,7 @@ components:
           description: 设备类型的value，参见devType.value类型。
           type: integer
           
-    simpleResp:
+    SimpleResp:
       description: 服务器返回的简单应答信息
       type: object
       properties:
@@ -400,20 +741,386 @@ components:
         errorMsg:
           type: string
           
-    devTypes:
+    DeviceTypeList:
       description: 系统中可用的设备类型列表。
       type: array
       items:
-        $ref: '#/components/schemas/devType'
-
-    devType:
-      description: 设备类型。
+        type: object
+        properties:
+          value: 
+            type: integer
+            description: 设备类型id，用于向服务器提交数据。
+          name:
+            type: string
+            description: 设备类型名称，用于展示到用户界面。
+          
+    ModeTypeList:
+      description: 系统预定义的运营模式
+      type: array
+      items:
+        type: object
+        description: 每个元素表示一个运营模式类别，比如“正常运行模式”、“降级运行模式”、“紧急运行模式”、“列车故障模式”
+        properties:
+          groupName:
+            type: string
+            description: 模式类别名称。比如“正常运行模式”、“降级运行模式”、“紧急运行模式”、“列车故障模式”
+          modes:
+            type: array
+            items:
+              type: object
+              description: 表示一个模式。
+              properties:
+                value:
+                  type: number 
+                  description: 在数据库中保存的value
+                modeName:
+                  type: string
+                  description: 模式名称。比如“降级运行模式”中的“进站免检模式”、“出站免检模式”等。
+    
+    DeviceStatusList:
+      description: 系统预定义的设备状态列表
+      type: array
+      items:
+        type: object
+        properties:
+          value: 
+            type: number
+          name:
+            description: 正常、警告、报警、离线、停止服务、未启用等。
+            type: string
+        
+    DeviceDetail:
+      description: 描述设备及模块的的详细信息
       type: object
       properties:
-        value: 
-          type: integer
-          description: 设备类型id，用于向服务器提交数据。
-        name:
+        deviceId:
+          description: 所属设备的节点Id（完整的长Id）。根据此Id可以从节点树中查找到设备的底图、状态等详细信息。
+          type: number
+        modules:
+          description: 设备模块信息
+          type: array
+          items:
+            type: object
+            description: 对应Java类MetroDeviceModule
+            properties:
+              moduleId:
+                type: number
+              moduleName:
+                description: 部件简写
+                type: string
+              statusDesc:
+                description: 模块的状态描述，错误、警告、正常。界面上要显示不同的颜色。
+                type: string
+                enum:
+                - error
+                - warn
+                - normal
+              remark: 
+                description: 部件名称
+                type: string
+              textLocation:
+                description: 模块在设备底图上的文字的位置。
+                type: object
+                properties:
+                  x: 
+                    type: number
+                  y: 
+                    type: number
+                  angle:
+                    type: number
+        statusHistory:
+          description: 设备状态的历史上报信息
+          type: array
+          items:
+            type: object
+            properties:
+              nodeId: 
+                description: 节点名称/节点编码
+                type: string 
+              statusName:
+                description: 状态名称/状态ID
+                type: string
+              statusDesc:
+                description: 状态描述/状态值
+                type: string
+              occurTime:
+                description: 发生时间，格式"2018-01-01 12:32:51"
+                type: string
+
+    CommandRequest:
+      description: 向下级节点发送命令的请求。
+      type: object
+      properties:
+        commandType:
           type: string
-          description: 设备类型名称，用于展示到用户界面。
+          enum:
+          - modeChange # 发送运营模式
+          - modeQuery # 查询运营模式
+          - timeSync # 时钟同步
+          - nodeControl # 控制命令
+          - boxQuery # 查询票箱、查询钱箱。服务器根据目标节点，来判断是查询票箱还是查询钱箱。
+        target:
+          type: array
+          description: 目标节点的Id
+          items:
+            type: number
+        arg:
+          oneOf:
+            - $ref: '#/components/schemas/CommandRequestSendModeArg'
+            - $ref: '#/components/schemas/CommandRequestNullArg'
+
             
+    CommandRequestSendModeArg:
+      type: number
+      description: 修改运营模式的命令参数，对应运营模式的value
+    
+    CommandRequestNullArg:
+      description: 总是填写0。
+      type: number
+
+    CommandResponse:
+      description: 向下级节点发送命令的返回值，参考CommandResult类
+      type: array
+      items:
+        type: object
+        properties:
+          id: 
+            description: 目标节点Id
+            type: string
+          cmdName:
+            description: 命令名称
+            type: string
+          cmdResult:
+            description: 命令结果
+            type: string
+          occurTime:
+            description: 发送时间
+            type: string
+            
+    CommandBoxQueryResult:
+      description: 设备钱箱、票箱查询结果
+      type: object
+      properties:
+        boxType:
+          type: string
+          enum:
+           - 票箱
+           - 钱箱
+        values:
+          type: array
+          items:
+            type: object
+            properties:
+              boxDesc: 
+                description: 设备钱（票）箱的名字及描述（第一列）
+                type: string
+              boxValue:
+                description: 数值列（第二列）
+                type: string
+                  
+    NetMonitorConfig:
+      description: 路网监控下的监控配置
+      type: object
+      properties:
+        warning:
+          description: 警告阈值（个）
+          type: number
+        alarm:
+          description: 报警阈值（个）
+          type: number
+        refreshInterval:
+          description: 刷新阈值（秒）
+          type: number
+              
+    StatusFilter:
+      description: 状态的过滤条件
+      type: object
+      properties:
+        nodeIds:
+          type: array
+          items:
+            type: number
+        orderField:
+          type: string
+        orderType:
+          type: string
+          enum:
+          - asc
+          - desc
+        startTime:
+          type: string
+          format: datetime
+        endTime:
+          type: string
+          format: datetime
+        maxCount:
+          type: number
+        status:
+          type: array
+          items: 
+            type: number
+        devType:
+          type: array
+          items: 
+            type: number
+
+
+    EventFilter:
+      description: 事件的过滤条件
+      type: object
+      properties:
+        nodeIds:
+          type: array
+          items:
+            type: number
+        orderField:
+          type: string
+        orderType:
+          type: string
+          enum:
+          - asc
+          - desc
+        startTime:
+          type: string
+          format: datetime
+        endTime:
+          type: string
+          format: datetime
+        maxCount:
+          type: number
+        devType:
+          type: array
+          items: 
+            type: number
+            
+    StationStatusList:
+      description: 车站状态列表
+      type: array
+      items:
+        $ref: '#/components/schemas/StationStatustViewItem'
+    StationStatustViewItem:
+      description: 车站状态列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点Id
+          type: number
+        status:
+          description: 车站状态
+          type: number
+        mode:
+          description: 车站模式
+          type: number
+        normalEvent:
+          description: 正常设备（个）
+          type: number
+        warningEvent:
+          description: 警告设备（个）
+          type: number
+        alarmlEvent:
+          description: 报警设备（个）
+          type: number
+        updateTime:
+          description: 模式生效时间
+          type: string
+        isOnline:
+          description: 是否在线(该属性不显示在表格中，但是会用于判断单元格的颜色)
+          type: boolean
+          
+    EquStatusList:
+      description: 设备状态列表
+      type: array
+      items:
+        $ref: '#/components/schemas/EquStatusViewItem'
+    EquStatusViewItem:
+      description: 设备状态列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点Id
+          type: number
+        status:
+          description: 设备状态
+          type: number
+        updateTime:
+          description: 状态更新时间
+          type: string
+        isOnline:
+          description: 是否在线
+          type: boolean
+          
+    TmoModeUploadInfoList:
+      description: 模式上传信息列表
+      type: array
+      items:
+        $ref: '#/components/schemas/TmoModeUploadInfo'
+    TmoModeUploadInfo:
+      description: 模式上传信息列表中的一个条目
+      type: object
+      properties:
+        lineId:
+          description: 线路名称/线路编号
+          type: number
+        stationId:
+          description: 车站名称/车站编号
+          type: number
+        modeCode:
+          description: 进入的模式/编号
+          type: number
+        modeUploadTime:
+          description: 模式发生时间
+          type: string
+          format: datetime
+        
+    TmoModeBroadcastList:
+      description: 模式广播信息列表
+      type: array
+      items:
+        $ref: '#/components/schemas/TmoModeBroadcast'
+    TmoModeBroadcast:
+      description: 模式广播信息列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点名称/节点编码
+          type: number
+        stationId:
+          description: 模式上传源车站/编号
+          type: number
+        modeCode:
+          description: 模式/编号
+          type: number
+        modeBroadcastTime:
+          description: 模式广播时间
+          type: string
+          format: datetime                          
+        targetId:
+          description: 模式广播目的车站/编号
+          type: number
+
+    TmoEquStatusCurList:
+      description: 设备事件列表
+      type: array
+      items:
+        $ref: '#/components/schemas/TmoEquStatusCur'
+    TmoEquStatusCur:
+      description: 设备事件列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点名称/节点编码
+          type: number
+        statusName:
+          description: 状态名称/状态ID
+          type: string
+        statusDesc:
+          description: 状态描述/状态值
+          type: number
+        applyDevice:
+          description: 适用设备
+          type: string
+        occurTime:
+          description: 发生时间
+          type: number
+          format: datetime
+

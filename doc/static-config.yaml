@@ -1,0 +1,131 @@
+openapi: 3.0.2
+servers:
+  - url: 'http://localhost/afc-monitor'
+info:
+  description: AFC监控系统前后台接口-获取静态配置
+    version: 1.0.0
+  title: AFC监控系统前后台接口-获取静态配置
+tags:
+  - name: 获取静态配置
+    description: 主要是用来AFC系统预定义的一些枚举值。比如设备类型、运行模式等。
+
+paths:
+  /config/devTypeListList:
+    get:
+      tags:
+        - 获取静态配置
+      operationId: editor-config-devTypeList
+      summary: 获取系统中预定义的设备列表。
+      responses:
+        default:
+          description: 返回设备列表。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  data:
+                    $ref: '#/components/schemas/DeviceTypeList'
+                    
+  /config/modeTypeList:
+    get:
+      tags:
+        - 获取静态配置
+      operationId: editor-config-modeTypeList
+      summary: 获取系统中预定义的模式列表。
+      responses:
+        default:
+          description: 返回模式列表。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  data:
+                    $ref: '#/components/schemas/ModeTypeList'
+                    
+  /config/deviceStatusList:
+    get:
+      tags:
+        - 获取静态配置
+      operationId: editor-config-deviceStatusList
+      summary: 获取系统中预定义的设备状态列表。
+      responses:
+        default:
+          description: 返回模式列表。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    description: 错误码。0表示成功，其他表示失败。
+                    type: integer
+                  errorMsg:
+                    type: string              
+                  data:
+                    $ref: '#/components/schemas/DeviceStatusList'
+                    
+
+
+components:
+  schemas:
+         
+    DeviceTypeList:
+      description: 系统中可用的设备类型列表。
+      type: array
+      items:
+        type: object
+        properties:
+          value: 
+            type: integer
+            description: 设备类型id，用于向服务器提交数据。
+          name:
+            type: string
+            description: 设备类型名称，用于展示到用户界面。
+          
+    ModeTypeList:
+      description: 系统预定义的运营模式
+      type: array
+      items:
+        type: object
+        description: 每个元素表示一个运营模式类别，比如“正常运行模式”、“降级运行模式”、“紧急运行模式”、“列车故障模式”
+        properties:
+          groupName:
+            type: string
+            description: 模式类别名称。比如“正常运行模式”、“降级运行模式”、“紧急运行模式”、“列车故障模式”
+          modes:
+            type: array
+            items:
+              type: object
+              description: 表示一个模式。
+              properties:
+                value:
+                  type: number 
+                  description: 在数据库中保存的value
+                modeName:
+                  type: string
+                  description: 模式名称。比如“降级运行模式”中的“进站免检模式”、“出站免检模式”等。
+    
+    DeviceStatusList:
+      description: 系统预定义的设备状态列表
+      type: array
+      items:
+        type: object
+        properties:
+          value: 
+            type: number
+          name:
+            description: 正常、警告、报警、离线、停止服务、未启用等。
+            type: string
+     

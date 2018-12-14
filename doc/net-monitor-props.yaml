@@ -1,0 +1,293 @@
+openapi: 3.0.2
+servers:
+  - url: 'http://localhost:8011/'
+info:
+  description: AFC监控系统前后台接口-路网监控-详细的表格数据
+  version: 1.0.0
+  title: AFC监控系统前后台接口-路网监控-详细的表格数据
+tags:
+  - name: 路网监控-详细的表格数据
+
+paths:
+                
+  /monitor/query/stationStatus:
+    post:
+      tags:
+        - 路网监控
+      summary: 车站状态列表。浏览器端需要定时调用。监控配置界面中，可以设置调用间隔。
+      operationId: monitor-query-stationStatus
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/StatusFilter'       
+      responses:
+        200:
+          description: 返回车站状态列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusList' 
+
+  /monitor/query/deviceStatus:
+    post:
+      tags:
+        - 路网监控
+      summary: 设备状态列表。定时调用。
+      operationId: monitor-query-deviceStatus
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/StatusFilter'       
+      responses:
+        200:
+          description: 返回设备状态列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquStatusList' 
+                
+  /monitor/query/modeUpload:
+    post:
+      tags:
+        - 路网监控
+      summary: 模式上传信息。定时调用。
+      operationId: monitor-query-modeUpload
+      responses:
+        200:
+          description: 返回模式上传信息。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoModeUploadInfoList' 
+                
+  /monitor/query/modeBroadcast:
+    post:
+      tags:
+        - 路网监控
+      summary: 模式广播信息。定时调用。
+      operationId: monitor-query-modeBroadcast
+      responses:
+        200:
+          description: 返回模式广播信息。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoModeBroadcastList' 
+                
+
+  /monitor/query/deviceEvent:
+    post:
+      tags:
+        - 路网监控
+      summary: 设备事件列表。定时调用。
+      operationId: monitor-query-deviceEvent
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/EventFilter'       
+      responses:
+        200:
+          description: 返回设备事件列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoEquStatusCurList' 
+
+components:
+  schemas:
+
+    StatusFilter:
+      description: 状态的过滤条件
+      type: object
+      properties:
+        nodeIds:
+          type: array
+          items:
+            type: number
+        orderField:
+          type: string
+        orderType:
+          type: string
+          enum:
+          - asc
+          - desc
+        startTime:
+          type: string
+          format: datetime
+        endTime:
+          type: string
+          format: datetime
+        maxCount:
+          type: number
+        status:
+          type: array
+          items: 
+            type: number
+        devType:
+          type: array
+          items: 
+            type: number
+
+
+    EventFilter:
+      description: 事件的过滤条件
+      type: object
+      properties:
+        nodeIds:
+          type: array
+          items:
+            type: number
+        orderField:
+          type: string
+        orderType:
+          type: string
+          enum:
+          - asc
+          - desc
+        startTime:
+          type: string
+          format: datetime
+        endTime:
+          type: string
+          format: datetime
+        maxCount:
+          type: number
+        devType:
+          type: array
+          items: 
+            type: number
+            
+    StationStatusList:
+      description: 车站状态列表
+      type: array
+      items:
+        $ref: '#/components/schemas/StationStatustViewItem'
+    StationStatustViewItem:
+      description: 车站状态列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点Id
+          type: number
+        status:
+          description: 车站状态
+          type: number
+        mode:
+          description: 车站模式
+          type: number
+        normalEvent:
+          description: 正常设备（个）
+          type: number
+        warningEvent:
+          description: 警告设备（个）
+          type: number
+        alarmlEvent:
+          description: 报警设备（个）
+          type: number
+        updateTime:
+          description: 模式生效时间
+          type: string
+        isOnline:
+          description: 是否在线(该属性不显示在表格中，但是会用于判断单元格的颜色)
+          type: boolean
+          
+    EquStatusList:
+      description: 设备状态列表
+      type: array
+      items:
+        $ref: '#/components/schemas/EquStatusViewItem'
+    EquStatusViewItem:
+      description: 设备状态列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点Id
+          type: number
+        status:
+          description: 设备状态
+          type: number
+        updateTime:
+          description: 状态更新时间
+          type: string
+        isOnline:
+          description: 是否在线
+          type: boolean
+          
+    TmoModeUploadInfoList:
+      description: 模式上传信息列表
+      type: array
+      items:
+        $ref: '#/components/schemas/TmoModeUploadInfo'
+    TmoModeUploadInfo:
+      description: 模式上传信息列表中的一个条目
+      type: object
+      properties:
+        lineId:
+          description: 线路名称/线路编号
+          type: number
+        stationId:
+          description: 车站名称/车站编号
+          type: number
+        modeCode:
+          description: 进入的模式/编号
+          type: number
+        modeUploadTime:
+          description: 模式发生时间
+          type: string
+          format: datetime
+        
+    TmoModeBroadcastList:
+      description: 模式广播信息列表
+      type: array
+      items:
+        $ref: '#/components/schemas/TmoModeBroadcast'
+    TmoModeBroadcast:
+      description: 模式广播信息列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点名称/节点编码
+          type: number
+        stationId:
+          description: 模式上传源车站/编号
+          type: number
+        modeCode:
+          description: 模式/编号
+          type: number
+        modeBroadcastTime:
+          description: 模式广播时间
+          type: string
+          format: datetime                          
+        targetId:
+          description: 模式广播目的车站/编号
+          type: number
+
+    TmoEquStatusCurList:
+      description: 设备事件列表
+      type: array
+      items:
+        $ref: '#/components/schemas/TmoEquStatusCur'
+    TmoEquStatusCur:
+      description: 设备事件列表中的一个条目
+      type: object
+      properties:
+        nodeId:
+          description: 节点名称/节点编码
+          type: number
+        statusName:
+          description: 状态名称/状态ID
+          type: string
+        statusDesc:
+          description: 状态描述/状态值
+          type: number
+        applyDevice:
+          description: 适用设备
+          type: string
+        occurTime:
+          description: 发生时间
+          type: number
+          format: datetime
+

@@ -1,0 +1,245 @@
+openapi: 3.0.2
+servers:
+  - url: 'http://localhost:8011/'
+info:
+  description: AFC监控系统前后台接口-节点管理
+  version: 1.0.0
+  title: AFC监控系统前后台接口-节点管理
+tags:
+  - name: 节点管理
+    description: 节点管理部分，就是对底图做增删改查。
+
+paths:
+  /editor/map/save:
+    post:
+      tags:
+        - 节点管理
+      summary: 保存节点地图。
+      description: 保存节点地图。
+      operationId: editor-map-save
+      requestBody:
+        description: 需要保存的地图数据。应该只提交修改后的节点。
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapSaveItem'
+      responses:
+        200:
+          description: 成功   
+                
+  /editor/node/create:
+    post:
+      tags:
+        - 节点管理
+      summary: 创建新节点。（注意，不能新建顶层节点）
+      description: 创建新节点。
+      operationId: editor-node-create
+      requestBody:
+        description: 新建的节点数据。
+        content: 
+            multipart/form-data: 
+              schema: 
+                type: object
+                properties:
+                  data: 
+                    $ref: '#/components/schemas/NodeData'
+                  img: 
+                    description: 底图图片。
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description: 创建结果。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nodeId: 
+                    description: 创建的nodeid。
+                    type: number
+                
+  /editor/node/remove:
+    post:
+      tags:
+        - 节点管理
+      summary: 删除节点。
+      description: 删除节点。删除的时候，会把所有的下级节点都删除。
+      operationId: editor-node-remove
+      requestBody:
+        description: 要删除的节点Id。
+        content: 
+          application/json:
+            schema:
+              description: 要删除的节点Id。 
+              type: object
+              properties:
+                nodeId:
+                  type: number
+      responses:
+        200:
+          description: 成功   
+  
+  /editor/node/query:
+    post:
+      tags:
+        - 节点管理
+      summary: 查询节点属性。
+      description: 查询节点属性。
+      operationId: editor-node-query
+      requestBody:
+        description: 需要查询的节点Id。
+        content: 
+          application/json:
+            schema:
+              description: 要查询的节点id。 
+              type: object
+              properties:
+                nodeId:
+                  type: number      
+      responses:
+        200:
+          description: 查询的节点数据。
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeData'
+ 
+  /editor/node/update:
+    post:
+      tags:
+        - 节点管理
+      summary: 修改节点属性。
+      description: 修改节点属性。
+      operationId: editor-node-update
+      requestBody:
+        description: 需要更新的节点数据。有些字段，一旦创建好，就不能修改。客户端需要把这些字段设置为原值，但是服务器直接忽视。
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodeData'
+      responses:
+        200:
+          description: 成功   
+  
+components:
+  schemas:
+    MapSaveItem:
+      description: 节点位置信息。字段的含义与NodeItem相同。
+      type: array
+      items:
+        description: 对应一个NodeItem，但是只包含部分字段。
+        type: object
+        properties:
+          nodeId:
+            type: integer
+          icon:
+            type: object
+            properties:
+              angle: 
+                type: number
+              x: 
+                type: integer
+              y:
+                type: integer
+          text:
+            type: object
+            properties:
+              angle: 
+                type: number
+              x: 
+                type: integer
+              y:
+                type: integer
+
+    NodeData:
+      description: 一个节点
+      type: object
+      properties:
+        nodeType:
+          $ref: 'common.yaml#/components/schemas/NodeType'
+        data:
+          oneOf:
+            - $ref: '#/components/schemas/NodeAcc'
+            - $ref: '#/components/schemas/NodeLine'
+            - $ref: '#/components/schemas/NodeStation'
+            - $ref: '#/components/schemas/NodeDevice'
+
+    NodeAcc:
+      description: ACC节点属性
+      type: object
+      properties:
+        nodeName:
+          description: 清分名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+
+    NodeLine:
+      description: 线路节点属性
+      type: object
+      properties:
+        ownerNodeId:
+          description: 所属地图的id。
+          type: integer
+        id:
+          description: 线路短编号(假设完整id为0x01020304，此处短编号只是指01)
+          type: integer
+        name:
+          description: 线路名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+        isActive:
+          description: 启用状态
+          type: boolean
+
+
+    NodeStation:
+      description: 车站节点属性
+      type: object
+      properties:
+        ownerNodeId:
+          description: 所属地图的id。
+          type: integer
+        id:
+          description: 车站短编号(假设完整id为0x01020304，此处短编号只是指02)
+          type: integer
+        name:
+          description: 车站名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+        isActive:
+          description: 启用状态
+          type: boolean
+          
+    NodeDevice:
+      description: 设备节点属性
+      type: object
+      properties:
+        ownerNodeId:
+          description: 所属地图的id。
+          type: integer
+        id:
+          description: 设备短编号(假设完整id为0x01020304，此处短编号只是指04)
+          type: integer
+        name:
+          description: 设备名称
+          type: string
+        ip:
+          description: 网络地址，比如192.168.144.183
+          type: string
+        logicalAddr:
+          description: 逻辑地址
+          type: string
+        isActive:
+          description: 启用状态
+          type: boolean
+        devType:
+          description: 设备类型的value，参见devType.value类型。
+          type: integer
+    

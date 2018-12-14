@@ -1,0 +1,322 @@
+openapi: 3.0.2
+servers:
+  - url: 'http://localhost:8011/'
+info:
+  description: AFC监控系统前后台接口-路网监控-节点命令
+  version: 1.0.0
+  title: AFC监控系统前后台接口-路网监控-节点命令
+tags:
+  - name: 路网监控-命令
+
+paths:
+  /monitor/changeMode:
+    post:
+      tags:
+        - 路网监控
+      summary: 修改运营模式。
+      description: 修改运营模式
+      operationId: monitor-changeMode
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        200:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'    
+                
+  /monitor/queryMode:
+    post:
+      tags:
+        - 路网监控
+      summary: 查询运营模式。
+      description: 查询运营模式
+      operationId: monitor-changeMode
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        200:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'    
+                
+  /monitor/timeSync:
+    post:
+      tags:
+        - 路网监控
+      summary: 时钟同步。
+      description: 时钟同步
+      operationId: monitor-time-sync
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        200:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'   
+                
+  /monitor/nodeControl:
+    post:
+      tags:
+        - 路网监控
+      summary: 发送控制命令。
+      description: 发送控制命令
+      operationId: monitor-nodeControl
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+               $ref: '#/components/schemas/CommandRequest'
+      responses:
+        200:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'   
+                
+  /monitor/query/deviceDetail/{deviceId}:
+    post:
+      tags:
+        - 路网监控
+      summary: 查询设备详细信息
+      description: 查询设备详细信息
+      operationId: monitor-query-deviceDetail
+      parameters:
+        - name: 'deviceId' 
+          in: 'path'
+          required: true
+          description: 设备的Id
+          schema: 
+            type: number
+      responses:
+        200:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceDetail'   
+                
+  /monitor/query/box/{deviceId}:
+    post:
+      tags:
+        - 路网监控
+      summary: 查询票箱或者钱箱信息。
+      description: 查询票箱或者钱箱信息
+      operationId: monitor-query-box
+      parameters:
+        - name: 'deviceId' 
+          in: 'path'
+          required: true
+          description: 设备的Id
+          schema: 
+            type: number
+      responses:
+        200:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandBoxQueryResult'   
+
+  /monitor/refresh:
+    post:
+      tags:
+        - 路网监控
+      summary: 刷新数据。刷新后，界面要重新构建。
+      description: 刷新数据
+      operationId: monitor-refresh
+      responses:
+        200:
+          description: 成功。
+
+  /monitor/config:
+    get:
+      tags:
+        - 路网监控
+      summary: 获取配置数据。
+      description: 获取配置数据。
+      operationId: monitor-config-get
+      responses:
+        200:
+          description: 返回命令执行结果。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetMonitorConfig' 
+    post:
+      tags:
+        - 路网监控
+      summary: 更新配置数据。
+      description: 更新配置数据
+      operationId: monitor-config-post
+      requestBody:
+        content: 
+          'application/json':
+             schema:
+                $ref: '#/components/schemas/NetMonitorConfig' 
+      responses:
+        200:
+          description: ok
+       
+
+components:
+  schemas:
+    DeviceDetail:
+      description: 描述设备及模块的的详细信息
+      type: object
+      properties:
+        deviceId:
+          description: 所属设备的节点Id（完整的长Id）。根据此Id可以从节点树中查找到设备的底图、状态等详细信息。
+          type: number
+        modules:
+          description: 设备模块信息
+          type: array
+          items:
+            type: object
+            description: 对应Java类MetroDeviceModule
+            properties:
+              moduleId:
+                type: number
+              moduleName:
+                description: 部件简写
+                type: string
+              statusDesc:
+                description: 模块的状态描述，错误、警告、正常。界面上要显示不同的颜色。
+                type: string
+                enum:
+                - error
+                - warn
+                - normal
+              remark: 
+                description: 部件名称
+                type: string
+              textLocation:
+                description: 模块在设备底图上的文字的位置。
+                type: object
+                properties:
+                  x: 
+                    type: number
+                  y: 
+                    type: number
+                  angle:
+                    type: number
+        statusHistory:
+          description: 设备状态的历史上报信息
+          type: array
+          items:
+            type: object
+            properties:
+              nodeId: 
+                description: 节点名称/节点编码
+                type: string 
+              statusName:
+                description: 状态名称/状态ID
+                type: string
+              statusDesc:
+                description: 状态描述/状态值
+                type: string
+              occurTime:
+                description: 发生时间，格式"2018-01-01 12:32:51"
+                type: string
+
+    CommandRequest:
+      description: 向下级节点发送命令的请求。
+      type: object
+      properties:
+        commandType:
+          type: string
+          enum:
+          - modeChange # 发送运营模式
+          - modeQuery # 查询运营模式
+          - timeSync # 时钟同步
+          - nodeControl # 控制命令
+          - boxQuery # 查询票箱、查询钱箱。服务器根据目标节点，来判断是查询票箱还是查询钱箱。
+        target:
+          type: array
+          description: 目标节点的Id
+          items:
+            type: number
+        arg:
+          oneOf:
+            - $ref: '#/components/schemas/CommandRequestSendModeArg'
+            - $ref: '#/components/schemas/CommandRequestNullArg'
+
+            
+    CommandRequestSendModeArg:
+      type: number
+      description: 修改运营模式的命令参数，对应运营模式的value
+    
+    CommandRequestNullArg:
+      description: 总是填写0。
+      type: number
+
+    CommandResponse:
+      description: 向下级节点发送命令的返回值，参考CommandResult类
+      type: array
+      items:
+        type: object
+        properties:
+          id: 
+            description: 目标节点Id
+            type: string
+          cmdName:
+            description: 命令名称
+            type: string
+          cmdResult:
+            description: 命令结果
+            type: string
+          occurTime:
+            description: 发送时间
+            type: string
+            
+    CommandBoxQueryResult:
+      description: 设备钱箱、票箱查询结果
+      type: object
+      properties:
+        boxType:
+          type: string
+          enum:
+           - 票箱
+           - 钱箱
+        values:
+          type: array
+          items:
+            type: object
+            properties:
+              boxDesc: 
+                description: 设备钱（票）箱的名字及描述（第一列）
+                type: string
+              boxValue:
+                description: 数值列（第二列）
+                type: string
+                  
+    NetMonitorConfig:
+      description: 路网监控下的监控配置
+      type: object
+      properties:
+        warning:
+          description: 警告阈值（个）
+          type: number
+        alarm:
+          description: 报警阈值（个）
+          type: number
+        refreshInterval:
+          description: 刷新阈值（秒）
+          type: number
+
+   

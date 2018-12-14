@@ -1,0 +1,138 @@
+openapi: 3.0.2
+servers:
+  - url: 'http://localhost:8011/'
+info:
+  description: AFC监控系统前后台接口-公共结构
+  version: 1.0.0
+  title: AFC监控系统前后台接口-公共结构
+
+paths:
+  /node/list-img-urls:
+    post:
+      tags:
+        - 节点管理
+      operationId: node-list-img-urls
+      summary: 返回系统中的底图url列表。
+      responses:
+        200:
+          description: 底图url列表。
+          content:
+            application/json:
+              schema:
+                description: 一个图片的url地址。是相对与当前请求的地址。
+                type: array
+                items:
+                  type: string
+
+  /node/list/{mode}:
+    post:
+      tags:
+        - 节点管理
+      operationId: node-list
+      summary: 返回系统中所有需要编辑的节点树。该接口会被节点编辑、路网监控界面调用。
+      parameters: 
+        - name: mode
+          in: path
+          required: true
+          description: >-
+            控制返回哪些字段。
+            editor表示节点编辑树，不需要返回status字段，其他的都要填写。
+            monitor表示路网监控树，全都要。
+            simple表示简单的树，只需要填写标记为required的字段。
+          schema:
+            type: string
+            enum:
+              - editor 
+              - monitor
+              - simple
+      responses:
+        200:
+          description: 返回一个节点树，具体有哪些字段，根据请求中的mode来判断。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeItem'
+
+components:
+  schemas:
+    SimpleResp:
+      description: 服务器返回的简单应答信息
+      type: object
+      properties:
+        error:
+          description: 错误码。0表示成功，其他表示失败。
+          type: integer
+        errorMsg:
+          description: 错误描述字符串。
+          type: string
+
+    NodeType:
+      description: 节点类型
+      type: string
+      enum:      
+        - ACC
+        - Line
+        - Station
+        - Device
+
+    NodeItem:
+      description: >-
+        一个节点。可以包含多个下级节点，从而构成多层树形结构，ACC-LC-SC-SLE。不包含模块。
+        涉及到坐标的时候，都是以底图的左上角点为原点。x轴向右为正方向，y轴向下为正方向。
+      type: object
+      required: 
+        - name
+        - nodeId
+        - nodeType
+        - subItems
+      properties:
+        name:
+          description: 地图名称，比如“温州ACC”、“温州S1线”、“动车南站”
+          type: string
+        nodeId:
+          description: acc、lc、sc、device等节点的节点id。比如0x01020304是设备，0x01020000是车站。
+          type: integer
+        nodeType:
+          $ref: '#/components/schemas/NodeType'
+        subItems:
+          description: 下级节点列表，每个元素都是一个NodeItem。
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeItem'
+        imageUrl:
+          description: 地图底图的url索引。
+          type: integer
+        icon:
+          description: 当前节点在上级地图中的icon图片位置。
+          type: object
+          properties:
+            angle: 
+              description: 图片旋转角度。比如45，表示旋转45度。-45表示旋转-45度。
+              type: number
+            x: 
+              description: 图片左上角x坐标。
+              type: integer
+            y:
+              description: 图片左上角y坐标。
+              type: integer
+            imgs:
+              description: url的索引。如果是路网监控图，如果status为n，则NodeItem.icon.imgs[n]才是索引。如果是节点编辑图，则该数组长度总是为1。
+              type: array
+              items:
+                type: integer
+        text:
+          description: 当前节点在上级地图中的文本的位置。
+          type: object
+          properties:
+            angle: 
+              description: 文字旋转角度。目前总是传0。
+              type: number
+            x: 
+              description: 文字左上角x坐标。
+              type: integer
+            y:
+              description: 文字左上角x坐标。
+              type: integer
+        status:
+          description: 节点状态。这个数值可以作为索引，去查找icon的底图。在节点编辑界面，这个值可以为null或者0。
+          type: number

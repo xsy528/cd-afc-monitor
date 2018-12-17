@@ -111,7 +111,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeviceDetail'   
                 
-  /monitor/query/box/{deviceId}:
+  /monitor/query/box/{deviceId}/{queryType}:
     post:
       tags:
         - 路网监控
@@ -125,6 +125,12 @@ paths:
           description: 设备的Id
           schema: 
             type: number
+        - name: 'queryType'
+          in: 'path'
+          required: true
+          description: 是否是实时查询。如果是实时查询（true），则后台向下级节点发送命令；否则，从数据库获取信息。
+          schema: 
+            type: boolean
       responses:
         200:
           description: 返回命令执行结果。
@@ -286,24 +292,21 @@ components:
             
     CommandBoxQueryResult:
       description: 设备钱箱、票箱查询结果
-      type: object
-      properties:
-        boxType:
-          type: string
-          enum:
-           - 票箱
-           - 钱箱
-        values:
-          type: array
-          items:
-            type: object
-            properties:
-              boxDesc: 
-                description: 设备钱（票）箱的名字及描述（第一列）
-                type: string
-              boxValue:
-                description: 数值列（第二列）
-                type: string
+      type: array
+      items:
+        type: object
+        properties:
+          boxDesc: 
+            description: 设备钱（票）箱的名字及描述（第一列）
+            type: string
+          boxValue:
+            description: 数值列（第二列）
+            type: string
+          boxType:
+            type: string
+            enum:
+             - 票箱
+             - 钱箱
                   
     NetMonitorConfig:
       description: 路网监控下的监控配置

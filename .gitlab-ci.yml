@@ -2,6 +2,6 @@ image: busybox
 
 test:
   script:
-  - mkdir -p /publish/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME; cp -fr . /publish/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME;
+  - mkdir -p /publish/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME; cp -fr ./doc /publish/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME;
   tags:
   - swagger

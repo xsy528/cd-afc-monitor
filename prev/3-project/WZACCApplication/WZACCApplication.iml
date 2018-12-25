@@ -19,23 +19,5 @@
     <orderEntry type="module" module-name="com.insigma.commons.ui" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
     <orderEntry type="module" module-name="WZACCXML" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../2-product/AFCAppMonitor/lib/swt-win64-3.7.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../2-product/AFCMonitor/lib/swt-win64-3.7.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
 </module>

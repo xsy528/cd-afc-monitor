@@ -40,8 +40,8 @@
         </property>
 		<property name="configLocations">
 		<list>
-			<value>datasource/hibernate.cfg.xml</value>
-			<value>datasource/hibernate.monitor.cfg.xml</value>
+			<value>classpath*:datasource/hibernate.cfg.xml</value>
+			<value>classpath*:datasource/hibernate.monitor.cfg.xml</value>
 		</list>
 		</property>
 		 <property name="mappingLocations">

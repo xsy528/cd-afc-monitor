@@ -24,6 +24,10 @@ public abstract class MetroNode extends AFCNode implements Cloneable {
 
 	public abstract void setTextLocation(AFCNodeLocation TextLocation);
 
+	public abstract AFCNodeLocation getImageLocation();
+
+	public abstract AFCNodeLocation getTextLocation();
+
 	protected volatile MetroNode parent;
 
 	public void setParent(MetroNode parent) {

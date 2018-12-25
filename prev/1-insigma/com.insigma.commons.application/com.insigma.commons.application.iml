@@ -18,6 +18,8 @@
     <libelement value="jar://$MODULE_DIR$/lib/commons-lang-2.3.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/javassist-3.6.0.GA.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/scannotation-1.0.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/swt-win64-3.7.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/groovy-2.4.12.jar!/" />
     <src_description expected_position="0">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
       <src_folder value="file://$MODULE_DIR$/example" expected_position="1" />
@@ -188,7 +190,7 @@
     <orderEntry type="module" module-name="com.insigma.commons.core" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
     <orderEntry type="module-library">
-      <library>
+      <library name="swt-win64-3.7.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/swt-win64-3.7.jar!/" />
         </CLASSES>
@@ -197,7 +199,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library>
+      <library name="groovy-2.4.12.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/groovy-2.4.12.jar!/" />
         </CLASSES>

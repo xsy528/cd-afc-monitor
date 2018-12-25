@@ -19,9 +19,7 @@
     <orderEntry type="module" module-name="AFCApplication" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
     <orderEntry type="module" module-name="AFCUI" />
-    <orderEntry type="module" module-name="AFCParameter" />
     <orderEntry type="module" module-name="AFCODMonitor" />
-    <orderEntry type="module" module-name="com.insigma.commons.communication" />
     <orderEntry type="module" module-name="WZACCXML" />
   </component>
 </module>

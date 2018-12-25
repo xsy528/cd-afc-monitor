@@ -301,7 +301,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#handleModeBroadcast(java.util.List)
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#handleModeBroadcast(java.util.List)
 	 */
 	@Override
 	public long handleModeBroadcast(List<TmoModeBroadcast> modeBroadcasts) {
@@ -382,7 +382,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#getModeSearchList(java.lang.Short, java.lang.Short, java.util.Date, java.util.Date, int, int)
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#getModeSearchList(java.lang.Short, java.lang.Short, java.util.Date, java.util.Date, int, int)
 	 */
 	@Override
 	public List<Object> getModeSearchList(Short lineId, Short stationId, Date beginTime, Date endTime, int pageNum,
@@ -391,7 +391,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#getModeSearchCount(java.lang.Short, java.lang.Short, java.util.Date, java.util.Date)
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#getModeSearchCount(java.lang.Short, java.lang.Short, java.util.Date, java.util.Date)
 	 */
 	@Override
 	public int getModeSearchCount(Short lineId, Short stationId, Date benginTime, Date endTime) {
@@ -399,7 +399,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#getMetroNodeList()
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#getMetroNodeList()
 	 */
 	@Override
 	public List<Object[]> getMetroNodeList() {
@@ -417,7 +417,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#saveOrUpdateOnlineStatus(short, int, long, short)
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#saveOrUpdateOnlineStatus(short, int, long, short)
 	 */
 	@Override
 	public boolean saveOrUpdateOnlineStatus(short lineId, int stationId, long nodeId, short status) {
@@ -425,7 +425,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#getAbnormalTmoModeUploadInfo()
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#getAbnormalTmoModeUploadInfo()
 	 */
 	@Override
 	public List<TmoModeUploadInfo> getAbnormalTmoModeUploadInfo() {
@@ -433,7 +433,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#getTmoItemMode(int)
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#getTmoItemMode(int)
 	 */
 	@Override
 	public List<TmoItemStatus> getTmoItemMode(int stationId) {
@@ -446,7 +446,7 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 	}
 
 	/* (non-Javadoc)
-	 * @see com.insigma.acc.wz.service.IWZModeService#getDeviceTmoItemMode(short, int)
+	 * @see com.insigma.acc.wz.web.service.IWZModeService#getDeviceTmoItemMode(short, int)
 	 */
 	@Override
 	public List<TmoItemStatus> getDeviceTmoItemMode(short lindID, int stationID) {

@@ -7,18 +7,30 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:web/WEB-INF/spring-context.xml</param-value>
+        <param-value>classpath*:spring-config.xml</param-value>
     </context-param>
+    
+    <listener>
+        <listener-class>com.insigma.acc.wz.web.listener.Init</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>corsFilter</filter-name>
+        <filter-class>com.insigma.acc.wz.web.filter.CorsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>corsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>acc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:web/WEB-INF/spring-context.xml</param-value>
+            <param-value>classpath*:spring-config.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

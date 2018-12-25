@@ -8,5 +8,7 @@
 
 	<import resource="module/spring-commons.xml" />
 	<import resource="module/spring-monitor.xml" />
+	<!-- web改造相关 -->
+	<import resource="classpath*:module/spring-web.xml"/>
 
 </beans>

@@ -11,15 +11,11 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="AFCApplication" />
-    <orderEntry type="module" module-name="AFCParameter" />
-    <orderEntry type="module" module-name="AFCSimulator" />
     <orderEntry type="module" module-name="com.insigma.commons.application" />
     <orderEntry type="module" module-name="com.insigma.commons.binary" />
     <orderEntry type="module" module-name="com.insigma.commons.core" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
-    <orderEntry type="module" module-name="com.insigma.commons.tools.xdr.viewer" />
     <orderEntry type="module" module-name="com.insigma.commons.ui" />
     <orderEntry type="library" name="WZACC_LIB" level="project" />
-    <orderEntry type="module" module-name="com.insigma.commons.messageserver.virtualconn" />
   </component>
 </module>

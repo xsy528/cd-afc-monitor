@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
+
+	<bean id="nodeController" name="/node/**" class="com.insigma.acc.wz.web.controller.NodeController">
+		<constructor-arg index="0" ref="nodeService"/>
+		<constructor-arg index="1" ref="fileService"/>
+	</bean>
+
+	<bean id="fileController" name="/file/**" class="com.insigma.acc.wz.web.controller.FileController">
+		<constructor-arg index="0" ref="fileService"/>
+	</bean>
+
+	<bean id="nodeService" class="com.insigma.acc.wz.web.service.impl.NodeServiceImpl">
+		<property name="fileService" ref="fileService"/>
+	</bean>
+
+	<bean id="fileService" class="com.insigma.acc.wz.web.service.impl.FileServiceImpl" init-method="synResources">
+		<property name="resourceService" ref="resourceService"/>
+		<property name="commonDAO" ref="commonDAO"/>
+	</bean>
+
+</beans>
+

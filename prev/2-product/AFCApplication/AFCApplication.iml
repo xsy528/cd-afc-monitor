@@ -53,7 +53,6 @@
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
     <orderEntry type="module" module-name="com.insigma.commons.core" />
     <orderEntry type="module" module-name="com.insigma.commons.application" />
-    <orderEntry type="module" module-name="com.insigma.commons.communication" />
     <orderEntry type="module" module-name="com.insigma.commons.binary" />
     <orderEntry type="module" module-name="com.insigma.commons.framework" />
     <orderEntry type="module-library">
@@ -247,8 +246,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="com.insigma.commons.ui" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="library" name="TestCaseLib" level="project" />
-    <orderEntry type="module" module-name="com.insigma.commons.authority" />
     <orderEntry type="module-library">
       <library name="swt-win64-3.7.jar">
         <CLASSES>
@@ -258,5 +255,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="WZACC_LIB" level="project" />
+    <orderEntry type="library" name="swt-win64-3.7" level="project" />
   </component>
 </module>

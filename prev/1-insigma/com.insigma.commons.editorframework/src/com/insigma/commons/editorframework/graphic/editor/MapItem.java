@@ -8,19 +8,18 @@
  */
 package com.insigma.commons.editorframework.graphic.editor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Event;
-
 import com.insigma.commons.editorframework.Action;
 import com.insigma.commons.editorframework.graphic.GraphicItem;
 import com.insigma.commons.editorframework.graphic.ImageGraphicItem;
 import com.insigma.commons.ui.form.IEditorChangedListener;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Event;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 定义将要在界面显示的数据结构
@@ -242,7 +241,7 @@ public class MapItem {
 	 * 
 	 * @return 返回原始对象
 	 */
-	List<MapItem> getMapItemList() {
+	public List<MapItem> getMapItemList() {
 		return mapItems;
 	}
 

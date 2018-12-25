@@ -7,8 +7,8 @@
     <libelement value="jar://$MODULE_DIR$/lib/commons-io-1.4.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/persistence-api-1.0.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/commons-beanutils-1.7.0.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/swt-3.7.1-win32-win32-x86.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/org.sf.feeling.swt.win32.extension.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/swt-win64-3.7.jar!/" />
     <src_description expected_position="0">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
       <src_folder value="file://$MODULE_DIR$/res" expected_position="1" />
@@ -92,7 +92,7 @@
     </orderEntry>
     <orderEntry type="module" module-name="com.insigma.commons.application" />
     <orderEntry type="module-library">
-      <library>
+      <library name="swt-win64-3.7.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/swt-win64-3.7.jar!/" />
         </CLASSES>

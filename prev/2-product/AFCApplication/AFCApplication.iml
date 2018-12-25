@@ -23,7 +23,7 @@
     <libelement value="jar://$MODULE_DIR$/lib/antlr-3.2.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/scannotation-1.0.2.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/commons-io-1.4.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/swt-3.7.1-win32-win32-x86.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/swt-win64-3.7.jar!/" />
     <src_description expected_position="0">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
       <src_folder value="file://$MODULE_DIR$/test/src" expected_position="1" />
@@ -53,6 +53,7 @@
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
     <orderEntry type="module" module-name="com.insigma.commons.core" />
     <orderEntry type="module" module-name="com.insigma.commons.application" />
+    <orderEntry type="module" module-name="com.insigma.commons.communication" />
     <orderEntry type="module" module-name="com.insigma.commons.binary" />
     <orderEntry type="module" module-name="com.insigma.commons.framework" />
     <orderEntry type="module-library">
@@ -246,8 +247,10 @@
     </orderEntry>
     <orderEntry type="module" module-name="com.insigma.commons.ui" />
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" name="TestCaseLib" level="project" />
+    <orderEntry type="module" module-name="com.insigma.commons.authority" />
     <orderEntry type="module-library">
-      <library>
+      <library name="swt-win64-3.7.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/swt-win64-3.7.jar!/" />
         </CLASSES>
@@ -255,6 +258,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="WZACC_LIB" level="project" />
   </component>
 </module>

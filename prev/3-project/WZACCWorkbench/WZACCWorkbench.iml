@@ -10,15 +10,6 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/swt.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="WZACC_LIB" level="project" />
     <orderEntry type="module" module-name="com.insigma.commons.framework" />
     <orderEntry type="module" module-name="AFCApplication" />
@@ -28,10 +19,28 @@
     <orderEntry type="module" module-name="AFCODMonitor" />
     <orderEntry type="module" module-name="com.insigma.commons.ui" />
     <orderEntry type="module" module-name="com.insigma.commons.editorframework" />
+    <orderEntry type="module" module-name="AFCParameter" />
+    <orderEntry type="module" module-name="AFCParameterEditor" />
+    <orderEntry type="module" module-name="AFCEODManager" />
     <orderEntry type="module" module-name="com.insigma.commons.core" />
+    <orderEntry type="module" module-name="com.insigma.commons.taskserver" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
+    <orderEntry type="module" module-name="AFCFileManager" />
     <orderEntry type="module" module-name="AFCLog" />
+    <orderEntry type="module" module-name="com.insigma.commons.validator" />
     <orderEntry type="module" module-name="WZACCApplication" />
     <orderEntry type="module" module-name="WZMonitor" />
+    <orderEntry type="module" module-name="WZACCParameterManager" />
+    <orderEntry type="module" module-name="WZTicket" />
+    <orderEntry type="module" module-name="WZACCSAMCard" />
+    <orderEntry type="module" module-name="WZACCXML" />
+    <orderEntry type="module" module-name="AFCOPTManager" />
+    <orderEntry type="module" module-name="WZMessageServer" />
+    <orderEntry type="module" module-name="AFCAuthority" />
+    <orderEntry type="module" module-name="com.insigma.commons.authority" />
+    <orderEntry type="module" module-name="AFCDailyHandle" />
+    <orderEntry type="module" module-name="WZDailyHandler" />
+    <orderEntry type="module" module-name="ACCDailyClear" />
+    <orderEntry type="module" module-name="WZACCTicketManager" />
   </component>
 </module>

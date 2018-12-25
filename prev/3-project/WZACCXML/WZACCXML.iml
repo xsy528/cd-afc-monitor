@@ -6,24 +6,20 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/res" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="AFCApplication" />
+    <orderEntry type="module" module-name="AFCParameter" />
+    <orderEntry type="module" module-name="AFCSimulator" />
     <orderEntry type="module" module-name="com.insigma.commons.application" />
     <orderEntry type="module" module-name="com.insigma.commons.binary" />
     <orderEntry type="module" module-name="com.insigma.commons.core" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
+    <orderEntry type="module" module-name="com.insigma.commons.tools.xdr.viewer" />
     <orderEntry type="module" module-name="com.insigma.commons.ui" />
     <orderEntry type="library" name="WZACC_LIB" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../2-product/AFCAppMonitor/lib/swt-win64-3.7.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="module" module-name="com.insigma.commons.messageserver.virtualconn" />
   </component>
 </module>

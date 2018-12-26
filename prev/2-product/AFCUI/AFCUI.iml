@@ -94,9 +94,7 @@
     <orderEntry type="module" module-name="com.insigma.commons.framework" />
     <orderEntry type="module" module-name="com.insigma.commons.application" />
     <orderEntry type="module" module-name="com.insigma.commons.binary" />
-    <orderEntry type="module" module-name="com.insigma.commons.authority" />
     <orderEntry type="module" module-name="AFCApplication" />
-    <orderEntry type="module" module-name="com.insigma.commons.communication" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
     <orderEntry type="module-library">
       <library name="swt-win64-3.7.jar">

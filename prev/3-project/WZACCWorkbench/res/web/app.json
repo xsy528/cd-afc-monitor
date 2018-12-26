@@ -1,7 +1,7 @@
 {
   "localIP": "127.0.0.1",
   "localPort": 8090,
-  "remoteIP": "127.0.0.1",
+  "remoteIP": "192.168.144.185",
   "remotePort": 8060,
   "resourceDirs": [
     "web/h5"

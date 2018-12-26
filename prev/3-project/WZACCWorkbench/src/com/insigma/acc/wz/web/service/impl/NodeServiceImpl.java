@@ -2,6 +2,7 @@ package com.insigma.acc.wz.web.service.impl;
 
 import com.insigma.acc.wz.web.model.vo.ImageLocation;
 import com.insigma.acc.wz.web.model.vo.NodeItem;
+import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.acc.wz.web.model.vo.TextLocation;
 import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.service.NodeService;
@@ -41,7 +42,7 @@ public class NodeServiceImpl implements NodeService {
     private FileService fileService;
 
     @Override
-    public NodeItem getNodeTree(){
+    public Result<NodeItem> getNodeTree(){
         GraphicMapGenerator mapGenerator = new GraphicMapGenerator();
         GraphicMapBuilder graphicMapBuilder = new GraphicMapBuilder();
         mapGenerator.setGraphicMapBuilder(graphicMapBuilder);
@@ -52,7 +53,7 @@ public class NodeServiceImpl implements NodeService {
 
         MapItem rootMapItem = (MapItem) root.getValue();
         NodeItem nodeItem = mapItemToNodeItem(rootMapItem);
-        return nodeItem;
+        return Result.success(nodeItem);
     }
 
     public NodeItem mapItemToNodeItem(MapItem mapItem) {

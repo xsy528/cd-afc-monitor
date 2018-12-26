@@ -1,7 +1,5 @@
 package com.insigma.acc.wz.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.insigma.acc.wz.web.model.vo.NodeItem;
 import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.service.NodeService;
 import com.insigma.acc.wz.web.util.JsonUtils;
@@ -37,42 +35,18 @@ public class NodeController extends BaseMultiActionController {
     }
 
     public void editorTreeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setContentType("text/javascript; charset=utf-8");
+        response.setContentType("application/json; charset=utf-8");
         try(PrintWriter writer = response.getWriter()){
-            ObjectMapper objectMapper = new ObjectMapper();
-            NodeItem nodeItem = nodeService.getNodeTree();
-            if (nodeItem!=null){
-                String json = objectMapper.writeValueAsString(nodeItem);
-                System.out.println(json);
-                writer.println(json);
-            }
+            writer.println(JsonUtils.parseObject(nodeService.getNodeTree()));
         }
     }
 
     public void monitorTreeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setContentType("text/javascript; charset=utf-8");
-        try(PrintWriter writer = response.getWriter()){
-            ObjectMapper objectMapper = new ObjectMapper();
-            NodeItem nodeItem = nodeService.getNodeTree();
-            if (nodeItem!=null){
-                String json = objectMapper.writeValueAsString(nodeItem);
-                System.out.println(json);
-                writer.println(json);
-            }
-        }
+        editorTreeList(request,response);
     }
 
     public void simpleTreeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setContentType("text/javascript; charset=utf-8");
-        try(PrintWriter writer = response.getWriter()){
-            ObjectMapper objectMapper = new ObjectMapper();
-            NodeItem nodeItem = nodeService.getNodeTree();
-            if (nodeItem!=null){
-                String json = objectMapper.writeValueAsString(nodeItem);
-                System.out.println(json);
-                writer.println(json);
-            }
-        }
+        editorTreeList(request,response);
     }
 
     public void imageList(HttpServletRequest request, HttpServletResponse response) throws Exception {

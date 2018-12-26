@@ -245,10 +245,7 @@
     <orderEntry type="module" module-name="com.insigma.commons.core" />
     <orderEntry type="module" module-name="AFCApplication" />
     <orderEntry type="module" module-name="AFCUI" />
-    <orderEntry type="module" module-name="com.insigma.commons.native" />
-    <orderEntry type="module" module-name="com.insigma.commons.communication" />
     <orderEntry type="module" module-name="AFCLog" />
-    <orderEntry type="module" module-name="com.insigma.commons.authority" />
     <orderEntry type="module-library">
       <library name="commons-io-1.4.jar">
         <CLASSES>
@@ -267,6 +264,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="AFCMessageServer" />
   </component>
 </module>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project>
-	<property name="project.base.names" value="WZACCXML,WZACCApplication,WZACCParameterManager,WZACCTicketManager,WZTicket,WZMonitor,WZACCSAMCard,WZACCESUtil,WZMessageServer,WZFileServer,WZDailyHandler" />
-	<property name="project.dist.names" value="WZACCXML,WZACCParameterEditor,WZACCFileServer,WZACCMessageServer,WZDeploymentInitor,WZSCMessageServerSimulator,WZACCWorkbench,WZACCLoadServer,WZACCESFileServer,WZACCESMessageServer,WZACCESWorkbench,WZACCCleanWorkBench,WZACCTaskServer,WZACCModbus,WZACCYKTServer,WZACCSecretServer,WZACCDataServer" />
-</project>

@@ -1,21 +1,27 @@
 package com.insigma.acc.wz.web.server;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.insigma.acc.wz.web.filter.CorsFilter;
+import com.insigma.acc.wz.web.listener.Init;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
-import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.servlet.DispatcherServlet;
 
+import javax.servlet.DispatcherType;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.EnumSet;
 import java.util.Map;
 
 /**
@@ -28,6 +34,8 @@ public class WebServer {
 
     private static final String LOG_PATH = "./jetty_log/yyyy_mm_dd.request.log";
 
+    private int port = 8080;
+
     /**
      * 启动Web服务器
      */
@@ -38,35 +46,36 @@ public class WebServer {
         Server server = new Server();
         Map<String, Object> appConfig = readAppConfig();
 
-        //设置主页
-        String mainUrl = (String) appConfig.get("mainUrl");
-        System.setProperty("mainUrl", mainUrl);
-
         //增加本地连接
         ServerConnector localConnector = new ServerConnector(server);
-        localConnector.setHost((String) appConfig.get("localIP"));
-        localConnector.setPort(Integer.parseInt(appConfig.get("localPort").toString()));
+        String portStr = System.getProperty("server.port");
+        if (portStr!=null){
+            port = Integer.parseInt(portStr);
+        }else{
+            port = Integer.parseInt(appConfig.get("localPort").toString());
+        }
+        localConnector.setPort(port);
         localConnector.setReuseAddress(true);
         server.addConnector(localConnector);
 
-        //增加远程连接
-        ServerConnector remoteConnector = new ServerConnector(server);
-        remoteConnector.setHost((String) appConfig.get("remoteIP"));
-        remoteConnector.setPort(Integer.parseInt(appConfig.get("remotePort").toString()));
-        remoteConnector.setReuseAddress(true);
-        server.addConnector(remoteConnector);
-
-        //增加web应用
-        WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/");
-        //设置web.xml位置
-        String webXmlDir = new ClassPathResource((String) appConfig.get("webXmlDir")).getURL().getPath();
-        logger.info("webXmlDir:" + webXmlDir);
-        webAppContext.setWar(webXmlDir);
+        //servlet容器
+        ServletContextHandler servletContextHandler = new ServletContextHandler();
+        servletContextHandler.setInitParameter("contextConfigLocation","classpath*:spring-config.xml");
+        //添加dispatchServlet
+        DispatcherServlet dispatcherServlet = new DispatcherServlet();
+        dispatcherServlet.setContextConfigLocation("classpath*:spring-config.xml");
+        servletContextHandler.addServlet(new ServletHolder(dispatcherServlet),"/*");
+        //添加listener
+        servletContextHandler.addEventListener(new ContextLoaderListener());
+        servletContextHandler.addEventListener(new Init());
+        //添加corsFilter
+        servletContextHandler.addFilter(new FilterHolder(new CorsFilter()),
+                "/*", EnumSet.allOf(DispatcherType.class));
 
         //整合多个应用
         ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
-        contextHandlerCollection.setHandlers(new Handler[]{webAppContext});
+        contextHandlerCollection.setHandlers(new Handler[]{servletContextHandler});
+
         HandlerCollection handlerCollection = new HandlerCollection();
         handlerCollection.addHandler(contextHandlerCollection);
 
@@ -88,22 +97,15 @@ public class WebServer {
      */
     private Map<String, Object> readAppConfig() {
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> map = null;
+        Map<String, Object> map;
         try {
             ClassPathResource configResource = new ClassPathResource("web/app.json");
             InputStream configInput = configResource.getInputStream();
             logger.info("配置文件路径：" + configResource.getPath());
             map = objectMapper.readValue(configInput, new TypeReference<Map<String, Object>>(){});
-        } catch (JsonParseException e) {
-            logger.error("解析配置文件失败", e);
-        } catch (JsonMappingException e) {
-            logger.error("解析配置文件失败", e);
         } catch (IOException e) {
             logger.error("解析配置文件失败", e);
-        }finally {
-            if (map==null){
-                throw new RuntimeException("jetty服务器启动失败");
-            }
+            throw new RuntimeException("jetty服务器启动失败");
         }
         return map;
     }

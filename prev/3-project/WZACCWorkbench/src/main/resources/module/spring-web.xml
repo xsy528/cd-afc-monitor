@@ -19,7 +19,7 @@
 		<property name="fileService" ref="fileService"/>
 	</bean>
 
-	<bean id="fileService" class="com.insigma.acc.wz.web.service.impl.FileServiceImpl" init-method="synResources">
+	<bean id="fileService" class="com.insigma.acc.wz.web.service.impl.FileServiceImpl">
 		<property name="resourceService" ref="resourceService"/>
 		<property name="commonDAO" ref="commonDAO"/>
 	</bean>

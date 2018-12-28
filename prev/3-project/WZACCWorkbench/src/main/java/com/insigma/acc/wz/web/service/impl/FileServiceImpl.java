@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,13 +30,16 @@ public class FileServiceImpl implements FileService {
     private CommonDAO commonDAO;
 
     //资源名称-序号
-    private Map<String,Integer> resourceMap = new HashMap<>();
+    private static Map<String,Integer> resourceMap = new HashMap<>();
 
-    @PostConstruct
-    public void synResources() {
+    static{
         resourceMap.put("defaultPIC.png",0);
         //获取本地资源图片
-        getImages(ResourceUtils.getLocalResourceDir());
+        ResourceUtils.getImages().forEach(file ->putResource(file.getName()));
+    }
+
+    @Override
+    public void synResources() {
         getResourceFromDB();
     }
     private void getResourceFromDB(){
@@ -87,21 +89,7 @@ public class FileServiceImpl implements FileService {
         return Result.success(resourceList);
     }
 
-    public void getImages(File file){
-        if (file.isDirectory()){
-            for(File subFile:file.listFiles()){
-                getImages(subFile);
-            }
-        }else {
-            String filename = file.getName();
-            if (filename.endsWith(".png")) {
-                LOGGER.info("扫描到图片:" + file.getPath());
-                putResource(filename);
-            }
-        }
-    }
-
-    private void putResource(String path){
+    private static void putResource(String path){
         if (!resourceMap.containsKey(path)){
             resourceMap.put(path,resourceMap.size());
         }

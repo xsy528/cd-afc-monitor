@@ -9,4 +9,6 @@ public interface FileService {
     Integer getResourceIndex(String resourcePath);
 
     byte[] getFileBytes(String filename);
+
+    void synResources();
 }

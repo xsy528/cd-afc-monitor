@@ -6,8 +6,8 @@ import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.acc.wz.web.model.vo.TextLocation;
 import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.service.NodeService;
+import com.insigma.acc.wz.web.util.NodeUtils;
 import com.insigma.afc.application.AFCApplication;
-import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.constant.ApplicationKey;
 import com.insigma.afc.dic.DeviceStatus;
 import com.insigma.afc.manager.SystemConfigKey;
@@ -29,6 +29,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ticket: 节点服务实现类
+ * author: xuzhemin
+ */
 @Service
 public class NodeServiceImpl implements NodeService {
 
@@ -57,30 +61,17 @@ public class NodeServiceImpl implements NodeService {
         return Result.success(nodeItem);
     }
 
-    private static String getNodeId(long id,AFCNodeLevel afcNodeLevel){
-        switch (afcNodeLevel){
-            case ACC:{
-                return "0x00000000";
-            }
-            case LC: {
-                return String.format("0x%02x000000",id);
-            }
-            case SC:{
-                return String.format("0x%04x0000",id);
-            }
-            case SLE:{
-                return String.format("0x%08x",id);
-            }
-            default: return "";
-        }
-    }
-
+    /**
+     * 将MapItem转化为NodeItem
+     * @param mapItem 图元
+     * @return nodeItem
+     */
     public NodeItem mapItemToNodeItem(MapItem mapItem) {
 
         Application.getLineIdFormat();
         MetroNode metroNode = (MetroNode) mapItem.getValue();
         NodeItem nodeItem = new NodeItem();
-        nodeItem.setNodeId(getNodeId(metroNode.id(),metroNode.level()));
+        nodeItem.setNodeId(NodeUtils.getNodeId(metroNode.id(),metroNode.level()));
         nodeItem.setName(metroNode.name());
         nodeItem.setNodeType(metroNode.level().toString());
         nodeItem.setImageUrl(fileService.getResourceIndex(metroNode.getPicName()));
@@ -92,7 +83,7 @@ public class NodeServiceImpl implements NodeService {
         for (String imagePath:imageGraphicItem.getImagesPath()){
             imageIndexList.add(fileService.getResourceIndex(imagePath));
         }
-        nodeItem.setIcon(new ImageLocation(imageIndexList, imgLocation.getX(), imgLocation.getX(),
+        nodeItem.setIcon(new ImageLocation(imageIndexList, imgLocation.getX(), imgLocation.getY(),
                 imgLocation.getAngle()));
 
         //获取文字信息
@@ -133,6 +124,7 @@ public class NodeServiceImpl implements NodeService {
         return root;
     }
 
+    //根据状态转化图片
     public ActionTreeNode doimage(ActionTreeNode root) {
         MapItem mapitem = (MapItem) root.getValue();
         // 通信前置机是否在线

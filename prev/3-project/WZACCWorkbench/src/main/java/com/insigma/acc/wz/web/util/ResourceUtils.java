@@ -1,14 +1,17 @@
 package com.insigma.acc.wz.web.util;
 
 import com.insigma.commons.util.SystemPropertyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Ticket:
+ * Ticket: 资源工具类
  *
  * @author xuzhemin
  * 2018-12-24:11:10
@@ -17,27 +20,36 @@ public class ResourceUtils {
 
     private ResourceUtils(){}
 
-    private static final String localResourceDir = "com/insigma/afc/ui/monitor";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceUtils.class);
 
     private static final String ROOT_RESOURCE = "root.resource";
-
-    private static final String ROOT_RESOURCE_PATH = System.getProperty("user.dir") + "/"
-            + SystemPropertyUtil.getProperty(ROOT_RESOURCE, "conf/resource");
-
     private static final Map<String,String> filenameMap = new HashMap<>();
+    private static final String[] imageSuffixs = {"png","jpeg","jpg","gif"};
+    public static final String ROOT_RESOURCE_PATH = System.getProperty("user.dir") + "/"
+            + SystemPropertyUtil.getProperty(ROOT_RESOURCE, "conf/resource");
+    public static final String IMAGE_RESOURCE_PATH = System.getProperty("user.dir") + "/"
+            + SystemPropertyUtil.getProperty(ROOT_RESOURCE, "conf/images");
 
-    public static File getLocalResourceDir(){
-        URL url = Thread.currentThread().getContextClassLoader().getResource(localResourceDir);
-        if (url!=null){
-            File localResourceDir = new File(url.getFile());
-            if (!localResourceDir.exists()){
-                if(!localResourceDir.mkdirs()){
-                    throw new RuntimeException("创建本地资源路径失败");
+    public static List<File> getImages(){
+        List<File> fileList = new ArrayList<>();
+        getImages(new File(IMAGE_RESOURCE_PATH),fileList);
+        return fileList;
+    }
+    private static void getImages(File file,List<File> fileList){
+        if (file.isDirectory()){
+            for(File subFile:file.listFiles()){
+                getImages(subFile,fileList);
+            }
+        }else {
+            String filename = file.getName();
+            for (String suffix:imageSuffixs){
+                if (filename.endsWith(suffix)) {
+                    LOGGER.info("扫描到图片:" + file.getPath());
+                    fileList.add(file);
+                    break;
                 }
             }
-            return localResourceDir;
         }
-        return null;
     }
 
     public static File getResource(String filename){
@@ -49,17 +61,18 @@ public class ResourceUtils {
                 return target;
             }
         }
-        //先在本地资源文件查找
-        target = findFile(filename,getLocalResourceDir());
-        if (target!=null){
-            filenameMap.put(filename,target.getPath());
-            return target;
-        }
         //数据库同步的资源查找
         target = new File(ROOT_RESOURCE_PATH + "/" + filename);
         if (target.exists()){
             return target;
         }
+        //在本地资源文件夹查找
+        target = findFile(filename,new File(IMAGE_RESOURCE_PATH));
+        if (target!=null){
+            filenameMap.put(filename,target.getPath());
+            return target;
+        }
+        LOGGER.error("文件未找到:"+filename);
         return  null;
     }
 

@@ -1,0 +1,61 @@
+<Style>
+	<Tables>
+		<Table name="ACC_VERSIONQUERYTABLE">
+			<Columns>
+				<Column text="节点/编号" index="-1" format="com.insigma.acc.wz.parameter.format.NodeNameViewFormat"></Column>
+				<Column text="清分中心当前ACC参数大版本号" index="0" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前系统参数版本号" index="1" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前线网信息参数版本号" index="2" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前日历时间参数版本号" index="3" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前费率表参数版本号" index="4" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前车票参数版本号" index="5" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前优惠方案参数版本号" index="6" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前AGM设备参数版本号" index="7" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前RG通行控制参数本号" index="8" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前BOM设备参数版本号" index="9" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前TVM设备参数版本号" index="10" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前TVM界面参数本号" index="11" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前ISM设备参数版本号" index="12" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			    <Column text="清分中心当前PCA参数版本号" index="13" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+
+				<Column text="清分中心将来ACC参数大版本号" index="14" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来系统参数版本号" index="15" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来线网信息参数版本号" index="16" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来日历时间参数版本号" index="17" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来费率表参数版本号" index="18" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来车票参数版本号" index="19" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来优惠方案参数版本号" index="20" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来AGM设备参数版本号" index="21" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来RG通行控制参数本号" index="22" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来BOM设备参数版本号" index="23" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来TVM设备参数版本号" index="24" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来TVM界面参数本号" index="25" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来ISM设备参数版本号" index="26" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="清分中心将来PCA参数版本号" index="27" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			</Columns>
+		</Table>
+		<!-- 运营参数 -->
+		<Table name="BLACK_VERSIONQUERYTABLE">
+			<Columns>
+				<Column text="节点/编号" index="-1" format="com.insigma.acc.wz.parameter.format.NodeNameViewFormat"></Column>
+				<Column text="运营参数大版本号" index="28" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="一票通全量黑名单版本号" index="29" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="一票通增量黑名单版本号" index="30" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column> 
+	      		<Column text="一票通号段黑名单版本号" index="31" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="员工黑名单版本号" index="32" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="单程票回收条件版本号" index="33" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="模式履历版本号" index="34" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="票卡库存目录版本号" index="35" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="操作员基本信息文件" index="36" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+	      		<Column text="操作员权限文件" index="37" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			</Columns>
+		</Table> 
+		<!-- 运营参数 -->
+		<Table name="QRKEY_VERSIONQUERYTABLE">
+			<Columns>
+				<Column text="节点/编号" index="-1" format="com.insigma.acc.wz.parameter.format.NodeNameViewFormat"></Column>
+				<Column text="二维码公钥参数版本号" index="38" format="com.insigma.acc.wz.parameter.format.VersionNumberFormat"></Column>
+			</Columns>
+		</Table> 
+	</Tables>
+</Style>

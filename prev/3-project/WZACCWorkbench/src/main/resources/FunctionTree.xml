@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FunctionTree text="功能模块">
+
+	<!-- <DeploymentLevel type="1"> --><!-- ACC本级权限无需线路车站等级 -->
+	<Moudle text="ACC工作台" function="1">
+		<Moudle text="参数管理" function="10">
+			<!-- 参数管理相关 -->
+			<FunctionNodes text="设备参数管理" function="1001">
+				<FunctionNode text="车站版本查询" function="100101"></FunctionNode>
+				<FunctionNode text="设备版本查询" function="100102"></FunctionNode>
+				<FunctionNode text="参数切换查询" function="100103"></FunctionNode>
+				<FunctionNode text="设备参数导入" function="100104"></FunctionNode>
+				<FunctionNode text="参数发布" function="100105"></FunctionNode>
+				<FunctionNode text="设备参数导出" function="100106"></FunctionNode>
+			</FunctionNodes>
+
+			<FunctionNodes text="设备参数编辑" function="1002">
+				<FunctionNode text="新建" function="100201"></FunctionNode>
+				<FunctionNode text="转换" function="100202"></FunctionNode>
+				<FunctionNode text="移除" function="100203"></FunctionNode>
+				<FunctionNode text="保存" function="100204"></FunctionNode>
+				<FunctionNode text="刷新" function="100205"></FunctionNode>
+				<FunctionNode text="历史版本参数查询" function="100206"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="运营参数编辑" function="1003">
+				<FunctionNode text="一票通黑名单" function="100301"></FunctionNode>
+				<FunctionNode text="一票通号段黑名单" function="100302"></FunctionNode>
+				<FunctionNode text="员工卡黑名单" function="100303"></FunctionNode>
+				<FunctionNode text="单程票回收条件" function="100304"></FunctionNode>
+				<FunctionNode text="模式履历" function="100305"></FunctionNode>
+				<FunctionNode text="票卡库存目录" function="100306"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="操作员参数编辑" function="1004">
+				<FunctionNode text="操作员参数查看" function="100401"></FunctionNode>
+				<FunctionNode text="操作员参数编辑" function="100402"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="运营参数管理" function="1005">
+				<FunctionNode text="车站运营参数版本查询" function="100509"></FunctionNode>
+				<FunctionNode text="设备运营参数版本查询" function="100511"></FunctionNode>
+				<FunctionNode text="黑名单版本信息查询" function="100503"></FunctionNode>
+				<FunctionNode text="模式履历版本信息查询" function="100504"></FunctionNode>
+				<FunctionNode text="单程票回收条件版本信息查询" function="100505"></FunctionNode>
+				<FunctionNode text="票卡库存目录版本信息查询" function="100506"></FunctionNode>
+				<FunctionNode text="操作员权限版本信息查询" function="100507"></FunctionNode>
+				<FunctionNode text="操作员版本信息查询" function="100508"></FunctionNode>
+				<FunctionNode text="运营参数转正" function="100501"></FunctionNode>
+				<FunctionNode text="运营参数发布" function="100502"></FunctionNode>
+				<FunctionNode text="运营参数导出" function="100510"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="软件管理" function="1006">
+				<FunctionNode text="车站版本管理" function="100601"></FunctionNode>
+				<FunctionNode text="设备版本管理" function="100602"></FunctionNode>
+				<FunctionNode text="软件导入" function="100603"></FunctionNode>
+				<FunctionNode text="软件导出" function="100604"></FunctionNode>
+				<FunctionNode text="软件发布" function="100605"></FunctionNode>
+			    <FunctionNode text="软件切换查询" function="100606"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="二维码公钥参数管理" function="1007">
+				<FunctionNode text="车站版本查询" function="100701"></FunctionNode>
+				<FunctionNode text="设备版本查询" function="100702"></FunctionNode>
+				<FunctionNode text="二维码公钥参数发布" function="100703"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="二维码公钥参数编辑" function="1008">
+				<FunctionNode text="新建草稿版本" function="100801"></FunctionNode>
+				<FunctionNode text="版本转正" function="100802"></FunctionNode>
+				<FunctionNode text="版本查询" function="100803"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+
+		<Moudle text="监控管理" function="11">
+			<!-- 线路监控相关 -->
+			<FunctionNodes text="路网监控" function="1101">
+				<FunctionNode text="运营模式" function="110101"></FunctionNode>
+				<FunctionNode text="模式查询" function="110102"></FunctionNode>
+				<FunctionNode text="时钟同步" function="110103"></FunctionNode>
+				<FunctionNode text="发送控制命令" function="110104"></FunctionNode>
+				<FunctionNode text="监视设备" function="110105"></FunctionNode>
+				<FunctionNode text="查看钱箱/票箱状态" function="110107"></FunctionNode>
+				<FunctionNode text="刷新" function="110108"></FunctionNode>
+				<FunctionNode text="监控配置" function="110109"></FunctionNode>
+			</FunctionNodes>
+
+			<!-- 客流监控相关 -->
+			<FunctionNodes text="客流监控" function="1102">
+				<FunctionNode text="柱状图" function="110201"></FunctionNode>
+				<FunctionNode text="饼图" function="110202"></FunctionNode>
+				<FunctionNode text="曲线图" function="110203"></FunctionNode>
+				<FunctionNode text="客流查询" function="110205"></FunctionNode>
+			</FunctionNodes>
+
+			<!-- 节点管理相关 -->
+			<FunctionNodes text="节点管理" function="1104">
+				<FunctionNode text="线网布局" function="110401"></FunctionNode>
+				<FunctionNode text="保存" function="110402"></FunctionNode>
+				<FunctionNode text="地图同步" function="110404"></FunctionNode>
+				<FunctionNode text="撤销" function="110405"></FunctionNode>
+				<FunctionNode text="重做" function="110406"></FunctionNode>
+			</FunctionNodes>
+
+			<!-- 断面客流相关 -->
+			<FunctionNodes text="断面客流" function="1105">
+				<FunctionNode text="断面客流图监控" function="110501"></FunctionNode>
+				<FunctionNode text="断面客流表监控" function="110502"></FunctionNode>
+				<FunctionNode text="断面客流配置" function="110503"></FunctionNode>
+			</FunctionNodes>
+
+			<!-- 设备查询相关 -->
+			<FunctionNodes text="各类查询" function="1103">
+				<FunctionNode text="模式上传查询" function="110301"></FunctionNode>
+				<FunctionNode text="模式广播查询" function="110302"></FunctionNode>
+				<FunctionNode text="模式日志查询 " function="110303"></FunctionNode>
+				<FunctionNode text="命令日志查询" function="110304"></FunctionNode>
+				<FunctionNode text="设备事件" function="110305"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+
+		<Moudle text="系统管理" function="13">
+			<FunctionNodes text="权限管理" function="1301">
+				<FunctionNode text="查询用户" function="130101"></FunctionNode>
+				<FunctionNode text="新建用户" function="130102"></FunctionNode>
+				<FunctionNode text="删除用户" function="130103"></FunctionNode>
+				<FunctionNode text="修改用户" function="130104"></FunctionNode>
+				<FunctionNode text="重置密码" function="130105"></FunctionNode>
+				<FunctionNode text="修改密码" function="130106"></FunctionNode>
+				<FunctionNode text="查询角色" function="130107"></FunctionNode>
+				<FunctionNode text="新建角色" function="130108"></FunctionNode>
+				<FunctionNode text="删除角色" function="130109"></FunctionNode>
+				<FunctionNode text="修改角色" function="130110"></FunctionNode>
+				<FunctionNode text="查看子系统" function="130111"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="日志管理" function="1302">
+				<FunctionNode text="日志查询" function="130201"></FunctionNode>
+			</FunctionNodes>
+			<!-- 数据文件相关 -->
+			<FunctionNodes text="数据文件管理" function="1303">
+				<FunctionNode text="正常数据文件" function="130301"></FunctionNode>
+				<FunctionNode text="异常数据文件" function="130302"></FunctionNode>
+			</FunctionNodes>
+
+			<!-- 交易明细查询 -->
+			<FunctionNodes text="交易明细查询" function="1304">
+				<FunctionNode text="正常交易明细查询" function="130401"></FunctionNode>
+				<FunctionNode text="异常交易明细查询" function="130402"></FunctionNode>
+			</FunctionNodes>
+			
+			<!-- 对账管理 -->
+			<FunctionNodes text="对账管理" function="1305">
+				<FunctionNode text="车站对帐文件" function="130501"></FunctionNode>
+				<FunctionNode text="一卡通上传文件" function="130502"></FunctionNode>
+				<FunctionNode text="一卡通下载文件" function="130503"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+
+		<Moudle text="任务管理" function="14">
+			<FunctionNodes text="计划任务管理" function="1401">
+				<FunctionNode text="刷新" function="140101"></FunctionNode>
+				<FunctionNode text="新建计划任务" function="140102"></FunctionNode>
+				<FunctionNode text="查看详细信息" function="140103"></FunctionNode>
+				<FunctionNode text="立即触发任务" function="140104"></FunctionNode>
+				<FunctionNode text="移除任务" function="140105"></FunctionNode>
+				<FunctionNode text="启用任务" function="140106"></FunctionNode>
+				<FunctionNode text="停止任务" function="140107"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+
+		<Moudle text="清算管理" function="15">
+			<FunctionNodes text="一票通清算" function="1501">
+				<FunctionNode text="重做" function="150101"></FunctionNode>
+				<FunctionNode text="设置" function="150102"></FunctionNode>
+				<FunctionNode text="单步" function="150103"></FunctionNode>
+				<FunctionNode text="多步" function="150104"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="一卡通清算" function="1502">
+				<FunctionNode text="重做" function="150201"></FunctionNode>
+				<FunctionNode text="设置" function="150202"></FunctionNode>
+				<FunctionNode text="单步" function="150203"></FunctionNode>
+				<FunctionNode text="多步" function="150204"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="银联闪付清算" function="1503">
+				<FunctionNode text="重做" function="150301"></FunctionNode>
+				<FunctionNode text="设置" function="150302"></FunctionNode>
+				<FunctionNode text="单步" function="150303"></FunctionNode>
+				<FunctionNode text="多步" function="150304"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="二维码清算" function="1504">
+				<FunctionNode text="重做" function="150401"></FunctionNode>
+				<FunctionNode text="设置" function="150402"></FunctionNode>
+				<FunctionNode text="单步" function="150403"></FunctionNode>
+				<FunctionNode text="多步" function="150404"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="清算调整" function="1510">
+				<FunctionNode text="清算结果调整" function="151001"></FunctionNode>
+				<FunctionNode text="可疑帐调整" function="151002"></FunctionNode>
+				<FunctionNode text="单边查询" function="151003"></FunctionNode>
+				<FunctionNode text="一卡通未确认交易明细" function="151004"></FunctionNode>
+				<FunctionNode text="一卡通正常交易明细" function="151005"></FunctionNode>
+				<FunctionNode text="调整及拒付交易明细" function="151006"></FunctionNode>				
+			</FunctionNodes>
+			<FunctionNodes text="综合查询" function="1511">
+				<FunctionNode text="对账数据查询" function="151101"></FunctionNode>
+				<FunctionNode text="分账查询" function="151102"></FunctionNode>
+				<FunctionNode text="ACC服务费查询" function="151103"></FunctionNode>
+				<FunctionNode text="票务服务费查询" function="151104"></FunctionNode>
+				<FunctionNode text="收益查询" function="151105"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+
+		<Moudle text="SAM卡管理" function="16">
+			<FunctionNodes text="ACC-SAM卡管理" function="1601">
+				<FunctionNode text="SAM卡跟踪管理" function="160101"></FunctionNode>
+				<FunctionNode text="SAM卡绑定设备管理" function="160102"></FunctionNode>
+				<!--  <FunctionNode text="SAM卡黑名单" function="160103"></FunctionNode>-->
+				<FunctionNode text="设备上报状态查询" function="160104"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+		
+		<Moudle text="票务管理" function="17">
+			<FunctionNodes text="车票挂失解挂管理" function="1701">
+				<FunctionNode text="车票挂失解挂" function="170101"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="车票退票退款管理" function="1702">
+				<FunctionNode text="车票退票退款" function="170201"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="员工票申请管理" function="1703">
+				<FunctionNode text="员工票申请" function="170301"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="车票查询与跟踪" function="1704">
+				<FunctionNode text="车票账户查询 " function="170401"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+	</Moudle>
+	<Moudle text="清分工作台" function="2">
+		<Moudle text="清分规则管理 " function="50">
+			<FunctionNodes text="基本规则设置" function="5001">
+				<FunctionNode text="清分算法参数" function="500101"></FunctionNode>
+				<FunctionNode text="收益方信息" function="500102"></FunctionNode>
+				<FunctionNode text="线路信息" function="500103"></FunctionNode>
+				<FunctionNode text="车站信息" function="500104"></FunctionNode>
+				<FunctionNode text="路段信息" function="500105"></FunctionNode>
+				<FunctionNode text="换乘路径管理" function="500106"></FunctionNode>
+				<FunctionNode text="清分比例" function="500107"></FunctionNode>
+			</FunctionNodes>
+			<FunctionNodes text="清分规则管理" function="5002">
+				<FunctionNode text="清分规则版本管理" function="500201"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+	</Moudle>
+
+	<Moudle text="ES工作台" function="3">
+		<Moudle text="ES管理 " function="70">
+			<FunctionNodes text="ES制卡管理" function="7001">
+				<FunctionNode text="ES设备管理" function="700101"></FunctionNode>
+				<FunctionNode text="ES设备状态" function="700102"></FunctionNode>
+				<FunctionNode text="ES任务管理" function="700103"></FunctionNode>
+				<FunctionNode text="ES增加任务" function="700104"></FunctionNode>
+				<FunctionNode text="设备签到签退查询" function="700105"></FunctionNode>
+				<FunctionNode text="操作员签到签退查询" function="700106"></FunctionNode>
+				<FunctionNode text="制卡文件管理" function="700107"></FunctionNode>
+				<FunctionNode text="制卡统计查询" function="700108"></FunctionNode>
+				<!-- <FunctionNode text="ES设备参数发布" function="700109"></FunctionNode> -->
+				<!-- <FunctionNode text="TP文件导入" function="700110"></FunctionNode> -->
+			</FunctionNodes>
+		    <FunctionNodes text="ES个性化管理" function="7002">
+				<FunctionNode text="个性化管理" function="700201"></FunctionNode>
+			</FunctionNodes>
+			<!-- <FunctionNodes text="ES打印管理" function="7003">
+				<FunctionNode text="个性化打印管理" function="700301"></FunctionNode>
+				<FunctionNode text="打印模板管理" function="700302"></FunctionNode>
+			</FunctionNodes> -->
+			<FunctionNodes text="ES交易数据查询" function="7004">
+				<FunctionNode text="正常交易数据查询" function="700401"></FunctionNode>
+				<FunctionNode text="异常交易数据查询" function="700402"></FunctionNode>
+			</FunctionNodes>
+		</Moudle>
+	</Moudle>
+	
+	<!-- ACC报表 Start -->
+	<Moudle text="报表管理" function="99">
+		<FunctionNodes text="结算类报表" function="9901">
+				<FunctionNode text="一票通交易结算日报" function="990101"></FunctionNode>
+				<FunctionNode text="一卡通交易结算日报" function="990102"></FunctionNode>
+				<FunctionNode text="清分收益统计日报" function="990103"></FunctionNode>
+				<FunctionNode text="票务佣金汇总日报" function="990104"></FunctionNode>
+				<FunctionNode text="票务佣金分摊日报" function="990105"></FunctionNode>
+				<FunctionNode text="线路消费分账汇总日报" function="990106"></FunctionNode>
+				<FunctionNode text="收益方消费分账汇总日报" function="990107"></FunctionNode>
+				<FunctionNode text="一卡通可疑账明细日报" function="990108"></FunctionNode>
+				<FunctionNode text="一卡通可疑调整账明细日报" function="990109"></FunctionNode>
+				<FunctionNode text="一票通可疑账明细日报" function="990110"></FunctionNode>
+				<FunctionNode text="一票通可疑调整账明细日报" function="990111"></FunctionNode>
+				<!-- <FunctionNode text="一卡通不平账明细日报" function="990112"></FunctionNode>
+				<FunctionNode text="一卡通已确认不平账明细日报" function="990113"></FunctionNode> -->
+				<FunctionNode text="营收日报" function="990112"></FunctionNode>
+				<FunctionNode text="营收月报" function="990113"></FunctionNode>
+				<!-- <FunctionNode text="政府补贴月报" function="990114"></FunctionNode>
+				<FunctionNode text="政府补贴年报" function="990115"></FunctionNode> -->
+				<FunctionNode text="特殊人群客流与优惠统计表" function="990114"></FunctionNode>
+				<FunctionNode text="ACC清分服务费" function="990115"></FunctionNode>
+				<!-- <FunctionNode text="电子支付营收日报" function="990117"></FunctionNode> -->
+				<FunctionNode text="车站交易日报" function="990116"></FunctionNode>
+		</FunctionNodes>
+		<FunctionNodes text="收益类报表" function="9902">
+				<!-- <FunctionNode text="一卡通消费报表" function="990201"></FunctionNode>
+				<FunctionNode text="一票通消费报表" function="990202"></FunctionNode>
+				<FunctionNode text="一卡通售充消费月报" function="990203"></FunctionNode> -->
+				<FunctionNode text="一卡通接收交易日报" function="990201"></FunctionNode>
+				<FunctionNode text="一票通接收交易日报" function="990202"></FunctionNode>
+				<FunctionNode text="BOM更新统计报表（按票种）" function="990203"></FunctionNode>
+				<FunctionNode text="BOM更新统计报表（按车站）" function="990204"></FunctionNode>
+				<FunctionNode text="TVM售票收益统计日报表" function="990205"></FunctionNode>
+				<FunctionNode text="BOM收益（设备）统计日报表" function="990206"></FunctionNode>
+				<FunctionNode text="BOM收益（售票员）统计日报表" function="990207"></FunctionNode>
+				<FunctionNode text="ISM收益统计日报表" function="990208"></FunctionNode>
+				<FunctionNode text="票卡售卖统计报表" function="990209"></FunctionNode>
+				<FunctionNode text="收益统计日报表" function="990210"></FunctionNode>
+				<FunctionNode text="收益统计月报表" function="990211"></FunctionNode>
+				<FunctionNode text="银联购票报表" function="990212"></FunctionNode>
+				<FunctionNode text="电子支付二维码过闸消费报表" function="990213"></FunctionNode>
+				<FunctionNode text="电子支付银联卡过闸消费报表" function="990214"></FunctionNode>
+				<FunctionNode text="电子支付二维码过闸应收明细报表" function="990215"></FunctionNode>
+				<FunctionNode text="电子支付银联卡过闸应收明细报表" function="990216"></FunctionNode>
+		</FunctionNodes>
+		<FunctionNodes text="客流类报表" function="9903">
+				<FunctionNode text="线路换乘客流统计报表" function="990301"></FunctionNode>
+				<FunctionNode text="车站OD客流统计时报" function="990302"></FunctionNode>
+				<FunctionNode text="车站OD客流统计日报" function="990303"></FunctionNode>
+				<FunctionNode text="车站分时进出站客流日报" function="990304"></FunctionNode>
+				<FunctionNode text="单程票客流日报" function="990305"></FunctionNode>
+				<FunctionNode text="断面客流日报" function="990306"></FunctionNode>
+				<FunctionNode text="票种分时进出站客流日报" function="990307"></FunctionNode>
+				<FunctionNode text="时段最大断面客流日报" function="990308"></FunctionNode>
+				<FunctionNode text="进站客流日报" function="990309"></FunctionNode>
+				<FunctionNode text="出站客流日报" function="990310"></FunctionNode>
+				<FunctionNode text="进出站客流（按车站和票类）统计日报表" function="990311"></FunctionNode>
+				<FunctionNode text="进出站客流统计月报表" function="990312"></FunctionNode>
+		</FunctionNodes>
+		<FunctionNodes text="库存类报表" function="9904">
+				<FunctionNode text="中心票卡库存统计日报" function="990401"></FunctionNode>
+				<FunctionNode text="票卡库存日台账" function="990402"></FunctionNode>
+				<FunctionNode text="票卡库存月台账" function="990403"></FunctionNode>
+				<FunctionNode text="票卡出入库明细日报" function="990404"></FunctionNode>
+				<FunctionNode text="中心预赋值票卡库存统计日报" function="990405"></FunctionNode>
+				<FunctionNode text="单程票回收统计日表" function="990406"></FunctionNode>
+				<FunctionNode text="中心制票情况月统计表" function="990407"></FunctionNode>
+				<FunctionNode text="单程票回收统计日报(按设备)" function="990408"></FunctionNode>
+		</FunctionNodes>
+		<FunctionNodes text="维修类报表" function="9905">
+				<FunctionNode text="SAM卡状态报表" function="990501"></FunctionNode>
+				<FunctionNode text="SAM卡绑定报表" function="990502"></FunctionNode>
+		</FunctionNodes>
+		<FunctionNodes text="分析类报表" function="9906">
+				<FunctionNode text="系统进出站客流分析日报" function="990601"></FunctionNode>
+		</FunctionNodes>
+		<FunctionNodes text="票卡使用类报表" function="9907">
+				<FunctionNode text="车站票卡使用统计日报" function="990701"></FunctionNode>
+				<FunctionNode text="系统票卡使用统计日报" function="990702"></FunctionNode>
+				<FunctionNode text="系统票卡使用统计月报" function="990703"></FunctionNode>
+		</FunctionNodes>
+		
+	</Moudle>	
+	<!-- </DeploymentLevel> -->
+
+</FunctionTree>

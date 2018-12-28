@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id ="optBLKReslutBuilder" class="com.insigma.acc.wz.opt.result.WZBLKResultBuilder">
+	</bean>
+	
+   <!-- <bean id="blkService" class="com.insigma.afc.opt.service.BlkServiceImpl">
+        <property name="commonDAO" ref="commonDAO" />
+        <property name="componentClassNameProvider" ref="eodClassNameProvider"/>
+    </bean> -->
+    
+    <bean id="optParameterService"  class="com.insigma.acc.wz.opt.service.WZOptParamService">
+        <property name="commonDAO" ref="commonDAO" />
+        <property name="parameterConfig" ref="parameterConfig" />
+    </bean>
+    
+    <bean id="optParamVersionService"  class="com.insigma.acc.wz.opt.service.WZOptParamVersionService">
+        <property name="commonDAO" ref="commonDAO" />
+        <property name="parameterConfig" ref="parameterConfig" />
+    </bean>
+    
+<!--       <bean id="paramManageService"  class="com.insigma.acc.wz.opt.service.WZOptParamManageService">
+        <property name="commonDAO" ref="commonDAO" />
+    </bean>  -->
+    
+</beans>
+

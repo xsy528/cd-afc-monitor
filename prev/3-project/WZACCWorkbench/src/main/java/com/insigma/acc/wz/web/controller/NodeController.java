@@ -1,5 +1,6 @@
 package com.insigma.acc.wz.web.controller;
 
+import com.insigma.acc.wz.web.model.vo.NodeItem;
 import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.service.NodeService;
 import com.insigma.acc.wz.web.util.JsonUtils;
@@ -46,14 +47,16 @@ public class NodeController extends BaseMultiActionController {
     }
 
     public void simpleTreeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        editorTreeList(request,response);
+        response.setContentType("application/json; charset=utf-8");
+        try(PrintWriter writer = response.getWriter()){
+            writer.println(JsonUtils.parseObject(nodeService.getNodeTree(), NodeItem.required.class));
+        }
     }
 
     public void imageList(HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.setContentType("application/json; charset=utf-8");
         try(PrintWriter writer = response.getWriter()){
-            String json = JsonUtils.parseObject(fileService.getResourceList());
-            writer.println(json);
+            writer.println(JsonUtils.parseObject(fileService.getResourceList()));
         }
     }
 

@@ -70,6 +70,8 @@ public class DateTimeUtil {
 	public static final String[] DAY_29 = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
 			"15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29" };
 
+	public static final String DEFAULT_DATA_TIME_FORMAT="yyyy-MM-dd HH:mm:ss";
+
 	/**
 	 * 返回 格式HH:mm:ss的字符串
 	 * 
@@ -364,7 +366,6 @@ public class DateTimeUtil {
 	/**
 	 * 获得当前到秒 String 类型 格式 yyyy－ＭＭ－dd ＨＨ：mm：ss
 	 * 
-	 * @param date
 	 * @return
 	 */
 	public static String getCurrentDateInMinString() {
@@ -666,6 +667,15 @@ public class DateTimeUtil {
 			String dtrDate = df.format(d);
 			return dtrDate.substring(0, 4) + "年" + Integer.parseInt(dtrDate.substring(4, 6)) + "月"
 					+ Integer.parseInt(dtrDate.substring(6, 8)) + "日";
+		}
+	}
+
+	public static String formatDate(java.util.Date d) {
+		if (d == null) {
+			return "--";
+		} else {
+			SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATA_TIME_FORMAT);
+			return df.format(d);
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.insigma.acc.wz.web.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.insigma.acc.wz.web.exception.ErrorCode;
 
 /**
@@ -10,8 +11,13 @@ import com.insigma.acc.wz.web.exception.ErrorCode;
  */
 public class Result<T> {
 
+    public interface Base{}
+
+    @JsonView(Base.class)
     private int code;
+    @JsonView(Base.class)
     private String message;
+    @JsonView(Base.class)
     private T data;
 
     private Result(ErrorCode errorCode,T data){

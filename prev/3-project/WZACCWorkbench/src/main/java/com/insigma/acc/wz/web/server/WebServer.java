@@ -8,7 +8,6 @@ import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
-import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
@@ -64,13 +63,13 @@ public class WebServer {
         //添加dispatchServlet
         DispatcherServlet dispatcherServlet = new DispatcherServlet();
         dispatcherServlet.setContextConfigLocation("classpath*:spring-config.xml");
-        servletContextHandler.addServlet(new ServletHolder(dispatcherServlet),"/*");
+        ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
+        servletContextHandler.addServlet(servletHolder,"/");
         //添加listener
         servletContextHandler.addEventListener(new ContextLoaderListener());
         servletContextHandler.addEventListener(new Init());
         //添加corsFilter
-        servletContextHandler.addFilter(new FilterHolder(new CorsFilter()),
-                "/*", EnumSet.allOf(DispatcherType.class));
+        servletContextHandler.addFilter(CorsFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 
         //整合多个应用
         ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();

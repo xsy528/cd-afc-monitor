@@ -1,16 +1,23 @@
 package com.insigma.acc.wz.web.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class NodeItem implements Serializable {
 
+    public interface required extends Result.Base{}
+
     private static final long serialVersionUID = 1L;
 
+    @JsonView(required.class)
     private String name;
 
-    private String nodeId;
+    @JsonView(required.class)
+    private long nodeId;
 
+    @JsonView(required.class)
     private String nodeType;
 
     private int status;
@@ -21,6 +28,7 @@ public class NodeItem implements Serializable {
 
     private TextLocation text;
 
+    @JsonView(required.class)
     private List<NodeItem> subItems;
 
     public String getName() {
@@ -79,11 +87,11 @@ public class NodeItem implements Serializable {
         this.subItems = subItems;
     }
 
-    public String getNodeId() {
+    public long getNodeId() {
         return nodeId;
     }
 
-    public void setNodeId(String nodeId) {
+    public void setNodeId(long nodeId) {
         this.nodeId = nodeId;
     }
 

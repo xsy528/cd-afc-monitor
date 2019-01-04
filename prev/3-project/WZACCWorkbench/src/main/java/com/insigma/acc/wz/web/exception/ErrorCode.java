@@ -9,7 +9,8 @@ package com.insigma.acc.wz.web.exception;
 public enum ErrorCode {
 
     SUCCESS(0,"成功"),
-    RESOURCE_NOT_FOUND(1,"未找到资源");
+    RESOURCE_NOT_FOUND(1,"未找到资源"),
+    REQUIRED_PARAMETER_NOT_FOUND(2,"缺少必要属性");
 
     private int code;
     private String message;

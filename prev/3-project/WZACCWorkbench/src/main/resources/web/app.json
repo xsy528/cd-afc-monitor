@@ -1,4 +1,4 @@
 {
   "localPort": 8060,
-  "requestLogEnable": false
+  "requestLogEnable": true
 }

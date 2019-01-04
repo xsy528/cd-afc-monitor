@@ -16,9 +16,6 @@ import com.insigma.afc.initor.ConfigLoadSystemInitor;
  */
 public class WZACCWorkbenchWeb {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 
 		//加载配置

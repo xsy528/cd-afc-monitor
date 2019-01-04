@@ -1,13 +1,5 @@
 package com.insigma.acc.wz.monitor.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.constant.ApplicationKey;
@@ -18,16 +10,14 @@ import com.insigma.afc.monitor.listview.equstatus.EquStatusFilterForm;
 import com.insigma.afc.monitor.listview.equstatus.EquStatusViewItem;
 import com.insigma.afc.monitor.listview.equstatus.StationStatustViewItem;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
-import com.insigma.afc.topology.MetroACC;
-import com.insigma.afc.topology.MetroDevice;
-import com.insigma.afc.topology.MetroLine;
-import com.insigma.afc.topology.MetroNode;
-import com.insigma.afc.topology.MetroStation;
+import com.insigma.afc.topology.*;
 import com.insigma.commons.application.Application;
 import com.insigma.commons.exception.ApplicationException;
 import com.insigma.commons.op.OPException;
 import com.insigma.commons.service.Service;
 import com.insigma.commons.util.lang.DateTimeUtil;
+
+import java.util.*;
 
 /**
  * 设备状态相关Service
@@ -125,8 +115,7 @@ public class WZACCMetroNodeStatusService extends Service implements IMetroNodeSt
 			Integer pageSize = filterForm.getPageSize();
 			String orderField = "updateTime";
 			String orderType = filterForm.getOrderType();
-			List<Long> deviceList = new ArrayList<Long>();
-			Long[] deviceIds = null;
+			List<Long> deviceList = new ArrayList<>();
 			List<Object> selections = filterForm.getSelections();
 
 			if (selections != null) {
@@ -135,9 +124,10 @@ public class WZACCMetroNodeStatusService extends Service implements IMetroNodeSt
 						final MetroNode metroNode = (MetroNode) o;
 						long nodeId = AFCApplication.getNodeId(metroNode.id());
 						deviceList.add(nodeId);
+					}else if (o instanceof Long){
+						deviceList.add((Long)o);
 					}
 				}
-				deviceIds = deviceList.toArray(new Long[deviceList.size()]);
 			}
 
 			List<EquStatusViewItem> viewItemList = new ArrayList<EquStatusViewItem>();

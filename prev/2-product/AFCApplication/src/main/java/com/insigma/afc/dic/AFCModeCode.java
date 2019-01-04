@@ -129,4 +129,12 @@ public class AFCModeCode extends Definition {
 	@DicItem(name = "停止运营模式", group = AFCModeCode.MODE_SIGN_DESCEND)
 	public static Integer STOP_MODE_CODE = 0xff;
 
+	public String getModeText(Object value){
+		String name = this.getNameByValue(value);
+		if (value==null||name==null){
+			return "未知模式/"+value==null?"":value.toString();
+		}
+		return String.format("%s/0x%02x",name,value);
+	}
+
 }

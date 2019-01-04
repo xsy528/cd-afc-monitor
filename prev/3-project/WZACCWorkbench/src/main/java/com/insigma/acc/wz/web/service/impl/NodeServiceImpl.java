@@ -6,7 +6,6 @@ import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.acc.wz.web.model.vo.TextLocation;
 import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.service.NodeService;
-import com.insigma.acc.wz.web.util.NodeUtils;
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.constant.ApplicationKey;
 import com.insigma.afc.dic.DeviceStatus;
@@ -71,7 +70,7 @@ public class NodeServiceImpl implements NodeService {
         Application.getLineIdFormat();
         MetroNode metroNode = (MetroNode) mapItem.getValue();
         NodeItem nodeItem = new NodeItem();
-        nodeItem.setNodeId(NodeUtils.getNodeId(metroNode.id(),metroNode.level()));
+        nodeItem.setNodeId(metroNode.id());
         nodeItem.setName(metroNode.name());
         nodeItem.setNodeType(metroNode.level().toString());
         nodeItem.setImageUrl(fileService.getResourceIndex(metroNode.getPicName()));

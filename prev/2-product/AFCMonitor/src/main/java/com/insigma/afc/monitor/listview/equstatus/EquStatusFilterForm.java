@@ -1,15 +1,15 @@
 package com.insigma.afc.monitor.listview.equstatus;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.insigma.afc.monitor.listview.FilterForm;
 import com.insigma.afc.provider.DeviceStatusComboProvider;
 import com.insigma.afc.provider.DeviceTypeProvider;
 import com.insigma.commons.ui.anotation.DataSource;
 import com.insigma.commons.ui.anotation.Validation;
 import com.insigma.commons.ui.anotation.View;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class EquStatusFilterForm extends FilterForm {
 
@@ -67,4 +67,7 @@ public class EquStatusFilterForm extends FilterForm {
 		return statusLevelList;
 	}
 
+	public void setStatusLevelList(List<Short> statusLevelList) {
+		this.statusLevelList = statusLevelList;
+	}
 }

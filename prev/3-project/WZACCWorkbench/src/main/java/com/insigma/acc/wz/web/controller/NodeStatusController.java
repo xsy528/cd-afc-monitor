@@ -6,6 +6,7 @@ import com.insigma.acc.wz.monitor.service.WZModeService;
 import com.insigma.acc.wz.web.exception.ErrorCode;
 import com.insigma.acc.wz.web.model.vo.*;
 import com.insigma.acc.wz.web.service.NodeStatusService;
+import com.insigma.acc.wz.web.util.HttpUtils;
 import com.insigma.acc.wz.web.util.JsonUtils;
 import com.insigma.acc.wz.web.util.NodeUtils;
 import com.insigma.afc.dic.AFCModeCode;
@@ -25,9 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Ticket: 节点状态控制器
@@ -39,7 +41,6 @@ public class NodeStatusController extends BaseMultiActionController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NodeStatusController.class);
 
-    static Map<String,String> methodMapping = new HashMap<>();
     static{
         methodMapping.put("/monitor/query/stationStatus","getStationStatus");
         methodMapping.put("/monitor/query/deviceStatus","getDeviceStatus");
@@ -47,6 +48,8 @@ public class NodeStatusController extends BaseMultiActionController{
         methodMapping.put("/monitor/query/modeBroadcast","getModeBroadcast");
         methodMapping.put("/monitor/query/deviceEvent","getDeviceEvent");
         methodMapping.put("/monitor/query/deviceStatusType","getDeviceStatusType");
+        methodMapping.put("/monitor/query/deviceDetail","getDeviceDetail");
+        methodMapping.put("/monitor/query/boxDetail","getBoxDetail");
     }
 
     private WZACCMetroNodeStatusService metroNodeStatusService;
@@ -56,7 +59,6 @@ public class NodeStatusController extends BaseMultiActionController{
     @Autowired
     public NodeStatusController(WZACCMetroNodeStatusService metroNodeStatusService, WZModeService modeService,
                                 NodeStatusService nodeStatusService) {
-        super(methodMapping);
         this.metroNodeStatusService = metroNodeStatusService;
         this.modeService = modeService;
         this.nodeStatusService = nodeStatusService;
@@ -66,7 +68,7 @@ public class NodeStatusController extends BaseMultiActionController{
     public void getStationStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json; charset=utf-8");
 
-        JsonNode jsonNode = getBody(request);
+        JsonNode jsonNode = HttpUtils.getBody(request);
         try(PrintWriter writer = response.getWriter()){
             if (jsonNode==null){
                 writer.println(JsonUtils.parseObject(Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND)));
@@ -114,7 +116,7 @@ public class NodeStatusController extends BaseMultiActionController{
     //模式上传信息
     public void getModeUpload(HttpServletRequest request, HttpServletResponse response){
         response.setContentType("application/json; charset=utf-8");
-        JsonNode jsonNode = getBody(request);
+        JsonNode jsonNode = HttpUtils.getBody(request);
         long nodeId = jsonNode.get("nodeId")==null?-1:jsonNode.get("nodeId").longValue();
         List<TmoModeUploadInfo> tmoModeUploadInfos = nodeStatusService.getModeUpload(nodeId);
         List<ModeUploadInfo> modeUploadInfos = new ArrayList<>();
@@ -158,7 +160,7 @@ public class NodeStatusController extends BaseMultiActionController{
     public void getDeviceStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json; charset=utf-8");
 
-        JsonNode jsonNode = getBody(request);
+        JsonNode jsonNode = HttpUtils.getBody(request);
         try(PrintWriter writer = response.getWriter()){
             if (jsonNode == null) {
                 writer.write(JsonUtils.parseObject(Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND)));
@@ -198,7 +200,7 @@ public class NodeStatusController extends BaseMultiActionController{
     //设备事件列表
     public void getDeviceEvent(HttpServletRequest request, HttpServletResponse response){
         response.setContentType("application/json; charset=utf-8");
-        JsonNode jsonNode = getBody(request);
+        JsonNode jsonNode = HttpUtils.getBody(request);
         try(PrintWriter writer = response.getWriter()) {
             if (jsonNode == null) {
                 writer.write(JsonUtils.parseObject(Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND)));
@@ -249,17 +251,14 @@ public class NodeStatusController extends BaseMultiActionController{
         }catch (IOException e){
             LOGGER.error("",e);
         }
-
     }
 
-    private JsonNode getBody(HttpServletRequest request){
-        JsonNode jsonNode = null;
-        try(InputStream inputStream = request.getInputStream()){
-            jsonNode = JsonUtils.generateObject(inputStream);
-        }catch (IOException e){
-            LOGGER.error("从请求获取jsonbody异常",e);
+    public Result getDeviceDetail(HttpServletRequest request, HttpServletResponse response){
+        JsonNode jsonNode = HttpUtils.getBody(request);
+        if (jsonNode==null||jsonNode.get("deviceId")==null){
+            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
         }
-        return jsonNode;
+        return nodeStatusService.getDeviceDetail(jsonNode.get("deviceId").longValue());
     }
 
 }

@@ -27,7 +27,7 @@ public class JsonUtils {
      */
     public static String parseObject(Object o){
         if (o==null){
-            return "{}";
+            return "";
         }
         try {
             return new ObjectMapper().writeValueAsString(o);
@@ -45,7 +45,7 @@ public class JsonUtils {
      */
     public static String parseObject(Object o,Class view){
         if(o==null){
-            return "{}";
+            return "";
         }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -57,7 +57,14 @@ public class JsonUtils {
         return null;
     }
 
-    public static JsonNode generateObject(InputStream inputStream) throws IOException {
+    //通过输入流生成json对象
+    public static JsonNode readObject(InputStream inputStream) throws IOException {
         return new ObjectMapper().readTree(inputStream);
     }
+
+    //通过输入流生成java对象
+    public static <T> T readObject(InputStream inputStream,Class<T> type) throws IOException {
+        return new ObjectMapper().reader(type).readValue(inputStream);
+    }
+
 }

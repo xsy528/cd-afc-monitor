@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Ticket:
@@ -17,8 +15,6 @@ import java.util.Map;
  */
 public class FileController extends BaseMultiActionController{
 
-    private static Map<String,String> methodMapping = new HashMap<>();
-
     static{
         methodMapping.put("/file","getFileLink");
     }
@@ -27,7 +23,6 @@ public class FileController extends BaseMultiActionController{
     private FileService fileService;
 
     public FileController(FileService fileService) {
-        super(methodMapping);
         this.fileService = fileService;
     }
 

@@ -16,10 +16,18 @@
 		</property>
 	</bean>
 
-
 	<bean name="metroNodeService" class="com.insigma.afc.topology.service.MetroNodeService">
 		<property name="commonDAO" ref="commonDAO"></property>
 		<property name="resourceService" ref="resourceService"></property>
+	</bean>
+
+	<bean id="syncLogService" class="com.insigma.afc.log.service.impl.SyncLogService" scope="prototype">
+		<property name="commonDAO" ref="commonDAO" />
+		<property name="module" value="11" />
+		<property name="lineId" value="0" />
+		<property name="stationId" value="0" />
+		<property name="nodeId" value="0" />
+		<property name="ipAddress" value="127.0.0.1" />
 	</bean>
 	
 </beans>

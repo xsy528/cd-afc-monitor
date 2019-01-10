@@ -1,5 +1,6 @@
 package com.insigma.acc.wz.web.service;
 
+import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.afc.monitor.entity.TmoModeBroadcast;
 import com.insigma.afc.monitor.entity.TmoModeUploadInfo;
 
@@ -16,4 +17,6 @@ public interface NodeStatusService {
     List<TmoModeUploadInfo> getModeUpload(long nodeId);
 
     List<TmoModeBroadcast> getModeBroadcast();
+
+    Result getDeviceDetail(long id);
 }

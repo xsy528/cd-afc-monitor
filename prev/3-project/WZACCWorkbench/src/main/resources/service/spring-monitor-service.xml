@@ -31,6 +31,10 @@
 		</property>
 	</bean>
 
+	<bean name="eventService" class="com.insigma.acc.wz.messageserver.service.WZMetroEventService">
+		<property name="commonDAO" ref="commonDAO"></property>
+	</bean>
+
 	<!-- 命令相关 |start -->
 	<bean id="commandFactory" class="com.insigma.acc.wz.monitor.WZACCCommandFactory">
 	</bean>

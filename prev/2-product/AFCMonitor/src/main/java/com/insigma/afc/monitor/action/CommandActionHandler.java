@@ -1,14 +1,5 @@
 package com.insigma.afc.monitor.action;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.dic.AFCCmdResultType;
 import com.insigma.afc.dic.AFCDeviceType;
@@ -24,13 +15,17 @@ import com.insigma.commons.application.Application;
 import com.insigma.commons.application.IUser;
 import com.insigma.commons.editorframework.ActionContext;
 import com.insigma.commons.editorframework.ActionHandlerAdapter;
-import com.insigma.commons.editorframework.dialog.TableViewDialog;
 import com.insigma.commons.service.ICommonDAO;
 import com.insigma.commons.spring.Autowire;
 import com.insigma.commons.thread.EnhancedThread;
-import com.insigma.commons.ui.MessageForm;
-import com.insigma.commons.ui.dialog.ProgressBarDialog;
 import com.insigma.commons.util.lang.DateTimeUtil;
+import org.eclipse.swt.widgets.Display;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 
 public abstract class CommandActionHandler extends ActionHandlerAdapter {
 
@@ -38,28 +33,13 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 	protected ICommandService commandService;
 
 	@Autowire
-	protected ICommonDAO commonDAO;
+	private ICommonDAO commonDAO;
 
-	final List<CommandResult> results = new Vector<CommandResult>();
+	private List<CommandResult> results = new Vector<>();
+
+	private CountDownLatch countDownLatch;
 
 	private List<MetroNode> nodes;
-
-	// 对话框是否已经显示过，避免由于线程异步导致多次弹出对话框
-	private volatile boolean hasShow = false;
-
-	private ProgressBarDialog progress = null;
-
-	public void setProgress(final ProgressBarDialog progress) {
-		this.progress = progress;
-	}
-
-	public ICommandService getCommandService() {
-		return commandService;
-	}
-
-	public void setCommandService(final ICommandService commandService) {
-		this.commandService = commandService;
-	}
 
 	public ICommonDAO getCommonDAO() {
 		return commonDAO;
@@ -69,126 +49,25 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 		this.commonDAO = commonDAO;
 	}
 
-	public void send(final ActionContext context, final int id, final String name, final Object arg,
+	public List<CommandResult> send(final ActionContext context,final int id, final String name, final Object arg,
 			final List<MetroNode> nodes, final short cmdType) {
+		if (nodes==null||countDownLatch!=null){
+			return null;
+		}
 		this.nodes = nodes;
 		results.clear();
-
-		try {
-			commandService.alive();
-		} catch (Exception e) {
-			if (logService != null) {
-				logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
-			}
-			MessageForm.Message("错误信息", "发送命令失败：工作台与通信服务器离线。", SWT.ICON_ERROR);
-			return;
-		}
-
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				Shell shell = new Shell();
-				progress = new ProgressBarDialog(shell, SWT.NONE);
-				progress.setText("正在发送命令，请稍候...");
-				progress.open();
-				if (shell != null && !shell.isDisposed()) {
-					shell.dispose();
-					shell = null;
-				}
-			}
-		});
-
+		countDownLatch = new CountDownLatch(nodes.size());
 		for (MetroNode node : nodes) {
-			CommandThread thread = new CommandThread(context, id, name, arg, node, cmdType, nodes.size());
+			CommandThread thread = new CommandThread(id, name, arg, node, cmdType);
 			thread.start();
 		}
-
-	}
-
-	// public void send(ActionContext context, int id, Map<String, Map<String,
-	// Object>> maps, Object arg,
-	// List<MetroNode> nodes, short cmdType) {
-	// this.nodes = nodes;
-	// results.clear();
-	//
-	// try {
-	// commandService.alive();
-	// } catch (Exception e) {
-	// if (logService != null)
-	// logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
-	// MessageForm.Message("错误信息", "发送命令失败：工作台与通信服务器离线。", SWT.ICON_ERROR);
-	// return;
-	// }
-	//
-	// Display.getDefault().asyncExec(new Runnable() {
-	// public void run() {
-	// Shell shell = new Shell();
-	// progress = new ProgressBarDialog(shell, SWT.NONE);
-	// progress.setText("正在发送命令，请稍候...");
-	// progress.open();
-	// if (shell != null && !shell.isDisposed()) {
-	// shell.dispose();
-	// shell = null;
-	// }
-	// }
-	// });
-	//
-	// for (MetroNode node : nodes) {
-	// for (String key : maps.keySet()) {
-	//
-	// CommandThread thread = new CommandThread(context, id, key, maps.get(key),
-	// node, cmdType, nodes.size()
-	// * maps.keySet().size());
-	// thread.start();
-	// }
-	// }
-	//
-	// }
-
-	public void send(final ActionContext context, final List<Integer> cmdIds, final List<String> cmdIdTexts,
-			final Object arg, final List<MetroNode> nodes, final short cmdType) {
-		this.nodes = nodes;
-		results.clear();
-
 		try {
-			commandService.alive();
-		} catch (Exception e) {
-			if (logService != null) {
-				logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
-			}
-			MessageForm.Message("错误信息", "发送命令失败：工作台与通信服务器离线。", SWT.ICON_ERROR);
-			return;
+			countDownLatch.await();
+		} catch (InterruptedException e) {
+			logger.error("",e);
 		}
-
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				Shell shell = new Shell();
-				progress = new ProgressBarDialog(shell, SWT.NONE);
-				progress.setText("正在发送命令，请稍候...");
-				progress.open();
-				if (shell != null && !shell.isDisposed()) {
-					shell.dispose();
-					shell = null;
-				}
-			}
-		});
-		List<Object> args = (ArrayList) arg;
-		// 每一个目的节点对应的一种设备命令起一个线程
-		for (int i = 0; i < cmdIds.size(); i++) {
-			Integer id = cmdIds.get(i);
-			String name = cmdIdTexts.get(i);
-			Object e = null;
-			if (args != null) {
-				e = args.get(i);
-			}
-			for (MetroNode node : nodes) {
-				CommandThread thread = new CommandThread(context, id, name, e, node, cmdType,
-						nodes.size() * cmdIds.size());
-				thread.start();
-			}
-		}
-
+		countDownLatch=null;
+		return results = sortResults(results);
 	}
 
 	public class CommandThread extends EnhancedThread {
@@ -199,24 +78,18 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 
 		private final Object arg;
 
-		private final ActionContext context;
-
 		private final MetroNode node;
 
 		private final short cmdType;
 
-		private final int totalCount;
-
-		public CommandThread(final ActionContext context, final int id, final String name, final Object arg,
-				final MetroNode node, final short cmdType, final int totalCount) {
+		CommandThread(final int id, final String name, final Object arg,
+				final MetroNode node, final short cmdType) {
 			super("命令发送线程");
-			this.context = context;
 			this.id = id;
 			this.name = name;
 			this.arg = arg;
 			this.node = node;
 			this.cmdType = cmdType;
-			this.totalCount = totalCount;
 		}
 
 		@Override
@@ -244,32 +117,7 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 			}
 			logger.info("向节点" + node.name() + "发送" + name + "  返回：" + result);
 			results.add(save(node, name, arg, result, cmdType, resultDesc));
-
-			if (results.size() == totalCount && !hasShow) {
-				hasShow = true;
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (progress != null) {
-							progress.close();
-							progress = null;
-						}
-
-						int[] widths = new int[] { 200, 250, 165, 150, 150 };
-						TableViewDialog viewdlg = new TableViewDialog(context.getFrameWork(), SWT.NONE);
-						viewdlg.setText("命令发送结果");
-						viewdlg.setTitle("命令发送结果");
-						viewdlg.setDescription("描述：命令发送结果列表");
-						viewdlg.setSize(700, 500);
-						viewdlg.setDataList(sortResults(results));
-						// TableViewDialog自带closeAction，此处无需再set
-						// viewdlg.addCloseAction();
-						viewdlg.setWidths(widths);
-						viewdlg.open();
-						hasShow = false;
-					}
-				});
-			}
+			countDownLatch.countDown();
 		}
 	}
 
@@ -333,16 +181,6 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 
 		TmoCmdResult tmoCmdResult = new TmoCmdResult();
 		tmoCmdResult.setOccurTime(DateTimeUtil.getNow());
-		//		if (arg != null) {
-		//			// tmoCmdResult.setRemark("命令参数：" + BeanUtil.toString(arg));
-		//			// tmoCmdResult.setTagValue(tagValue)
-		//			if (arg instanceof Form) {
-		//				Form form = (Form) arg;
-		//				String string = form.getEntity().toString();
-		//				command = string;
-		//			}
-		//		}
-
 		tmoCmdResult.setCmdName(command);
 
 		if (node instanceof MetroLine) {

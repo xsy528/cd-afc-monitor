@@ -30,11 +30,11 @@ public class Result<T> {
     }
 
     public static <T> Result<T> success(){
-        return new Result(ErrorCode.SUCCESS,null);
+        return new Result(ErrorCode.SUCCESS,"");
     }
 
     public static <T> Result<T> error(ErrorCode errorCode){
-        return new Result(errorCode,null);
+        return new Result(errorCode,"");
     }
 
     public int getCode() {

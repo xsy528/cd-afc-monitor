@@ -7,6 +7,7 @@ import com.insigma.acc.wz.web.model.vo.TextLocation;
 import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.service.NodeService;
 import com.insigma.afc.application.AFCApplication;
+import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.constant.ApplicationKey;
 import com.insigma.afc.dic.DeviceStatus;
 import com.insigma.afc.manager.SystemConfigKey;
@@ -15,11 +16,13 @@ import com.insigma.afc.monitor.listview.equstatus.StationStatustViewItem;
 import com.insigma.afc.monitor.map.GraphicMapGenerator;
 import com.insigma.afc.monitor.map.builder.GraphicMapBuilder;
 import com.insigma.afc.topology.*;
+import com.insigma.afc.view.provider.CommonTreeProvider;
 import com.insigma.commons.application.Application;
 import com.insigma.commons.editorframework.ActionTreeNode;
 import com.insigma.commons.editorframework.graphic.ImageGraphicItem;
 import com.insigma.commons.editorframework.graphic.TextGraphicItem;
 import com.insigma.commons.editorframework.graphic.editor.MapItem;
+import com.insigma.commons.ui.tree.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,38 @@ public class NodeServiceImpl implements NodeService {
         NodeItem nodeItem = mapItemToNodeItem(rootMapItem);
         return Result.success(nodeItem);
     }
+
+    @Override
+    public Result<NodeItem> getNodeSimpleTree(){
+        CommonTreeProvider commonTreeProvider = new CommonTreeProvider();
+        commonTreeProvider.setDepth(AFCNodeLevel.SLE);
+        TreeNode treeNode = commonTreeProvider.getTree();
+        return Result.success(treeNodeToNodeItem(treeNode));
+    }
+
+    public NodeItem treeNodeToNodeItem(TreeNode treeNode){
+        NodeItem root = new NodeItem();
+        Object key = treeNode.getKey();
+        if (key!=null&&key instanceof MetroNode){
+            MetroNode metroNode = (MetroNode)key;
+            root.setNodeId(metroNode.id());
+            root.setNodeType(metroNode.level().toString());
+        }else {
+            root.setNodeId(-1);
+        }
+        root.setName(treeNode.getText());
+        List<TreeNode> treeNodes = treeNode.getChilds();
+        if (treeNodes!=null&&!treeNodes.isEmpty()){
+            List<NodeItem> subNodeItems = new ArrayList<>();
+            root.setSubItems(subNodeItems);
+            for (TreeNode subTreeNode:treeNodes) {
+                NodeItem subNodeItem = treeNodeToNodeItem(subTreeNode);
+                subNodeItems.add(subNodeItem);
+            }
+        }
+        return root;
+    }
+
 
     /**
      * 将MapItem转化为NodeItem

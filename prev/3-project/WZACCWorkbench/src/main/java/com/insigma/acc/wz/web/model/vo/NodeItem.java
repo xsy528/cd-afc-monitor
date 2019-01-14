@@ -8,8 +8,13 @@ import java.util.List;
 public class NodeItem implements Serializable {
 
     public interface required extends Result.Base{}
+    public interface monitor extends required{}
+    public interface editor extends monitor{}
 
     private static final long serialVersionUID = 1L;
+
+    @JsonView(editor.class)
+    private long pid;
 
     @JsonView(required.class)
     private String name;
@@ -20,16 +25,28 @@ public class NodeItem implements Serializable {
     @JsonView(required.class)
     private String nodeType;
 
+    @JsonView(monitor.class)
     private int status;
 
+    @JsonView(monitor.class)
     private int imageUrl;
 
+    @JsonView(monitor.class)
     private ImageLocation icon;
 
+    @JsonView(monitor.class)
     private TextLocation text;
 
     @JsonView(required.class)
     private List<NodeItem> subItems;
+
+    public long getPid() {
+        return pid;
+    }
+
+    public void setPid(long pid) {
+        this.pid = pid;
+    }
 
     public String getName() {
         return name;

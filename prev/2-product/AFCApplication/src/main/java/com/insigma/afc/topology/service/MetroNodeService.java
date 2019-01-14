@@ -5,30 +5,26 @@
  */
 package com.insigma.afc.topology.service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.constant.ResourceNameSpaceDefine;
 import com.insigma.afc.entity.TsyResource;
 import com.insigma.afc.service.ITsyResourceService;
-import com.insigma.afc.topology.MetroACC;
-import com.insigma.afc.topology.MetroDevice;
-import com.insigma.afc.topology.MetroDeviceModule;
-import com.insigma.afc.topology.MetroLine;
-import com.insigma.afc.topology.MetroNode;
-import com.insigma.afc.topology.MetroStation;
+import com.insigma.afc.topology.*;
 import com.insigma.commons.exception.ApplicationException;
+import com.insigma.commons.exception.DAOException;
 import com.insigma.commons.op.OPException;
 import com.insigma.commons.op.SqlRestrictions;
 import com.insigma.commons.service.Service;
 import com.insigma.commons.ui.tree.TreeNode;
 import com.insigma.commons.util.lang.StringUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 获取线路相关参数信息
@@ -221,6 +217,50 @@ public class MetroNodeService extends Service implements IMetroNodeService {
 	}
 
 	@Override
+	public boolean exists(MetroNode metroNode){
+		int num = 0;
+		AFCNodeLevel afcNodeLevel = metroNode.level();
+		switch (afcNodeLevel){
+			case LC:{
+				MetroLine metroLine = (MetroLine)metroNode;
+				String hqlByLC = "from MetroLine t where t.lineID = ?";
+				try {
+					num = commonDAO.getEntityListHQL(hqlByLC, metroLine.getLineID()).size();
+				} catch (OPException e) {
+					throw new DAOException("查询线路表失败",e);
+				}
+				break;
+			}
+			case SC:{
+				MetroStation metroStation = (MetroStation) metroNode;
+				String hqlBySC = "from MetroStation t where t.id.lineId = ? and t.id.stationId = ?";
+				try {
+					num = commonDAO.getEntityListHQL(hqlBySC, metroStation.getId().getLineId(),
+							metroStation.getId().getStationId()).size();
+				} catch (OPException e) {
+					throw new DAOException("查询车站表失败",e);
+				}
+				break;
+			}
+			case SLE:{
+				MetroDevice metroDevice = (MetroDevice) metroNode;
+				String hqlBySLE = " from MetroDevice t where t.id.lineId = ? and t.id.stationId = ? and t.id.deviceId = ?";
+				try {
+					num = commonDAO.getEntityListHQL(hqlBySLE, metroDevice.getId().getLineId(),
+							metroDevice.getId().getStationId(), metroDevice.getId().getDeviceId()).size();
+				} catch (OPException e) {
+					throw new DAOException("查询车站表失败",e);
+				}
+				break;
+			}
+		}
+		if (num==0){
+			return false;
+		}
+		return true;
+	}
+
+	@Override
 	public boolean checkMetroNode(MetroNode currentNode, MetroNode beforeNode) {
 		int num = 0;
 		String sql = null;
@@ -409,6 +449,39 @@ public class MetroNodeService extends Service implements IMetroNodeService {
 		} catch (OPException e) {
 			throw new ApplicationException("保存地图信息异常。" + currentNode);
 		}
+	}
+
+	@Override
+	public void saveMetroNodes(List<MetroNode> metroNodes) {
+		for (MetroNode metroNode:metroNodes){
+			AFCNodeLevel level = metroNode.level();
+			switch (level){
+				case ACC:{
+					//保存ACC节点
+					break;
+				}
+				case LC:{
+					//保存资源
+					saveResource(metroNode);
+					//保存节点
+					commonDAO.saveOrUpdateObj(metroNode);
+					break;
+				}
+				case SC:{
+					//保存资源
+					saveResource(metroNode);
+					//保存节点
+					commonDAO.saveOrUpdateObj(metroNode);
+					break;
+				}
+				case SLE:{
+					//保存节点
+					commonDAO.saveOrUpdateObj(metroNode);
+				}
+			}
+		}
+		//刷新内存中的节点
+		AFCApplication.refresh();
 	}
 
 	private int deleteChildMetroNode(AFCNodeLevel type, MetroNode currentNode) {

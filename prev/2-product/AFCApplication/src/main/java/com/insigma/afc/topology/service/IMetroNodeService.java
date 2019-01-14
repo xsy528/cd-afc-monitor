@@ -5,16 +5,11 @@
  */
 package com.insigma.afc.topology.service;
 
-import java.util.List;
-
-import com.insigma.afc.topology.MetroACC;
-import com.insigma.afc.topology.MetroDevice;
-import com.insigma.afc.topology.MetroDeviceModule;
-import com.insigma.afc.topology.MetroLine;
-import com.insigma.afc.topology.MetroNode;
-import com.insigma.afc.topology.MetroStation;
+import com.insigma.afc.topology.*;
 import com.insigma.commons.application.IService;
 import com.insigma.commons.ui.tree.TreeNode;
+
+import java.util.List;
 
 /**
  * 客流数据获取接口
@@ -113,6 +108,19 @@ public interface IMetroNodeService extends IService {
 
 	void saveMetroNodes(MetroNode currentNode, MetroNode beforeNode, List<MetroNode> childNodes,
 			List<MetroNode> deleteNodes, boolean updateFlag);
+
+	/**
+	 * 保存节点
+	 * @param metroNodes
+	 */
+	void saveMetroNodes(List<MetroNode> metroNodes);
+
+	/**
+	 * 判断节点是否存在
+	 * @param metroNode
+	 * @return
+	 */
+	boolean exists(MetroNode metroNode);
 
 	/**
 	 * @param currentNode

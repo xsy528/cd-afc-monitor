@@ -6,13 +6,13 @@
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
 
-	<bean id="nodeController" name="/node/**" class="com.insigma.acc.wz.web.controller.NodeController">
-		<constructor-arg index="0" ref="nodeService"/>
-		<constructor-arg index="1" ref="fileService"/>
-	</bean>
-
 	<bean id="fileController" name="/file/**" class="com.insigma.acc.wz.web.controller.FileController">
 		<constructor-arg index="0" ref="fileService"/>
+	</bean>
+
+	<bean id="nodeController" name="/node/**" class="com.insigma.acc.wz.web.controller.NodeTreeController">
+		<constructor-arg index="0" ref="nodeService"/>
+		<constructor-arg index="1" ref="fileService"/>
 	</bean>
 
 	<bean id="nodeStatusController" name="/monitor/query/*" class="com.insigma.acc.wz.web.controller.NodeStatusController">
@@ -21,13 +21,18 @@
 		<constructor-arg index="2" ref="nodeStatusService"/>
 	</bean>
 
+	<bean id="nodeManagerController" name="/editor/**" class="com.insigma.acc.wz.web.controller.NodeManagerController">
+		<constructor-arg index="0" ref="fileService"/>
+		<constructor-arg index="1" ref="metroNodeService"/>
+	</bean>
+
 	<bean id="commandController" name="/monitor/*" class="com.insigma.acc.wz.web.controller.CommandController">
-		<constructor-arg index="0" ref="commandService"></constructor-arg>
-		<constructor-arg index="1" ref="fileService"></constructor-arg>
+		<constructor-arg index="0" ref="commandService"/>
+		<constructor-arg index="1" ref="fileService"/>
 	</bean>
 
 	<bean id="monitorConfigController" name="/monitor/config/*" class="com.insigma.acc.wz.web.controller.MonitorConfigController">
-		<constructor-arg index="0" ref="monitorConfigService"></constructor-arg>
+		<constructor-arg index="0" ref="monitorConfigService"/>
 	</bean>
 
 	<bean id="monitorConfigService" class="com.insigma.acc.wz.web.service.impl.MonitorConfigServiceImpl">

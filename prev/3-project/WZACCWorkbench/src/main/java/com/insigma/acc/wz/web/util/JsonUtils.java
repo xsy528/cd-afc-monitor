@@ -1,6 +1,7 @@
 package com.insigma.acc.wz.web.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Ticket: JSON处理工具
@@ -65,6 +67,13 @@ public class JsonUtils {
     //通过输入流生成java对象
     public static <T> T readObject(InputStream inputStream,Class<T> type) throws IOException {
         return new ObjectMapper().reader(type).readValue(inputStream);
+    }
+
+    //通过输入流生成java对象
+    public static <T> List<T> readObjectToList(InputStream inputStream, Class<T> type) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JavaType javaType = objectMapper.getTypeFactory().constructCollectionType(List.class,type);
+        return objectMapper.reader(javaType).readValue(inputStream);
     }
 
 }

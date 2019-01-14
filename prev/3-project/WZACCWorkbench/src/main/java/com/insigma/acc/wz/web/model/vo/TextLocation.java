@@ -1,5 +1,7 @@
 package com.insigma.acc.wz.web.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.io.Serializable;
 
 public class TextLocation extends Location implements Serializable {
@@ -13,6 +15,10 @@ public class TextLocation extends Location implements Serializable {
         this.angle = angle;
     }
 
+    public TextLocation() {
+    }
+
+    @JsonView(NodeItem.monitor.class)
     private String text;
 
     public String getText() {

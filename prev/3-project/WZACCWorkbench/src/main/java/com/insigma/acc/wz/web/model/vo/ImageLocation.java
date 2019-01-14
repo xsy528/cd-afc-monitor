@@ -1,11 +1,16 @@
 package com.insigma.acc.wz.web.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class ImageLocation extends Location implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public ImageLocation() {
+    }
 
     public ImageLocation(List<Integer> imgs, int x, int y, int angle) {
         this.imgs = imgs;
@@ -14,6 +19,7 @@ public class ImageLocation extends Location implements Serializable {
         this.angle = angle;
     }
 
+    @JsonView(NodeItem.monitor.class)
     private List<Integer> imgs;
 
     public List<Integer> getImgs() {

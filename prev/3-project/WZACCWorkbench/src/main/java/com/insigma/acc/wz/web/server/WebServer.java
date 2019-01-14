@@ -17,6 +17,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.MultipartConfigElement;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,6 +65,8 @@ public class WebServer {
         DispatcherServlet dispatcherServlet = new DispatcherServlet();
         dispatcherServlet.setContextConfigLocation("classpath*:spring-config.xml");
         ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
+        int MB_5=5*1024*1024;
+        servletHolder.getRegistration().setMultipartConfig(new MultipartConfigElement("tmp",MB_5,MB_5,MB_5));
         servletContextHandler.addServlet(servletHolder,"/");
         //添加listener
         servletContextHandler.addEventListener(new ContextLoaderListener());

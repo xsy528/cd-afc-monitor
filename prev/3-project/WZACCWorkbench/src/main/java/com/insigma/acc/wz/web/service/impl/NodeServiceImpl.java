@@ -88,6 +88,7 @@ public class NodeServiceImpl implements NodeService {
             root.setSubItems(subNodeItems);
             for (TreeNode subTreeNode:treeNodes) {
                 NodeItem subNodeItem = treeNodeToNodeItem(subTreeNode);
+                subNodeItem.setPid(root.getNodeId());
                 subNodeItems.add(subNodeItem);
             }
         }
@@ -102,7 +103,6 @@ public class NodeServiceImpl implements NodeService {
      */
     public NodeItem mapItemToNodeItem(MapItem mapItem) {
 
-        Application.getLineIdFormat();
         MetroNode metroNode = (MetroNode) mapItem.getValue();
         NodeItem nodeItem = new NodeItem();
         nodeItem.setNodeId(metroNode.id());
@@ -134,7 +134,9 @@ public class NodeServiceImpl implements NodeService {
         List<NodeItem> subNodeItems = new ArrayList<>();
         nodeItem.setSubItems(subNodeItems);
         for (MapItem subMapItem:mapItems){
-            subNodeItems.add(mapItemToNodeItem(subMapItem));
+            NodeItem subNodeItem = mapItemToNodeItem(subMapItem);
+            subNodeItem.setPid(nodeItem.getNodeId());
+            subNodeItems.add(subNodeItem);
         }
         return nodeItem;
     }

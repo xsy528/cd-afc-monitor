@@ -32,4 +32,12 @@ public interface FileService {
      * 同步数据库资源
      */
     void synResources();
+
+    /**
+     * 保存临时文件到本地
+     * @param data
+     * @param name
+     * @return 保存结果，包含文件路径
+     */
+    Result<String> saveTmpFile(byte[] data, String name) ;
 }

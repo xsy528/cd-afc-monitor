@@ -1,8 +1,10 @@
 package com.insigma.acc.wz.web.service.impl;
 
+import com.insigma.acc.wz.web.exception.ErrorCode;
 import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.util.ResourceUtils;
+import com.insigma.afc.entity.TsyResource;
 import com.insigma.afc.service.ITsyResourceService;
 import com.insigma.commons.op.OPException;
 import com.insigma.commons.service.CommonDAO;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,24 @@ public class FileServiceImpl implements FileService {
     public void synResources() {
         getResourceFromDB();
     }
+
+    @Override
+    public Result<String> saveTmpFile(byte[] data, String name) {
+        Path path = Paths.get("tmp");
+        File file = path.toFile();
+        if (!file.exists()){
+            file.mkdirs();
+        }
+        path = path.resolve(name);
+        try {
+            Files.write(path,data, StandardOpenOption.WRITE,StandardOpenOption.CREATE);
+            return Result.success(path.toString());
+        } catch (IOException e) {
+            LOGGER.error("保存临时文件失败",e);
+        }
+        return Result.error(ErrorCode.SAVE_FILE_FAILED);
+    }
+
     private void getResourceFromDB(){
         //同步数据库资源到本地
         resourceService.syncResouce();
@@ -87,6 +110,13 @@ public class FileServiceImpl implements FileService {
         String[] resourceList = new String[resourceMap.size()];
         resourceMap.forEach((k,v)->resourceList[v]=k);
         return Result.success(resourceList);
+    }
+
+    //@Override
+    public Result<String> uploadFile(){
+        TsyResource tsyResource = new TsyResource();
+        resourceService.save(tsyResource);
+        return Result.success(tsyResource.getName());
     }
 
     private static void putResource(String path){

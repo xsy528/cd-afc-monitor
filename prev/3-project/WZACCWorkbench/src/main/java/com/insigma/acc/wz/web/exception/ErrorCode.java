@@ -26,6 +26,7 @@ public enum ErrorCode {
     INVALID_ARGUMENT(15,"非法参数"),
     UNKNOW_ERROR(100,"未知异常"),
     TOO_LARGE_FILE(101,"文件过大"),
+    DATABASE_ERROR(102,"数据库异常"),
     MONITOR_CONFIG_SAVE_ERROR(1000,"监控参数设置失败");
 
 

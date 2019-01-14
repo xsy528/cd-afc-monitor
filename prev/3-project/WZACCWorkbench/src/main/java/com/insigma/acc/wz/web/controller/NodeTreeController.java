@@ -7,7 +7,7 @@ import com.insigma.acc.wz.web.service.FileService;
 import com.insigma.acc.wz.web.service.NodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class NodeController extends BaseMultiActionController {
+public class NodeTreeController extends BaseMultiActionController {
 
     @Autowired
     private NodeService nodeService;
@@ -23,17 +23,19 @@ public class NodeController extends BaseMultiActionController {
         methodMapping.put("/node/list-img-urls","imageList");
     }
 
-    public NodeController(NodeService nodeService,FileService fileService){
+    public NodeTreeController(NodeService nodeService, FileService fileService){
         this.nodeService = nodeService;
         this.fileService = fileService;
     }
 
+    @JsonView(NodeItem.editor.class)
     public Result<NodeItem> editorTreeList(){
         return nodeService.getNodeTree();
     }
 
+    @JsonView(NodeItem.monitor.class)
     public Result<NodeItem> monitorTreeList(){
-        return editorTreeList();
+        return nodeService.getNodeTree();
     }
 
     @JsonView(NodeItem.required.class)

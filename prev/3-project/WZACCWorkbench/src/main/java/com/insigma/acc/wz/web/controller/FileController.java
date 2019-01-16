@@ -1,5 +1,6 @@
 package com.insigma.acc.wz.web.controller;
 
+import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.acc.wz.web.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +17,8 @@ import java.io.OutputStream;
 public class FileController extends BaseMultiActionController{
 
     static{
-        methodMapping.put("/file","getFileLink");
+        methodMapping.put("/file/ref","getFileLink");
+        methodMapping.put("/file/images","getImageList");
     }
 
     @Autowired
@@ -32,5 +34,9 @@ public class FileController extends BaseMultiActionController{
         try(OutputStream outputStream = response.getOutputStream()){
             outputStream.write(fileService.getFileBytes(filename));
         }
+    }
+
+    public Result<String[]> getImageList(){
+        return fileService.getResourceList();
     }
 }

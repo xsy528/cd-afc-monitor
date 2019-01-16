@@ -14,9 +14,16 @@ import java.util.List;
  */
 public interface NodeStatusService {
 
+    //模式上传信息
     List<TmoModeUploadInfo> getModeUpload(long nodeId);
 
+    //模式广播信息
     List<TmoModeBroadcast> getModeBroadcast();
 
+    //监视设备信息
     Result getDeviceDetail(long id);
+
+    //票箱钱箱信息
+    Result getBoxDetail(long id);
+
 }

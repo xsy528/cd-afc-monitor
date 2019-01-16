@@ -221,10 +221,12 @@ public class NodeStatusController extends BaseMultiActionController{
 
     public Result getDeviceDetail(HttpServletRequest request, HttpServletResponse response){
         JsonNode jsonNode = HttpUtils.getBody(request);
-        if (jsonNode==null||jsonNode.get("deviceId")==null){
-            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
-        }
-        return nodeStatusService.getDeviceDetail(jsonNode.get("deviceId").longValue());
+        return nodeStatusService.getDeviceDetail(jsonNode.get("nodeId").longValue());
+    }
+
+    public Result getBoxDetail(HttpServletRequest request, HttpServletResponse response){
+        JsonNode jsonNode = HttpUtils.getBody(request);
+        return nodeStatusService.getBoxDetail(jsonNode.get("nodeId").longValue());
     }
 
 }

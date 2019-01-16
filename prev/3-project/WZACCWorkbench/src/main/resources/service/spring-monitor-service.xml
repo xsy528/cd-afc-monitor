@@ -50,5 +50,10 @@
 		<property name="commonDAO" ref="commonDAO">
 		</property>
 	</bean>
+
+	<!--事件-->
+	<bean name="metroEventService" class="com.insigma.acc.wz.monitor.service.impl.WZMetroEventService">
+		<property name="commonDAO" ref="commonDAO"/>
+	</bean>
 </beans>
 

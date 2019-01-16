@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
+
+	<bean id="fileController" name="/file/**" class="com.insigma.acc.wz.web.controller.FileController">
+		<constructor-arg index="0" ref="fileService"/>
+	</bean>
+
+	<bean id="nodeController" name="/node/list/*" class="com.insigma.acc.wz.web.controller.NodeTreeController">
+		<constructor-arg index="0" ref="nodeService"/>
+	</bean>
+
+	<bean id="nodeStatusController" name="/monitor/query/*" class="com.insigma.acc.wz.web.controller.NodeStatusController">
+		<constructor-arg index="0" ref="metroNodeStatusService"/>
+		<constructor-arg index="1" ref="wzmodeService"/>
+		<constructor-arg index="2" ref="nodeStatusService"/>
+	</bean>
+
+	<bean id="nodeManagerController" name="/editor/**" class="com.insigma.acc.wz.web.controller.NodeManagerController">
+		<constructor-arg index="0" ref="fileService"/>
+		<constructor-arg index="1" ref="metroNodeService"/>
+	</bean>
+
+	<bean id="commandController" name="/monitor/*" class="com.insigma.acc.wz.web.controller.CommandController">
+		<constructor-arg index="0" ref="commandService"/>
+		<constructor-arg index="1" ref="fileService"/>
+	</bean>
+
+	<bean id="monitorConfigController" name="/monitor/config/*" class="com.insigma.acc.wz.web.controller.MonitorConfigController">
+		<constructor-arg index="0" ref="monitorConfigService"/>
+	</bean>
+
+	<bean id="DicController" name="/config/*" class="com.insigma.acc.wz.web.controller.DicController"></bean>
+
+	<bean id="monitorConfigService" class="com.insigma.acc.wz.web.service.impl.MonitorConfigServiceImpl">
+		<property name="logSysService" ref="syncLogService"/>
+	</bean>
+
+	<bean id="commandService" class="com.insigma.acc.wz.web.service.impl.CommandServiceImpl"></bean>
+
+	<bean id="nodeStatusService" class="com.insigma.acc.wz.web.service.impl.NodeStatusServiceImpl">
+		<property name="commonDAO" ref="commonDAO"/>
+		<property name="iDeviceModuleFactory" ref="WZDeviceModuleFactoryImpl"/>
+		<property name="statusService" ref="metroNodeStatusService"/>
+		<property name="fileService" ref="fileService"/>
+		<property name="monitorService" ref="monitorService"/>
+	</bean>
+
+	<bean id="nodeService" class="com.insigma.acc.wz.web.service.impl.NodeServiceImpl">
+		<property name="fileService" ref="fileService"/>
+	</bean>
+
+	<bean id="fileService" class="com.insigma.acc.wz.web.service.impl.FileServiceImpl">
+		<property name="resourceService" ref="resourceService"/>
+		<property name="commonDAO" ref="commonDAO"/>
+	</bean>
+
+</beans>
+

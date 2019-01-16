@@ -29,6 +29,13 @@ import java.util.concurrent.CountDownLatch;
 
 public abstract class CommandActionHandler extends ActionHandlerAdapter {
 
+	protected CommandActionHandler(boolean autowire){
+		super(autowire);
+	}
+
+	protected CommandActionHandler(){
+	}
+
 	@Autowire
 	protected ICommandService commandService;
 

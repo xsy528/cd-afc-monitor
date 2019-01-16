@@ -26,6 +26,16 @@ public class ActionHandlerAdapter implements IActionHandler {
 		actionHandlerServiceWire.wire(this);
 	}
 
+	public ActionHandlerAdapter(boolean autowire) {
+		if (autowire) {
+			actionHandlerServiceWire.wire(this);
+		}
+	}
+
+	protected void wire(){
+	    actionHandlerServiceWire.wire(this);
+    }
+
 	public Log getLogger() {
 		return logger;
 	}

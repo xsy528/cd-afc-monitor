@@ -5,20 +5,9 @@
  */
 package com.insigma.acc.wz.monitor.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
-import com.insigma.afc.monitor.entity.TmoEquEvent;
-import com.insigma.afc.monitor.entity.TmoEquEventCur;
-import com.insigma.afc.monitor.entity.TmoEquStatus;
-import com.insigma.afc.monitor.entity.TmoEquStatusCur;
-import com.insigma.afc.monitor.entity.TmoItemStatus;
-import com.insigma.afc.monitor.entity.TmoModeBroadcast;
-import com.insigma.afc.monitor.entity.TmoModeUploadInfo;
+import com.insigma.afc.monitor.entity.*;
 import com.insigma.afc.monitor.listview.event.EventFilterForm;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.topology.MetroNode;
@@ -28,6 +17,11 @@ import com.insigma.commons.database.StringHelper;
 import com.insigma.commons.exception.ApplicationException;
 import com.insigma.commons.op.OPException;
 import com.insigma.commons.op.SqlRestrictions;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Ticket: <br/>
@@ -565,6 +559,8 @@ public class WZModeService extends AbstarctModeService implements IWZModeService
 					final MetroNode metroNode = (MetroNode) o;
 					long nodeId = AFCApplication.getNodeId(metroNode.id());
 					deviceList.add(nodeId);
+				}else if(o instanceof Long){
+					deviceList.add(Long.parseLong(o.toString()));
 				}
 			}
 			deviceIds = deviceList.toArray(new Long[deviceList.size()]);

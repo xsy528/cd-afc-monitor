@@ -10,9 +10,8 @@
 		<constructor-arg index="0" ref="fileService"/>
 	</bean>
 
-	<bean id="nodeController" name="/node/**" class="com.insigma.acc.wz.web.controller.NodeTreeController">
+	<bean id="nodeController" name="/node/list/*" class="com.insigma.acc.wz.web.controller.NodeTreeController">
 		<constructor-arg index="0" ref="nodeService"/>
-		<constructor-arg index="1" ref="fileService"/>
 	</bean>
 
 	<bean id="nodeStatusController" name="/monitor/query/*" class="com.insigma.acc.wz.web.controller.NodeStatusController">
@@ -34,6 +33,8 @@
 	<bean id="monitorConfigController" name="/monitor/config/*" class="com.insigma.acc.wz.web.controller.MonitorConfigController">
 		<constructor-arg index="0" ref="monitorConfigService"/>
 	</bean>
+
+	<bean id="DicController" name="/config/*" class="com.insigma.acc.wz.web.controller.DicController"></bean>
 
 	<bean id="monitorConfigService" class="com.insigma.acc.wz.web.service.impl.MonitorConfigServiceImpl">
 		<property name="logSysService" ref="syncLogService"/>

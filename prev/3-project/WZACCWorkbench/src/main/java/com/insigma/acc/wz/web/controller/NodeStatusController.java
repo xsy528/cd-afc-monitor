@@ -7,7 +7,6 @@ import com.insigma.acc.wz.web.exception.ErrorCode;
 import com.insigma.acc.wz.web.model.vo.*;
 import com.insigma.acc.wz.web.service.NodeStatusService;
 import com.insigma.acc.wz.web.util.HttpUtils;
-import com.insigma.acc.wz.web.util.JsonUtils;
 import com.insigma.acc.wz.web.util.NodeUtils;
 import com.insigma.afc.dic.AFCModeCode;
 import com.insigma.afc.dic.DeviceStatus;
@@ -25,8 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +44,6 @@ public class NodeStatusController extends BaseMultiActionController{
         methodMapping.put("/monitor/query/modeUpload","getModeUpload");
         methodMapping.put("/monitor/query/modeBroadcast","getModeBroadcast");
         methodMapping.put("/monitor/query/deviceEvent","getDeviceEvent");
-        methodMapping.put("/monitor/query/deviceStatusType","getDeviceStatusType");
         methodMapping.put("/monitor/query/deviceDetail","getDeviceDetail");
         methodMapping.put("/monitor/query/boxDetail","getBoxDetail");
     }
@@ -65,59 +61,44 @@ public class NodeStatusController extends BaseMultiActionController{
     }
 
     //车站状态列表
-    public void getStationStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json; charset=utf-8");
-
+    public Result<List<StationStatus>> getStationStatus(HttpServletRequest request, HttpServletResponse response) {
         JsonNode jsonNode = HttpUtils.getBody(request);
-        try(PrintWriter writer = response.getWriter()){
-            if (jsonNode==null){
-                writer.println(JsonUtils.parseObject(Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND)));
-                return;
-            }
-            List<Integer> idList = new ArrayList<>();
-            for(JsonNode id:jsonNode.get("nodeIds")){
-                idList.add(id.intValue());
-            }
-            List<StationStatustViewItem> data = metroNodeStatusService
-                    .getStationStatusView(null,idList.toArray(new Integer[idList.size()]));
-            List<StationStatus> stationStatusList = new ArrayList<>();
-            for (StationStatustViewItem stationStatustViewItem:data){
-                StationStatus stationStatus = new StationStatus();
-                stationStatus.setAlarmEvent(stationStatustViewItem.getAlarmEvent());
-                stationStatus.setNormalEvent(stationStatustViewItem.getNormalEvent());
-                stationStatus.setWarnEvent(stationStatustViewItem.getWarnEvent());
-                stationStatus.setOnline(stationStatustViewItem.isOnline());
-                stationStatus.setUpdateTime(DateTimeUtil.formatDate(stationStatustViewItem.getUpdateTime()));
-
-                //设置车站状态
-                Short status = Integer.valueOf(stationStatustViewItem.getStatus()).shortValue();
-                stationStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
-                stationStatus.setName(stationStatustViewItem.name());
-                //设置车站模式/编号
-                Integer mode = Long.valueOf(stationStatustViewItem.getMode()).intValue();
-                stationStatus.setMode(AFCModeCode.getInstance().getModeText(mode));
-
-                stationStatusList.add(stationStatus);
-            }
-            writer.println(JsonUtils.parseObject(Result.success(stationStatusList)));
+        List<Integer> idList = new ArrayList<>();
+        JsonNode nodeIds = jsonNode.get("nodeIds");
+        if (nodeIds==null||!nodeIds.isArray()){
+            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
         }
-    }
-
-    //设备状态类型列表
-    public void getDeviceStatusType(HttpServletRequest request, HttpServletResponse response){
-        response.setContentType("application/json; charset=utf-8");
-        try(PrintWriter printWriter=response.getWriter()) {
-            printWriter.println(JsonUtils.parseObject(Result.success(DeviceStatus.getInstance().getByGroup("1"))));
-        }catch (IOException e){
-            LOGGER.error("",e);
+        for(JsonNode id:nodeIds){
+            idList.add(id.intValue());
         }
+        List<StationStatustViewItem> data = metroNodeStatusService
+                .getStationStatusView(null,idList.toArray(new Integer[idList.size()]));
+        List<StationStatus> stationStatusList = new ArrayList<>();
+        for (StationStatustViewItem stationStatustViewItem:data){
+            StationStatus stationStatus = new StationStatus();
+            stationStatus.setAlarmEvent(stationStatustViewItem.getAlarmEvent());
+            stationStatus.setNormalEvent(stationStatustViewItem.getNormalEvent());
+            stationStatus.setWarnEvent(stationStatustViewItem.getWarnEvent());
+            stationStatus.setOnline(stationStatustViewItem.isOnline());
+            stationStatus.setUpdateTime(DateTimeUtil.formatDate(stationStatustViewItem.getUpdateTime()));
+
+            //设置车站状态
+            Short status = Integer.valueOf(stationStatustViewItem.getStatus()).shortValue();
+            stationStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
+            stationStatus.setName(stationStatustViewItem.name());
+            //设置车站模式/编号
+            Integer mode = Long.valueOf(stationStatustViewItem.getMode()).intValue();
+            stationStatus.setMode(AFCModeCode.getInstance().getModeText(mode));
+
+            stationStatusList.add(stationStatus);
+        }
+        return Result.success(stationStatusList);
     }
 
     //模式上传信息
-    public void getModeUpload(HttpServletRequest request, HttpServletResponse response){
-        response.setContentType("application/json; charset=utf-8");
+    public Result<List<ModeUploadInfo>> getModeUpload(HttpServletRequest request, HttpServletResponse response){
         JsonNode jsonNode = HttpUtils.getBody(request);
-        long nodeId = jsonNode.get("nodeId")==null?-1:jsonNode.get("nodeId").longValue();
+        long nodeId = jsonNode.get("nodeId").longValue();
         List<TmoModeUploadInfo> tmoModeUploadInfos = nodeStatusService.getModeUpload(nodeId);
         List<ModeUploadInfo> modeUploadInfos = new ArrayList<>();
         for (TmoModeUploadInfo tmoModeUploadInfo:tmoModeUploadInfos){
@@ -128,16 +109,11 @@ public class NodeStatusController extends BaseMultiActionController{
             modeUploadInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeUploadInfo.getModeCode())));
             modeUploadInfos.add(modeUploadInfo);
         }
-        try(PrintWriter printWriter=response.getWriter()){
-             printWriter.println(JsonUtils.parseObject(Result.success(modeUploadInfos)));
-        }catch (IOException e){
-            LOGGER.error("",e);
-        }
+        return Result.success(modeUploadInfos);
     }
 
     //模式广播信息
-    public void getModeBroadcast(HttpServletRequest request, HttpServletResponse response){
-        response.setContentType("application/json; charset=utf-8");
+    public Result<List<ModeBroadcastInfo>> getModeBroadcast(HttpServletRequest request, HttpServletResponse response){
         List<TmoModeBroadcast> tmoModeBroadcasts = nodeStatusService.getModeBroadcast();
         List<ModeBroadcastInfo> modeBroadcastInfos = new ArrayList<>();
         for (TmoModeBroadcast tmoModeBroadcast:tmoModeBroadcasts){
@@ -149,108 +125,98 @@ public class NodeStatusController extends BaseMultiActionController{
             modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast.getModeCode())));
             modeBroadcastInfos.add(modeBroadcastInfo);
         }
-        try(PrintWriter printWriter=response.getWriter()){
-            printWriter.println(JsonUtils.parseObject(Result.success(modeBroadcastInfos)));
-        }catch (IOException e){
-            LOGGER.error("",e);
-        }
+        return Result.success(modeBroadcastInfos);
     }
 
     //设备状态列表
-    public void getDeviceStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json; charset=utf-8");
-
+    public Result<List<EquStatus>> getDeviceStatus(HttpServletRequest request, HttpServletResponse response) {
         JsonNode jsonNode = HttpUtils.getBody(request);
-        try(PrintWriter writer = response.getWriter()){
-            if (jsonNode == null) {
-                writer.write(JsonUtils.parseObject(Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND)));
-                return;
-            }
-            List<Object> idList = new ArrayList<>();
-            for(JsonNode id:jsonNode.get("nodeIds")){
-                idList.add(id.longValue());
-            }
-            List<Short> statusList = new ArrayList<>();
-            for(JsonNode id:jsonNode.get("status")){
+        List<Object> idList = new ArrayList<>();
+        for(JsonNode id:jsonNode.get("nodeIds")){
+            idList.add(id.longValue());
+        }
+        List<Short> statusList = new ArrayList<>();
+        if (jsonNode.get("status")!=null){
+            for (JsonNode id : jsonNode.get("status")) {
                 statusList.add(id.shortValue());
             }
-            Date startTime = new Date(Long.valueOf(jsonNode.get("startTime").textValue()));
-            Date endTime = new Date(Long.valueOf(jsonNode.get("endTime").textValue()));
-            EquStatusFilterForm filterForm = new EquStatusFilterForm();
-            filterForm.setStartTime(startTime);
-            filterForm.setEndTime(endTime);
-            filterForm.setSelections(idList);
-            filterForm.setStatusLevelList(statusList);
-            List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(filterForm);
-            List<EquStatus> equStatusList = new ArrayList<>();
-            for (EquStatusViewItem equStatusViewItem:data){
-                EquStatus equStatus = new EquStatus();
-                equStatus.setName(equStatusViewItem.name());
-                Short status = Integer.valueOf(equStatusViewItem.getStatus()).shortValue();
-                equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
-                equStatus.setOnline(equStatusViewItem.isOnline());
-                equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
-                equStatusList.add(equStatus);
-            }
-            String json = JsonUtils.parseObject(Result.success(equStatusList));
-            writer.println(json);
         }
+        EquStatusFilterForm filterForm = new EquStatusFilterForm();
+        JsonNode startTimeNode = jsonNode.get("startTime");
+        if (startTimeNode!=null){
+            filterForm.setStartTime(new Date(Long.valueOf(startTimeNode.textValue())));
+        }
+        JsonNode endTimeNode = jsonNode.get("endTime");
+        if (endTimeNode!=null) {
+            filterForm.setEndTime(new Date(Long.valueOf(endTimeNode.textValue())));
+        }
+        filterForm.setSelections(idList);
+        filterForm.setStatusLevelList(statusList);
+        List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(filterForm);
+        List<EquStatus> equStatusList = new ArrayList<>();
+        for (EquStatusViewItem equStatusViewItem:data){
+            EquStatus equStatus = new EquStatus();
+            equStatus.setName(equStatusViewItem.name());
+            Short status = Integer.valueOf(equStatusViewItem.getStatus()).shortValue();
+            equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
+            equStatus.setOnline(equStatusViewItem.isOnline());
+            equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
+            equStatusList.add(equStatus);
+        }
+        return Result.success(equStatusList);
     }
 
     //设备事件列表
-    public void getDeviceEvent(HttpServletRequest request, HttpServletResponse response){
-        response.setContentType("application/json; charset=utf-8");
+    public Result<List<EquEvent>> getDeviceEvent(HttpServletRequest request, HttpServletResponse response){
         JsonNode jsonNode = HttpUtils.getBody(request);
-        try(PrintWriter writer = response.getWriter()) {
-            if (jsonNode == null) {
-                writer.write(JsonUtils.parseObject(Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND)));
-                return;
-            }
-            EventFilterForm eventFilterForm = new EventFilterForm();
-            List<Object> idList = new ArrayList<>();
-            for(JsonNode id:jsonNode.get("nodeIds")){
-                idList.add(id.longValue());
-            }
-            List<Short> devTypeList = new ArrayList<>();
-            for(JsonNode id:jsonNode.get("devType")){
+        List<Object> idList = new ArrayList<>();
+        for(JsonNode id:jsonNode.get("nodeIds")){
+            idList.add(id.longValue());
+        }
+        List<Object> devTypeList = new ArrayList<>();
+        if (jsonNode.get("devType")!=null){
+            for (JsonNode id : jsonNode.get("devType")) {
                 devTypeList.add(id.shortValue());
             }
-            eventFilterForm.setSelections(idList);
-            eventFilterForm.setEquTypeList(devTypeList);
-
-            int maxCount = jsonNode.get("maxCount")==null?100:jsonNode.get("maxCount").intValue();
-            eventFilterForm.setPageSize(maxCount);
-
-            String orderField = jsonNode.get("orderField")==null?"OCCUR_TIME":jsonNode.get("orderField").textValue();
-            eventFilterForm.setOrderField(orderField);
-
-            String orderType = jsonNode.get("orderType")==null?"ASC":jsonNode.get("orderType").textValue();
-            if (!(orderType.equals("ASC")||orderType.equals("AESC"))){
-                orderType="ASC";
-            }
-            eventFilterForm.setOrderType(orderType);
-
-            Date startTime = new Date(Long.valueOf(jsonNode.get("startTime").textValue()));
-            Date endTime = new Date(Long.valueOf(jsonNode.get("endTime").textValue()));
-            eventFilterForm.setStartTime(startTime);
-            eventFilterForm.setEndTime(endTime);
-
-            List<TmoEquStatusCur> tmoEquStatusCurs = modeService.getEquStatusList(eventFilterForm,0).getDatas();
-            List<EquEvent> equEvents = new ArrayList<>();
-            for (TmoEquStatusCur tmoEquStatusCur:tmoEquStatusCurs){
-                EquEvent equEvent = new EquEvent();
-                equEvent.setApplyDevice(tmoEquStatusCur.getApplyDevice());
-                equEvent.setItem(tmoEquStatusCur.getItem1());
-                equEvent.setNodeName(NodeUtils.getNodeText(tmoEquStatusCur.getNodeId()));
-                equEvent.setOccurTime(DateTimeUtil.formatDate(tmoEquStatusCur.getOccurTime()));
-                equEvent.setStatusName(tmoEquStatusCur.getStatusName()+"/"+tmoEquStatusCur.getStatusId());
-                equEvent.setStatusDesc(tmoEquStatusCur.getStatusDesc()+"/"+tmoEquStatusCur.getStatusValue());
-                equEvents.add(equEvent);
-            }
-            writer.println(JsonUtils.parseObject(Result.success(equEvents)));
-        }catch (IOException e){
-            LOGGER.error("",e);
         }
+        EventFilterForm eventFilterForm = new EventFilterForm();
+        eventFilterForm.setSelections(idList);
+        eventFilterForm.setEquTypeList(devTypeList);
+
+        int maxCount = jsonNode.get("maxCount")==null?100:jsonNode.get("maxCount").intValue();
+        eventFilterForm.setPageSize(maxCount);
+
+        String orderField = jsonNode.get("orderField")==null?"occurTime":jsonNode.get("orderField").textValue();
+        eventFilterForm.setOrderField(orderField);
+
+        String orderType = jsonNode.get("orderType")==null?"ASC":jsonNode.get("orderType").textValue();
+        if (!(orderType.equals("ASC")||orderType.equals("AESC"))){
+            orderType="ASC";
+        }
+        eventFilterForm.setOrderType(orderType);
+
+        JsonNode startTimeNode = jsonNode.get("startTime");
+        if (startTimeNode!=null){
+            eventFilterForm.setStartTime(new Date(Long.valueOf(startTimeNode.textValue())));
+        }
+        JsonNode endTimeNode = jsonNode.get("endTime");
+        if (endTimeNode!=null) {
+            eventFilterForm.setEndTime(new Date(Long.valueOf(endTimeNode.textValue())));
+        }
+
+        List<TmoEquStatusCur> tmoEquStatusCurs = modeService.getEquStatusList(eventFilterForm,0).getDatas();
+        List<EquEvent> equEvents = new ArrayList<>();
+        for (TmoEquStatusCur tmoEquStatusCur:tmoEquStatusCurs){
+            EquEvent equEvent = new EquEvent();
+            equEvent.setApplyDevice(tmoEquStatusCur.getApplyDevice());
+            equEvent.setItem(tmoEquStatusCur.getItem1());
+            equEvent.setNodeName(NodeUtils.getNodeText(tmoEquStatusCur.getNodeId()));
+            equEvent.setOccurTime(DateTimeUtil.formatDate(tmoEquStatusCur.getOccurTime()));
+            equEvent.setStatusName(tmoEquStatusCur.getStatusName()+"/"+tmoEquStatusCur.getStatusId());
+            equEvent.setStatusDesc(tmoEquStatusCur.getStatusDesc()+"/"+tmoEquStatusCur.getStatusValue());
+            equEvents.add(equEvent);
+        }
+        return Result.success(equEvents);
     }
 
     public Result getDeviceDetail(HttpServletRequest request, HttpServletResponse response){

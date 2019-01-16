@@ -35,6 +35,7 @@ public class CommandController extends BaseMultiActionController {
         methodMapping.put("/monitor/changeMode","changeMode");
         methodMapping.put("/monitor/timeSync","timeSync");
         methodMapping.put("/monitor/nodeControl","nodeControl");
+        methodMapping.put("/monitor/queryBox","queryBox");
         methodMapping.put("/monitor/refresh","refresh");
     }
 
@@ -101,5 +102,11 @@ public class CommandController extends BaseMultiActionController {
         AFCApplication.refresh();
         fileService.synResources();
         return Result.success();
+    }
+
+    //查询钱箱和票箱
+    public Result<List<CommandResult>> queryBox(HttpServletRequest request, HttpServletResponse response){
+        JsonNode jsonNode = HttpUtils.getBody(request);
+        return commandService.sendQueryBoxCommand(jsonNode.get("nodeId").longValue());
     }
 }

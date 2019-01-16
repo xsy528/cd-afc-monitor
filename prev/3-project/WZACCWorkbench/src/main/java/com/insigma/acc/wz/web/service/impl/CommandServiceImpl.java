@@ -1,8 +1,8 @@
 package com.insigma.acc.wz.web.service.impl;
 
 import com.insigma.acc.wz.define.WZCommandType;
+import com.insigma.acc.wz.define.WZDeviceType;
 import com.insigma.acc.wz.module.WZBaseLogModule;
-import com.insigma.acc.wz.module.code.WZACCLogModuleCode;
 import com.insigma.acc.wz.web.exception.ErrorCode;
 import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.acc.wz.web.service.CommandService;
@@ -17,7 +17,6 @@ import com.insigma.afc.topology.MetroNode;
 import com.insigma.afc.topology.MetroStation;
 import com.insigma.afc.workbench.rmi.CommandType;
 import com.insigma.commons.lang.PairValue;
-import com.insigma.commons.service.ILogService;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -31,8 +30,12 @@ import java.util.List;
  */
 public class CommandServiceImpl extends CommandActionHandler implements CommandService {
 
+    public CommandServiceImpl(){
+        super(false);
+    }
+
     private WZBaseLogModule logModule = new WZBaseLogModule();
-    private ILogService synLogService = logModule.getLogService(WZACCLogModuleCode.MODULE_MONITOR + "");
+//    private ILogService synLogService = logModule.getLogService(WZACCLogModuleCode.MODULE_MONITOR + "");
 
     @Override
     public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, int command){
@@ -93,7 +96,6 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
 
         name = StringUtils.defaultIfEmpty(name,"模式")+"切换命令";
 
-        List<CommandResult> commandResults;
         //先判断通信服务器连接是否正常
         try {
             commandService.alive();
@@ -103,13 +105,8 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
             }
             return Result.error(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
-        commandResults = send(null,CommandType.CMD_CHANGE_MODE, name, arg, stationIds,
-                AFCCmdLogType.LOG_MODE.shortValue());
-        if (commandResults==null){
-            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
-        }else{
-            return Result.success(commandResults);
-        }
+        return Result.success(send(null,CommandType.CMD_CHANGE_MODE, name, arg, stationIds,
+                    AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
     @Override
@@ -123,13 +120,8 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
 //            return;
 //        }
 
-        List<CommandResult> commandResults = send(null, CommandType.CMD_QUERY_MODE, "模式查询命令",
-                null, stationIds, AFCCmdLogType.LOG_MODE.shortValue());
-        if (commandResults==null){
-            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
-        }else{
-            return Result.success(commandResults);
-        }
+        return Result.success(send(null, CommandType.CMD_QUERY_MODE, "模式查询命令",
+                null, stationIds, AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
     @Override
@@ -157,13 +149,8 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
 //            return;
 //        }
 
-        List<CommandResult> commandResults = send(null, CommandType.CMD_TIME_SYNC, "时间同步命令",
-                null, stationIds, AFCCmdLogType.LOG_TIME_SYNC.shortValue());
-        if (commandResults==null){
-            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
-        }else{
-            return Result.success(commandResults);
-        }
+        return Result.success(send(null, CommandType.CMD_TIME_SYNC, "时间同步命令",
+                null, stationIds, AFCCmdLogType.LOG_TIME_SYNC.shortValue()));
     }
 
     @Override
@@ -173,13 +160,34 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
-        List<CommandResult> commandResults = send(null, WZCommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
-                null, deviceIds, command);
-        if (commandResults==null){
-            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
-        }else{
-            return Result.success(commandResults);
+        return Result.success(send(null, WZCommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
+                null, deviceIds, command));
+    }
+
+    @Override
+    public Result<List<CommandResult>> sendQueryBoxCommand(Long nodeId){
+        MetroNode metroNode = AFCApplication.getNode(nodeId);
+        if (metroNode==null||metroNode.level()!=AFCNodeLevel.SLE){
+            return Result.error(ErrorCode.NODE_NOT_EXISTS);
         }
+        MetroDevice device = (MetroDevice)metroNode;
+        List<MetroNode> ids = new ArrayList<>();
+        ids.add(device);
+        List<CommandResult> commandResults = new ArrayList<>();
+        if (device.getDeviceType() == WZDeviceType.TVM.shortValue()
+                || device.getDeviceType() == WZDeviceType.TSM.shortValue()) {
+            commandResults.addAll(send(null, CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
+                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+        }
+        if (device.getDeviceType() == WZDeviceType.TVM.shortValue()
+                || device.getDeviceType() == WZDeviceType.POST.shortValue()
+                || device.getDeviceType() == WZDeviceType.ENG.shortValue()
+                || device.getDeviceType() == WZDeviceType.EXG.shortValue()
+                || device.getDeviceType() == WZDeviceType.REG.shortValue()) {
+            commandResults.addAll(send(null, WZCommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
+                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+        }
+        return Result.success(commandResults);
     }
 
     /**

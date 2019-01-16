@@ -13,6 +13,16 @@ public class Location {
     @JsonView(NodeItem.monitor.class)
     protected int angle;
 
+    public Location(){
+
+    }
+
+    public Location(int x,int y,int angle){
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
+    }
+
     public int getX() {
         return x;
     }

@@ -20,11 +20,10 @@ public class WZACCWorkbenchWeb {
 
 		//加载配置
 		new ConfigLoadSystemInitor("config/Config.xml").init();
-
 		try {
 			new WebServer().startServer();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("web容器启动失败");
 		}
 	}
 

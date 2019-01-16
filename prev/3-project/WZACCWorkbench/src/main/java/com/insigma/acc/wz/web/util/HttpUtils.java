@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DataBindingException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -19,12 +20,13 @@ public class HttpUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpUtils.class);
 
     public static JsonNode getBody(HttpServletRequest request){
-        JsonNode jsonNode = null;
+        JsonNode jsonNode;
         try(InputStream inputStream = request.getInputStream()){
             jsonNode = JsonUtils.readObject(inputStream);
+            return jsonNode;
         }catch (IOException e){
             LOGGER.error("从请求获取jsonbody异常",e);
+            throw new DataBindingException(e);
         }
-        return jsonNode;
     }
 }

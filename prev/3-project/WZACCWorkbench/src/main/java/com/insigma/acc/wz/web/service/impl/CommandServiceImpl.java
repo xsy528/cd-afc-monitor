@@ -10,7 +10,6 @@ import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.dic.AFCCmdLogType;
 import com.insigma.afc.dic.AFCModeCode;
-import com.insigma.afc.monitor.ICommandFactory;
 import com.insigma.afc.monitor.action.CommandActionHandler;
 import com.insigma.afc.monitor.action.CommandResult;
 import com.insigma.afc.topology.MetroDevice;
@@ -34,7 +33,6 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
 
     private WZBaseLogModule logModule = new WZBaseLogModule();
     private ILogService synLogService = logModule.getLogService(WZACCLogModuleCode.MODULE_MONITOR + "");
-    private ICommandFactory commandFactory;
 
     @Override
     public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, int command){

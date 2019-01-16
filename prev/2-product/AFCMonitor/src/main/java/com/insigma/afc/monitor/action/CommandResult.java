@@ -1,11 +1,9 @@
 package com.insigma.afc.monitor.action;
 
-import org.eclipse.swt.graphics.Color;
-
-import com.insigma.afc.constant.ColorConstants;
 import com.insigma.afc.monitor.action.convertor.CmdResultConvertor;
 import com.insigma.commons.ui.anotation.ColumnView;
 import com.insigma.commons.ui.form.IColorItem;
+import org.eclipse.swt.graphics.Color;
 
 public class CommandResult implements IColorItem {
 
@@ -91,10 +89,11 @@ public class CommandResult implements IColorItem {
 	}
 
 	public Color getForeground() {
-		if (result != 0) {
-			return ColorConstants.COLOR_ERROR;
-		}
-		return ColorConstants.COLOR_NORMAL;
+		return null;
+//		if (result != 0) {
+//			return ColorConstants.COLOR_ERROR;
+//		}
+//		return ColorConstants.COLOR_NORMAL;
 	}
 
 	public short getResult() {

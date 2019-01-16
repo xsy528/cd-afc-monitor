@@ -451,37 +451,143 @@ public class MetroNodeService extends Service implements IMetroNodeService {
 		}
 	}
 
+//	@Override
+//	public void saveMetroNodes(MetroNode metroNode) {
+//		saveMetroNodes(metroNode,null);
+//	}
+
 	@Override
-	public void saveMetroNodes(List<MetroNode> metroNodes) {
-		for (MetroNode metroNode:metroNodes){
-			AFCNodeLevel level = metroNode.level();
-			switch (level){
-				case ACC:{
-					//保存ACC节点
+	public void saveMetroNodes(MetroNode metroNode,Long oldNodeId) {
+		AFCNodeLevel level = metroNode.level();
+		if (oldNodeId!=null){
+			//删除旧节点
+			delete(level,oldNodeId);
+		}
+		switch (level){
+			case ACC:{
+				//保存ACC节点
+				break;
+			}
+			case LC:{
+				//保存资源
+				saveResource(metroNode);
+				//保存节点
+				commonDAO.saveOrUpdateObj(metroNode);
+				if (oldNodeId==null) {
 					break;
 				}
-				case LC:{
-					//保存资源
-					saveResource(metroNode);
-					//保存节点
-					commonDAO.saveOrUpdateObj(metroNode);
+				//插入新节点
+				MetroLine metroLine = (MetroLine)metroNode;
+				short newLineId = metroLine.getLineID();
+				//车站节点
+				List<MetroStation> metroStations = ((MetroLine)metroNode).getSubNodes();
+				if (metroStations==null||metroStations.isEmpty()) {
 					break;
 				}
-				case SC:{
-					//保存资源
-					saveResource(metroNode);
-					//保存节点
-					commonDAO.saveOrUpdateObj(metroNode);
+				for (MetroStation metroStation:metroStations){
+					//修改车站节点id
+					//原id+(新lineId-旧lineId)*16^2
+					int stationId = metroStation.getId().getStationId();
+					MetroStationId metroStationId = metroStation.getId();
+					metroStationId.setStationId(stationId+(newLineId-oldNodeId.shortValue())*16*16);
+					metroStationId.setLineId(newLineId);
+					metroStation.setLineName(metroLine.getLineName());
+					commonDAO.saveOrUpdateObj(metroStation);
+					//设备节点
+					List<MetroDevice> metroDevices = metroStation.getSubNodes();
+					if (metroDevices==null||metroDevices.isEmpty()){
+						break;
+					}
+					for (MetroDevice metroDevice:metroDevices){
+						long deviceId = metroDevice.getId().getDeviceId();
+						MetroDeviceId metroDeviceId = metroDevice.getId();
+						metroDeviceId.setLineId(newLineId);
+						metroDeviceId.setStationId(metroStationId.getStationId());
+						//原id+(新lineId-旧lineId)*16^6
+						metroDeviceId.setDeviceId(deviceId+(newLineId-oldNodeId)*16*16*16*16*16*16);
+						metroDevice.setLineName(metroLine.getLineName());
+						commonDAO.saveOrUpdateObj(metroDevice);
+					}
+				}
+				break;
+			}
+			case SC:{
+				//保存资源
+				saveResource(metroNode);
+				//保存节点
+				commonDAO.saveOrUpdateObj(metroNode);
+				if (oldNodeId==null){
 					break;
 				}
-				case SLE:{
-					//保存节点
-					commonDAO.saveOrUpdateObj(metroNode);
+				MetroStation metroStation = (MetroStation)metroNode;
+				int newStationId = metroStation.getId().getStationId();
+				//设备节点
+				List<MetroDevice> metroDevices = metroStation.getSubNodes();
+				if (metroDevices==null||metroDevices.isEmpty()){
+					break;
 				}
+				for (MetroDevice metroDevice:metroDevices){
+					MetroDeviceId metroDeviceId = metroDevice.getId();
+					long deviceId = metroDeviceId.getDeviceId();
+					metroDeviceId.setStationId(newStationId);
+					//原id+(新lineId-旧lineId)*16^4
+					metroDeviceId.setDeviceId(deviceId+(newStationId-oldNodeId)*16*16*16*16);
+					metroDevice.setStationName(metroStation.getStationName());
+					commonDAO.saveOrUpdateObj(metroDevice);
+				}
+				break;
+			}
+			case SLE:{
+				//保存节点
+				commonDAO.saveOrUpdateObj(metroNode);
 			}
 		}
-		//刷新内存中的节点
-		AFCApplication.refresh();
+	}
+
+	@Override
+	public void delete(long nodeId) {
+		delete(AFCApplication.getNode(nodeId).level(),nodeId);
+	}
+
+	private int delete(AFCNodeLevel type, long nodeId) {
+		int resultNum = 0;
+		int deleteLcNum;
+		int deleteScNum;
+		int deleteSleNum;
+		int one;
+		try {
+			switch (type) {
+				case ACC:
+					deleteLcNum = commonDAO.execSqlUpdate("delete from TMETRO_LINE ");
+					deleteScNum = commonDAO.execSqlUpdate("delete from TMETRO_STATION ");
+					deleteSleNum = commonDAO.execSqlUpdate("delete from TMETRO_DEVICE ");
+					resultNum = deleteLcNum + deleteScNum + deleteSleNum;
+					logger.debug("删除线网id=" +nodeId+ "中所有节点，共" + resultNum + "个");
+					break;
+				case LC:
+					deleteScNum = commonDAO.execSqlUpdate("delete from TMETRO_STATION  where LINE_ID=?",nodeId);
+					deleteSleNum = commonDAO.execSqlUpdate("delete from TMETRO_DEVICE  where LINE_ID=?",nodeId);
+					one = commonDAO.execSqlUpdate("DELETE FROM TMETRO_LINE WHERE LINE_ID=?",nodeId);
+					resultNum = deleteScNum + deleteSleNum + one;
+					logger.debug("删除线路id=" + nodeId + "中所有节点，共" + resultNum + "个");
+					break;
+				case SC:
+					deleteSleNum = commonDAO.execSqlUpdate("delete from TMETRO_DEVICE  where STATION_ID=?",nodeId);
+					one = commonDAO.execSqlUpdate("DELETE FROM TMETRO_STATION WHERE STATION_ID=?",nodeId);
+					resultNum = deleteSleNum + one;
+					logger.debug("删除车站id=" + nodeId + "中所有节点，共" + resultNum + "个");
+					break;
+				case SLE:
+					one = commonDAO.execSqlUpdate("DELETE FROM TMETRO_DEVICE WHERE DEVICE_ID=?",nodeId);
+					logger.debug("删除设备id=" + nodeId + "中所有节点，共" + one + "个");
+					break;
+				default:
+					break;
+			}
+			return resultNum;
+		} catch (Exception e) {
+			throw new ApplicationException("删除子节点异常。", e);
+		}
 	}
 
 	private int deleteChildMetroNode(AFCNodeLevel type, MetroNode currentNode) {
@@ -572,6 +678,33 @@ public class MetroNodeService extends Service implements IMetroNodeService {
 		}
 	}
 
+	private void updateSubNode(AFCNodeLevel type, String name, int id) {
+		switch (type) {
+			case LC:
+				String sql1 = "update TMETRO_STATION set LINE_NAME ='" + name + "' where LINE_ID = " + id;
+				String sql2 = "update TMETRO_DEVICE set LINE_NAME ='" + name + "' where LINE_ID = " + id;
+				try {
+					commonDAO.execSqlUpdate(sql1);
+					commonDAO.execSqlUpdate(sql2);
+				} catch (OPException e) {
+					e.printStackTrace();
+				}
+				break;
+			case SC:
+				String sql3 = "update TMETRO_DEVICE set STATION_NAME ='" + name + "' where STATION_ID = " + id;
+				//			String[] strSC = new String[] { sql3 };
+				//			commonDAO.execBathUpdate(strSC);
+				try {
+					commonDAO.execSqlUpdate(sql3);
+				} catch (OPException e) {
+					e.printStackTrace();
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
 	private void updateName(AFCNodeLevel type, String name, int id) {
 		if (commonDAO == null) {
 			logger.warn("commonDAO为空，无法查询数据。请检查配置文件是否已经注入commonDAO");
@@ -609,7 +742,8 @@ public class MetroNodeService extends Service implements IMetroNodeService {
 	/**
 	 * @param currentNode
 	 */
-	private void saveResource(MetroNode currentNode) {
+	@Override
+	public void saveResource(MetroNode currentNode) {
 		if (currentNode.level() == AFCNodeLevel.SLE) {
 			return;
 		}

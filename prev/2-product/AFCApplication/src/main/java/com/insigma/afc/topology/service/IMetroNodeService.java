@@ -7,6 +7,7 @@ package com.insigma.afc.topology.service;
 
 import com.insigma.afc.topology.*;
 import com.insigma.commons.application.IService;
+import com.insigma.commons.op.OPException;
 import com.insigma.commons.ui.tree.TreeNode;
 
 import java.util.List;
@@ -100,8 +101,6 @@ public interface IMetroNodeService extends IService {
 	 * 
 	 * @param stationIDs
 	 *            车站号数组，当参数为null时表示忽略车站条件
-	 * @param deviceIDs
-	 *            设备号数组，当参数为null时表示忽略设备条件
 	 * @return 树列表
 	 */
 	List<TreeNode> getMetroTreeNode(Short[] lineIDs, Integer[] stationIDs);
@@ -111,9 +110,14 @@ public interface IMetroNodeService extends IService {
 
 	/**
 	 * 保存节点
-	 * @param metroNodes
 	 */
-	void saveMetroNodes(List<MetroNode> metroNodes);
+	void saveMetroNodes(MetroNode metroNode,Long oldNodeId);
+
+	/**
+	 * 删除节点
+	 * @param nodeId 节点id
+	 */
+	void delete(long nodeId) throws OPException;
 
 	/**
 	 * 判断节点是否存在
@@ -121,6 +125,12 @@ public interface IMetroNodeService extends IService {
 	 * @return
 	 */
 	boolean exists(MetroNode metroNode);
+
+	/**
+	 * 保存资源对象
+	 * @param currentNode
+	 */
+	void saveResource(MetroNode currentNode);
 
 	/**
 	 * @param currentNode

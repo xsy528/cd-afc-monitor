@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insigma.acc.wz.web.filter.CorsFilter;
 import com.insigma.acc.wz.web.listener.Init;
+import com.insigma.acc.wz.web.server.handler.ErrorHandler;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
@@ -57,6 +58,7 @@ public class WebServer {
         localConnector.setPort(port);
         localConnector.setReuseAddress(true);
         server.addConnector(localConnector);
+        server.setErrorHandler(new ErrorHandler());
 
         //servlet容器
         ServletContextHandler servletContextHandler = new ServletContextHandler();
@@ -81,6 +83,7 @@ public class WebServer {
         HandlerCollection handlerCollection = new HandlerCollection();
         handlerCollection.addHandler(contextHandlerCollection);
 
+        //打印请求日志
         boolean requestLogEnable = Boolean.valueOf(appConfig.get("requestLogEnable").toString());
         if (requestLogEnable) {
             //增加log
@@ -120,9 +123,11 @@ public class WebServer {
         NCSARequestLog ret = new NCSARequestLog();
 
         File logPath = new File(LOG_PATH);
+        //创建日志文件父目录
         logPath.getParentFile().mkdirs();
-
+        //设置日志文件路径
         ret.setFilename(logPath.getPath());
+        //保留10天
         ret.setRetainDays(10);
         ret.setExtended(false);
         ret.setAppend(true);

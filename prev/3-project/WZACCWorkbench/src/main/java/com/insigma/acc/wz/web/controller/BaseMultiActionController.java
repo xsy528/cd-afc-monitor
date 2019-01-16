@@ -184,7 +184,7 @@ public abstract class BaseMultiActionController extends AbstractController imple
 
         // Look at all methods in the subclass, trying to find
         // methods that are validators according to our criteria
-        Method[] methods = delegate.getClass().getMethods();
+        Method[] methods = delegate.getClass().getDeclaredMethods();
         for (int i = 0; i < methods.length; i++) {
             // We're looking for methods with given parameters.
             Method method = methods[i];

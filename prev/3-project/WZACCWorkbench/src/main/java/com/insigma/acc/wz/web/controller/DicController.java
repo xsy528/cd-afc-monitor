@@ -4,8 +4,8 @@ import com.insigma.acc.wz.web.model.vo.Result;
 import com.insigma.afc.dic.AFCDeviceType;
 import com.insigma.afc.dic.AFCModeCode;
 import com.insigma.afc.dic.DeviceStatus;
-import com.insigma.commons.lang.PairValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +31,24 @@ public class DicController extends BaseMultiActionController {
 
     //获取运营模式列表
     public Result getModeTypeList(){
-        Map<String, List<PairValue<Object,String>>> modeTree = new HashMap<>();
-        modeTree.put("正常运行模式",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_NORMAL));
-        modeTree.put("降级运行模式",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_DESCEND));
-        modeTree.put("紧急运营模式",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_URGENCY));
-        modeTree.put("列车故障模式",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_BREAKDOWN));
-        return Result.success(modeTree);
+        List<Map> data = new ArrayList<>(4);
+        Map<String,Object> groupMode1 = new HashMap<>();
+        groupMode1.put("groupName","正常运行模式");
+        groupMode1.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_NORMAL));
+        Map<String,Object> groupMode2 = new HashMap<>();
+        groupMode2.put("groupName","降级运行模式");
+        groupMode2.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_DESCEND));
+        Map<String,Object> groupMode3 = new HashMap<>();
+        groupMode3.put("groupName","紧急运营模式");
+        groupMode3.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_URGENCY));
+        Map<String,Object> groupMode4 = new HashMap<>();
+        groupMode4.put("groupName","列车故障模式");
+        groupMode4.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_BREAKDOWN));
+        data.add(groupMode1);
+        data.add(groupMode2);
+        data.add(groupMode3);
+        data.add(groupMode4);
+        return Result.success(data);
     }
 
     //获取设备状态列表

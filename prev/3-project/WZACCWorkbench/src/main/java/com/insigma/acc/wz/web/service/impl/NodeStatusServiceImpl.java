@@ -156,7 +156,7 @@ public class NodeStatusServiceImpl implements NodeStatusService {
         int imgUrl = fileService.getResourceIndex(equipment.getPicName()
                 .substring(equipment.getPicName().lastIndexOf("/")+1));
         data.put("imgUrl",imgUrl);
-        data.put("items",viewItems);
+        data.put("modules",viewItems);
         return Result.success(data);
     }
 

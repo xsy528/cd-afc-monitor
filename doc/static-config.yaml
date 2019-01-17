@@ -8,7 +8,6 @@ info:
 tags:
   - name: 获取静态配置
     description: 主要是用来AFC系统预定义的一些枚举值。比如设备类型、运行模式等。
-
 paths:
   /config/devTypeList:
     get:
@@ -17,13 +16,12 @@ paths:
       operationId: config-devTypeList
       summary: 获取系统中预定义的设备列表。
       responses:
-        200:
+        '200':
           description: 返回设备列表。
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeviceTypeList'
-         
   /config/modeTypeList:
     get:
       tags:
@@ -31,7 +29,7 @@ paths:
       operationId: config-modeTypeList
       summary: 获取系统中预定义的模式列表。
       responses:
-        200:
+        '200':
           description: 返回模式列表。
           content:
             application/json:
@@ -40,7 +38,6 @@ paths:
                 properties:
                   schema:
                     $ref: '#/components/schemas/ModeTypeList'
-                    
   /config/deviceStatusList:
     get:
       tags:
@@ -48,33 +45,26 @@ paths:
       operationId: config-deviceStatusList
       summary: 获取系统中预定义的设备状态列表。
       responses:
-        200:
+        '200':
           description: 返回模式列表。
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeviceStatusList'
-        default:
-          description: 返回模式列表。
-          content:
-            plaintext/json:
-              "数据库连接失败"          
-                    
 components:
-  schemas:       
+  schemas:
     DeviceTypeList:
       description: 系统中预定义的设备类型列表。
       type: array
       items:
         type: object
         properties:
-          value: 
+          key:
             type: integer
             description: 设备类型id，用于向服务器提交数据。
-          name:
+          value:
             type: string
             description: 设备类型名称，用于展示到用户界面。
-          
     ModeTypeList:
       description: 系统预定义的运营模式
       type: array
@@ -91,22 +81,20 @@ components:
               type: object
               description: 表示一个模式。
               properties:
-                value:
-                  type: number 
+                key:
+                  type: number
                   description: 在数据库中保存的value
-                modeName:
+                value:
                   type: string
                   description: 模式名称。比如“降级运行模式”中的“进站免检模式”、“出站免检模式”等。
-    
     DeviceStatusList:
       description: 系统预定义的设备状态列表
       type: array
       items:
         type: object
         properties:
-          value: 
+          key:
             type: number
-          name:
+          value:
             description: 正常、警告、报警、离线、停止服务、未启用等。
             type: string
- 

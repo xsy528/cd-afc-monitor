@@ -6,7 +6,21 @@ info:
   version: 1.0.0
   title: AFC监控系统前后台接口-公共结构
 paths:
-  /node/list-img-urls:
+  /file/ref:
+    get:
+      tags: 
+        - 节点管理
+      operationId: 图片引用
+      summary: 返回图片字节数组
+      responses:
+        '200':
+          description: 图片内容
+          content:
+            image/png:
+              schema:
+                description: 字节流
+                type: object
+  /file/images:
     get:
       tags:
         - 节点管理
@@ -41,6 +55,7 @@ paths:
               - editor
               - monitor
               - simple
+              - device
       responses:
         '200':
           description: 返回一个节点树，具体有哪些字段，根据请求中的mode来判断。
@@ -68,9 +83,9 @@ components:
       type: string
       enum:
         - ACC
-        - Line
-        - Station
-        - Device
+        - LC
+        - SC
+        - SLE
     NodeItem:
       description: >-
         一个节点。可以包含多个下级节点，从而构成多层树形结构，ACC-LC-SC-SLE。不包含模块。
@@ -86,7 +101,7 @@ components:
           description: 地图名称，比如“温州ACC”、“温州S1线”、“动车南站”
           type: string
         nodeId:
-          description: acc、lc、sc、device等节点的节点id。比如0x01020304是设备，0x01020000是车站。
+          description: 节点id
           type: integer
         nodeType:
           $ref: '#/components/schemas/NodeType'

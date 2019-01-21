@@ -12,6 +12,8 @@ Lorenz Maierhofer, lorenz.maierhofer@logicmindguide.com
 */
 package com.insigma.commons.ui.widgets.ktable;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -26,11 +28,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-import com.insigma.commons.log.Log;
-import com.insigma.commons.log.Logs;
 
 public abstract class KTableCellEditor {
-	protected final Log logger = Logs.getLog(getClass());
+	protected final Log logger = LogFactory.getLog(getClass());
 	protected KTableModel m_Model;
 	protected KTable m_Table;
 	protected Rectangle m_Rect;

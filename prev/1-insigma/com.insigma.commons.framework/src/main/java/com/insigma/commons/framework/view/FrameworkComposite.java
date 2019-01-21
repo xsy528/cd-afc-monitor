@@ -112,7 +112,8 @@ public class FrameworkComposite extends CompositeFrameWork {
 			if (fid == null) {
 				notDefinedFunctions.add(function);
 			} else {
-				boolean hasAuth = Application.getUser().hasFunction(fid);
+				//TODO 判断权限
+				boolean hasAuth = true;
 				if (!hasAuth) {
 					continue;
 				}
@@ -136,10 +137,9 @@ public class FrameworkComposite extends CompositeFrameWork {
 				logger.warn("function:[" + function.getTitle() + "]没有定义functionId,默认初始化该function");
 				notDefinedFunctions.add(function);
 			} else {
-				boolean hasAuth = Application.getUser().hasFunction(fid);
+				//TODO 判断权限
+				boolean hasAuth = true;
 				if (!hasAuth) {
-					logger.debug("用户:[" + Application.getUser().getUserName() + "]没有function:" + function
-							+ "的权限,忽略该function的初始化");
 					continue;
 				}
 			}

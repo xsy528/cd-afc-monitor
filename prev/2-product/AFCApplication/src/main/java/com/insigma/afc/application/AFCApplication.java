@@ -186,35 +186,6 @@ public class AFCApplication extends Application {
 		init(_nodeIdStrategy);
 	}
 
-	public static String getApplicationName() {
-		AFCConfiguration afconfig = Application.getConfig(AFCConfiguration.class);
-		return afconfig.getApplicationName();
-	}
-
-	public static String getVersion(Class<? extends Object> clazz) {
-		if (clazz == null) {
-			return "";
-		}
-		String path = clazz.getProtectionDomain().getCodeSource().getLocation().getFile();
-		try {
-			path = java.net.URLDecoder.decode(path, "UTF-8");
-			logger.debug("1:" + path);
-		} catch (java.io.UnsupportedEncodingException ex) {
-			logger.error("版本获取失败", ex);
-			return "";
-		}
-		java.io.File jarFile = new java.io.File(path);
-		String jarName = jarFile.getName();
-		int startIndex = jarName.indexOf("-") + 1;
-		int endIndex = jarName.indexOf(".jar");
-		if (startIndex != -1 && endIndex != -1) {
-			return jarName.substring(startIndex, endIndex);
-		} else {
-			return "";
-		}
-
-	}
-
 	public static AFCNodeLevel getAFCNodeType() {
 		if (afcNode == null) {
 			try {

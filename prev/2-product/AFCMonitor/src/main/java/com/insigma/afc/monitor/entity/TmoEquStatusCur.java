@@ -1,22 +1,7 @@
 package com.insigma.afc.monitor.entity;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.insigma.afc.monitor.action.convertor.EquStatusDescConvertor;
-import com.insigma.afc.monitor.action.convertor.EquStatusNameConvertor;
-import com.insigma.afc.monitor.entity.convertor.EventCtrRowColorConvertor;
-import com.insigma.afc.topology.convertor.MetroNodeConvertor;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
 
 /**
  * TmoEquStatusCur entity. 
@@ -25,7 +10,6 @@ import com.insigma.commons.ui.convert.DateTimeConvertor;
 @Entity
 @Table(name = "TMO_EQU_STATUS_CUR")
 @SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_EQU_STATUS_CUR", allocationSize = 1, initialValue = 1)
-@TableView(colorConvertor = EventCtrRowColorConvertor.class)
 public class TmoEquStatusCur implements java.io.Serializable {
 
 	private static final long serialVersionUID = -3062802443533247360L;
@@ -40,28 +24,20 @@ public class TmoEquStatusCur implements java.io.Serializable {
 
 	private Short deviceType;
 
-	@ColumnView(name = "节点名称/节点编码", sortAble = false, convertor = MetroNodeConvertor.class)
 	private Long nodeId;
 
-	//	@ColumnView(name = "状态ID")
 	private Short statusId;
 
-	@ColumnView(name = "状态名称/状态ID", sortAble = false, convertor = EquStatusNameConvertor.class)
 	private String statusName;
 
-	//	@ColumnView(name = "状态值")
 	private Short statusValue;
 
-	@ColumnView(name = "状态描述/状态值", sortAble = false, convertor = EquStatusDescConvertor.class)
 	private String statusDesc;
 
-	@ColumnView(name = "适用设备", sortAble = false)
 	private String applyDevice;
 
 	private Timestamp sysTime;
 
-	/** 发生时间 */
-	@ColumnView(name = "发生时间", sortAble = false, convertor = DateTimeConvertor.class)
 	private Timestamp occurTime;
 
 	private Short item1;

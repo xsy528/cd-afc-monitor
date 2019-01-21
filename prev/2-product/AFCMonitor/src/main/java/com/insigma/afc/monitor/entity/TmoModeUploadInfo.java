@@ -1,19 +1,11 @@
 package com.insigma.afc.monitor.entity;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.insigma.afc.entity.convertor.AFCModeCodeConvertor;
 import com.insigma.afc.topology.convertor.MetroNodeConvertor;
 import com.insigma.commons.ui.anotation.ColumnView;
 import com.insigma.commons.ui.convert.DateTimeConvertor;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * TmoModeUploadInfo entity.
@@ -33,7 +25,6 @@ public class TmoModeUploadInfo implements java.io.Serializable {
 	private Short lineId;
 	@ColumnView(name = "车站名称/车站编号", sortAble = false, convertor = MetroNodeConvertor.class)
 	private Integer stationId;
-	@ColumnView(name = "进入的模式/编号", sortAble = false, convertor = AFCModeCodeConvertor.class)
 	private Short modeCode;
 	@ColumnView(name = "模式发生时间", sortAble = false, convertor = DateTimeConvertor.class)
 	private Date modeUploadTime;

@@ -4,12 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.insigma.commons.log.Log;
-import com.insigma.commons.log.Logs;
 import com.insigma.commons.reflect.BeanUtil;
 import com.insigma.commons.ui.anotation.ColumnView;
 import com.insigma.commons.ui.anotation.View;
@@ -29,7 +29,7 @@ public class BeanTableViewer extends TableView {
 
 	private Class<?> dataClass;
 
-	private static Log logger = Logs.getLog(BeanTableViewer.class);
+	private static Log logger = LogFactory.getLog(BeanTableViewer.class);
 
 	private Object beanDataPre;
 

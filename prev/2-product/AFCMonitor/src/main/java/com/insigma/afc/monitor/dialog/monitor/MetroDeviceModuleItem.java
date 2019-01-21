@@ -1,21 +1,15 @@
 package com.insigma.afc.monitor.dialog.monitor;
 
-import com.insigma.afc.topology.convertor.DeviceModuleStatusConvertor;
-import com.insigma.commons.ui.anotation.ColumnView;
-
 /**
  * 
  * @author shenchao
  */
 public class MetroDeviceModuleItem {
 
-	@ColumnView(name = "部件简写", width = 100, sortAble = false)
 	private String moduleName;
 
-	@ColumnView(name = "部件名称", width = 150, sortAble = false)
 	private String remark;
 
-	@ColumnView(name = "状态值", width = 100, convertor = DeviceModuleStatusConvertor.class, sortAble = false)
 	private Short status;
 
 	public MetroDeviceModuleItem(String moduleName, Short status, String remark) {

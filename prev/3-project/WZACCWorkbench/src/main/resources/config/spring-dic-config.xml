@@ -11,7 +11,6 @@
 				<value>package:com/insigma/afc/opt/constant</value>
 				<value>package:com/insigma/acc/wz/define</value>
 				<value>com.insigma.commons.application.IllegalType</value>
-				<value>com.insigma.acc.wz.module.code.WZACCLogModuleCode</value>
 			</list>
 		</constructor-arg>
 	</bean>

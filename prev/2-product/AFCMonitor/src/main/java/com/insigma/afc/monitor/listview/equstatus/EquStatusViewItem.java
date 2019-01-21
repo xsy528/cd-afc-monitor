@@ -1,21 +1,16 @@
 package com.insigma.afc.monitor.listview.equstatus;
 
+import com.insigma.afc.topology.AFCNode;
+import com.insigma.commons.ui.anotation.ColumnView;
+import com.insigma.commons.ui.convert.DateTimeConvertor;
+
 import java.io.Serializable;
 import java.util.Date;
 
-import com.insigma.afc.entity.convertor.AFCDeviceStatusConvertor;
-import com.insigma.afc.monitor.entity.convertor.EquStatusRowColorConvertor;
-import com.insigma.afc.topology.AFCNode;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
-
-@TableView(colorConvertor = EquStatusRowColorConvertor.class)
 public class EquStatusViewItem extends AFCNode implements Serializable {
 
 	private boolean isOnline;
 
-	@ColumnView(name = "设备状态", convertor = AFCDeviceStatusConvertor.class, sortAble = false)
 	//0正常 1警告 2报警 4离线 0xff停止服务
 	private int status;
 

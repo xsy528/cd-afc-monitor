@@ -1,23 +1,12 @@
 package com.insigma.afc.monitor.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.insigma.afc.monitor.action.convertor.EventNameConvertor;
-import com.insigma.afc.monitor.entity.convertor.EventCtrRowColorConvertor;
 import com.insigma.afc.topology.AFCNode;
 import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
 import com.insigma.commons.util.lang.DateTimeUtil;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 事件实体
@@ -27,7 +16,6 @@ import com.insigma.commons.util.lang.DateTimeUtil;
 @Entity
 @Table(name = "TMO_EQU_EVENT")
 @SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_EQU_EVENT", allocationSize = 1, initialValue = 1)
-@TableView(colorConvertor = EventCtrRowColorConvertor.class)
 public class TmoEquEventHistory extends AFCNode implements Serializable {
 
 	/**
@@ -76,7 +64,6 @@ public class TmoEquEventHistory extends AFCNode implements Serializable {
 	private String tagName;
 
 	/** 事件值 */
-	@ColumnView(name = "事件名称/编号", convertor = EventNameConvertor.class)
 	private Integer tagId;
 
 	/** 标记值 */
@@ -94,7 +81,6 @@ public class TmoEquEventHistory extends AFCNode implements Serializable {
 	private String evtDesc;
 
 	/** 发生时间 */
-	@ColumnView(name = "发生时间", convertor = DateTimeConvertor.class)
 	private Date occurTime;
 
 	/** 事件状态： */

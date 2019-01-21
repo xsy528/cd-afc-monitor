@@ -5,15 +5,15 @@
  */
 package com.insigma.afc.initor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.insigma.afc.config.AFCConfiguration;
 import com.insigma.commons.application.Application;
 import com.insigma.commons.config.ConfigurationItem;
 import com.insigma.commons.config.IConfigurationProvider;
 import com.insigma.commons.config.NetworkConfig;
 import com.insigma.commons.config.xml.XMLConfigurationProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Ticket: <br/>

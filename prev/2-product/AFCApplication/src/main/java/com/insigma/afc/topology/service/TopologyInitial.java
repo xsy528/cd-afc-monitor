@@ -1,13 +1,5 @@
 package com.insigma.afc.topology.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.constant.ApplicationKey;
@@ -15,6 +7,13 @@ import com.insigma.afc.topology.MetroDevice;
 import com.insigma.afc.topology.MetroLine;
 import com.insigma.afc.topology.MetroStation;
 import com.insigma.commons.application.Application;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TopologyInitial {
 

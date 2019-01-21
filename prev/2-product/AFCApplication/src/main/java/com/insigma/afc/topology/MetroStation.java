@@ -1,30 +1,14 @@
 package com.insigma.afc.topology;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
-import com.insigma.afc.dic.AFCDeviceType;
-import com.insigma.afc.topology.convertor.MetroNodeStatusConvertor;
 import com.insigma.commons.reflect.ClassUtil;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.DataSource;
 import com.insigma.commons.ui.anotation.View;
 import com.insigma.commons.ui.anotation.ViewExpansion;
 import com.insigma.commons.util.SystemPropertyUtil;
+
+import javax.persistence.*;
+import java.util.*;
 
 /**
  * TmetroStation entity.
@@ -60,9 +44,6 @@ public class MetroStation extends MetroNode implements java.io.Serializable {
 
 	private String backPicName;
 
-	@View(label = "启用状态", type = "RadioBox")
-	@ColumnView(name = "启用状态", convertor = MetroNodeStatusConvertor.class)
-	@DataSource(list = { "启用", "未启用" }, values = { "0", "1" })
 	private Short status = 0;
 
 	private String remark;

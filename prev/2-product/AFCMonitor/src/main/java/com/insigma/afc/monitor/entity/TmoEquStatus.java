@@ -1,22 +1,7 @@
 package com.insigma.afc.monitor.entity;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.insigma.afc.monitor.action.convertor.EquStatusDescConvertor;
-import com.insigma.afc.monitor.action.convertor.EquStatusNameConvertor;
-import com.insigma.afc.monitor.entity.convertor.EventCtrRowColorConvertor;
-import com.insigma.afc.topology.convertor.MetroNodeConvertor;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
 
 /**
  * TmoEquStatus entity. 
@@ -25,7 +10,6 @@ import com.insigma.commons.ui.convert.DateTimeConvertor;
 @Entity
 @Table(name = "TMO_EQU_STATUS")
 @SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_EQU_STATUS", allocationSize = 1, initialValue = 1)
-@TableView(colorConvertor = EventCtrRowColorConvertor.class)
 public class TmoEquStatus implements java.io.Serializable {
 
 	// Fields
@@ -41,40 +25,25 @@ public class TmoEquStatus implements java.io.Serializable {
 
 	private Short deviceType;
 
-	@ColumnView(name = "节点名称/节点编码", convertor = MetroNodeConvertor.class, sortAble = false)
 	private Long nodeId;
 
-	//	@ColumnView(name = "状态ID")
 	private Short statusId;
 
-	@ColumnView(name = "状态名称/状态ID", convertor = EquStatusNameConvertor.class, sortAble = false)
 	private String statusName;
 
-	//	@ColumnView(name = "状态值")
 	private Short statusValue;
 
-	@ColumnView(name = "状态描述/状态值", convertor = EquStatusDescConvertor.class, sortAble = false)
 	private String statusDesc;
 
-	//	@ColumnView(name = "是否上送 ACC/LCC", convertor = UploadLcOrACCConvertor.class)
-	//	private Short uploadLccoracc;
-
-	//	@ColumnView(name = "适用设备")
 	private String applyDevice;
 
 	private Timestamp sysTime;
 
-	/** 发生时间 */
-	@ColumnView(name = "发生时间", convertor = DateTimeConvertor.class, sortAble = false)
 	private Timestamp occurTime;
 
-	//item1 作为状态等级使用
 	private Short item1;
 	private Short item2;
 
-	// Constructors
-
-	/** default constructor */
 	public TmoEquStatus() {
 	}
 

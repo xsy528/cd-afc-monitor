@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.widgets.Composite;
 
-import com.insigma.commons.log.Log;
-import com.insigma.commons.log.Logs;
 import com.insigma.commons.reflect.BeanUtil;
 import com.insigma.commons.ui.anotation.data.AnnotationData;
 import com.insigma.commons.ui.anotation.data.AnnotationDataParse;
@@ -55,7 +55,7 @@ public class WidgetsFactory {
 
 	private List<IWidgetProvider> widgetProviders;
 
-	private Log logger = Logs.getLog(WidgetsFactory.class);
+	private Log logger = LogFactory.getLog(WidgetsFactory.class);
 
 	public static WidgetsFactory getInstance() {
 		return instance;

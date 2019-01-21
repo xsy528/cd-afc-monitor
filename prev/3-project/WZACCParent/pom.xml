@@ -20,8 +20,6 @@
     <modules>
         <module>../WZACCApplication</module>
         <module>../WZACCWorkbench</module>
-        <module>../WZACCXML</module>
-        <module>../WZMonitor</module>
     </modules>
 
     <dependencyManagement>
@@ -33,17 +31,7 @@
             </dependency>
             <dependency>
                 <groupId>com.insigma.product</groupId>
-                <artifactId>AFCODMonitor</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.insigma.product</groupId>
                 <artifactId>AFCApplication</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.insigma.product</groupId>
-                <artifactId>AFCUI</artifactId>
                 <version>1.0</version>
             </dependency>
             <dependency>

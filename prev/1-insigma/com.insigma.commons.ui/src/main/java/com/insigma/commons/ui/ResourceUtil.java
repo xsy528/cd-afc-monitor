@@ -7,7 +7,6 @@ import java.io.File;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.insigma.commons.log.Logs;
 import com.insigma.commons.util.SystemPropertyUtil;
 import com.swtdesigner.SWTResourceManager;
 
@@ -32,7 +31,6 @@ public class ResourceUtil {
 		if (rootFilePath.exists()) {
 			return SWTResourceManager.getImage(ROOT_RESOURCE_PATH + "/" + imageName);
 		} else {
-			Logs.get().warn(rootFilePath + "资源文件不存在，取默认图片");
 			return SWTResourceManager.getImage(ResourceUtil.class, "images/defaultPIC.png");
 		}
 

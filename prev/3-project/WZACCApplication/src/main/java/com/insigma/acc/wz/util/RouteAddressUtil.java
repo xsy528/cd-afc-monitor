@@ -1,23 +1,14 @@
 package com.insigma.acc.wz.util;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.insigma.acc.wz.define.WZDeviceType;
 import com.insigma.acc.wz.define.WZFTPFileType;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.dic.AFCDeviceFileType;
 import com.insigma.afc.topology.INodeIdStrategy;
 import com.insigma.commons.application.Application;
-import com.insigma.commons.application.exception.ServiceException;
-import com.insigma.commons.lang.PairValue;
-import com.insigma.commons.util.lang.DateTimeUtil;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 /**
  * Ticket:* <b> nodeId的转换策略</b><br/>
@@ -231,116 +222,6 @@ public class RouteAddressUtil implements INodeIdStrategy {
 			resultString = originalString + tempString;
 		}
 		return resultString;
-	}
-
-	public static void main(final String[] args) {
-
-		Timestamp s = new Timestamp((1263082625000L));
-		System.out.println(s);
-
-		Date date = DateTimeUtil.getDateFromLong(1263082625000L);
-		System.out.println(date);
-
-		System.out.println(System.currentTimeMillis());
-		RouteAddressUtil util = new RouteAddressUtil();
-		long address = 19992833; //01311101
-		System.out.println("设备");
-		//TODO
-		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-
-		address = 19988480; //01310000     
-		System.out.println("车站");
-		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-
-		address = 16777216; //01000000 
-		System.out.println("线路");
-		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-
-		address = 0;//0
-		System.out.println("ACC");
-		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-
-		//		System.out.println("getNodeType:" + String.format("%08x", util.getNodeId(305)));
-
-		//		
-		//		System.out.println(System.currentTimeMillis());
-		//		RouteAddressUtil util = new RouteAddressUtil();
-		//		long address = 19992833;  //01311101
-		//		System.out.println("设备");
-		//		System.out.println(getAddressType(address));
-		//		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		//		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		//		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		//		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		//		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		//		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		//		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		//		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-		//
-		//		address = 19988480; //01310000          16909056
-		//		System.out.println("车站");
-		//		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		//		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		//		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		//		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		//		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		//		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		//		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		//		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-		//
-		//		address = 16777728; //01000000 
-		//		System.out.println("线路");
-		//		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		//		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		//		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		//		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		//		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		//		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		//		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		//		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-		//
-		//		address = 256;//0
-		//		System.out.println("ACC");
-		//		System.out.println("AddressType:" + String.format("%08x", getAddressType(address)));
-		//		System.out.println("getAddress:" + String.format("%08x", getAddress(address)));
-		//		System.out.println("getFatherNode:" + String.format("%08x", util.getFatherNode(address)));
-		//		System.out.println("getNodeId:" + String.format("%08x", util.getNodeId(address)));
-		//		System.out.println("getStationId:" + String.format("%04x", util.getStationId(address)));
-		//		System.out.println("getLineId:" + String.format("%02x", util.getLineId(address)));
-		//		System.out.println("getNodeLevel:" + String.format("%08x", util.getNodeLevel(address).getStatusCode()));
-		//		System.out.println("getNodeType:" + String.format("%08x", util.getNodeType(address)));
-		//		
-		//		
-		//		
-
 	}
 
 	//节点号由线路+车站+设备类型+设备ID 组成

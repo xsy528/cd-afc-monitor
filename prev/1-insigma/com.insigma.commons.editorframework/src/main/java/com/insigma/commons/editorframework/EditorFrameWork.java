@@ -61,17 +61,7 @@ public class EditorFrameWork extends Composite {
 
 	private ToolBar toolBar;
 
-	private List<Action> actions;
-
-	private int[] leftRightW = new int[] { 15, 85 };
-
-	private int[] middleRightW = new int[] { 85, 15 };
-
-	private int[] upDownW = new int[] { 85, 15 };
-
-	private ToolItemSelection toolItemSelection = new ToolItemSelection();
-
-	private List<PeriodicalTask> tasks = new ArrayList<PeriodicalTask>();
+	private List<PeriodicalTask> tasks = new ArrayList<>();
 	private MinimizeButtonContainer leftBtn;
 	private MinimizeButtonContainer rightBtn;
 
@@ -90,50 +80,11 @@ public class EditorFrameWork extends Composite {
 		}
 	}
 
-	public class ActionPeriodicalTask extends PeriodicalTask {
-
-		private Action action;
-
-		public ActionPeriodicalTask(Action action) {
-			this.action = action;
-		}
-
-		@Override
-		public void execute() {
-			EditorFrameWork frameWork = EditorFrameWork.this;
-			if (action != null && !frameWork.isDisposed()) {
-				ActionContext context = new ActionContext(action);
-				context.setFrameWork(frameWork);
-				action.perform(context);
-			}
-		}
-
-	}
-
 	public void addRefreshView(FrameWorkView view, int interval) {
 		RefreshPeriodicalTask task = new RefreshPeriodicalTask(view);
 		task.setInterval(interval);
 		tasks.add(task);
 		task.start();
-	}
-
-	public void addScheduleAction(Action action, int interval) {
-		ActionPeriodicalTask task = new ActionPeriodicalTask(action);
-		task.setInterval(interval);
-		tasks.add(task);
-		task.start();
-	}
-
-	public void cancelSchedule(Action action) {
-		for (PeriodicalTask task : tasks) {
-			if (task instanceof ActionPeriodicalTask) {
-				ActionPeriodicalTask at = (ActionPeriodicalTask) task;
-				if (at.action.equals(action)) {
-					task.cancel();
-				}
-			}
-		}
-
 	}
 
 	public void cancelScheduleAll() {
@@ -146,72 +97,6 @@ public class EditorFrameWork extends Composite {
 	public void schedule() {
 		for (PeriodicalTask task : tasks) {
 			task.start();
-		}
-	}
-
-	/*重新调度*/
-	public void reschedule() {
-		for (PeriodicalTask task : tasks) {
-			task.cancel();
-		}
-		for (PeriodicalTask task : tasks) {
-			task.run();
-		}
-	}
-
-	public class ToolItemSelection extends SelectionAdapter {
-		public void widgetSelected(SelectionEvent arg0) {
-			if (arg0.widget instanceof ToolItem) {
-				ToolItem item = (ToolItem) arg0.widget;
-				if (item.getData() != null && item.getData() instanceof Action) {
-					final Action action = ((Action) item.getData());
-					action.setFrameWork(EditorFrameWork.this);
-
-					if (action.showProgress) {
-						Action innerAction = new Action("showProgress");
-						innerAction.setShowProgressText(action.showProgressText);
-						innerAction.setHandler(new ActionHandlerAdapter() {
-							@Override
-							public void perform(final ActionContext context) {
-								action.perform(context);
-							}
-						});
-						ProgressBarTaskManager taskManager = new ProgressBarTaskManager();
-						taskManager.submit(innerAction);
-					} else {
-						ActionContext context = new ActionContext(action);
-						context.setFrameWork(EditorFrameWork.this);
-						action.perform(context);
-					}
-					updateToolBar(toolBar);
-					// updateToolAction(action, item);
-				}
-			}
-			if (arg0.widget instanceof MenuItem) {
-				MenuItem item = (MenuItem) arg0.widget;
-				if (item.getData() != null && item.getData() instanceof Action) {
-					final Action action = ((Action) item.getData());
-					action.setFrameWork(EditorFrameWork.this);
-
-					if (action.showProgress) {
-						Action innerAction = new Action("showProgress");
-						innerAction.setHandler(new ActionHandlerAdapter() {
-							@Override
-							public void perform(final ActionContext context) {
-								action.perform(context);
-							}
-						});
-						ProgressBarTaskManager taskManager = new ProgressBarTaskManager();
-						taskManager.submit(innerAction);
-					} else {
-						ActionContext context = new ActionContext(action);
-						context.setFrameWork(EditorFrameWork.this);
-						action.perform(context);
-					}
-
-					updateMenu(item.getParent());
-				}
-			}
 		}
 	}
 
@@ -264,147 +149,11 @@ public class EditorFrameWork extends Composite {
 		schedule();
 	}
 
-	//	private boolean checkFunction(FrameWorkView view) {
-	//		{
-	//			// 权限验证
-	//			String fid = view.getFunctionID();
-	//			if (fid == null) {
-	//				logger.warn("view:[" + view.getText()
-	//						+ "]没有定义functionId，默认初始化该view");
-	//				// continue;
-	//			} else {
-	//				boolean hasAuth = Application.getUser().hasFunction(fid);
-	//				if (!hasAuth) {
-	//					logger.debug("用户：[" + Application.getUser().getUserName()
-	//							+ "]没有view:" + view + "的权限,忽略该view的初始化");
-	//					if (view != null && !view.isDisposed()) {
-	//						view.dispose();
-	//					}
-	//					return false;
-	//				}
-	//			}
-	//		}
-	//		return true;
-	//	}
-
-	public void addView(FrameWorkView view) {
-		addView(view, SWT.LEFT);
-	}
-
-	public void addView(String name, FrameWorkView view, int pos) {
-		namedViews.put(name, view);
-		addView(view, pos);
-		Action refreshAction = view.getRefreshAction();
-		if (refreshAction != null) {
-			refreshAction.setFrameWork(this);
-			ActionContext context = new ActionContext(refreshAction);
-			context.setFrameWork(EditorFrameWork.this);
-			refreshAction.perform(context);
-		}
-	}
-
-	public void addView(FrameWorkView view, int pos) {
-		switch (pos) {
-		case SWT.LEFT:
-			leftfolder.addView(view);
-			leftRight.setWeights(leftRightW);
-			break;
-		case SWT.RIGHT:
-			rightfolder.addView(view);
-			middleRight.setWeights(middleRightW);
-			break;
-		case SWT.BOTTOM:
-			upDown.setWeights(upDownW);
-			bottomfolder.addView(view);
-			break;
-		case SWT.CENTER:
-			editor.addView(view);
-			break;
-		}
-		view.setFrameWork(this);
-		views.put(view.getClass(), view);
-		if (view.getRefreshInterval() != 0) {
-			addRefreshView(view, view.getRefreshInterval());
-		}
-	}
-
-	public FrameWorkView getView(String name) {
-		if (namedViews.containsKey(name)) {
-			return namedViews.get(name);
-		}
-		return null;
-	}
-
 	public FrameWorkView getView(Class<?> id) {
 		if (views.containsKey(id)) {
 			return views.get(id);
 		}
 		return null;
-	}
-
-	public List<Action> getActions() {
-		return actions;
-	}
-
-	public void setActions(List<Action> actions) {
-		this.actions = actions;
-		updateToolBar(toolBar, actions);
-	}
-
-	public void updateToolBar(ToolBar toolbar, List<Action> actions) {
-
-		for (int i = 0; i < toolbar.getItemCount(); i++) {
-			toolbar.getItem(0).dispose();
-		}
-		// 构建工具栏
-		for (int i = 0; i < actions.size(); i++) {
-			Action action = actions.get(i);
-			{
-				// 权限验证
-				String fid = action.getID();
-				if (fid == null) {
-					logger.warn("action:[" + action.getName() + "]没有定义functionId，默认初始化该action");
-					// continue;
-				} else {
-					boolean hasAuth = Application.getUser().hasFunction(fid);
-					if (!hasAuth) {
-						logger.debug("用户：[" + Application.getUser().getUserName() + "]没有action:" + action
-								+ "的权限,忽略该action的初始化");
-						continue;
-					}
-				}
-			}
-			// 多级子项
-			if (action.getItems().size() != 0) {
-				final ToolItem item = new ToolItem(toolbar, SWT.DROP_DOWN);
-
-				final Menu menu = new Menu(toolbar);
-				for (Action subAction : action.getItems()) {
-					MenuItem mitem = new MenuItem(menu, SWT.CHECK);
-					mitem.setText(subAction.getName());
-					mitem.setData(subAction);
-					mitem.setSelection(subAction.isChecked());
-					mitem.addSelectionListener(toolItemSelection);
-				}
-				item.addListener(SWT.Selection, new Listener() {
-					public void handleEvent(Event event) {
-						if (event.detail == SWT.ARROW) {
-							Rectangle rect = item.getBounds();
-							Point pt = new Point(rect.x, rect.y + rect.height);
-							pt = toolBar.toDisplay(pt);
-							menu.setLocation(pt.x, pt.y);
-							menu.setVisible(true);
-						}
-					}
-				});
-				item.setData(action);
-			} else {
-				final ToolItem item = new ToolItem(toolbar, SWT.NONE);
-				item.addSelectionListener(toolItemSelection);
-				item.setData(action);
-			}
-		}
-		updateToolBar(toolbar);
 	}
 
 	protected void updateToolBar(ToolBar toolbar) {
@@ -430,81 +179,11 @@ public class EditorFrameWork extends Composite {
 		item.setEnabled(action.IsEnable());
 	}
 
-	public void updateMenu(Menu menu) {
-		for (MenuItem item : menu.getItems()) {
-			Action action = (Action) item.getData();
-			updateMenuItem(action, item);
-		}
-	}
-
-	protected void updateMenuItem(Action action, MenuItem item) {
-		if (action.getName() != null) {
-			item.setText(action.getName());
-		}
-		if (action.getImage() != null) {
-			item.setImage(SWTResourceManager.getImage(action.getClass(), action.getImage()));
-		}
-		item.setSelection(action.isChecked());
-	}
-
-	public void toggleView(int view, boolean isViewLeft) {
-		switch (view) {
-		case SWT.LEFT:
-			if (leftRight.getWeights()[0] == 0 && isViewLeft) {
-				leftRight.setWeights(leftRightW);
-			} else {
-				leftRightW = leftRight.getWeights();
-				leftRight.setWeights(new int[] { 0, 100 });
-			}
-			break;
-		case SWT.RIGHT:
-			if (middleRight.getWeights()[1] == 0) {
-				middleRight.setWeights(middleRightW);
-			} else {
-				middleRightW = middleRight.getWeights();
-				middleRight.setWeights(new int[] { 100, 0 });
-			}
-			break;
-		case SWT.BOTTOM:
-			if (upDown.getWeights()[1] == 0) {
-				upDown.setWeights(upDownW);
-			} else {
-				upDownW = upDown.getWeights();
-				upDown.setWeights(new int[] { 100, 0 });
-			}
-			break;
-		}
-	}
-
 	public Collection<FrameWorkView> getViews() {
 		List<FrameWorkView> _views = new ArrayList<FrameWorkView>();
 		_views.addAll(this.views.values());
 		_views.addAll(namedViews.values());
 		return _views;
-	}
-
-	public int[] getMiddleRightW() {
-		return middleRightW;
-	}
-
-	public void setMiddleRightW(int[] middleRightW) {
-		this.middleRightW = middleRightW;
-	}
-
-	public int[] getUpDownW() {
-		return upDownW;
-	}
-
-	public void setUpDownW(int[] upDownW) {
-		this.upDownW = upDownW;
-	}
-
-	public int[] getLeftRightW() {
-		return leftRightW;
-	}
-
-	public void setLeftRightW(int[] leftRightW) {
-		this.leftRightW = leftRightW;
 	}
 
 	@Override

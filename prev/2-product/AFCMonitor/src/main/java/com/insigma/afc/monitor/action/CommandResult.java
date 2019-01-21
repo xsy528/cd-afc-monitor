@@ -1,6 +1,5 @@
 package com.insigma.afc.monitor.action;
 
-import com.insigma.afc.monitor.action.convertor.CmdResultConvertor;
 import com.insigma.commons.ui.anotation.ColumnView;
 import com.insigma.commons.ui.form.IColorItem;
 import org.eclipse.swt.graphics.Color;
@@ -22,7 +21,6 @@ public class CommandResult implements IColorItem {
 
 	private short result;
 
-	@ColumnView(name = "命令结果", convertor = CmdResultConvertor.class)
 	private String cmdResult;
 
 	@ColumnView(name = "发送时间")

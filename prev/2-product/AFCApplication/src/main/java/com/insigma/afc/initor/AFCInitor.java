@@ -5,10 +5,9 @@
  */
 package com.insigma.afc.initor;
 
+import com.insigma.commons.ui.InitialThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.insigma.commons.ui.InitialThread;
 
 /**
  * Ticket: <br/>

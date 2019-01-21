@@ -1,21 +1,12 @@
 package com.insigma.afc.monitor.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.insigma.afc.monitor.action.convertor.EventNameConvertor;
-import com.insigma.afc.topology.convertor.MetroNodeConvertor;
 import com.insigma.commons.ui.anotation.ColumnView;
 import com.insigma.commons.ui.convert.DateTimeConvertor;
 import com.insigma.commons.util.lang.DateTimeUtil;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 事件实体
@@ -64,11 +55,9 @@ public class TmoEquEvent implements Serializable {
 	public static final short SET_FLAG = 1;
 
 	/** 事件ID */
-	@ColumnView(name = "事件名称/编号", convertor = EventNameConvertor.class, width = 200, sortAble = false)
 	private Long eventId;
 
 	/** 节点序号 */
-	@ColumnView(name = "节点名称/节点编码", convertor = MetroNodeConvertor.class, width = 200, sortAble = false)
 	private Long nodeId;
 
 	/** 线路号 */

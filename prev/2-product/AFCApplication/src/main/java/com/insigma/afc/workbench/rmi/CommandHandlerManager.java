@@ -1,12 +1,12 @@
 package com.insigma.afc.workbench.rmi;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.insigma.afc.topology.MetroNode;
 import com.insigma.commons.application.IService;
 import com.insigma.commons.spring.ServiceWireHelper;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CommandHandlerManager implements IService {
 

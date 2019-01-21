@@ -1,8 +1,6 @@
 package com.insigma.afc.monitor.search;
 
-import com.insigma.afc.monitor.entity.convertor.ModeBroadcastRowColorConvertor;
 import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
 
 /**
  * 模式广播查询
@@ -10,7 +8,6 @@ import com.insigma.commons.ui.anotation.TableView;
  * @author CaiChunye
  */
 
-@TableView(colorConvertor = ModeBroadcastRowColorConvertor.class)
 public class TmoModeBroadcastViewItem {
 
 	private Long id;

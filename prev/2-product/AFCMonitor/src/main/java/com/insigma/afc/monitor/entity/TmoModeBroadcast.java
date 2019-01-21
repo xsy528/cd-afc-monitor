@@ -1,22 +1,12 @@
 package com.insigma.afc.monitor.entity;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.insigma.afc.entity.convertor.AFCModeCodeConvertor;
-import com.insigma.afc.monitor.entity.convertor.BroadcastRowColorConvertor;
 import com.insigma.afc.topology.AFCNode;
 import com.insigma.afc.topology.convertor.MetroNodeConvertor;
 import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
 import com.insigma.commons.ui.convert.DateTimeConvertor;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * TmoModeBroadcast entity.
@@ -26,7 +16,6 @@ import com.insigma.commons.ui.convert.DateTimeConvertor;
 @Entity
 @Table(name = "TMO_MODE_BROADCAST")
 @SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_MODE_BROADCAST", allocationSize = 1, initialValue = 1)
-@TableView(colorConvertor = BroadcastRowColorConvertor.class)
 public class TmoModeBroadcast extends AFCNode implements java.io.Serializable {
 
 	private static final long serialVersionUID = -2016157168440972766L;
@@ -38,7 +27,6 @@ public class TmoModeBroadcast extends AFCNode implements java.io.Serializable {
 	@ColumnView(name = "模式上传源车站/编号", convertor = MetroNodeConvertor.class, sortAble = false)
 	protected int stationId;
 
-	@ColumnView(name = "模式/编号", convertor = AFCModeCodeConvertor.class, sortAble = false)
 	private Short modeCode;
 
 	@ColumnView(name = "模式广播时间", convertor = DateTimeConvertor.class, sortAble = false)

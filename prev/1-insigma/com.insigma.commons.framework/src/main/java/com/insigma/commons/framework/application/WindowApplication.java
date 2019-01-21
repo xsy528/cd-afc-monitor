@@ -11,16 +11,15 @@
  */
 package com.insigma.commons.framework.application;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-
 import com.insigma.commons.application.Application;
 import com.insigma.commons.framework.view.FrameworkWindow;
 import com.insigma.commons.framework.view.dialog.confirm.ExitConfirmDialog;
 import com.insigma.commons.ui.MessageForm;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class WindowApplication extends Application {
 
@@ -33,17 +32,17 @@ public class WindowApplication extends Application {
 		return uiplatForm;
 	}
 
-	public static void setUiplatForm(UIPlatForm uiplatForm) {
-		WindowApplication.uiplatForm = uiplatForm;
-	}
+//	public static void setUiplatForm(UIPlatForm uiplatForm) {
+//		WindowApplication.uiplatForm = uiplatForm;
+//	}
 
 	public static FrameworkWindow getFrameworkWindow() {
 		return frameworkWindow;
 	}
 
-	public static void setFrameworkWindow(FrameworkWindow frameworkWindow) {
-		WindowApplication.frameworkWindow = frameworkWindow;
-	}
+//	public static void setFrameworkWindow(FrameworkWindow frameworkWindow) {
+//		WindowApplication.frameworkWindow = frameworkWindow;
+//	}
 
 	public static void addWindowCloseListener(WindowCloseListener listener) {
 		listeners.add(listener);

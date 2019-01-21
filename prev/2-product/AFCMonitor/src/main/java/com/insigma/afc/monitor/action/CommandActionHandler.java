@@ -8,18 +8,15 @@ import com.insigma.afc.topology.MetroDevice;
 import com.insigma.afc.topology.MetroLine;
 import com.insigma.afc.topology.MetroNode;
 import com.insigma.afc.topology.MetroStation;
-import com.insigma.afc.ui.dialog.PWDDialog;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.workbench.rmi.ICommandService;
 import com.insigma.commons.application.Application;
-import com.insigma.commons.application.IUser;
 import com.insigma.commons.editorframework.ActionContext;
 import com.insigma.commons.editorframework.ActionHandlerAdapter;
 import com.insigma.commons.service.ICommonDAO;
 import com.insigma.commons.spring.Autowire;
 import com.insigma.commons.thread.EnhancedThread;
 import com.insigma.commons.util.lang.DateTimeUtil;
-import org.eclipse.swt.widgets.Display;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -110,7 +107,8 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 			int result = AFCCmdResultType.SEND_FAILED;
 			String resultDesc = null;
 			try {
-				CmdHandlerResult command = commandService.command(id, Application.getUser().getUserID(),
+				String userId = "0";
+				CmdHandlerResult command = commandService.command(id, userId,
 						AFCApplication.getAFCNode().id(), arg, node);
 				Serializable returnValue = command.returnValue;
 				if (returnValue != null && returnValue instanceof Integer) {
@@ -146,23 +144,6 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 		}
 
 		return orderResulsts;
-	}
-
-	public boolean authority() {
-		String uid = "";
-		IUser user = Application.getUser();
-		if (user != null) {
-			uid = user.getUserID();
-		}
-
-		PWDDialog pwdDialog = new PWDDialog(Display.getDefault().getActiveShell(), uid);
-		pwdDialog.setPwdFocus();
-		Boolean success = (Boolean) pwdDialog.open();
-		if (success == null || !success) {
-			return false;
-		}
-
-		return true;
 	}
 
 	public CommandResult save(final MetroNode node, String command, final Object arg, final int result,
@@ -217,7 +198,8 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 		}
 
 		tmoCmdResult.setUploadStatus((short) 0);
-		tmoCmdResult.setOperatorId(Application.getUser().getUserID());
+		//操作员id
+		//tmoCmdResult.setOperatorId(Application.getUser().getUserID());
 		tmoCmdResult.setCmdResult((short) result);
 		tmoCmdResult.setRemark(resultDesc);
 		tmoCmdResult.setCmdType(cmdType);

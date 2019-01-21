@@ -11,8 +11,17 @@
  */
 package com.insigma.commons.framework.view;
 
-import java.lang.reflect.Constructor;
-
+import com.insigma.commons.framework.Action;
+import com.insigma.commons.framework.IResponseDisplayer;
+import com.insigma.commons.framework.Response;
+import com.insigma.commons.framework.action.FunctionAction;
+import com.insigma.commons.framework.application.Module;
+import com.insigma.commons.framework.application.StatusPage;
+import com.insigma.commons.framework.application.UIPlatForm;
+import com.insigma.commons.framework.application.WindowApplication;
+import com.insigma.commons.framework.extend.UserModule;
+import com.insigma.commons.ui.control.StatusBar;
+import com.insigma.commons.ui.widgets.Shell;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -25,17 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import com.insigma.commons.framework.Action;
-import com.insigma.commons.framework.IResponseDisplayer;
-import com.insigma.commons.framework.Response;
-import com.insigma.commons.framework.action.FunctionAction;
-import com.insigma.commons.framework.application.Module;
-import com.insigma.commons.framework.application.StatusPage;
-import com.insigma.commons.framework.application.UIPlatForm;
-import com.insigma.commons.framework.application.WindowApplication;
-import com.insigma.commons.framework.extend.UserModule;
-import com.insigma.commons.ui.control.StatusBar;
-import com.insigma.commons.ui.widgets.Shell;
+import java.lang.reflect.Constructor;
 
 public abstract class FrameworkWindow extends Shell implements IResponseDisplayer {
 
@@ -133,11 +132,11 @@ public abstract class FrameworkWindow extends Shell implements IResponseDisplaye
 		return composite;
 	}
 
-	public void setPlatForm(UIPlatForm platForm) {
-		this.platForm = platForm;
-		WindowApplication.setUiplatForm(platForm);
-		WindowApplication.setFrameworkWindow(this);
-	}
+//	public void setPlatForm(UIPlatForm platForm) {
+//		this.platForm = platForm;
+//		WindowApplication.setUiplatForm(platForm);
+//		WindowApplication.setFrameworkWindow(this);
+//	}
 
 	protected void createStatusBar() {
 		((GridLayout) statusBar.getLayout()).numColumns = platForm.getStatusPages().size() * 2;

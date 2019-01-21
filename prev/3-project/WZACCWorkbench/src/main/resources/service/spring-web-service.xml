@@ -6,43 +6,43 @@
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
 
-	<bean id="fileController" name="/file/**" class="com.insigma.acc.wz.web.controller.FileController">
+	<bean id="fileController" name="/file/**" class="com.insigma.acc.monitor.controller.FileController">
 		<constructor-arg index="0" ref="fileService"/>
 	</bean>
 
-	<bean id="nodeController" name="/node/list/*" class="com.insigma.acc.wz.web.controller.NodeTreeController">
+	<bean id="nodeController" name="/node/list/*" class="com.insigma.acc.monitor.controller.NodeTreeController">
 		<constructor-arg index="0" ref="nodeService"/>
 	</bean>
 
-	<bean id="nodeStatusController" name="/monitor/query/*" class="com.insigma.acc.wz.web.controller.NodeStatusController">
+	<bean id="nodeStatusController" name="/monitor/query/*" class="com.insigma.acc.monitor.controller.NodeStatusController">
 		<constructor-arg index="0" ref="metroNodeStatusService"/>
 		<constructor-arg index="1" ref="wzmodeService"/>
 		<constructor-arg index="2" ref="nodeStatusService"/>
 	</bean>
 
-	<bean id="nodeManagerController" name="/editor/**" class="com.insigma.acc.wz.web.controller.NodeManagerController">
+	<bean id="nodeManagerController" name="/editor/**" class="com.insigma.acc.monitor.controller.NodeManagerController">
 		<constructor-arg index="0" ref="fileService"/>
 		<constructor-arg index="1" ref="metroNodeService"/>
 	</bean>
 
-	<bean id="commandController" name="/monitor/*" class="com.insigma.acc.wz.web.controller.CommandController">
+	<bean id="commandController" name="/monitor/*" class="com.insigma.acc.monitor.controller.CommandController">
 		<constructor-arg index="0" ref="commandService"/>
 		<constructor-arg index="1" ref="fileService"/>
 	</bean>
 
-	<bean id="monitorConfigController" name="/monitor/config/*" class="com.insigma.acc.wz.web.controller.MonitorConfigController">
+	<bean id="monitorConfigController" name="/monitor/config/*" class="com.insigma.acc.monitor.controller.MonitorConfigController">
 		<constructor-arg index="0" ref="monitorConfigService"/>
 	</bean>
 
-	<bean id="DicController" name="/config/*" class="com.insigma.acc.wz.web.controller.DicController"></bean>
+	<bean id="DicController" name="/config/*" class="com.insigma.acc.monitor.controller.DicController"></bean>
 
-	<bean id="monitorConfigService" class="com.insigma.acc.wz.web.service.impl.MonitorConfigServiceImpl">
+	<bean id="monitorConfigService" class="com.insigma.acc.monitor.service.impl.MonitorConfigServiceImpl">
 		<property name="logSysService" ref="syncLogService"/>
 	</bean>
 
-	<bean id="commandService" class="com.insigma.acc.wz.web.service.impl.CommandServiceImpl"></bean>
+	<bean id="commandService" class="com.insigma.acc.monitor.service.impl.CommandServiceImpl"></bean>
 
-	<bean id="nodeStatusService" class="com.insigma.acc.wz.web.service.impl.NodeStatusServiceImpl">
+	<bean id="nodeStatusService" class="com.insigma.acc.monitor.service.impl.NodeStatusServiceImpl">
 		<property name="commonDAO" ref="commonDAO"/>
 		<property name="iDeviceModuleFactory" ref="WZDeviceModuleFactoryImpl"/>
 		<property name="statusService" ref="metroNodeStatusService"/>
@@ -50,11 +50,11 @@
 		<property name="monitorService" ref="monitorService"/>
 	</bean>
 
-	<bean id="nodeService" class="com.insigma.acc.wz.web.service.impl.NodeServiceImpl">
+	<bean id="nodeService" class="com.insigma.acc.monitor.service.impl.NodeServiceImpl">
 		<property name="fileService" ref="fileService"/>
 	</bean>
 
-	<bean id="fileService" class="com.insigma.acc.wz.web.service.impl.FileServiceImpl">
+	<bean id="fileService" class="com.insigma.acc.monitor.service.impl.FileServiceImpl">
 		<property name="resourceService" ref="resourceService"/>
 		<property name="commonDAO" ref="commonDAO"/>
 	</bean>

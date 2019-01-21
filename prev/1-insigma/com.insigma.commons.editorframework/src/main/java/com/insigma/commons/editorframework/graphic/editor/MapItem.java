@@ -40,8 +40,6 @@ public class MapItem {
 	// jfq，该列表有两个元素，items[0]是ImageItem，items[1]是TextItem
 	private List<GraphicItem> items;// 界面渲染的基本图元
 
-	// private List<GraphicItem> orgItems = new ArrayList<GraphicItem>();
-
 	private List<MapItem> mapItems;
 
 	private Action selectionAction;

@@ -1,45 +1,23 @@
 package com.insigma.commons.op;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Serializable;
-import java.sql.BatchUpdateException;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import org.apache.log4j.Logger;
-import org.hibernate.*;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-
 import com.insigma.commons.exception.ApplicationException;
 import com.insigma.commons.io.CSVReader;
 import com.insigma.commons.io.CSVWriter;
 import com.insigma.commons.io.ColumnValuePattern;
 import com.insigma.commons.io.FileUtil;
+import org.apache.log4j.Logger;
+import org.hibernate.*;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import java.io.*;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Title: Description: Copyright: Copyright (c) 2004-9-16 Company: DOIT
@@ -151,7 +129,6 @@ public class BaseHibernateDao extends HibernateDaoSupport {
 	 *            锁模式
 	 * @return 实体对象
 	 * @throws OPException
-	 * @throws NotFindException
 	 */
 	public Object retrieveObjForUpdate(Class c, Serializable id, LockMode lockMode) {
 		Object obj;

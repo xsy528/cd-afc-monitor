@@ -16,16 +16,26 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module" module-name="WZMonitor" />
     <orderEntry type="module" module-name="WZACCApplication" />
-    <orderEntry type="module" module-name="WZACCXML" />
+    <orderEntry type="module" module-name="AFCMonitor" />
+    <orderEntry type="module" module-name="AFCLog" />
     <orderEntry type="module" module-name="AFCApplication" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr:3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:stringtemplate:3.2" level="project" />
+    <orderEntry type="library" name="Maven: antlr:antlr:2.7.7" level="project" />
+    <orderEntry type="library" name="Maven: cglib:cglib:2.1_3" level="project" />
+    <orderEntry type="library" name="Maven: asm:asm:1.5.3" level="project" />
+    <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
+    <orderEntry type="module" module-name="com.insigma.commons.editorframework" />
     <orderEntry type="module" module-name="com.insigma.commons.framework" />
     <orderEntry type="module" module-name="com.insigma.commons.ui" />
     <orderEntry type="module" module-name="com.insigma.commons.application" />
     <orderEntry type="module" module-name="com.insigma.commons.persistence" />
     <orderEntry type="module" module-name="com.insigma.commons.core" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.3" level="project" />
     <orderEntry type="library" name="Maven: ant:ant:1.6.3" level="project" />
     <orderEntry type="library" name="Maven: commons-dbcp:commons-dbcp:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.3" level="project" />
@@ -44,9 +54,6 @@
     <orderEntry type="library" name="Maven: net.sf.scannotation:scannotation:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.6.0.GA" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse:swt-win64:3.7" level="project" />
-    <orderEntry type="module" module-name="com.insigma.commons.binary" />
-    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.3" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
     <orderEntry type="library" name="Maven: org.fs.feeling:swt.win32.extention:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: jasperreports:jasperreports:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.7.0" level="project" />
@@ -65,19 +72,7 @@
     <orderEntry type="library" name="Maven: stax:stax-api:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: com.jasperassistant.designer:viewer:1.1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr:3.2" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.2" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:stringtemplate:3.2" level="project" />
-    <orderEntry type="library" name="Maven: antlr:antlr:2.7.7" level="project" />
-    <orderEntry type="library" name="Maven: cglib:cglib:2.1_3" level="project" />
-    <orderEntry type="library" name="Maven: asm:asm:1.5.3" level="project" />
-    <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
-    <orderEntry type="module" module-name="AFCMonitor" />
-    <orderEntry type="module" module-name="AFCLog" />
-    <orderEntry type="module" module-name="AFCUI" />
-    <orderEntry type="module" module-name="com.insigma.commons.editorframework" />
     <orderEntry type="library" name="Maven: org.eclipse.ui:org.eclipse.ui.forms:3.3.101.v20080708_34x" level="project" />
-    <orderEntry type="module" module-name="AFCODMonitor" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:9.4.14.v20181114" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-http:9.4.14.v20181114" level="project" />

@@ -17,25 +17,14 @@
 		<mapping class="com.insigma.afc.monitor.entity.TmoModuleStatusCur"/>
 		<mapping class="com.insigma.afc.monitor.entity.TmoModeBroadcast"/>
 		<mapping class="com.insigma.afc.monitor.entity.TmoModeUploadInfo"/>
-		<!--<mapping class="com.insigma.afc.ningbo.entity.TmoEquDown"/>
-		
-		<mapping class="com.insigma.afc.monitor.entity.TmoEquStatus"/>
-		<mapping class="com.insigma.afc.ningbo.entity.TstNodeStocks" />
-		<mapping class="com.insigma.afc.ningbo.entity.TstTvmBoxStocks" /> -->
-		<mapping class="com.insigma.afc.odmonitor.entity.TmoOdFlowStats" />
 		<mapping class="com.insigma.afc.monitor.entity.TmoEquEventCur"/>
 		<mapping class="com.insigma.afc.monitor.entity.TmoItemStatus"/>
 		<mapping class="com.insigma.afc.monitor.entity.TmoCmdResult"/>
 		<mapping class="com.insigma.afc.monitor.entity.TmoEquStatus" />
-		<mapping class="com.insigma.afc.odmonitor.entity.TccSectionValues" />
-		
 
 		<!-- TVM钱票箱表 -->
-		<mapping class="com.insigma.acc.monitor.wz.entity.TstMoneyTicketStockDetail"/>
-		<mapping class="com.insigma.acc.monitor.wz.entity.TstNodeStocks"/>
-		<mapping class="com.insigma.acc.monitor.wz.entity.TstTvmBoxStocks"/>
+		<mapping class="com.insigma.acc.monitor.model.entity.TstNodeStocks"/>
+		<mapping class="com.insigma.acc.monitor.model.entity.TstTvmBoxStocks"/>
 		
-		<!-- 断面客流 -->
-		<mapping class="com.insigma.afc.odmonitor.entity.TmoSectionOdFlowStats" />
 	</session-factory>
 </hibernate-configuration>

@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import com.insigma.commons.application.Application;
 import com.insigma.commons.editorframework.graphic.editor.MapItem;
-import com.insigma.commons.log.Logs;
 import com.insigma.commons.ui.widgets.Tree;
 import com.swtdesigner.SWTResourceManager;
 
@@ -99,7 +98,7 @@ public class ActionTreeView extends FrameWorkView {
 					context.setData(node);
 					action.getHandler().perform(context);
 				} catch (Exception e) {
-					Logs.get().error("执行createAction异常", e);
+					//Logs.get().error("执行createAction异常", e);
 				}
 			}
 		}

@@ -8,9 +8,9 @@
  */
 package com.insigma.commons.editorframework.graphic.editor;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.insigma.commons.editorframework.Action;
+import com.insigma.commons.editorframework.FrameWorkView;
+import com.insigma.commons.ui.ResourceUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -21,9 +21,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 
-import com.insigma.commons.editorframework.Action;
-import com.insigma.commons.editorframework.FrameWorkView;
-import com.insigma.commons.ui.ResourceUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapEditorView extends FrameWorkView {
 
@@ -53,10 +52,10 @@ public class MapEditorView extends FrameWorkView {
 		return editable;
 	}
 
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-		mapComposite.setMoveable(editable);
-	}
+//	public void setEditable(boolean editable) {
+//		this.editable = editable;
+//		mapComposite.setMoveable(editable);
+//	}
 
 	public MapEditorView(Composite arg0, int arg1) {
 		super(arg0, arg1 | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);

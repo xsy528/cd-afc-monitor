@@ -1,12 +1,11 @@
 package com.insigma.afc.workbench.rmi;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.insigma.afc.topology.MetroNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.insigma.afc.topology.MetroNode;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandService implements ICommandService {
 

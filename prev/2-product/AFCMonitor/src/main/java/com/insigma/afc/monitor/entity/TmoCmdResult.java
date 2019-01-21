@@ -1,24 +1,14 @@
 package com.insigma.afc.monitor.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.insigma.afc.monitor.entity.convertor.CmdResultRowColorConvertor;
 import com.insigma.afc.topology.AFCNode;
 import com.insigma.afc.topology.convertor.AFCMackcodeConvertor;
-import com.insigma.afc.topology.convertor.UserNameConvertor;
 import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
 import com.insigma.commons.ui.convert.DateTimeConvertor;
 import com.insigma.commons.util.lang.DateTimeUtil;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 命令日志实体
@@ -28,7 +18,6 @@ import com.insigma.commons.util.lang.DateTimeUtil;
 @Entity
 @Table(name = "TMO_CMD_RESULT")
 @SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_CMD_RESULT", allocationSize = 1, initialValue = 1)
-@TableView(colorConvertor = CmdResultRowColorConvertor.class)
 public class TmoCmdResult extends AFCNode implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -40,7 +29,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 	@ColumnView(name = "命令名称", sortAble = false)
 	private String cmdName;
 
-	@ColumnView(name = "操作员名称/编号", convertor = UserNameConvertor.class, sortAble = false)
 	private String operatorId;
 
 	@ColumnView(name = "发送时间", convertor = DateTimeConvertor.class, sortAble = false)

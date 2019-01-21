@@ -1,8 +1,8 @@
 package com.insigma.afc.workbench.rmi;
 
-import java.util.List;
-
 import com.insigma.afc.topology.MetroNode;
+
+import java.util.List;
 
 public interface ICommandHandler {
 

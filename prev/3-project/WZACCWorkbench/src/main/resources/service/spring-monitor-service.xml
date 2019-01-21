@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	<bean id="metroNodeStatusService"
-		class="com.insigma.acc.wz.monitor.service.WZACCMetroNodeStatusService">
+		class="com.insigma.acc.monitor.service.WZACCMetroNodeStatusService">
 		<property name="commonDAO">
 			<ref bean="commonDAO" />
 		</property>
 	</bean>
 	<!-- 设备监视-设备模块 -->
 	<bean id="WZDeviceModuleFactoryImpl"
-		class="com.insigma.acc.wz.monitor.service.WZDeviceModuleFactoryImpl">
+		class="com.insigma.acc.monitor.service.WZDeviceModuleFactoryImpl">
 		<property name="commonDAO">
 			<ref bean="commonDAO" />
 		</property>
@@ -21,38 +21,18 @@
 		<property name="commonDAO" ref="commonDAO">
 		</property>
 	</bean>
-	<bean name="wzmodeService" class="com.insigma.acc.wz.monitor.service.WZModeService">
+	<bean name="wzmodeService" class="com.insigma.acc.monitor.service.WZModeService">
 		<property name="commonDAO" ref="commonDAO">
 		</property>
 	</bean>
 
-	<bean name="monitorService" class="com.insigma.acc.wz.monitor.service.WZMonitorService">
-		<property name="commonDAO" ref="commonDAO">
-		</property>
-	</bean>
-
-	<!-- 命令相关 |start -->
-	<bean id="commandFactory" class="com.insigma.acc.wz.monitor.WZACCCommandFactory">
-	</bean>
-
-	<bean name="commandLogService" class="com.insigma.afc.monitor.service.CommandLogService">
-		<property name="commonDAO" ref="commonDAO">
-		</property>
-	</bean>
-	<!-- 客流相关 -->
-	<bean name="chartService" class="com.insigma.afc.odmonitor.service.ChartService">
-		<property name="commonDAO" ref="commonDAO">
-		</property>
-	</bean>
-	<!-- 断面客流相关 -->
-	<bean name="sectionODFlowService"
-		class="com.insigma.afc.odmonitor.service.SectionODFlowService">
+	<bean name="monitorService" class="com.insigma.acc.monitor.service.WZMonitorService">
 		<property name="commonDAO" ref="commonDAO">
 		</property>
 	</bean>
 
 	<!--事件-->
-	<bean name="metroEventService" class="com.insigma.acc.wz.monitor.service.impl.WZMetroEventService">
+	<bean name="metroEventService" class="com.insigma.acc.monitor.service.impl.WZMetroEventService">
 		<property name="commonDAO" ref="commonDAO"/>
 	</bean>
 </beans>

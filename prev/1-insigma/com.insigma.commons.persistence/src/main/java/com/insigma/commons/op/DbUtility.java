@@ -1,20 +1,12 @@
 package com.insigma.commons.op;
 
+import org.apache.log4j.Logger;
+
 import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 /**
  * Title: Description: Copyright: Copyright (c) 2004-9-16 Company: DOIT
@@ -188,7 +180,6 @@ public class DbUtility {
 			resultSet = (ResultSet) stmt.getObject(1);
 
 			if (resultSet != null) {
-				// list = new ArrayList();
 				ResultSetMetaData resultMetaData = resultSet.getMetaData();
 				int fieldCount = resultMetaData.getColumnCount();
 				while (resultSet.next()) {
@@ -359,7 +350,6 @@ public class DbUtility {
 			stmt = cnt.createStatement();
 			resultSet = stmt.executeQuery(sql);
 			if (resultSet != null) {
-				// list = new ArrayList();
 				ResultSetMetaData resultMetaData = resultSet.getMetaData();
 				int fieldCount = resultMetaData.getColumnCount();
 				while (resultSet.next()) {

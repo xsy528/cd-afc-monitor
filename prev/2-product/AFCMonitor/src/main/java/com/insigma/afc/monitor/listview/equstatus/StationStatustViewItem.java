@@ -1,25 +1,18 @@
 package com.insigma.afc.monitor.listview.equstatus;
 
-import java.util.Date;
-
-import com.insigma.afc.entity.convertor.AFCDeviceStatusConvertor;
-import com.insigma.afc.entity.convertor.AFCModeCodeConvertor;
-import com.insigma.afc.monitor.entity.convertor.ItemStatusRowColorConvertor;
 import com.insigma.afc.topology.AFCNode;
 import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.TableView;
 import com.insigma.commons.ui.convert.DateTimeConvertor;
 
-@TableView(colorConvertor = ItemStatusRowColorConvertor.class)
+import java.util.Date;
+
 public class StationStatustViewItem extends AFCNode {
 	private static final long serialVersionUID = 1885333299581941692L;
 
 	private boolean isOnline;
 
-	@ColumnView(name = "车站状态", convertor = AFCDeviceStatusConvertor.class, sortAble = false)
 	private int status;
 
-	@ColumnView(name = "车站模式/编号", convertor = AFCModeCodeConvertor.class, sortAble = false)
 	private long mode;
 
 	@ColumnView(name = "正常设备(个)", sortAble = false)

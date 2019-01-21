@@ -71,7 +71,7 @@ public class GraphicMapBuilder extends AbstractGraphicMapBuilder {
 				// 右键
 				for (Action action : contextActions) {
 					// 过滤非必要选择 2013-4-18shenchao
-					if (action instanceof NodeAction && AFCApplication.getUser().hasFunction(action.getID())) {
+					if (action instanceof NodeAction) {
 						AFCNodeLevel targetType = ((NodeAction) action).getTargetType();
 						if (targetType != null && targetType.equals(AFCNodeLevel.SLE)) {
 							item.addContextAction(action);

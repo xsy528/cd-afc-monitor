@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>com.insigma.project</groupId>
-            <artifactId>WZMonitor</artifactId>
+            <artifactId>WZACCApplication</artifactId>
             <version>1.0</version>
         </dependency>
 
@@ -76,7 +76,7 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <mainClass>com.insigma.acc.wz.view.WZACCWorkbenchWeb</mainClass>
+                            <mainClass>com.insigma.acc.monitor.ACCMonitorApp</mainClass>
                         </configuration>
                     </execution>
                 </executions>

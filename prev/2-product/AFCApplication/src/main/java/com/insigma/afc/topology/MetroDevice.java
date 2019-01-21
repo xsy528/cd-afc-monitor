@@ -1,31 +1,17 @@
 package com.insigma.afc.topology;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.dic.AFCDeviceSubType;
 import com.insigma.afc.dic.AFCDeviceType;
-import com.insigma.afc.provider.DeviceTypeComboCasecadeProvider;
-import com.insigma.afc.provider.DeviceTypeProvider;
-import com.insigma.afc.topology.convertor.MetroNodeStatusConvertor;
 import com.insigma.commons.reflect.ClassUtil;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.ControlCascade;
-import com.insigma.commons.ui.anotation.DataSource;
 import com.insigma.commons.ui.anotation.View;
 import com.insigma.commons.ui.anotation.ViewExpansion;
 import com.insigma.commons.util.SystemPropertyUtil;
+
+import javax.persistence.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * MetroDevice entity.
@@ -38,46 +24,28 @@ public class MetroDevice extends MetroNode implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@View
 	private MetroDeviceId id;
 
-	@View(label = "线路名称", regexp = "^[\\u4e00-\\u9fa5,\\w]{0,16}$", modify = false)
 	private String lineName;
 
-	@View(label = "车站名称", regexp = "^[\\u4e00-\\u9fa5,\\w]{0,16}$", modify = false)
 	private String stationName;
 
-	@View(label = "设备名称", regexp = "^[\\u4e00-\\u9fa5,\\w]{0,16}$")
 	private String deviceName;
 
-	@View(label = "设备类型", type = "Combo", format = "0x%02x")
-	@DataSource(provider = DeviceTypeProvider.class)
 	private short deviceType = AFCDeviceType.TVM.shortValue();
 
-	//	@View(label = "设备子类型", type = "Combo")
-	//	@DataSource(provider = AFCDeviceSubType.class)
-	@ControlCascade(type = "byType", changedField = "deviceType", casecadeListener = DeviceTypeComboCasecadeProvider.class)
 	private Short deviceSubType;
 
-	//	@View(label = "网络地址", regexp = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$")
-	@View(label = "网络地址", regexp = "[0-9\\.]{1,15}")
 	private String ipAddress;
 
-	//	@View(label = "图片坐标")
 	private AFCNodeLocation imageLocation;
 
-	//	@View(label = "文字坐标")
 	private AFCNodeLocation textLocation;
 
-	//	@View(label = "网络端口")
 	private int commPort;
 
-	@View(label = "逻辑地址", regexp = "[0-9]{0,8}")
 	private long logicAddress;
 
-	@View(label = "启用状态", type = "RadioBox")
-	@ColumnView(name = "启用状态", convertor = MetroNodeStatusConvertor.class)
-	@DataSource(list = { "启用", "未启用" }, values = { "0", "1" })
 	private Short status;
 
 	// 网卡的MAC地址
@@ -85,7 +53,6 @@ public class MetroDevice extends MetroNode implements java.io.Serializable {
 
 	private String remark;
 
-	//	@View(label = "图片", type = "Image", coloumnspan = 2, heightHint = 450)
 	private String picName;
 
 	// Constructors

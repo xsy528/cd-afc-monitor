@@ -21,8 +21,6 @@
         <module>../AFCLog</module>
         <module>../AFCApplication</module>
         <module>../AFCMonitor</module>
-        <module>../AFCODMonitor</module>
-        <module>../AFCUI</module>
     </modules>
 
     <dependencyManagement>

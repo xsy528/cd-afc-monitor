@@ -9,9 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.insigma.commons.io.FileUtil;
-import com.insigma.commons.log.Log;
-import com.insigma.commons.log.Logs;
 import com.insigma.commons.ui.form.BeanEditorTableModel;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.spi.LoggerFactory;
 
 /**
  * @author DLF
@@ -20,7 +21,7 @@ import com.insigma.commons.ui.form.BeanEditorTableModel;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class AnnotationOverrideManager {
 
-	private static final Log logger = Logs.getLog(AnnotationOverrideManager.class);
+	private static final Log logger = LogFactory.getLog(AnnotationOverrideManager.class);
 
 	public static String JSON_DATA_PATH = "jsondata";
 

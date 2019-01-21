@@ -8,20 +8,15 @@
  */
 package com.insigma.commons.editorframework.graphic.editor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.insigma.commons.editorframework.Action;
+import com.insigma.commons.editorframework.ActionContext;
+import com.insigma.commons.editorframework.EditorFrameWork;
+import com.insigma.commons.editorframework.graphic.GraphicItem;
+import com.insigma.commons.editorframework.graphic.editor.action.MapAction;
+import com.insigma.commons.editorframework.graphic.editor.action.MouseMoveAction;
+import com.swtdesigner.SWTResourceManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -31,13 +26,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import com.insigma.commons.editorframework.Action;
-import com.insigma.commons.editorframework.ActionContext;
-import com.insigma.commons.editorframework.EditorFrameWork;
-import com.insigma.commons.editorframework.graphic.GraphicItem;
-import com.insigma.commons.editorframework.graphic.editor.action.MapAction;
-import com.insigma.commons.editorframework.graphic.editor.action.MouseMoveAction;
-import com.swtdesigner.SWTResourceManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MapComposite extends Composite {
 
@@ -77,12 +68,12 @@ public class MapComposite extends Composite {
 		return moveable;
 	}
 
-	public void setMoveable(boolean moveable) {
-		this.moveable = moveable;
-		if (isMoveable()) {
-			addKeyListener(new MapKeyListener(this));
-		}
-	}
+//	public void setMoveable(boolean moveable) {
+//		this.moveable = moveable;
+//		if (isMoveable()) {
+//			addKeyListener(new MapKeyListener(this));
+//		}
+//	}
 
 	public EditorFrameWork getFrameWork() {
 		return frameWork;

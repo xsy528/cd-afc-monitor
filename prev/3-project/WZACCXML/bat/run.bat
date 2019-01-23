@@ -1,1 +1,0 @@
-java -Djava.ext.dirs="%JAVA_HOME%/jre/lib/ext;./bin;./lib;" -cp "%CLASSPATH%;./conf" com.insigma.acc.wz.xdr.tool.viewer.XDRViewerTool

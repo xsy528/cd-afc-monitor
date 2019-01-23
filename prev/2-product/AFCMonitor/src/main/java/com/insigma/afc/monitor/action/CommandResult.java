@@ -1,29 +1,23 @@
 package com.insigma.afc.monitor.action;
 
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.form.IColorItem;
 import org.eclipse.swt.graphics.Color;
 
-public class CommandResult implements IColorItem {
+public class CommandResult{
 
 	private String logId;
 
-	@ColumnView(name = "节点名称", width = 200)
 	private String id;
 
 	private String operatorId;
 
-	@ColumnView(name = "命令名称")
 	private String cmdName;
 
-	//	@ColumnView(name = "命令参数")
 	private String arg;
 
 	private short result;
 
 	private String cmdResult;
 
-	@ColumnView(name = "发送时间")
 	private String occurTime;
 
 	public String getLogId() {

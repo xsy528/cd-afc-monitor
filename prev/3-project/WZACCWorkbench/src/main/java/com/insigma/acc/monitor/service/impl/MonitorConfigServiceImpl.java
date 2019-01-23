@@ -2,7 +2,7 @@ package com.insigma.acc.monitor.service.impl;
 
 import com.insigma.acc.monitor.model.vo.WZMonitorConfigInfo;
 import com.insigma.acc.monitor.exception.ErrorCode;
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.service.MonitorConfigService;
 import com.insigma.afc.manager.SystemConfigManager;
 import com.insigma.afc.monitor.dialog.config.MonitorConfigInfo;

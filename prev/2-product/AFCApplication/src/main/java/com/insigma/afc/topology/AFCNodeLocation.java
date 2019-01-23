@@ -3,11 +3,8 @@
  */
 package com.insigma.afc.topology;
 
-import java.io.Serializable;
-
 import javax.persistence.Embeddable;
-
-import com.insigma.commons.ui.anotation.View;
+import java.io.Serializable;
 
 /**
  * @author changjin_qiu
@@ -19,13 +16,10 @@ public class AFCNodeLocation implements Serializable {
 
 	private static final long serialVersionUID = -3784271692331046578L;
 
-	@View(label = "X")
 	private int x;
 
-	@View(label = "Y")
 	private int y;
 
-	@View(label = "角度")
 	private int angle;
 
 	public AFCNodeLocation() {

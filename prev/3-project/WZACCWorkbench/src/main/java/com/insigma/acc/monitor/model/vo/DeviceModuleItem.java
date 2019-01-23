@@ -1,5 +1,7 @@
 package com.insigma.acc.monitor.model.vo;
 
+import com.insigma.acc.monitor.model.dto.Location;
+
 import java.io.Serializable;
 
 /**

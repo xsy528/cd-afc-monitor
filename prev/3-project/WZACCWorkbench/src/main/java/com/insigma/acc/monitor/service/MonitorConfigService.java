@@ -1,7 +1,7 @@
 package com.insigma.acc.monitor.service;
 
 import com.insigma.acc.monitor.model.vo.WZMonitorConfigInfo;
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 
 /**
  * Ticket:

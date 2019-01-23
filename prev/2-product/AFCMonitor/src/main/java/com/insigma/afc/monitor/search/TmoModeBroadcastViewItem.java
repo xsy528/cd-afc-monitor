@@ -1,7 +1,5 @@
 package com.insigma.afc.monitor.search;
 
-import com.insigma.commons.ui.anotation.ColumnView;
-
 /**
  * 模式广播查询
  * 
@@ -12,34 +10,24 @@ public class TmoModeBroadcastViewItem {
 
 	private Long id;
 
-	@ColumnView(name = "序号", sortAble = false)
 	private String recordId;
 
-	@ColumnView(name = "模式上传源线路/编号", sortAble = false)
 	private String lineName;
 
-	@ColumnView(name = "模式上传源车站/编号", sortAble = false)
 	private String stationName;
 
-	@ColumnView(name = "进入的模式名称/编号", sortAble = false)
 	private String modeCode;
 
-	@ColumnView(name = "模式上传时间", sortAble = false)
 	private String modeUploadTime;
 
-	@ColumnView(name = "模式广播时间 ", sortAble = false)
 	private String modeBroadcastTime;
 
-	@ColumnView(name = "模式广播方式", sortAble = false)
 	private String broadcastType;
 
-	@ColumnView(name = "模式广播状态", sortAble = false)
 	private String broadcastStatus;
 
-	@ColumnView(name = "模式广播目的车站/编号", sortAble = false)
 	private String targetId;
 
-	@ColumnView(name = "操作员编号", sortAble = false)
 	private String operatorId;
 
 	/**

@@ -8,7 +8,6 @@ package com.insigma.afc.topology.service;
 import com.insigma.afc.topology.*;
 import com.insigma.commons.application.IService;
 import com.insigma.commons.op.OPException;
-import com.insigma.commons.ui.tree.TreeNode;
 
 import java.util.List;
 
@@ -36,13 +35,6 @@ public interface IMetroNodeService extends IService {
 	List<MetroLine> getMetroLine(Short[] lineIDs);
 
 	/**
-	 * 获取所有车站参数信息
-	 * 
-	 * @return 车站列表
-	 */
-	List<MetroStation> getAllMetroStation();
-
-	/**
 	 * 获取车站参数信息
 	 * 
 	 * @param lineIDs
@@ -54,11 +46,11 @@ public interface IMetroNodeService extends IService {
 	List<MetroStation> getMetroStation(Short[] lineIDs, Integer[] stationIDs);
 
 	/**
-	 * 获取所有设备参数信息
-	 * 
-	 * @return 设备列表
+	 * 获取线路所有车站
+	 * @param lineId
+	 * @return
 	 */
-	List<MetroDevice> getAllMetroDevice();
+	List<MetroStation> getMetroStation(Short lineId);
 
 	/**
 	 * 获取设备参数信息 *
@@ -72,11 +64,10 @@ public interface IMetroNodeService extends IService {
 	List<MetroDevice> getMetroDevice(Integer[] stationIDs, Long[] deviceIDs);
 
 	/**
-	 * 获取设备模块参数信息 *
-	 * 
-	 * @return 设备模块列表
+	 * 获取车站设备
+	 * @return 设备列表
 	 */
-	List<MetroDeviceModule> getAllMetroDeviceModule();
+	List<MetroDevice> getMetroDevice(Integer stationID);
 
 	/**
 	 * 获取设备模块参数信息
@@ -95,18 +86,6 @@ public interface IMetroNodeService extends IService {
 	 * @return 设备模块列表
 	 */
 	MetroACC getMetroACC();
-
-	/**
-	 * 获取树信息
-	 * 
-	 * @param stationIDs
-	 *            车站号数组，当参数为null时表示忽略车站条件
-	 * @return 树列表
-	 */
-	List<TreeNode> getMetroTreeNode(Short[] lineIDs, Integer[] stationIDs);
-
-	void saveMetroNodes(MetroNode currentNode, MetroNode beforeNode, List<MetroNode> childNodes,
-			List<MetroNode> deleteNodes, boolean updateFlag);
 
 	/**
 	 * 保存节点
@@ -131,12 +110,5 @@ public interface IMetroNodeService extends IService {
 	 * @param currentNode
 	 */
 	void saveResource(MetroNode currentNode);
-
-	/**
-	 * @param currentNode
-	 * @param beforeNode
-	 * @return 当更新或者添加未重复节点时为true
-	 */
-	boolean checkMetroNode(MetroNode currentNode, MetroNode beforeNode);
 
 }

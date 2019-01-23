@@ -3,7 +3,7 @@ package com.insigma.acc.monitor.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.insigma.acc.monitor.controller.resolver.CustomMethodNameResolver;
 import com.insigma.acc.monitor.exception.ErrorCode;
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.util.JsonUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

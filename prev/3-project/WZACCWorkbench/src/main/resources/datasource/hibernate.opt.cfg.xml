@@ -33,12 +33,12 @@
 		<mapping class="com.insigma.acc.wz.opt.model.WZOPTComponentTicketDirCataLog"/>
 		
 		<!-- 权限参数  -->
-		<mapping class="com.insigma.acc.wz.xdr.runfile.OperatorRight_t"/>
-		<mapping class="com.insigma.acc.wz.xdr.runfile.RoleFunctionList_t"/>
-		<mapping class="com.insigma.acc.wz.xdr.runfile.FunctionList_t"/>
+		<mapping class="com.insigma.acc.monitor.xdr.runfile.OperatorRight_t"/>
+		<mapping class="com.insigma.acc.monitor.xdr.runfile.RoleFunctionList_t"/>
+		<mapping class="com.insigma.acc.monitor.xdr.runfile.FunctionList_t"/>
 		
-		<mapping class="com.insigma.acc.wz.xdr.runfile.OperInfoList_t"/>
-		<mapping class="com.insigma.acc.wz.xdr.runfile.OperInfo_t"/>
+		<mapping class="com.insigma.acc.monitor.xdr.runfile.OperInfoList_t"/>
+		<mapping class="com.insigma.acc.monitor.xdr.runfile.OperInfo_t"/>
 		
 		
 	</session-factory>

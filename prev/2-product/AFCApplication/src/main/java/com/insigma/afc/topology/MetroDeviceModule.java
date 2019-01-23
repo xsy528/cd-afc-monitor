@@ -1,24 +1,13 @@
 package com.insigma.afc.topology;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.commons.reflect.ClassUtil;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.View;
-import com.insigma.commons.ui.anotation.ViewExpansion;
 import com.insigma.commons.util.SystemPropertyUtil;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MetroDeviceModule entity.
@@ -40,15 +29,12 @@ public class MetroDeviceModule extends MetroNode implements java.io.Serializable
 
 	private String deviceName;
 
-	@ColumnView(name = "部件简写", width = 65)
 	private String moduleName;
 
 	private String ipAddress;
 
-	@ColumnView(name = "状态值", width = 55)
 	private Short status;
 
-	@ColumnView(name = "部件名称", width = 150)
 	private String remark;
 
 	// Constructors
@@ -248,8 +234,6 @@ public class MetroDeviceModule extends MetroNode implements java.io.Serializable
 
 	private String extJsonValue;
 
-	@View(label = "扩展信息", group = "==扩展信息==")
-	@ViewExpansion(viewClass = "${MetroDeviceModule.extValue}")
 	@Transient
 	private Object extValue;
 

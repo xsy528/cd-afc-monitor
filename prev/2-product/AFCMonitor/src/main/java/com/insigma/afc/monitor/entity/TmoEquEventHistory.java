@@ -1,7 +1,6 @@
 package com.insigma.afc.monitor.entity;
 
 import com.insigma.afc.topology.AFCNode;
-import com.insigma.commons.ui.anotation.ColumnView;
 import com.insigma.commons.util.lang.DateTimeUtil;
 
 import javax.persistence.*;
@@ -77,7 +76,6 @@ public class TmoEquEventHistory extends AFCNode implements Serializable {
 	private Short eventType;
 
 	/** 事件描述*/
-	@ColumnView(name = "事件描述")
 	private String evtDesc;
 
 	/** 发生时间 */

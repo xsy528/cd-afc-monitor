@@ -2,10 +2,7 @@ package com.insigma.afc.topology;
 
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
-import com.insigma.afc.topology.convertor.MetroNodeConvertor;
 import com.insigma.commons.reflect.ClassUtil;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.View;
 import com.insigma.commons.util.SystemPropertyUtil;
 
 import javax.persistence.*;
@@ -21,23 +18,16 @@ import java.util.*;
 public class MetroLine extends MetroNode implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@View(label = "线路编号", regexp = "\\d{0,4}", modify = true)
-	@ColumnView(name = "线路编号", convertor = MetroNodeConvertor.class)
 	private short lineID;
 
-	@View(label = "线路名称", regexp = "^[\\u4e00-\\u9fa5,\\w]{0,16}$")
 	private String lineName;
 
-	@View(label = "网络地址", regexp = "[0-9\\.]{1,15}")
 	private String ipAddress;
 
-	//	@View(label = "图片坐标")
 	private AFCNodeLocation imageLocation;
 
-	//	@View(label = "文字坐标")
 	private AFCNodeLocation textLocation;
 
-	@View(label = "图片名称", type = "File")
 	private String picName;
 
 	private String remark;

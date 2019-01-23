@@ -1,9 +1,9 @@
 package com.insigma.acc.monitor.service.impl;
 
-import com.insigma.acc.wz.define.WZCommandType;
-import com.insigma.acc.wz.define.WZDeviceType;
+import com.insigma.acc.monitor.define.WZCommandType;
+import com.insigma.acc.monitor.define.WZDeviceType;
 import com.insigma.acc.monitor.exception.ErrorCode;
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.service.CommandService;
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
@@ -100,7 +100,7 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
             }
             return Result.error(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
-        return Result.success(send(null,CommandType.CMD_CHANGE_MODE, name, arg, stationIds,
+        return Result.success(send(CommandType.CMD_CHANGE_MODE, name, arg, stationIds,
                     AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
@@ -111,7 +111,7 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
-        return Result.success(send(null, CommandType.CMD_QUERY_MODE, "模式查询命令",
+        return Result.success(send(CommandType.CMD_QUERY_MODE, "模式查询命令",
                 null, stationIds, AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
@@ -136,7 +136,7 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
             }
         }
 
-        return Result.success(send(null, CommandType.CMD_TIME_SYNC, "时间同步命令",
+        return Result.success(send(CommandType.CMD_TIME_SYNC, "时间同步命令",
                 null, stationIds, AFCCmdLogType.LOG_TIME_SYNC.shortValue()));
     }
 
@@ -156,7 +156,7 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
         }
         command = rmiGenerateFiles();
         if (command.isOK) {
-            return Result.success(send(null, CommandType.CMD_SYNC_MAP, "地图同步命令", null, ids,
+            return Result.success(send(CommandType.CMD_SYNC_MAP, "地图同步命令", null, ids,
                     AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
         return Result.error(ErrorCode.UNKNOW_ERROR);
@@ -188,7 +188,7 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
-        return Result.success(send(null, WZCommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
+        return Result.success(send(WZCommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
                 null, deviceIds, command));
     }
 
@@ -204,7 +204,7 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
         List<CommandResult> commandResults = new ArrayList<>();
         if (device.getDeviceType() == WZDeviceType.TVM.shortValue()
                 || device.getDeviceType() == WZDeviceType.TSM.shortValue()) {
-            commandResults.addAll(send(null, CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
+            commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
         if (device.getDeviceType() == WZDeviceType.TVM.shortValue()
@@ -212,7 +212,7 @@ public class CommandServiceImpl extends CommandActionHandler implements CommandS
                 || device.getDeviceType() == WZDeviceType.ENG.shortValue()
                 || device.getDeviceType() == WZDeviceType.EXG.shortValue()
                 || device.getDeviceType() == WZDeviceType.REG.shortValue()) {
-            commandResults.addAll(send(null, WZCommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
+            commandResults.addAll(send(WZCommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
         return Result.success(commandResults);

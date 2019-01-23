@@ -17,9 +17,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.insigma.project</groupId>
-            <artifactId>WZACCApplication</artifactId>
-            <version>1.0</version>
+            <groupId>com.insigma.product</groupId>
+            <artifactId>AFCMonitor</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.insigma.commons</groupId>
+                    <artifactId>commons-framework</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--jetty-->

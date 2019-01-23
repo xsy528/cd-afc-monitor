@@ -1,9 +1,9 @@
 package com.insigma.acc.monitor.service.impl;
 
 import com.insigma.acc.monitor.exception.ErrorCode;
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.service.FileService;
-import com.insigma.acc.monitor.util.ResourceUtils;
+import com.insigma.commons.util.ResourceUtils;
 import com.insigma.afc.entity.TsyResource;
 import com.insigma.afc.service.ITsyResourceService;
 import com.insigma.commons.op.OPException;
@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,15 @@ public class FileServiceImpl implements FileService {
             }
         }
         return index;
+    }
+
+    @Override
+    public List<Integer> getResourcesIndexs(List<String> resourcePaths) {
+        List<Integer> indexs = new ArrayList<>();
+        for (String resourcePath:resourcePaths){
+            indexs.add(getResourceIndex(resourcePath));
+        }
+        return indexs;
     }
 
     @Override

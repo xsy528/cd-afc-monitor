@@ -11,8 +11,6 @@ import com.insigma.afc.topology.MetroStation;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.workbench.rmi.ICommandService;
 import com.insigma.commons.application.Application;
-import com.insigma.commons.editorframework.ActionContext;
-import com.insigma.commons.editorframework.ActionHandlerAdapter;
 import com.insigma.commons.service.ICommonDAO;
 import com.insigma.commons.spring.Autowire;
 import com.insigma.commons.thread.EnhancedThread;
@@ -53,7 +51,7 @@ public abstract class CommandActionHandler extends ActionHandlerAdapter {
 		this.commonDAO = commonDAO;
 	}
 
-	public List<CommandResult> send(final ActionContext context,final int id, final String name, final Object arg,
+	public List<CommandResult> send(final int id, final String name, final Object arg,
 			final List<MetroNode> nodes, final short cmdType) {
 		if (nodes==null||countDownLatch!=null){
 			return null;

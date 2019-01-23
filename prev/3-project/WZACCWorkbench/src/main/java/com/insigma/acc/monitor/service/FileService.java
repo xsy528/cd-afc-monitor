@@ -1,6 +1,8 @@
 package com.insigma.acc.monitor.service;
 
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
+
+import java.util.List;
 
 /**
  * 文件服务
@@ -20,6 +22,13 @@ public interface FileService {
      * @return 索引
      */
     Integer getResourceIndex(String resourcePath);
+
+    /**
+     * 获取图片索引数组
+     * @param resourcePath 资源文件名称数组
+     * @return 索引数组
+     */
+    List<Integer> getResourcesIndexs(List<String> resourcePaths);
 
     /**
      * 文件数据

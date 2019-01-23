@@ -1,13 +1,11 @@
 package com.insigma.afc.monitor.listview.equstatus;
 
 import com.insigma.afc.topology.AFCNode;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
 
 import java.util.Date;
 
 public class StationStatustViewItem extends AFCNode {
-	private static final long serialVersionUID = 1885333299581941692L;
+	private static final long serialVersionUID = 1L;
 
 	private boolean isOnline;
 
@@ -15,16 +13,12 @@ public class StationStatustViewItem extends AFCNode {
 
 	private long mode;
 
-	@ColumnView(name = "正常设备(个)", sortAble = false)
 	private int normalEvent;
 
-	@ColumnView(name = "警告设备(个)", sortAble = false)
 	private int warnEvent;
 
-	@ColumnView(name = "报警设备(个)", sortAble = false)
 	private int alarmEvent;
 
-	@ColumnView(name = "模式生效时间", convertor = DateTimeConvertor.class, sortAble = false)
 	private Date updateTime;
 
 	private Date StationStatusUpdateTime;

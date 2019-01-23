@@ -5,8 +5,6 @@ import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.afc.dic.AFCDeviceSubType;
 import com.insigma.afc.dic.AFCDeviceType;
 import com.insigma.commons.reflect.ClassUtil;
-import com.insigma.commons.ui.anotation.View;
-import com.insigma.commons.ui.anotation.ViewExpansion;
 import com.insigma.commons.util.SystemPropertyUtil;
 
 import javax.persistence.*;
@@ -352,8 +350,6 @@ public class MetroDevice extends MetroNode implements java.io.Serializable {
 
 	private String extJsonValue;
 
-	@View(label = "扩展信息")
-	@ViewExpansion(viewClass = "${MetroextValue}")
 	@Transient
 	private Object extValue;
 

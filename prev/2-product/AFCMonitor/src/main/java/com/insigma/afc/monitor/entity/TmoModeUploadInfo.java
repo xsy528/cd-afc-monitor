@@ -1,9 +1,5 @@
 package com.insigma.afc.monitor.entity;
 
-import com.insigma.afc.topology.convertor.MetroNodeConvertor;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -21,12 +17,9 @@ public class TmoModeUploadInfo implements java.io.Serializable {
 	// Fields
 	private Long recordId;
 
-	@ColumnView(name = "线路名称/线路编号", sortAble = false, convertor = MetroNodeConvertor.class)
 	private Short lineId;
-	@ColumnView(name = "车站名称/车站编号", sortAble = false, convertor = MetroNodeConvertor.class)
 	private Integer stationId;
 	private Short modeCode;
-	@ColumnView(name = "模式发生时间", sortAble = false, convertor = DateTimeConvertor.class)
 	private Date modeUploadTime;
 	private Short broadcastStatus;
 

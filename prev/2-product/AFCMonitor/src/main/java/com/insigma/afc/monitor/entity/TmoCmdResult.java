@@ -1,9 +1,6 @@
 package com.insigma.afc.monitor.entity;
 
 import com.insigma.afc.topology.AFCNode;
-import com.insigma.afc.topology.convertor.AFCMackcodeConvertor;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
 import com.insigma.commons.util.lang.DateTimeUtil;
 
 import javax.persistence.*;
@@ -26,19 +23,16 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 
 	private Short cmdType;
 
-	@ColumnView(name = "命令名称", sortAble = false)
 	private String cmdName;
 
 	private String operatorId;
 
-	@ColumnView(name = "发送时间", convertor = DateTimeConvertor.class, sortAble = false)
 	private Date occurTime;
 
 	private String tagName;
 
 	private String tagValue;
 
-	@ColumnView(name = "命令结果/应答码", convertor = AFCMackcodeConvertor.class, sortAble = false)
 	private Short cmdResult;
 
 	// @ColumnView(name = "结果说明")

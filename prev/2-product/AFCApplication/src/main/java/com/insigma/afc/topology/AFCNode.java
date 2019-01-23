@@ -3,17 +3,14 @@
  */
 package com.insigma.afc.topology;
 
+import com.insigma.afc.application.AFCApplication;
+import com.insigma.afc.application.AFCNodeLevel;
+
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.Transient;
-
-import com.insigma.afc.application.AFCApplication;
-import com.insigma.afc.application.AFCNodeLevel;
-import com.insigma.afc.topology.convertor.MetroNodeConvertor;
-import com.insigma.commons.ui.anotation.ColumnView;
 
 /**
  * @author qcj(qiuchangjin@zdwxgd.com)
@@ -34,7 +31,6 @@ public class AFCNode implements Serializable {
 	 * 节点编号：例如：由线路+车站+设备类型+设备ID 组成，8 位数字字符。
 	 * @return
 	 */
-	@ColumnView(name = "节点名称/节点编码", convertor = MetroNodeConvertor.class, sortAble = false)
 	protected long nodeId;
 
 	/**

@@ -1,6 +1,6 @@
 package com.insigma.acc.monitor.service;
 
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.entity.TmoModeBroadcast;
 import com.insigma.afc.monitor.entity.TmoModeUploadInfo;
 

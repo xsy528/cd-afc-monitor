@@ -28,7 +28,7 @@
 	</bean>
 	
 	<bean name="xdrSLEFileContentDecoder"
-		class="com.insigma.acc.wz.xdr.tool.decoder.XDRSLEFileContentDecoder">
+		class="com.insigma.acc.monitor.xdr.tool.decoder.XDRSLEFileContentDecoder">
 	</bean>
 
 </beans>

@@ -17,8 +17,6 @@ import javax.persistence.Transient;
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.commons.reflect.ClassUtil;
-import com.insigma.commons.ui.anotation.View;
-import com.insigma.commons.ui.anotation.ViewExpansion;
 import com.insigma.commons.util.SystemPropertyUtil;
 
 /**
@@ -33,19 +31,14 @@ public class MetroACC extends MetroNode implements java.io.Serializable {
 
 	private short accID;
 
-	@View(label = "清分名称")
 	private String accName;
 
-	@View(label = "网络地址")
 	private String ipAddress;
 
-	//@View(label = "图片坐标")
 	private AFCNodeLocation imageLocation;
 
-	//@View(label = "文字坐标")
 	private AFCNodeLocation textLocation;
 
-	@View(label = "图片名称", type = "File")
 	private String picName;
 
 	private String remark;
@@ -224,8 +217,6 @@ public class MetroACC extends MetroNode implements java.io.Serializable {
 
 	private String extJsonValue;
 
-	@View(label = "扩展信息", group = "==扩展信息==")
-	@ViewExpansion(viewClass = "${MetroACC.extValue}")
 	@Transient
 	private Object extValue;
 

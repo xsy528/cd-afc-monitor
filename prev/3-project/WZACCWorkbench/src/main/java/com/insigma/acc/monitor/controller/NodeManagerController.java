@@ -2,7 +2,7 @@ package com.insigma.acc.monitor.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.insigma.acc.monitor.exception.ErrorCode;
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.service.FileService;
 import com.insigma.acc.monitor.util.HttpUtils;
 import com.insigma.acc.monitor.util.JsonUtils;

@@ -2,7 +2,7 @@ package com.insigma.acc.monitor.listener;
 
 import com.insigma.acc.monitor.init.WZACCInfoInitor;
 import com.insigma.acc.monitor.init.WZAdminInitor;
-import com.insigma.acc.wz.util.RouteAddressUtil;
+import com.insigma.acc.monitor.util.RouteAddressUtil;
 import com.insigma.acc.monitor.service.FileService;
 import com.insigma.afc.initor.AFCApplicationInitor;
 import com.insigma.afc.initor.DicSystemInitor;

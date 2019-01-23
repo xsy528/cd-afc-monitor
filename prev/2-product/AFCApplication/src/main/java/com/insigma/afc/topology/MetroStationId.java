@@ -3,10 +3,6 @@ package com.insigma.afc.topology;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import com.insigma.afc.topology.convertor.MetroNodeConvertor;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.anotation.View;
-
 /**
  * TmetroStationId entity.
  * 
@@ -16,12 +12,8 @@ import com.insigma.commons.ui.anotation.View;
 public class MetroStationId implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@View(label = "线路编号", modify = false, regexp = "\\d{0,4}")
-	@ColumnView(name = "线路编号", convertor = MetroNodeConvertor.class)
 	private Short lineId;
 
-	@View(label = "车站编号", regexp = "\\d{0,4}")
-	@ColumnView(name = "车站编号", convertor = MetroNodeConvertor.class)
 	private Integer stationId;
 
 	// Constructors

@@ -1,0 +1,26 @@
+<XDRViewer>
+	<!-- <MenuItem name="打开交易类XDR文件" decodeClass="com.insigma.afc.sjz.xml.tool.decoder.XDRSLEFileContentDecoder" 
+		hotKeys="S" /> -->
+	<MenuItem name="打开参数XDR主控文件"
+		decodeClass="com.insigma.acc.monitor.xdr.tool.decoder.XDREODControlFileContentDecoder"
+		hotKeys="C" />
+	<MenuItem name="打开参数XDR组件文件"
+		decodeClass="com.insigma.acc.monitor.xdr.tool.decoder.XDREODFileContentDecoder"
+		hotKeys="P" />
+	<MenuItem name="打开运营参数主控文件"
+		decodeClass="com.insigma.acc.monitor.xdr.tool.decoder.XDRRUNParameterControlFileContentDecoder"
+		hotKeys="S" />
+	<MenuItem name="打开运营参数文件"
+		decodeClass="com.insigma.acc.monitor.xdr.tool.decoder.XDRRUNParameterFileDecoder"
+		hotKeys="S" />
+	<MenuItem name="打开交易类XDR文件"
+		decodeClass="com.insigma.acc.monitor.xdr.tool.decoder.XDRSLEFileContentDecoder"
+		hotKeys="S" />
+	 <MenuItem name="打开对账XDR文件" decodeClass="com.insigma.acc.monitor.xdr.tool.decoder.XDRALSDataFileContentDecoder"
+		hotKeys="E" /> 
+	<MenuItem name="打开ES交易类XDR文件"
+		decodeClass="com.insigma.acc.monitor.xdr.tool.decoder.XDRESFileContentDecoder"
+		hotKeys="S" />
+	<MenuItem type="separator" />
+
+</XDRViewer>

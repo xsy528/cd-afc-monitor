@@ -20,10 +20,7 @@
     <modules>
         <module>../com.insigma.commons.core</module>
         <module>../com.insigma.commons.application</module>
-        <module>../com.insigma.commons.framework</module>
         <module>../com.insigma.commons.persistence</module>
-        <module>../com.insigma.commons.ui</module>
-        <module>../com.insigma.commons.editorframework</module>
     </modules>
 
     <dependencyManagement>

@@ -20,9 +20,11 @@
             <artifactId>AFCLog</artifactId>
             <version>1.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.insigma.commons</groupId>
-            <artifactId>commons-editorframework</artifactId>
+            <artifactId>commons-application</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 

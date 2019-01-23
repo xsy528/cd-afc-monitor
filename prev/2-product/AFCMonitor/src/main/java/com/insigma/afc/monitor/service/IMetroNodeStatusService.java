@@ -1,13 +1,14 @@
 package com.insigma.afc.monitor.service;
 
-import java.util.List;
-
 import com.insigma.afc.monitor.entity.TmoItemStatus;
 import com.insigma.afc.monitor.listview.equstatus.EquStatusFilterForm;
 import com.insigma.afc.monitor.listview.equstatus.EquStatusViewItem;
 import com.insigma.afc.monitor.listview.equstatus.StationStatustViewItem;
 import com.insigma.afc.topology.MetroNode;
+import com.insigma.afc.topology.MetroStation;
 import com.insigma.commons.application.IService;
+
+import java.util.List;
 
 /**
  * 节点(设备、车站)状态获取接口
@@ -37,13 +38,13 @@ public interface IMetroNodeStatusService extends IService {
 	List<EquStatusViewItem> getEquStatusView(EquStatusFilterForm conditon);
 
 	/**
-	 * 获取设备状态统计信息
+	 * 获取车站设备状态统计信息
 	 * 
 	 * @param stationID
 	 *            车站号
 	 * @return 统计信息列表
 	 */
-	List<EquStatusViewItem> getEquStatusViewByStationId(int stationID);
+	List<StationStatustViewItem> getAllStationStatusView(List<MetroStation> metroStations);
 
 	/**
 	 * 获取车站状态信息

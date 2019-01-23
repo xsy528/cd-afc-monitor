@@ -3,8 +3,6 @@ package com.insigma.afc.topology;
 import com.insigma.afc.application.AFCApplication;
 import com.insigma.afc.application.AFCNodeLevel;
 import com.insigma.commons.reflect.ClassUtil;
-import com.insigma.commons.ui.anotation.View;
-import com.insigma.commons.ui.anotation.ViewExpansion;
 import com.insigma.commons.util.SystemPropertyUtil;
 
 import javax.persistence.*;
@@ -21,25 +19,18 @@ public class MetroStation extends MetroNode implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@View()
 	private MetroStationId id = new MetroStationId();
 
-	@View(label = "线路名称", regexp = "^[\\u4e00-\\u9fa5,\\w]{0,16}$", modify = false)
 	private String lineName;
 
-	@View(label = "车站名称", regexp = "^[\\u4e00-\\u9fa5,\\w]{0,16}$")
 	private String stationName;
 
-	@View(label = "网络地址", regexp = "[0-9\\.]{1,15}")
 	private String ipAddress;
 
-	//	@View(label = "图片坐标")
 	private AFCNodeLocation imageLocation;
 
-	//	@View(label = "文字坐标")
 	private AFCNodeLocation textLocation;
 
-	@View(label = "车站图片", type = "File")
 	private String picName;
 
 	private String backPicName;
@@ -307,8 +298,6 @@ public class MetroStation extends MetroNode implements java.io.Serializable {
 
 	private String extJsonValue;
 
-	@View(label = "扩展信息")
-	@ViewExpansion(viewClass = "${MetroStation.extValue}")
 	@Transient
 	private Object extValue;
 

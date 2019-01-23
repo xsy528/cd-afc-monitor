@@ -2,16 +2,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
-
-	<!--<bean id ="viewItemTransformation" class="com.insigma.afc.ningbo.monitor.search.ViewItemTransformationUtil"></bean>
-	
-	-->
-	<!--bean id ="deviceTypeComboCasecadeProvider" class="com.insigma.afc.provider.DeviceTypeComboCasecadeProvider"></bean-->
-	<!--	
-	<bean id ="ticketTypeComboCasecadeProvider" class="com.insigma.afc.chengdu.ticket.provider.TicketTypeCasecadeProvider"></bean>
--->
-
-	<!--<bean id ="blkResultBuilder" class="com.insigma.acc.wz.opt.result.WZBLKResultBuilder"></bean>-->
 		
 </beans>
 	

@@ -1,7 +1,5 @@
 package com.insigma.afc.monitor.entity;
 
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
 import com.insigma.commons.util.lang.DateTimeUtil;
 
 import javax.persistence.*;
@@ -88,11 +86,9 @@ public class TmoEquEvent implements Serializable {
 	private Short eventType;
 
 	/** 事件描述 */
-	@ColumnView(name = "事件描述", width = 120, sortAble = false)
 	private String evtDesc;
 
 	/** 发生时间 */
-	@ColumnView(name = "发生时间", convertor = DateTimeConvertor.class, width = 140, sortAble = false)
 	private Date occurTime;
 
 	/** 事件状态： */

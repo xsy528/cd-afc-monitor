@@ -11,7 +11,7 @@
 	</bean>
 
 	<bean id="nodeController" name="/node/list/*" class="com.insigma.acc.monitor.controller.NodeTreeController">
-		<constructor-arg index="0" ref="nodeService"/>
+		<constructor-arg index="0" ref="nodeTreeService"/>
 	</bean>
 
 	<bean id="nodeStatusController" name="/monitor/query/*" class="com.insigma.acc.monitor.controller.NodeStatusController">
@@ -50,8 +50,10 @@
 		<property name="monitorService" ref="monitorService"/>
 	</bean>
 
-	<bean id="nodeService" class="com.insigma.acc.monitor.service.impl.NodeServiceImpl">
+	<bean id="nodeTreeService" class="com.insigma.acc.monitor.service.impl.NodeTreeServiceImpl">
 		<property name="fileService" ref="fileService"/>
+		<property name="iMetroNodeService" ref="metroNodeService"/>
+		<property name="iMetroNodeStatusService" ref="metroNodeStatusService"/>
 	</bean>
 
 	<bean id="fileService" class="com.insigma.acc.monitor.service.impl.FileServiceImpl">

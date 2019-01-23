@@ -1,8 +1,8 @@
 package com.insigma.acc.monitor.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.insigma.acc.wz.define.WZDeviceCmdControlType;
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.define.WZDeviceCmdControlType;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.service.CommandService;
 import com.insigma.acc.monitor.service.FileService;
 import com.insigma.acc.monitor.util.HttpUtils;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Ticket:
+ * Ticket: 命令接口
  *
  * @author xuzhemin
  * 2019-01-04:10:49

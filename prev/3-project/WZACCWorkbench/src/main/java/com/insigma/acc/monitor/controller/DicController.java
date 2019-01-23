@@ -1,6 +1,6 @@
 package com.insigma.acc.monitor.controller;
 
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.afc.dic.AFCDeviceType;
 import com.insigma.afc.dic.AFCModeCode;
 import com.insigma.afc.dic.DeviceStatus;

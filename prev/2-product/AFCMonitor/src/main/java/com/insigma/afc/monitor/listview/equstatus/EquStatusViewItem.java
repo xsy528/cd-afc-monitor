@@ -1,8 +1,6 @@
 package com.insigma.afc.monitor.listview.equstatus;
 
 import com.insigma.afc.topology.AFCNode;
-import com.insigma.commons.ui.anotation.ColumnView;
-import com.insigma.commons.ui.convert.DateTimeConvertor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +21,6 @@ public class EquStatusViewItem extends AFCNode implements Serializable {
 	//	@ColumnView(name = "报警事件")
 	private String alarmEvent;
 
-	@ColumnView(name = "状态更新时间", convertor = DateTimeConvertor.class, sortAble = false)
 	private Date updateTime;
 
 	public boolean isOnline() {

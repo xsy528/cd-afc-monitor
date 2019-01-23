@@ -1,8 +1,9 @@
 package com.insigma.acc.monitor.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.insigma.acc.monitor.service.WZACCMetroNodeStatusService;
-import com.insigma.acc.monitor.service.WZModeService;
+import com.insigma.acc.monitor.model.dto.Result;
+import com.insigma.acc.monitor.service.impl.WZACCMetroNodeStatusServiceImpl;
+import com.insigma.acc.monitor.service.impl.WZModeServiceImpl;
 import com.insigma.acc.monitor.exception.ErrorCode;
 import com.insigma.acc.monitor.model.vo.*;
 import com.insigma.acc.monitor.service.NodeStatusService;
@@ -48,12 +49,12 @@ public class NodeStatusController extends BaseMultiActionController{
         methodMapping.put("/monitor/query/boxDetail","getBoxDetail");
     }
 
-    private WZACCMetroNodeStatusService metroNodeStatusService;
-    private WZModeService modeService;
+    private WZACCMetroNodeStatusServiceImpl metroNodeStatusService;
+    private WZModeServiceImpl modeService;
     private NodeStatusService nodeStatusService;
 
     @Autowired
-    public NodeStatusController(WZACCMetroNodeStatusService metroNodeStatusService, WZModeService modeService,
+    public NodeStatusController(WZACCMetroNodeStatusServiceImpl metroNodeStatusService, WZModeServiceImpl modeService,
                                 NodeStatusService nodeStatusService) {
         this.metroNodeStatusService = metroNodeStatusService;
         this.modeService = modeService;

@@ -18,7 +18,6 @@
     </properties>
 
     <modules>
-        <module>../WZACCApplication</module>
         <module>../WZACCWorkbench</module>
     </modules>
 

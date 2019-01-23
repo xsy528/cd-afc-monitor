@@ -1,6 +1,6 @@
 package com.insigma.acc.monitor.controller;
 
-import com.insigma.acc.monitor.model.vo.Result;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -5,7 +5,6 @@
  */
 package com.insigma.afc.initor;
 
-import com.insigma.commons.ui.InitialThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,11 +22,6 @@ public abstract class SystemInitor {
 
 	public boolean nextIfFail() {
 		return true;
-	}
-
-	public void notifyView(String message) {
-		InitialThread initThread = (InitialThread) Thread.currentThread();
-		initThread.setMessage(message);
 	}
 
 	public boolean isDaemon() {

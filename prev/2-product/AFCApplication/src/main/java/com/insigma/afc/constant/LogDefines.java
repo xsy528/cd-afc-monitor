@@ -121,17 +121,4 @@ public class LogDefines {
 		}
 	}
 
-	public static Color getLogStatusColor(String statusLevel) {
-		if (statusLevel.equals(logClassName[0])) {
-			return ColorConstants.COLOR_NORMAL;
-
-		} else if (statusLevel.equals(logClassName[1])) {
-			return ColorConstants.COLOR_WARN;
-		} else if (statusLevel.equals(logClassName[2])) {
-			return ColorConstants.COLOR_ERROR;
-		} else {
-			return ColorConstants.COLOR_NORMAL;
-		}
-	}
-
 }

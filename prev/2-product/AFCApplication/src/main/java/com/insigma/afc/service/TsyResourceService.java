@@ -3,25 +3,20 @@
  */
 package com.insigma.afc.service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import org.apache.commons.io.FileUtils;
-
 import com.insigma.afc.entity.AFCResource;
 import com.insigma.afc.entity.TsyResource;
-import com.insigma.commons.codec.md5.MD5Util;
 import com.insigma.commons.exception.ApplicationException;
 import com.insigma.commons.io.FileUtil;
 import com.insigma.commons.op.OPException;
 import com.insigma.commons.service.Service;
-import com.insigma.commons.ui.ResourceUtil;
+import com.insigma.commons.util.MD5Util;
+import com.insigma.commons.util.ResourceUtils;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author qcj(qiuchangjin@zdwxgd.com)
@@ -58,7 +53,7 @@ public class TsyResourceService extends Service implements ITsyResourceService {
 	@Override
 	public void syncResouce() {
 		System.out.println("---- start to sync resources------");
-		String rootRes = ResourceUtil.ROOT_RESOURCE_PATH;
+		String rootRes = ResourceUtils.ROOT_RESOURCE_PATH;
 		File rootFilePath = new File(rootRes);
 
 		if (rootFilePath.exists()) {
@@ -278,16 +273,4 @@ public class TsyResourceService extends Service implements ITsyResourceService {
 		}
 	}
 
-	/*	public static void main(String[] args) {
-			Properties properties = System.getProperties();
-			for (Object string : properties.keySet()) {
-				System.out.println(string);
-			}
-			System.out.println("-------" + properties.get("user.dir"));
-	
-			URL rootPath = TsyResourceService.class.getResource("/images/Bluehills.jpg");
-			File file = new File(URLDecoder.decode(rootPath.getFile()));
-			System.out.println(file.exists());
-			System.out.println(new File("./images/Bluehills.jpg").exists());
-		}*/
 }

@@ -1,14 +1,14 @@
 package com.insigma.acc.monitor.service.impl;
 
+import com.insigma.acc.monitor.define.WZDeviceType;
+import com.insigma.acc.monitor.exception.ErrorCode;
+import com.insigma.acc.monitor.model.dto.Location;
+import com.insigma.acc.monitor.model.dto.Result;
 import com.insigma.acc.monitor.model.entity.TstNodeStocks;
 import com.insigma.acc.monitor.model.entity.TstTvmBoxStocks;
-import com.insigma.acc.wz.define.WZDeviceType;
-import com.insigma.acc.monitor.service.IWZMonitorService;
-import com.insigma.acc.monitor.exception.ErrorCode;
 import com.insigma.acc.monitor.model.vo.DeviceModuleItem;
-import com.insigma.acc.monitor.model.vo.Location;
-import com.insigma.acc.monitor.model.vo.Result;
 import com.insigma.acc.monitor.service.FileService;
+import com.insigma.acc.monitor.service.IWZMonitorService;
 import com.insigma.acc.monitor.service.NodeStatusService;
 import com.insigma.acc.monitor.util.NodeUtils;
 import com.insigma.afc.application.AFCApplication;
@@ -26,7 +26,6 @@ import com.insigma.afc.topology.MetroNode;
 import com.insigma.commons.op.OPException;
 import com.insigma.commons.query.QueryFilter;
 import com.insigma.commons.service.CommonDAO;
-import com.insigma.commons.ui.anotation.ColumnView;
 import com.insigma.commons.util.lang.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -310,10 +309,8 @@ public class NodeStatusServiceImpl implements NodeStatusService {
     //钱箱查询结果行
     public class DeviceCashBoxViewItem {
 
-        @ColumnView(name = "设备钱箱信息", sortAble = false)
         private String deviceCashBoxInfo = "";
 
-        @ColumnView(name = "设备钱箱值", sortAble = false)
         private String deviceCashBoxValue = "";
 
         public String getDeviceCashBoxInfo() {
@@ -345,10 +342,8 @@ public class NodeStatusServiceImpl implements NodeStatusService {
     //票箱查询结果行
     public class DeviceTicketBoxViewItem {
 
-        @ColumnView(name = "设备票箱信息", sortAble = false)
         private String deviceTicketBoxInfo = "";
 
-        @ColumnView(name = "设备票箱值(张)", sortAble = false)
         private String deviceTicketBoxValue = "";
 
         public String getDeviceTicketBoxInfo() {

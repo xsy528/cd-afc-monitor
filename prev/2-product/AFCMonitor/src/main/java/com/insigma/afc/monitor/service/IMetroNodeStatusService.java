@@ -1,9 +1,9 @@
 package com.insigma.afc.monitor.service;
 
-import com.insigma.afc.monitor.entity.TmoItemStatus;
-import com.insigma.afc.monitor.listview.equstatus.EquStatusFilterForm;
-import com.insigma.afc.monitor.listview.equstatus.EquStatusViewItem;
-import com.insigma.afc.monitor.listview.equstatus.StationStatustViewItem;
+import com.insigma.afc.monitor.model.entity.TmoItemStatus;
+import com.insigma.afc.monitor.model.dto.EquStatusFilterForm;
+import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
+import com.insigma.afc.monitor.model.dto.StationStatustViewItem;
 import com.insigma.afc.topology.MetroNode;
 import com.insigma.afc.topology.MetroStation;
 import com.insigma.commons.application.IService;

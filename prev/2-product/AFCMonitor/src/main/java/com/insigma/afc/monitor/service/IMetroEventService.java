@@ -4,13 +4,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import com.insigma.afc.monitor.entity.TmoEquEvent;
-import com.insigma.afc.monitor.entity.TmoEquEventCur;
-import com.insigma.afc.monitor.entity.TmoEquEventHistory;
-import com.insigma.afc.monitor.entity.TmoEquStatus;
-import com.insigma.afc.monitor.entity.TmoEquStatusCur;
-import com.insigma.afc.monitor.listview.equstatus.EquStatusFilterForm;
-import com.insigma.afc.monitor.listview.event.EventFilterForm;
+import com.insigma.afc.monitor.model.entity.TmoEquEvent;
+import com.insigma.afc.monitor.model.entity.TmoEquEventCur;
+import com.insigma.afc.monitor.model.entity.TmoEquEventHistory;
+import com.insigma.afc.monitor.model.entity.TmoEquStatus;
+import com.insigma.afc.monitor.model.entity.TmoEquStatusCur;
+import com.insigma.afc.monitor.model.dto.EquStatusFilterForm;
+import com.insigma.afc.monitor.model.dto.EventFilterForm;
 import com.insigma.commons.application.IService;
 import com.insigma.commons.collection.PageHolder;
 

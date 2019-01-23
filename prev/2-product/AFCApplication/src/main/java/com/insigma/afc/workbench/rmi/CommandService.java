@@ -13,14 +13,6 @@ public class CommandService implements ICommandService {
 
 	private CommandHandlerManager commandHandlerManager;
 
-	public CommandHandlerManager getCommandHandlerManager() {
-		return commandHandlerManager;
-	}
-
-	public void setCommandHandlerManager(CommandHandlerManager commandHandlerManager) {
-		this.commandHandlerManager = commandHandlerManager;
-	}
-
 	public CmdHandlerResult command(int id, String userid, Long src, Object arg, List<MetroNode> targets) {
 		String tagStr = "";
 		String argStr = "";
@@ -78,5 +70,13 @@ public class CommandService implements ICommandService {
 
 	public void alive() {
 
+	}
+
+	public CommandHandlerManager getCommandHandlerManager() {
+		return commandHandlerManager;
+	}
+
+	public void setCommandHandlerManager(CommandHandlerManager commandHandlerManager) {
+		this.commandHandlerManager = commandHandlerManager;
 	}
 }

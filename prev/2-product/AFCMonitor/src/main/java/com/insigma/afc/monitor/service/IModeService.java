@@ -3,9 +3,9 @@ package com.insigma.afc.monitor.service;
 import java.util.Date;
 import java.util.List;
 
-import com.insigma.afc.monitor.entity.TmoModeBroadcast;
-import com.insigma.afc.monitor.entity.TmoModeUploadInfo;
-import com.insigma.afc.monitor.search.TmoModeBroadcastViewItem;
+import com.insigma.afc.monitor.model.entity.TmoModeBroadcast;
+import com.insigma.afc.monitor.model.entity.TmoModeUploadInfo;
+import com.insigma.afc.monitor.model.vo.TmoModeBroadcastViewItem;
 import com.insigma.commons.application.IService;
 
 /**

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class CommandHandlerManager implements IService {
 
-	Map<Integer, ICommandHandler> handlers = new HashMap<Integer, ICommandHandler>();
+	Map<Integer, ICommandHandler> handlers = new HashMap<>();
 
 	protected ServiceWireHelper actionHandlerServiceWire = new ServiceWireHelper();
 

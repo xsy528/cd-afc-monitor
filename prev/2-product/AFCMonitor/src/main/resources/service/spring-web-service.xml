@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
+
+	<bean id="fileController" name="/file/**" class="com.insigma.afc.monitor.controller.FileController">
+		<constructor-arg index="0" ref="fileService"/>
+	</bean>
+
+	<bean id="nodeController" name="/node/list/*" class="com.insigma.afc.monitor.controller.NodeTreeController">
+		<constructor-arg index="0" ref="nodeTreeService"/>
+	</bean>
+
+	<bean id="nodeStatusController" name="/monitor/query/*" class="com.insigma.afc.monitor.controller.NodeStatusController">
+		<constructor-arg index="0" ref="metroNodeStatusService"/>
+		<constructor-arg index="1" ref="wzmodeService"/>
+		<constructor-arg index="2" ref="nodeStatusService"/>
+	</bean>
+
+	<bean id="nodeManagerController" name="/editor/**" class="com.insigma.afc.monitor.controller.NodeManagerController">
+		<constructor-arg index="0" ref="fileService"/>
+		<constructor-arg index="1" ref="metroNodeService"/>
+	</bean>
+
+	<bean id="commandController" name="/monitor/*" class="com.insigma.afc.monitor.controller.CommandController">
+		<constructor-arg index="0" ref="commandService"/>
+		<constructor-arg index="1" ref="fileService"/>
+	</bean>
+
+	<bean id="monitorConfigController" name="/monitor/config/*" class="com.insigma.afc.monitor.controller.MonitorConfigController">
+		<constructor-arg index="0" ref="monitorConfigService"/>
+	</bean>
+
+	<bean id="DicController" name="/config/*" class="com.insigma.afc.monitor.controller.DicController"></bean>
+
+	<bean id="monitorConfigService" class="com.insigma.afc.monitor.service.impl.MonitorConfigServiceImpl">
+		<property name="logSysService" ref="syncLogService"/>
+	</bean>
+
+
+	<bean id="cmdHandlerList" class="java.util.LinkedList">
+		<constructor-arg>
+			<list>
+				<!-- 命令相关 rmi -->
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean id="commandHandlerManager" class="com.insigma.afc.workbench.rmi.CommandHandlerManager">
+		<constructor-arg>
+			<ref bean="cmdHandlerList" />
+		</constructor-arg>
+	</bean>
+	<bean id="iCommandService" class="com.insigma.afc.workbench.rmi.CommandService">
+		<property name="commandHandlerManager" ref="commandHandlerManager"/>
+	</bean>
+
+	<bean id="commandService" class="com.insigma.afc.monitor.service.impl.CommandServiceImpl">
+		<property name="commonDAO" ref="commonDAO"/>
+		<property name="commandService" ref="iCommandService"/>
+	</bean>
+
+	<bean id="nodeStatusService" class="com.insigma.afc.monitor.service.impl.NodeStatusServiceImpl">
+		<property name="commonDAO" ref="commonDAO"/>
+		<property name="iDeviceModuleFactory" ref="WZDeviceModuleFactoryImpl"/>
+		<property name="statusService" ref="metroNodeStatusService"/>
+		<property name="fileService" ref="fileService"/>
+		<property name="monitorService" ref="monitorService"/>
+	</bean>
+
+	<bean id="nodeTreeService" class="com.insigma.afc.monitor.service.impl.NodeTreeServiceImpl">
+		<property name="fileService" ref="fileService"/>
+		<property name="iMetroNodeService" ref="metroNodeService"/>
+		<property name="iMetroNodeStatusService" ref="metroNodeStatusService"/>
+	</bean>
+
+	<bean id="fileService" class="com.insigma.afc.monitor.service.impl.FileServiceImpl">
+		<property name="resourceService" ref="resourceService"/>
+		<property name="commonDAO" ref="commonDAO"/>
+	</bean>
+
+</beans>
+

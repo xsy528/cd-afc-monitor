@@ -201,12 +201,4 @@ public class SystemPropertyUtil {
 			return Boolean.valueOf(booleanStr);
 		}
 	}
-
-	public static void main(String[] args) {
-		setProperty("Key", "123.4");
-		System.out.println(getPropertyForDouble("Key", 0));
-		System.out.println(getPropertyForInt("Key", 0));
-		System.out.println(getPropertyForBigDecimal("Key", new BigDecimal(0)));
-		System.out.println(getPropertyForBoolean("Key"));
-	}
 }

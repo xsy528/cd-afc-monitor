@@ -19,12 +19,6 @@ import com.insigma.commons.query.QueryFilter;
 @SuppressWarnings("unchecked")
 public interface ICommonDAO extends IService {
 
-	void removeObjs(String hql) throws OPException;
-
-	void removeObjs(Collection objs) throws OPException;
-
-	void updateObject(Object obj);
-
 	Serializable saveObj(Object obj) throws OPException;
 
 	void saveObjs(Object objs[]) throws OPException;
@@ -33,13 +27,7 @@ public interface ICommonDAO extends IService {
 
 	void updateObj(Object obj) throws OPException;
 
-	void updateObjs(Object objs[]) throws OPException;
-
-	Connection getConnection() throws OPException;
-
 	void saveOrUpdateObj(Object obj);
-
-	void removeObj(Object o) throws OPException;
 
 	/**
 	 * 执行update 或者delete 等HQL语句
@@ -50,14 +38,6 @@ public interface ICommonDAO extends IService {
 	 *            变量绑定参数
 	 */
 	void executeHQLUpdate(String hql, Object... objects);
-
-	/**
-	 * 执行update 或者delete 等HQL语句
-	 * 
-	 * @param hql
-	 *            HQL执行语句
-	 */
-	void executeHQLUpdates(List<String> hqls);
 
 	/**
 	 * 执行SQL语句
@@ -102,21 +82,6 @@ public interface ICommonDAO extends IService {
 	List retrieveEntityListHQL(String sql, int page, int pageSize, Object... objects) throws OPException;
 
 	/**
-	 * 利用预编译SQL查询，如果查询不到，返回新的ArrayList，基本是返回List<Object[]>，不返回NullPoint。 *
-	 * 
-	 * @param sql
-	 *            SQL语句
-	 * @param page
-	 *            第一页从0开始 ,小于0不分页
-	 * @param pageSize
-	 *            每页显示数量
-	 * @param objects
-	 *            变量绑定参数
-	 * @return Query 返回Query
-	 */
-	public List retrieveEntityListSQL(String sql, int page, int pageSize, Object... objects) throws OPException;
-
-	/**
 	 * 根据sql获取列表
 	 * 
 	 * @param sql
@@ -128,8 +93,6 @@ public interface ICommonDAO extends IService {
 	 */
 	public List execSqlQuery(String sql, Object... objects) throws OPException;
 
-	public <T> List<T> fetchList(Class<T> table, Object condition);
-
 	/**
 	 * 按属性过滤条件列表查找对象列表.
 	 * 
@@ -138,18 +101,6 @@ public interface ICommonDAO extends IService {
 	public <T> PageHolder<T> fetchPageByFilter(QueryFilter filters, Class<T> clazz) throws OPException;
 
 	public <T> List<T> fetchListByFilter(QueryFilter filters, Class<T> clazz) throws OPException;
-
-	/**
-	 * 根据传入的object的annotation进行条件过滤,如果pageIndex>-1会自动进行count操作,totalCount会在pageHolder中保存
-	 * 
-	 * @param form
-	 * @param pageSize
-	 * @param pageIndex
-	 * @return PageHolder
-	 * @throws OPException
-	 */
-	public PageHolder fetchListByObject(Object form, int pageSize, int pageIndex, QueryCondition... cons)
-			throws OPException;
 
 	/**
 	 * @param preparedSql
@@ -174,31 +125,6 @@ public interface ICommonDAO extends IService {
 			boolean includeColumnNames, final Map<String, String> colNameMap,
 			final Map<String, ColumnValuePattern> colValPattern, final Object... paras) throws OPException;
 
-	/**
-	 * 调用无返回值的存储过程
-	 * 
-	 * @param sql
-	 *            eg: afc_dproc(?,?)
-	 * @param objects
-	 * @return
-	 */
-	public boolean callProcedure(String sql, Object... objects);
-
 	public Object callProcedureForObject4Oracle(String sql, int type, Object... objects);
 
-	public Object callProcedureForObject(String sql, Object... objects);
-
-	// 采用SQL进行批量更新
-	public void execBathUpdate(String[] sqls);
-
-	/**
-	 * 批量更新一条语句，根据不同的条件 例如： sql ="update  table  set  flag = 1 where record=?" objList
-	 * ={[1],[2]...[n]}
-	 * 
-	 * @param sql
-	 *            跟新的条件语句
-	 * @param objList
-	 *            跟新条件
-	 */
-	public void execBathUpdate(String sql, List<Object[]> objList);
 }

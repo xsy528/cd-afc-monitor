@@ -1,57 +1,27 @@
 package com.insigma.commons.service;
 
-import java.lang.reflect.Field;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import com.insigma.commons.collection.PageHolder;
+import com.insigma.commons.exception.ApplicationException;
+import com.insigma.commons.op.BaseHibernateDao;
+import com.insigma.commons.op.OPException;
+import com.insigma.commons.query.OrderBy;
+import com.insigma.commons.query.QueryCondition;
+import com.insigma.commons.query.QueryFilter;
+import com.insigma.commons.query.QueryFilter.ConditionType;
+import org.hibernate.criterion.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.insigma.commons.annotation.Condition;
-import com.insigma.commons.annotation.NoCondition;
-import com.insigma.commons.annotation.QueryClass;
-import com.insigma.commons.collection.PageHolder;
-import com.insigma.commons.database.StringHelper;
-import com.insigma.commons.exception.ApplicationException;
-import com.insigma.commons.op.BaseHibernateDao;
-import com.insigma.commons.op.OPException;
-import com.insigma.commons.op.SqlRestrictions;
-import com.insigma.commons.query.OrderBy;
-import com.insigma.commons.query.QueryCondition;
-import com.insigma.commons.query.QueryConditionFactory;
-import com.insigma.commons.query.QueryFilter;
-import com.insigma.commons.query.QueryFilter.ConditionType;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 @Transactional(propagation = Propagation.REQUIRED)
 @Service(value = "commonService")
 @SuppressWarnings("unchecked")
 public class CommonDAO extends BaseHibernateDao implements ICommonDAO {
-
-	public Object getSingleObject(String sql) {
-		return getSession().createSQLQuery(sql).uniqueResult();
-	}
-
-	public void updateObject(Object obj) {
-		try {
-			if (obj == null) {
-				throw new ApplicationException("更新实体失败。");
-			}
-			this.updateObj(obj);
-		} catch (OPException e) {
-			throw new ApplicationException("更新实体失败。", e);
-		}
-
-	}
 
 	public void saveOrUpdateObj(Object element) {
 		if (element == null) {
@@ -75,96 +45,6 @@ public class CommonDAO extends BaseHibernateDao implements ICommonDAO {
 		} catch (OPException e) {
 			throw new ApplicationException("执行HQL语句<" + hql + ">失败。", e);
 		}
-	}
-
-	public void executeHQLUpdates(List<String> hqls) {
-		for (String hql : hqls) {
-			executeHQLUpdate(hql);
-		}
-	}
-
-	public <T> List<T> fetchList(Class<T> table, Object condition) {
-		List<Object> args = new ArrayList<Object>();
-		StringBuffer sql = new StringBuffer();
-		try {
-			sql.append("from " + table.getClass().getName() + " t where 1=1 ");
-			for (Field field : condition.getClass().getDeclaredFields()) {
-				field.setAccessible(true);
-				if (field.get(condition) != null) {
-					if (field.getType().isArray()) {
-						sql.append(SqlRestrictions.in("t." + field.getName(),
-								StringHelper.array2StrOfCommaSplit((Object[]) field.get(condition))));
-					} else {
-						sql.append(" and t." + field.getName() + " = ? ");
-						args.add(field.get(condition));
-					}
-				}
-			}
-			return getEntityListHQL(sql.toString(), args.toArray());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public PageHolder fetchListByObject(Object form, int pageSize, int pageIndex, QueryCondition... cons)
-			throws OPException {
-		Class formClass = form.getClass();
-		QueryClass qc = form.getClass().getAnnotation(QueryClass.class);
-		if (qc == null) {
-			return null;
-		}
-		QueryFilter filter = new QueryFilter();
-		Class queryClass = qc.queryClass();
-		if (queryClass == null) {
-			throw new NullPointerException("查询类不能为空。");
-		}
-		filter.setPageIndex(pageIndex);
-		filter.setPageSize(pageSize);
-		if (qc.orderby() != null) {
-			String[] orderbys = qc.orderby();
-			for (String orderbyString : orderbys) {
-				String[] splits = orderbyString.split(" ");
-				boolean asc = false;
-				if (splits.length > 1) {
-					asc = "asc".equalsIgnoreCase(splits[1]);
-				}
-				filter.addOrderBy(splits[0], asc);
-			}
-		}
-
-		for (Field field : formClass.getDeclaredFields()) {
-			field.setAccessible(true);
-			if (field.getName().equals("serialVersionUID")) {
-				continue;
-			}
-
-			NoCondition ignore = field.getAnnotation(NoCondition.class);
-			if (ignore != null) {
-				continue;
-			}
-			Condition condition = field.getAnnotation(Condition.class);
-			Object fieldValue = null;
-			try {
-				fieldValue = field.get(form);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			if (fieldValue == null) {
-				continue;
-			}
-			QueryCondition con = QueryConditionFactory.buildCondition(condition, field.getName(), fieldValue);
-			if (con == null) {
-				continue;
-			}
-			filter.addQueryConditoin(con);
-		}
-		for (QueryCondition qcon : cons) {
-			filter.addQueryConditoin(qcon);
-		}
-		return fetchPageByFilter(filter, queryClass);
 	}
 
 	/**
@@ -272,47 +152,6 @@ public class CommonDAO extends BaseHibernateDao implements ICommonDAO {
 			return cs.getObject(i);
 		} catch (Exception e) {
 			throw new ApplicationException("更新实体失败。", e);
-		}
-	}
-
-	//适用于DB2
-	public Object callProcedureForObject(String sql, Object... objects) {
-		try {
-			Connection conn = getConnection();
-			CallableStatement cs;
-			String callString = "{call " + sql + " }";
-
-			cs = conn.prepareCall(callString);
-			int i = 1;
-			for (Object object : objects) {
-				cs.setObject(i, object);
-				i++;
-			}
-			cs.execute();
-
-			ResultSet rs = null;
-			rs = cs.getResultSet();
-
-			return rs;
-		} catch (Exception e) {
-			throw new ApplicationException("更新实体失败。", e);
-		}
-	}
-
-	public void execBathUpdate(String[] sqls) {
-		try {
-			this.execSqlUpdate(sqls);
-		} catch (Exception e) {
-			throw new ApplicationException("进行批量更新SQL异常。", e);
-		}
-	}
-
-	public void execBathUpdate(String sql, List<Object[]> objList) {
-		// TODO Auto-generated method stub
-		try {
-			this.execSqlUpdate(sql, objList);
-		} catch (Exception e) {
-			throw new ApplicationException("进行批量更新SQL异常。", e);
 		}
 	}
 }

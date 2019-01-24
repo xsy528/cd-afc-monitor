@@ -17,26 +17,7 @@ import com.insigma.commons.util.lang.StringUtil;
 @SuppressWarnings("unchecked")
 public class ClassUtil {
 
-	private static Log logger = LogFactory.getLog(com.insigma.commons.reflect.ClassUtil.class);
-
-	public static Object getClassInstance(String name) {
-		try {
-			return Thread.currentThread().getContextClassLoader().loadClass(name).newInstance();
-		} catch (Exception e) {
-		}
-		try {
-			return Class.forName(name).newInstance();
-		} catch (ClassNotFoundException ex) {
-			logger.error(ex.toString());
-			return null;
-		} catch (IllegalAccessException ex) {
-			logger.error(ex.toString());
-			return null;
-		} catch (InstantiationException ex) {
-			logger.error(ex.toString());
-		}
-		return null;
-	}
+	private static Log logger = LogFactory.getLog(ClassUtil.class);
 
 	public static Class<?> forName(String name) {
 		return forName(name, HashMap.class);
@@ -48,18 +29,6 @@ public class ClassUtil {
 		} catch (ClassNotFoundException e) {
 			logger.error("ClassName:" + name + " Not Found, return the defaultClazz:" + defaultClazz);
 			return defaultClazz;
-		}
-	}
-
-	public static void copyProperties(Object from, Object to) {
-		try {
-			if (from == null || to == null)
-				return;
-			BeanUtils.copyProperties(to, from);
-			//BeanCopier.create(from.getClass(), to.getClass(), false).copy(from,to, null);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			logger.error(ex.toString());
 		}
 	}
 

@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.insigma.commons.database.GlobalNames;
-
 /**
  * <p>
  * Title: insigma信息管理系统

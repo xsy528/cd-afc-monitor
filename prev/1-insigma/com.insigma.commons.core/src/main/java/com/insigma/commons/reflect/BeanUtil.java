@@ -835,32 +835,6 @@ public class BeanUtil {
 	}
 
 	/**
-	 * 将标准的实体对象转化为String[]
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	public static String[] toStringArray(Object obj) {
-		List<String> list = new ArrayList<String>();
-		String[] ss = new String[] {};
-		Field[] f = obj.getClass().getDeclaredFields();
-		for (Field element : f) {
-			// String str = element.getName();
-			Object o = null;
-			try {
-				element.setAccessible(true);
-				o = element.get(obj);
-			} catch (Exception e) {
-
-			}
-			list.add(o == null ? null : o.toString());
-			// logger.info(str + " = " + o);
-		}
-
-		return list.toArray(ss);
-	}
-
-	/**
 	 * 将from中的数据复制到to中
 	 * @param from
 	 * @param to
@@ -1047,25 +1021,5 @@ public class BeanUtil {
 		}
 
 		return true;
-	}
-
-	public static void main(String[] args) {
-		try {
-			a();
-		} catch (Exception e) {
-			System.out.println(11);
-			// TODO: handle exception
-		}
-	}
-
-	private static void a() {
-		try {
-			String s = null;
-			s.isEmpty();
-
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		System.out.println(1);
 	}
 }

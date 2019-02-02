@@ -1,13 +1,10 @@
 package com.insigma.afc.monitor.model.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.insigma.afc.topology.AFCNode;
+import java.util.Date;
 
 /**
  * TmoItemStatus entity.
@@ -16,20 +13,39 @@ import com.insigma.afc.topology.AFCNode;
  */
 @Entity
 @Table(name = "TMO_ITEM_STATUS")
-public class TmoItemStatus extends AFCNode implements java.io.Serializable {
+public class TmoItemStatus implements java.io.Serializable {
 
-	private static final long serialVersionUID = -3602719248501005866L;
+	private static final long serialVersionUID = 1L;
 
+	@Id
+	@Column(name = "DEVICE_ID", nullable = false, scale = 0)
+	private Long nodeId;
+
+	@Column(name = "LINE_ID", nullable = false, precision = 5, scale = 0)
+	private Short lineId;
+
+	@Column(name = "STATION_ID", nullable = false, precision = 11, scale = 0)
+	private Integer stationId;
+
+	@Column(name = "ITEM_STATUS", precision = 5, scale = 0)
 	private Short itemStatus;// 状态：正常，警告，报警
 
+	@Column(name = "ITEM_ACTIVITY", precision = 5, scale = 0)
 	private Boolean itemActivity;// 在线状态
 
+	@Column(name = "CURRENT_MODE_CODE")
 	private Short currentModeCode;// 当前模式
 
+	@Column(name = "LAST_MODE_CODE")
 	private Short lastModeCode;// 上一次模式
 
+	@Column(name = "MODE_CHANGE_TIME")
 	private Date modeChangeTime;// 模式切换时间
 
+	@Column(name = "ITEM_TYPE", nullable = false, precision = 11, scale = 0)
+	private Short nodeType;
+
+	@Column(name = "UPDATE_TIME")
 	private Date updateTime;// 状态更新时间
 
 	// Constructors
@@ -39,12 +55,18 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 	}
 
 	public TmoItemStatus(short lineId, int stationId, long nodeId, short nodeType) {
-		super(lineId, stationId, nodeId, nodeType);
+		this.lineId = lineId;
+		this.stationId = stationId;
+		this.nodeId = nodeId;
+		this.nodeType = nodeType;
 	}
 
 	public TmoItemStatus(short lineId, int stationId, long nodeId, short nodeType, short itemStatus,
 			Boolean itemActivity, Short currentModeCode, Short lastModeCode, Date modeChangeTime, Date updateTime) {
-		super(lineId, stationId, nodeId, nodeType);
+		this.lineId = lineId;
+		this.stationId = stationId;
+		this.nodeId = nodeId;
+		this.nodeType = nodeType;
 		this.itemStatus = itemStatus;
 		this.itemActivity = itemActivity;
 		this.currentModeCode = currentModeCode;
@@ -53,31 +75,6 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 		this.updateTime = updateTime;
 	}
 
-	@Id
-	@Column(name = "DEVICE_ID", nullable = false, scale = 0)
-	public long getNodeId() {
-		return this.nodeId;
-	}
-
-	@Column(name = "LINE_ID", nullable = false, precision = 5, scale = 0)
-	@Override
-	public short getLineId() {
-		return this.lineId;
-	}
-
-	@Override
-	@Column(name = "STATION_ID", nullable = false, precision = 11, scale = 0)
-	public int getStationId() {
-		return this.stationId;
-	}
-
-	@Override
-	@Column(name = "ITEM_TYPE", nullable = false, precision = 11, scale = 0)
-	public short getNodeType() {
-		return super.getNodeType();
-	}
-
-	@Column(name = "ITEM_STATUS", precision = 5, scale = 0)
 	public Short getItemStatus() {
 		return this.itemStatus;
 	}
@@ -86,7 +83,6 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 		this.itemStatus = itemStatus;
 	}
 
-	@Column(name = "ITEM_ACTIVITY", precision = 5, scale = 0)
 	public Boolean getItemActivity() {
 		return this.itemActivity;
 	}
@@ -95,7 +91,6 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 		this.itemActivity = itemActivity;
 	}
 
-	@Column(name = "CURRENT_MODE_CODE")
 	public Short getCurrentModeCode() {
 		return this.currentModeCode;
 	}
@@ -104,7 +99,6 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 		this.currentModeCode = currentModeCode;
 	}
 
-	@Column(name = "LAST_MODE_CODE")
 	public Short getLastModeCode() {
 		return this.lastModeCode;
 	}
@@ -113,7 +107,6 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 		this.lastModeCode = lastModeCode;
 	}
 
-	@Column(name = "MODE_CHANGE_TIME")
 	public Date getModeChangeTime() {
 		return this.modeChangeTime;
 	}
@@ -122,7 +115,6 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 		this.modeChangeTime = modeChangeTime;
 	}
 
-	@Column(name = "UPDATE_TIME")
 	public Date getUpdateTime() {
 		return updateTime;
 	}
@@ -131,4 +123,35 @@ public class TmoItemStatus extends AFCNode implements java.io.Serializable {
 		this.updateTime = updateTime;
 	}
 
+	public Long getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
+	}
+
+	public Short getLineId() {
+		return lineId;
+	}
+
+	public void setLineId(Short lineId) {
+		this.lineId = lineId;
+	}
+
+	public Integer getStationId() {
+		return stationId;
+	}
+
+	public void setStationId(Integer stationId) {
+		this.stationId = stationId;
+	}
+
+	public Short getNodeType() {
+		return nodeType;
+	}
+
+	public void setNodeType(Short nodeType) {
+		this.nodeType = nodeType;
+	}
 }

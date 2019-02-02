@@ -1,59 +1,87 @@
 package com.insigma.afc.monitor.service.impl;
 
-import com.insigma.afc.monitor.model.vo.WZMonitorConfigInfo;
+import com.insigma.afc.monitor.constant.SystemConfigKey;
+import com.insigma.afc.monitor.dao.TsyConfigDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
-import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.monitor.service.MonitorConfigService;
-import com.insigma.afc.manager.SystemConfigManager;
 import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
-import com.insigma.commons.exception.ApplicationException;
-import com.insigma.commons.service.ILogService;
+import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.afc.monitor.model.entity.TsyConfig;
+import com.insigma.afc.monitor.service.MonitorConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Ticket:
+ * Ticket:监控配置服务实现类
  *
  * @author xuzhemin
  * 2019-01-09:16:44
  */
+@Service
 public class MonitorConfigServiceImpl implements MonitorConfigService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitorConfigServiceImpl.class);
 
-    private ILogService logSysService;
+    private TsyConfigDao tsyConfigDao;
 
-    @Override
-    public Result<WZMonitorConfigInfo> getMonitorConfig(){
-        return Result.success(new WZMonitorConfigInfo());
+    @Autowired
+    public MonitorConfigServiceImpl(TsyConfigDao tsyConfigDao){
+        this.tsyConfigDao = tsyConfigDao;
     }
 
     @Override
-    public Result<WZMonitorConfigInfo> save(WZMonitorConfigInfo monitorConfigInfo) {
+    public Result<MonitorConfigInfo> getMonitorConfig(){
+        TsyConfig warningConfig = tsyConfigDao.findById(SystemConfigKey.WARNING_THRESHHOLD).orElse(null);
+        TsyConfig alarmConfig = tsyConfigDao.findById(SystemConfigKey.ALARM_THRESHHOLD).orElse(null);
+        TsyConfig refreshIntervalConfig = tsyConfigDao.findById(SystemConfigKey.VIEW_REFRESH_INTERVAL)
+                .orElse(null);
+        Integer warning;
+        Integer alarm;
+        Integer interval;
+        if (warningConfig==null){
+            warning = 0;
+        }else{
+            warning = Integer.valueOf(warningConfig.getConfigValue());
+        }
+        if (alarmConfig==null){
+            alarm = 0;
+        }else{
+            alarm = Integer.valueOf(alarmConfig.getConfigValue());
+        }
+        if (refreshIntervalConfig==null){
+            interval = 0;
+        }else{
+            interval = Integer.valueOf(refreshIntervalConfig.getConfigValue());
+        }
+        return Result.success(new MonitorConfigInfo(warning,alarm,interval));
+    }
+
+    @Override
+    public Result<MonitorConfigInfo> save(MonitorConfigInfo monitorConfigInfo) {
         int warning = monitorConfigInfo.getWarning();
         int alarm = monitorConfigInfo.getAlarm();
         int interval = monitorConfigInfo.getInterval();
 
+        //警告阈值要小于报警阈值
         if (alarm <= warning) {
-            Result.error(ErrorCode.THRESHOLD_INVALID);
+            return Result.error(ErrorCode.THRESHOLD_INVALID);
         } else if (interval < 5) {
-            Result.error(ErrorCode.REFRESH_INTERVAL_INVALID);
+            //时间间隔不能小于5秒
+            return Result.error(ErrorCode.REFRESH_INTERVAL_INVALID);
         }
 
-        try {
-            SystemConfigManager.setConfigItem(MonitorConfigInfo.ALARM_THRESHHOLD, alarm);
-            SystemConfigManager.setConfigItem(MonitorConfigInfo.WARNING_THRESHHOLD, warning);
-            SystemConfigManager.setConfigItem(MonitorConfigInfo.VIEW_REFRESH_INTERVAL, interval);
+        //保存配置
+        List<TsyConfig> tsyConfigList = new ArrayList<>();
+        tsyConfigList.add(new TsyConfig(SystemConfigKey.ALARM_THRESHHOLD,String.valueOf(alarm)));
+        tsyConfigList.add(new TsyConfig(SystemConfigKey.WARNING_THRESHHOLD,String.valueOf(warning)));
+        tsyConfigList.add(new TsyConfig(SystemConfigKey.VIEW_REFRESH_INTERVAL,String.valueOf(interval)));
+        tsyConfigDao.saveAll(tsyConfigList);
 
-        } catch (ApplicationException e) {
-            LOGGER.error("保存参数设置失败");
-            logSysService.doBizLog("监控参数设置失败。");
-            return Result.error(ErrorCode.UNKNOW_ERROR);
-        }
         return Result.success(monitorConfigInfo);
     }
 
-    public void setLogSysService(ILogService logSysService) {
-        this.logSysService = logSysService;
-    }
 }

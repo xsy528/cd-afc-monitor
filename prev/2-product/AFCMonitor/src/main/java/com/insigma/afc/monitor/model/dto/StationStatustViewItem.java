@@ -1,84 +1,113 @@
 package com.insigma.afc.monitor.model.dto;
 
-import com.insigma.afc.topology.AFCNode;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class StationStatustViewItem extends AFCNode {
+public class StationStatustViewItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private boolean isOnline;
+	private Short lineId;
 
-	private int status;
+	private Integer stationId;
 
-	private long mode;
+	private Long nodeId;
 
-	private int normalEvent;
+	private Short nodeType;
 
-	private int warnEvent;
+	private Boolean isOnline;
 
-	private int alarmEvent;
+	private Short status;
+
+	private Long mode;
+
+	private Integer normalEvent;
+
+	private Integer warnEvent;
+
+	private Integer alarmEvent;
 
 	private Date updateTime;
 
 	private Date StationStatusUpdateTime;
 
-	public StationStatustViewItem() {
-	}
-
-	public short getLineId() {
+	public Short getLineId() {
 		return lineId;
 	}
 
-	public void setLineId(short lineId) {
+	public void setLineId(Short lineId) {
 		this.lineId = lineId;
 	}
 
-	public int getStationId() {
+	public Integer getStationId() {
 		return stationId;
 	}
 
-	public void setStationId(int stationId) {
+	public void setStationId(Integer stationId) {
 		this.stationId = stationId;
 	}
 
-	public boolean isOnline() {
+	public Long getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
+	}
+
+	public Short getNodeType() {
+		return nodeType;
+	}
+
+	public void setNodeType(Short nodeType) {
+		this.nodeType = nodeType;
+	}
+
+	public Boolean getOnline() {
 		return isOnline;
 	}
 
-	public void setOnline(boolean isOnline) {
-		this.isOnline = isOnline;
+	public void setOnline(Boolean online) {
+		isOnline = online;
 	}
 
-	public long getMode() {
+	public Short getStatus() {
+		return status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
+	}
+
+	public Long getMode() {
 		return mode;
 	}
 
-	public void setMode(long mode) {
+	public void setMode(Long mode) {
 		this.mode = mode;
 	}
 
-	public int getNormalEvent() {
+	public Integer getNormalEvent() {
 		return normalEvent;
 	}
 
-	public void setNormalEvent(int normalEvent) {
+	public void setNormalEvent(Integer normalEvent) {
 		this.normalEvent = normalEvent;
 	}
 
-	public int getWarnEvent() {
+	public Integer getWarnEvent() {
 		return warnEvent;
 	}
 
-	public void setWarnEvent(int warnEvent) {
+	public void setWarnEvent(Integer warnEvent) {
 		this.warnEvent = warnEvent;
 	}
 
-	public int getAlarmEvent() {
+	public Integer getAlarmEvent() {
 		return alarmEvent;
 	}
 
-	public void setAlarmEvent(int alarmEvent) {
+	public void setAlarmEvent(Integer alarmEvent) {
 		this.alarmEvent = alarmEvent;
 	}
 
@@ -97,13 +126,4 @@ public class StationStatustViewItem extends AFCNode {
 	public void setStationStatusUpdateTime(Date stationStatusUpdateTime) {
 		StationStatusUpdateTime = stationStatusUpdateTime;
 	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
 }

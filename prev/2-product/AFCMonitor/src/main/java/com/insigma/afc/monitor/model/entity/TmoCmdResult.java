@@ -1,6 +1,5 @@
 package com.insigma.afc.monitor.model.entity;
 
-import com.insigma.afc.topology.AFCNode;
 import com.insigma.commons.util.lang.DateTimeUtil;
 
 import javax.persistence.*;
@@ -15,55 +14,70 @@ import java.util.Date;
 @Entity
 @Table(name = "TMO_CMD_RESULT")
 @SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_CMD_RESULT", allocationSize = 1, initialValue = 1)
-public class TmoCmdResult extends AFCNode implements Serializable {
+public class TmoCmdResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	private Long logId;
-
-	private Short cmdType;
-
-	private String cmdName;
-
-	private String operatorId;
-
-	private Date occurTime;
-
-	private String tagName;
-
-	private String tagValue;
-
-	private Short cmdResult;
-
-	// @ColumnView(name = "结果说明")
-	private String remark;
-
-	private Short uploadStatus;
-
-	public TmoCmdResult(Long logId, Short lineId, Integer stationId, Long nodeId, String operatorId, String cmdName,
-			Short cmdResult, Date occurTime, Short uploadStatus, Short cmdType) {
-		this.logId = logId;
-		this.lineId = lineId;
-		this.stationId = stationId;
-		this.nodeId = nodeId;
-		this.operatorId = operatorId;
-		this.cmdName = cmdName;
-		this.cmdResult = cmdResult;
-		this.occurTime = occurTime;
-		this.uploadStatus = uploadStatus;
-		this.cmdType = cmdType;
-	}
-
-	public TmoCmdResult() {
-	}
-
-	public TmoCmdResult(Long logId) {
-		this.logId = logId;
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
 	@Column(name = "LOG_ID", nullable = false, precision = 20, scale = 0)
+	private Long logId;
+
+	@Column(name="LINE_ID")
+	private Short lineId;
+
+	@Column(name="STATION_ID")
+	private Integer stationId;
+
+	@Column(name="NODE_ID")
+	private Long nodeId;
+
+	@Column(name = "ITEM_TYPE")
+	private Short nodeType;
+
+	@Column(name = "CMD_TYPE", nullable = false, precision = 5, scale = 0)
+	private Short cmdType;
+
+	@Column(name = "CMD_NAME", nullable = false, length = 500)
+	private String cmdName;
+
+	@Column(name = "OPERATOR_ID", nullable = false, length = 32)
+	private String operatorId;
+
+	@Column(name = "OCCUR_TIME", nullable = false, length = 11)
+	private Date occurTime;
+
+	@Column(name = "TAG_NAME", length = 32)
+	private String tagName;
+
+	@Column(name = "TAG_VALUE", length = 100)
+	private String tagValue;
+
+	@Column(name = "CMD_RESULT", nullable = false, precision = 5, scale = 0)
+	private Short cmdResult;
+
+	@Column(name = "REMARK", length = 500)
+	private String remark;
+
+	@Column(name = "UPLOAD_STATUS", nullable = false, precision = 5, scale = 0)
+	private Short uploadStatus;
+
+	public void setLineId(Short lineId) {
+		this.lineId = lineId;
+	}
+
+	public void setStationId(Integer stationId) {
+		this.stationId = stationId;
+	}
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
+	}
+
+	public void setNodeType(Short nodeType) {
+		this.nodeType = nodeType;
+	}
+
 	public Long getLogId() {
 		return this.logId;
 	}
@@ -72,17 +86,14 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.logId = logId;
 	}
 
-	@Column(name = "LINE_ID", nullable = false, precision = 5, scale = 0)
 	public short getLineId() {
 		return this.lineId;
 	}
 
-	@Column(name = "STATION_ID", nullable = false, precision = 11, scale = 0)
 	public int getStationId() {
 		return this.stationId;
 	}
 
-	@Column(name = "NODE_ID", nullable = false, scale = 0)
 	public long getNodeId() {
 		return this.nodeId;
 	}
@@ -91,7 +102,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.nodeId = nodeId;
 	}
 
-	@Column(name = "ITEM_TYPE")
 	public short getNodeType() {
 		return nodeType;
 	}
@@ -100,7 +110,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.nodeType = nodeType;
 	}
 
-	@Column(name = "OPERATOR_ID", nullable = false, length = 32)
 	public String getOperatorId() {
 		return this.operatorId;
 	}
@@ -109,7 +118,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.operatorId = operatorId;
 	}
 
-	@Column(name = "CMD_NAME", nullable = false, length = 500)
 	public String getCmdName() {
 		return this.cmdName;
 	}
@@ -118,7 +126,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.cmdName = cmdName;
 	}
 
-	@Column(name = "TAG_NAME", length = 32)
 	public String getTagName() {
 		return this.tagName;
 	}
@@ -127,7 +134,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.tagName = tagName;
 	}
 
-	@Column(name = "TAG_VALUE", length = 100)
 	public String getTagValue() {
 		return this.tagValue;
 	}
@@ -136,7 +142,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.tagValue = tagValue;
 	}
 
-	@Column(name = "CMD_RESULT", nullable = false, precision = 5, scale = 0)
 	public Short getCmdResult() {
 		return this.cmdResult;
 	}
@@ -145,7 +150,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.cmdResult = cmdResult;
 	}
 
-	@Column(name = "OCCUR_TIME", nullable = false, length = 11)
 	public Date getOccurTime() {
 		return this.occurTime;
 	}
@@ -154,7 +158,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.occurTime = occurTime;
 	}
 
-	@Column(name = "REMARK", length = 500)
 	public String getRemark() {
 		return this.remark;
 	}
@@ -163,7 +166,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.remark = remark;
 	}
 
-	@Column(name = "UPLOAD_STATUS", nullable = false, precision = 5, scale = 0)
 	public Short getUploadStatus() {
 		return this.uploadStatus;
 	}
@@ -172,7 +174,6 @@ public class TmoCmdResult extends AFCNode implements Serializable {
 		this.uploadStatus = uploadStatus;
 	}
 
-	@Column(name = "CMD_TYPE", nullable = false, precision = 5, scale = 0)
 	public Short getCmdType() {
 		return this.cmdType;
 	}

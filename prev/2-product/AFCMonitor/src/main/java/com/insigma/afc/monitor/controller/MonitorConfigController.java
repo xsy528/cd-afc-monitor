@@ -1,17 +1,14 @@
 package com.insigma.afc.monitor.controller;
 
-import com.insigma.afc.monitor.model.vo.WZMonitorConfigInfo;
-import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
 import com.insigma.afc.monitor.service.MonitorConfigService;
-import com.insigma.afc.monitor.util.JsonUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Ticket: 监控配置接口
@@ -19,14 +16,12 @@ import java.io.IOException;
  * @author xuzhemin
  * 2019-01-09:14:37
  */
-public class MonitorConfigController extends BaseMultiActionController {
+@Api(tags="监控配置接口")
+@RestController
+@RequestMapping("/monitor/config")
+public class MonitorConfigController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitorConfigController.class);
-
-    static{
-        methodMapping.put("/monitor/config/get","getMonitorConfig");
-        methodMapping.put("/monitor/config/save","saveMonitorConfig");
-    }
 
     private MonitorConfigService monitorConfigService;
 
@@ -35,20 +30,15 @@ public class MonitorConfigController extends BaseMultiActionController {
         this.monitorConfigService = monitorConfigService;
     }
 
-    //获取监控配置信息
-    public Result<WZMonitorConfigInfo> getMonitorConfig(){
+    @ApiOperation("获取监控配置信息")
+    @GetMapping("/get")
+    public Result<MonitorConfigInfo> getMonitorConfig(){
         return monitorConfigService.getMonitorConfig();
     }
 
-    //获取保存配置监控信息
-    public Result<WZMonitorConfigInfo> saveMonitorConfig(HttpServletRequest request, HttpServletResponse response){
-        WZMonitorConfigInfo wzMonitorConfigInfo;
-        try {
-            wzMonitorConfigInfo = JsonUtils.readObject(request.getInputStream(), WZMonitorConfigInfo.class);
-        } catch (IOException e) {
-            LOGGER.error("",e);
-            return Result.error(ErrorCode.READ_PARAMETER_ERROR);
-        }
-        return monitorConfigService.save(wzMonitorConfigInfo);
+    @ApiOperation("保存配置监控信息")
+    @PostMapping("/save")
+    public Result<MonitorConfigInfo> saveMonitorConfig(@RequestBody MonitorConfigInfo monitorConfigInfo){
+        return monitorConfigService.save(monitorConfigInfo);
     }
 }

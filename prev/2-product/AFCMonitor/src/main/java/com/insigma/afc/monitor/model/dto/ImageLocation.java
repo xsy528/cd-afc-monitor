@@ -1,6 +1,7 @@
 package com.insigma.afc.monitor.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.insigma.afc.monitor.model.vo.NodeItem;
 
 import java.io.Serializable;
 import java.util.List;

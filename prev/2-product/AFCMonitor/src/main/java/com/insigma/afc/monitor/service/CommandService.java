@@ -15,7 +15,7 @@ public interface CommandService {
 
     /**
      * 修改运营模式
-     * @param nodeIds 车站节点id数组
+     * @param stationIds 车站节点id数组
      * @param command 运营模式
      * @return 执行结果
      */
@@ -23,7 +23,7 @@ public interface CommandService {
 
     /**
      * 模式查询
-     * @param nodeIds 车站节点id数组
+     * @param stationIds 车站节点id数组
      * @return 执行结果
      */
     Result<List<CommandResult>> sendModeQueryCommand(List<Long> stationIds);
@@ -37,14 +37,14 @@ public interface CommandService {
 
     /**
      * 时钟同步
-     * @param nodeIds 线路id数组
+     * @param lineIds 线路id数组
      * @return 执行结果
      */
     Result<List<CommandResult>> sendMapSyncCommand(List<Long> lineIds);
 
     /**
      * 发送设备控制命令
-     * @param nodeIds 设备id数组
+     * @param deviceIds 设备id数组
      * @param command 控制命令
      * @return 执行结果
      */
@@ -52,7 +52,7 @@ public interface CommandService {
 
     /**
      * 查询钱箱票箱命令
-     * @param nodeId 设备id
+     * @param deviceId 设备id
      * @return 执行结果
      */
     Result<List<CommandResult>> sendQueryBoxCommand(Long deviceId);

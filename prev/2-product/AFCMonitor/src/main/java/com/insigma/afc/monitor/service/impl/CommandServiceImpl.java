@@ -1,37 +1,40 @@
 package com.insigma.afc.monitor.service.impl;
 
-import com.insigma.afc.application.AFCApplication;
-import com.insigma.afc.application.AFCNodeLevel;
-import com.insigma.afc.dic.AFCCmdLogType;
-import com.insigma.afc.dic.AFCCmdResultType;
-import com.insigma.afc.dic.AFCDeviceType;
-import com.insigma.afc.dic.AFCModeCode;
-import com.insigma.afc.monitor.model.dto.CommandResult;
+import com.insigma.afc.monitor.constant.dic.WZCommandType;
+import com.insigma.afc.monitor.constant.dic.WZDeviceType;
+import com.insigma.afc.monitor.constant.dic.AFCCmdLogType;
+import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
+import com.insigma.afc.monitor.constant.dic.AFCModeCode;
+import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
-import com.insigma.afc.monitor.model.define.WZCommandType;
-import com.insigma.afc.monitor.model.define.WZDeviceType;
+import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.entity.TmoCmdResult;
 import com.insigma.afc.monitor.service.CommandService;
-import com.insigma.afc.topology.MetroDevice;
-import com.insigma.afc.topology.MetroLine;
-import com.insigma.afc.topology.MetroNode;
-import com.insigma.afc.topology.MetroStation;
-import com.insigma.afc.workbench.rmi.CmdHandlerResult;
-import com.insigma.afc.workbench.rmi.CommandType;
-import com.insigma.afc.workbench.rmi.ICommandService;
-import com.insigma.commons.application.Application;
+import com.insigma.afc.monitor.service.rmi.CmdHandlerResult;
+import com.insigma.afc.monitor.service.rmi.CommandHandlerManager;
+import com.insigma.afc.monitor.constant.dic.CommandType;
+import com.insigma.afc.monitor.service.rmi.ICommandService;
+import com.insigma.afc.topology.constant.AFCNodeLevel;
+import com.insigma.afc.topology.constant.dic.AFCDeviceType;
+import com.insigma.afc.topology.model.entity.MetroDevice;
+import com.insigma.afc.topology.model.entity.MetroLine;
+import com.insigma.afc.topology.model.entity.MetroNode;
+import com.insigma.afc.topology.model.entity.MetroStation;
+import com.insigma.afc.topology.service.TopologyService;
+import com.insigma.afc.topology.util.NodeIdUtils;
 import com.insigma.commons.lang.PairValue;
-import com.insigma.commons.service.CommonDAO;
-import com.insigma.commons.service.ICommonDAO;
 import com.insigma.commons.thread.EnhancedThread;
 import com.insigma.commons.util.lang.DateTimeUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
@@ -42,57 +45,125 @@ import java.util.concurrent.CountDownLatch;
  * @author xuzhemin
  * 2019-01-04:13:59
  */
-public class CommandServiceImpl implements CommandService {
+@Service
+public class CommandServiceImpl implements CommandService,ICommandService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandServiceImpl.class);
 
-    protected ICommandService commandService;
-    private ICommonDAO commonDAO;
-
     private List<CommandResult> results = new Vector<>();
     private CountDownLatch countDownLatch;
-    private List<MetroNode> nodes;
+    private ThreadLocal<List<MetroNode>> threadLocalNodes = new ThreadLocal<>();
+
+    private TmoCmdResultDao tmoCmdResultDao;
+    private TopologyService topologyService;
+    private CommandHandlerManager commandHandlerManager;
+
+    @Autowired
+    public CommandServiceImpl(TmoCmdResultDao tmoCmdResultDao, TopologyService topologyService,
+                              CommandHandlerManager commandHandlerManager) {
+        this.tmoCmdResultDao = tmoCmdResultDao;
+        this.topologyService = topologyService;
+        this.commandHandlerManager = commandHandlerManager;
+    }
 
     @Override
-    public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, int command){
+    public CmdHandlerResult command(int id, String userId, Long src, Object arg, List<MetroNode> targets) {
+        if (targets==null){
+            return null;
+        }
+        StringBuilder tagStr = new StringBuilder();
+        StringBuilder argStr = new StringBuilder();
+        for (MetroNode tag:targets) {
+            tagStr.append(tag.id());
+            logger.info(tag.toString());
+        }
+        if (arg instanceof int[]) {
+            int[] a = (int[]) arg;
+            argStr.append(a[0]).append(",").append(a[1]);
+            logger.info("ID=" + id + ",参数为" + argStr + " 目标为" + tagStr);
+        } else {
+            logger.info("ID=" + id + ",参数为" + arg + " 目标为" + tagStr);
+        }
+        if (commandHandlerManager != null) {
+            try {
+                CmdHandlerResult process = commandHandlerManager.process(id, userId, src, arg, targets);
+                return process;
+            } catch (Exception e) {
+                logger.error("命令执行异常", e);
+                CmdHandlerResult result = new CmdHandlerResult();
+                result.isOK = false;
+                result.messages.add("命令执行异常：" + e.getMessage());
+                return result;
+            }
+        } else {
+            logger.error("未配置命令管理器");
+        }
+        CmdHandlerResult result = new CmdHandlerResult();
+        result.isOK = false;
+        result.messages.add("该命令未定义");
+        return result;
+    }
+
+    @Override
+    public CmdHandlerResult command(int id, String userId, Long src, Object arg, MetroNode... targets) {
+        return command(id, userId, src, arg, Arrays.asList(targets));
+    }
+
+    @Override
+    public CmdHandlerResult command(int id, String userId, Long src, MetroNode... targets) {
+        return command(id, userId, src, null, Arrays.asList(targets));
+    }
+
+    @Override
+    public CmdHandlerResult command(int id, String userId, Long src, List<MetroNode> targets) {
+        return command(id, userId, src, null, targets);
+    }
+
+    @Override
+    public void alive() {
+
+    }
+
+    @Override
+    public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, int command) {
 
         List<MetroNode> stationIds = getStationNodeFromIds(nodeIds);
-        if (stationIds==null){
+        if (stationIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
-        int[] arg = new int[]{-1,-1};
+        int[] arg = new int[]{-1, -1};
         String name = "";
-        for(PairValue<Object,String> pv:AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_NORMAL)){
-            if (Integer.parseInt(pv.getKey().toString())==command){
-                arg[0]=command;
-                name=pv.getValue();
+        for (PairValue<Object, String> pv : AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_NORMAL)) {
+            if (Integer.parseInt(pv.getKey().toString()) == command) {
+                arg[0] = command;
+                name = pv.getValue();
                 break;
             }
         }
-        if (arg[0]==-1){
-            for(PairValue<Object,String> pv:AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_DESCEND)){
-                if (Integer.parseInt(pv.getKey().toString())==command){
-                    arg[0]=command;
-                    name=pv.getValue();
+        if (arg[0] == -1) {
+            for (PairValue<Object, String> pv : AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_DESCEND)) {
+                if (Integer.parseInt(pv.getKey().toString()) == command) {
+                    arg[0] = command;
+                    name = pv.getValue();
                     break;
                 }
             }
         }
-        if (arg[0]==-1){
-            for(PairValue<Object,String> pv:AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_BREAKDOWN)){
-                if (Integer.parseInt(pv.getKey().toString())==command){
-                    arg[0]=command;
-                    name=pv.getValue();
+        if (arg[0] == -1) {
+            for (PairValue<Object, String> pv : AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_BREAKDOWN)) {
+                if (Integer.parseInt(pv.getKey().toString()) == command) {
+                    arg[0] = command;
+                    name = pv.getValue();
                     break;
                 }
             }
         }
-        if (arg[1]==-1){
-            for(PairValue<Object,String> pv:AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_URGENCY)){
-                if (Integer.parseInt(pv.getKey().toString())==command){
-                    arg[1]=command;
-                    name=pv.getValue();
+        if (arg[1] == -1) {
+            for (PairValue<Object, String> pv : AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_URGENCY)) {
+                if (Integer.parseInt(pv.getKey().toString()) == command) {
+                    arg[1] = command;
+                    name = pv.getValue();
                     break;
                 }
             }
@@ -106,11 +177,11 @@ public class CommandServiceImpl implements CommandService {
             return Result.error(ErrorCode.MODE_NOT_EXISTS);
         }
 
-        name = StringUtils.defaultIfEmpty(name,"模式")+"切换命令";
+        name = StringUtils.defaultIfEmpty(name, "模式") + "切换命令";
 
         //先判断通信服务器连接是否正常
         try {
-            commandService.alive();
+            alive();
         } catch (Exception e) {
 //            if (logService != null) {
 //                logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
@@ -118,13 +189,13 @@ public class CommandServiceImpl implements CommandService {
             return Result.error(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
         return Result.success(send(CommandType.CMD_CHANGE_MODE, name, arg, stationIds,
-                    AFCCmdLogType.LOG_MODE.shortValue()));
+                AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
     @Override
-    public Result<List<CommandResult>> sendModeQueryCommand(List<Long> nodeIds){
+    public Result<List<CommandResult>> sendModeQueryCommand(List<Long> nodeIds) {
         List<MetroNode> stationIds = getStationNodeFromIds(nodeIds);
-        if (stationIds==null){
+        if (stationIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
@@ -133,25 +204,25 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendTimeSyncCommand(List<Long> nodeIds){
+    public Result<List<CommandResult>> sendTimeSyncCommand(List<Long> nodeIds) {
         List<MetroNode> stationIds = getStationNodeFromIds(nodeIds);
-        if (stationIds==null){
+        if (stationIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
         //TODO 需要解释
-        if (AFCApplication.getAFCNodeType().equals(AFCNodeLevel.SC)) {
-            int i = 0;
-            for (; i < stationIds.size(); i++) {
-                MetroNode node = stationIds.get(i);
-                if (node instanceof MetroStation) {
-                    break;
-                }
-            }
-            if (i < stationIds.size()) {
-                stationIds.remove(i);
-            }
-        }
+//        if (AFCApplication.getAFCNodeType().equals(AFCNodeLevel.SC)) {
+//            int i = 0;
+//            for (; i < stationIds.size(); i++) {
+//                MetroNode node = stationIds.get(i);
+//                if (node instanceof MetroStation) {
+//                    break;
+//                }
+//            }
+//            if (i < stationIds.size()) {
+//                stationIds.remove(i);
+//            }
+//        }
 
         return Result.success(send(CommandType.CMD_TIME_SYNC, "时间同步命令",
                 null, stationIds, AFCCmdLogType.LOG_TIME_SYNC.shortValue()));
@@ -161,14 +232,14 @@ public class CommandServiceImpl implements CommandService {
     public Result<List<CommandResult>> sendMapSyncCommand(List<Long> lineIds) {
         CmdHandlerResult command = null;
         List<MetroNode> ids = new ArrayList<>();
-        for (Long lineId:lineIds){
-            MetroNode metroNode = AFCApplication.getNode(lineId);
-            if (metroNode.level()==AFCNodeLevel.LC){
+        for (Long lineId : lineIds) {
+            MetroNode metroNode = topologyService.getNode(lineId);
+            if (metroNode.level() == AFCNodeLevel.LC) {
                 ids.add(metroNode);
                 logger.info("地图同步数据 ：" + metroNode.name());
             }
         }
-        if (ids.isEmpty()){
+        if (ids.isEmpty()) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
         command = rmiGenerateFiles();
@@ -181,27 +252,24 @@ public class CommandServiceImpl implements CommandService {
 
     private CmdHandlerResult rmiGenerateFiles() {
 
-        ICommandService commandService = null;
         CmdHandlerResult command = new CmdHandlerResult();
         try {
-            commandService = Application.getService(ICommandService.class);
-            commandService.alive();
+            alive();
         } catch (Exception e) {
-            //			MessageForm.Message("错误信息", "发送地图同步失败：工作台与通信服务器离线。", SWT.ICON_ERROR);
             command.messages.add("发送地图同步失败：工作台与通信服务器离线。" + e.getMessage());
             command.isOK = false;
             return command;
         }
         //TODO 需要获取当前用户id
         String userId = "0";
-        command = commandService.command(CommandType.CMD_EXPORT_MAP, userId, 1l);
+        command = command(CommandType.CMD_EXPORT_MAP, userId, 1L);
         return command;
     }
 
     @Override
-    public Result<List<CommandResult>> sendNodeControlCommand(List<Long> nodeIds, short command){
+    public Result<List<CommandResult>> sendNodeControlCommand(List<Long> nodeIds, short command) {
         List<MetroNode> deviceIds = getDeviceNodeFromIds(nodeIds);
-        if (deviceIds==null){
+        if (deviceIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
@@ -210,25 +278,21 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendQueryBoxCommand(Long nodeId){
-        MetroNode metroNode = AFCApplication.getNode(nodeId);
-        if (metroNode==null||metroNode.level()!=AFCNodeLevel.SLE){
-            return Result.error(ErrorCode.NODE_NOT_EXISTS);
-        }
-        MetroDevice device = (MetroDevice)metroNode;
+    public Result<List<CommandResult>> sendQueryBoxCommand(Long nodeId) {
+        MetroDevice device = topologyService.getDeviceNode(nodeId);
         List<MetroNode> ids = new ArrayList<>();
         ids.add(device);
         List<CommandResult> commandResults = new ArrayList<>();
-        if (device.getDeviceType() == WZDeviceType.TVM.shortValue()
-                || device.getDeviceType() == WZDeviceType.TSM.shortValue()) {
+        if (device.getDeviceType() == WZDeviceType.TVM
+                || device.getDeviceType() == WZDeviceType.TSM) {
             commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
-        if (device.getDeviceType() == WZDeviceType.TVM.shortValue()
-                || device.getDeviceType() == WZDeviceType.POST.shortValue()
-                || device.getDeviceType() == WZDeviceType.ENG.shortValue()
-                || device.getDeviceType() == WZDeviceType.EXG.shortValue()
-                || device.getDeviceType() == WZDeviceType.REG.shortValue()) {
+        if (device.getDeviceType() == WZDeviceType.TVM
+                || device.getDeviceType() == WZDeviceType.POST
+                || device.getDeviceType() == WZDeviceType.ENG
+                || device.getDeviceType() == WZDeviceType.EXG
+                || device.getDeviceType() == WZDeviceType.REG) {
             commandResults.addAll(send(WZCommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
@@ -236,23 +300,24 @@ public class CommandServiceImpl implements CommandService {
     }
 
     /**
-     *  从传过来的节点id中获取车站节点
+     * 从传过来的节点id中获取车站节点
+     *
      * @param nodeIds 节点id数组
      * @return 车站节点数组
      */
-    public List<MetroNode> getStationNodeFromIds(List<Long> nodeIds){
-        if (nodeIds==null||nodeIds.isEmpty()){
+    private List<MetroNode> getStationNodeFromIds(List<Long> nodeIds) {
+        if (nodeIds == null || nodeIds.isEmpty()) {
             return null;
         }
         // 只留下车站节点
         List<MetroNode> stationIds = new ArrayList<>();
-        for (Long id:nodeIds){
-            MetroNode metroNode = AFCApplication.getNode(id);
+        for (Long id : nodeIds) {
+            MetroNode metroNode = topologyService.getNode(id);
             if (metroNode instanceof MetroStation) {
                 stationIds.add(metroNode);
             }
         }
-        if (stationIds == null || stationIds.isEmpty()) {
+        if (stationIds.isEmpty()) {
             return null;
         }
         return stationIds;
@@ -260,33 +325,34 @@ public class CommandServiceImpl implements CommandService {
 
     /**
      * 从id中获取设备id
+     *
      * @param nodeIds id数组
      * @return 设备节点数组
      */
-    public List<MetroNode> getDeviceNodeFromIds(List<Long> nodeIds){
-        if (nodeIds==null||nodeIds.isEmpty()){
+    private List<MetroNode> getDeviceNodeFromIds(List<Long> nodeIds) {
+        if (nodeIds == null || nodeIds.isEmpty()) {
             return null;
         }
         // 只留下设备节点
         List<MetroNode> deviceIds = new ArrayList<>();
-        for (Long id:nodeIds){
-            MetroNode metroNode = AFCApplication.getNode(id);
+        for (Long id : nodeIds) {
+            MetroNode metroNode = topologyService.getNode(id);
             if (metroNode instanceof MetroDevice) {
                 deviceIds.add(metroNode);
             }
         }
-        if (deviceIds == null || deviceIds.isEmpty()) {
+        if (deviceIds.isEmpty()) {
             return null;
         }
         return deviceIds;
     }
 
-    public List<CommandResult> send(final int id, final String name, final Object arg,
+    private List<CommandResult> send(final int id, final String name, final Object arg,
                                     final List<MetroNode> nodes, final short cmdType) {
-        if (nodes==null||countDownLatch!=null){
+        if (nodes == null || countDownLatch != null) {
             return null;
         }
-        this.nodes = nodes;
+        threadLocalNodes.set(nodes);
         results.clear();
         countDownLatch = new CountDownLatch(nodes.size());
         for (MetroNode node : nodes) {
@@ -296,9 +362,9 @@ public class CommandServiceImpl implements CommandService {
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
-            logger.error("",e);
+            logger.error("", e);
         }
-        countDownLatch=null;
+        countDownLatch = null;
         return results = sortResults(results);
     }
 
@@ -336,10 +402,10 @@ public class CommandServiceImpl implements CommandService {
             String resultDesc = null;
             try {
                 String userId = "0";
-                CmdHandlerResult command = commandService.command(id, userId,
-                        AFCApplication.getAFCNode().id(), arg, node);
+                //AFCApplication.getAFCNode().id(),
+                CmdHandlerResult command = command(id, userId, 0L, arg, node);
                 Serializable returnValue = command.returnValue;
-                if (returnValue != null && returnValue instanceof Integer) {
+                if (returnValue instanceof Integer) {
                     result = (Integer) returnValue;
                 } else if (command.isOK) {
                     result = AFCCmdResultType.SEND_SUCCESSFUL;
@@ -354,24 +420,25 @@ public class CommandServiceImpl implements CommandService {
         }
     }
 
-    public List<CommandResult> sortResults(final List<CommandResult> results) {
-        List<CommandResult> orderResulsts = new ArrayList<CommandResult>();
+    private List<CommandResult> sortResults(final List<CommandResult> results) {
+        List<CommandResult> orderResults = new ArrayList<>();
 
-        if (nodes == null || results == null) {
-            return orderResulsts;
+        List<MetroNode> nodes = threadLocalNodes.get();
+        if (threadLocalNodes.get() == null || results == null) {
+            return orderResults;
         }
 
         for (int i = 0; i < nodes.size(); i++) {
             for (int j = 0; j < results.size(); j++) {
-                String id = nodes.get(i).name() + "/0x" + String.format("%08x", nodes.get(i).getNodeId());
+                String id = nodes.get(i).name() + "/0x" + String.format("%08x", nodes.get(i).id());
                 if (id.equals(results.get(j).getId())) {
-                    orderResulsts.add(results.get(j));
+                    orderResults.add(results.get(j));
                     // break;
                 }
             }
         }
 
-        return orderResulsts;
+        return orderResults;
     }
 
     public CommandResult save(final MetroNode node, String command, final Object arg, final int result,
@@ -401,27 +468,25 @@ public class CommandServiceImpl implements CommandService {
 
         if (node instanceof MetroLine) {
             MetroLine line = (MetroLine) node;
-            short lineID = line.getLineID();
-            tmoCmdResult.setLineId(lineID);
+            tmoCmdResult.setLineId(line.getLineID());
             tmoCmdResult.setStationId(0);
-            tmoCmdResult.setNodeId(AFCApplication.getNodeId(lineID));
+            tmoCmdResult.setNodeId(NodeIdUtils.getNodeNo(line.id()));
             tmoCmdResult.setNodeType(AFCDeviceType.LC);
         }
 
         if (node instanceof MetroStation) {
             MetroStation station = (MetroStation) node;
-            tmoCmdResult.setLineId(station.getId().getLineId());
-            Integer stationId = station.getId().getStationId();
-            tmoCmdResult.setStationId(stationId);
-            tmoCmdResult.setNodeId(AFCApplication.getNodeId(stationId));
+            tmoCmdResult.setLineId(station.getLineId());
+            tmoCmdResult.setStationId(station.getStationId());
+            tmoCmdResult.setNodeId(NodeIdUtils.getNodeNo(station.id()));
             tmoCmdResult.setNodeType(AFCDeviceType.SC);
         }
 
         if (node instanceof MetroDevice) {
             MetroDevice device = (MetroDevice) node;
-            tmoCmdResult.setLineId(device.getId().getLineId());
-            tmoCmdResult.setStationId(device.getId().getStationId());
-            tmoCmdResult.setNodeId(device.getId().getDeviceId());
+            tmoCmdResult.setLineId(device.getLineId());
+            tmoCmdResult.setStationId(device.getStationId());
+            tmoCmdResult.setNodeId(device.getDeviceId());
             tmoCmdResult.setNodeType(device.getDeviceType());
         }
 
@@ -431,14 +496,10 @@ public class CommandServiceImpl implements CommandService {
         tmoCmdResult.setCmdResult((short) result);
         tmoCmdResult.setRemark(resultDesc);
         tmoCmdResult.setCmdType(cmdType);
-        try {
-            commonDAO.saveObj(tmoCmdResult);
-        } catch (Exception e) {
-            logger.error("保存命令日志异常", e);
-        }
+        tmoCmdResultDao.save(tmoCmdResult);
 
         CommandResult resultitem = new CommandResult();
-        resultitem.setId(node.name() + "/0x" + String.format("%08x", node.getNodeId()));
+        resultitem.setId(node.name() + "/0x" + String.format("%08x", node.id()));
         resultitem.setCmdName(tmoCmdResult.getCmdName());
         resultitem.setResult((short) result);
         resultitem.setCmdResult(tmoCmdResult.getRemark());
@@ -448,15 +509,7 @@ public class CommandServiceImpl implements CommandService {
         } else {
             resultitem.setArg("无");
         }
-
         return resultitem;
     }
 
-    public void setCommandService(ICommandService iCommandService){
-        this.commandService = iCommandService;
-    }
-
-    public void setCommonDAO(CommonDAO commonDAO){
-        this.commonDAO = commonDAO;
-    }
 }

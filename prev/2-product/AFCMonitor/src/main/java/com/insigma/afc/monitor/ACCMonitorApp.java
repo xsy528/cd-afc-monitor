@@ -5,26 +5,25 @@
  */
 package com.insigma.afc.monitor;
 
-import com.insigma.afc.monitor.server.WebServer;
-import com.insigma.afc.initor.ConfigLoadSystemInitor;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * 
  * Ticket: ACC工作台
- * @author  
+ * @author xuzhemin
  *
  */
+
+@SpringBootApplication(scanBasePackages = {"com.insigma.afc"})
+@EnableJpaRepositories("com.insigma.afc")
+@EntityScan("com.insigma.afc")
 public class ACCMonitorApp {
 
 	public static void main(String[] args) {
-
-		//加载配置
-		new ConfigLoadSystemInitor("config/Config.xml").init();
-		try {
-			new WebServer().startServer();
-		} catch (Exception e) {
-			throw new RuntimeException("web容器启动失败");
-		}
+		SpringApplication.run(ACCMonitorApp.class,args);
 	}
 
 }

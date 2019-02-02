@@ -1,10 +1,10 @@
 package com.insigma.afc.monitor.service;
 
-import com.insigma.afc.monitor.model.dto.NodeItem;
+import com.insigma.afc.monitor.model.vo.NodeItem;
 import com.insigma.afc.monitor.model.dto.Result;
 
 /**
- * 节点服务
+ * 节点树服务
  * author:xuzhemin
  */
 public interface NodeTreeService {

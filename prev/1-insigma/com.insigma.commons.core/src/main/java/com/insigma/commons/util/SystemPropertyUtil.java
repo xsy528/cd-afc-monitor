@@ -3,11 +3,11 @@
  */
 package com.insigma.commons.util;
 
-import java.math.BigDecimal;
-
-import org.apache.log4j.Logger;
-
 import com.insigma.commons.util.lang.NumberUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
 
 /**
  * 根据key值获取系统属性的工具类
@@ -23,7 +23,7 @@ public class SystemPropertyUtil {
 	/** Suffix for system property placeholders: "}" */
 	public static final String PLACEHOLDER_SUFFIX = "}";
 
-	private static Logger logger = Logger.getLogger(SystemPropertyUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(SystemPropertyUtil.class);
 
 	/**
 	 * 

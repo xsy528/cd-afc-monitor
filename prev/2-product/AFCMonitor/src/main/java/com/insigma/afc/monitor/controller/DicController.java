@@ -1,9 +1,14 @@
 package com.insigma.afc.monitor.controller;
 
+import com.insigma.afc.monitor.constant.dic.AFCModeCode;
+import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.dic.AFCDeviceType;
-import com.insigma.afc.dic.AFCModeCode;
-import com.insigma.afc.dic.DeviceStatus;
+import com.insigma.afc.topology.constant.dic.AFCDeviceType;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,25 +21,24 @@ import java.util.Map;
  * @author xuzhemin
  * 2019-01-14:16:18
  */
-public class DicController extends BaseMultiActionController {
+@Api(tags="字典接口")
+@RestController
+@RequestMapping("/config")
+public class DicController {
 
-    static{
-        methodMapping.put("/config/devTypeList","getDeviceTypeList");
-        methodMapping.put("/config/modeTypeList","getModeTypeList");
-        methodMapping.put("/config/deviceStatusList","getDeviceStatusList");
-    }
-
-    //获取设备类型列表
+    @ApiOperation("获取设备类型列表")
+    @GetMapping("/devTypeList")
     public Result getDeviceTypeList(){
         return Result.success(AFCDeviceType.getInstance().getByGroup("SLE"));
     }
 
-    //获取运营模式列表
+    @ApiOperation("获取运营模式列表")
+    @GetMapping("/modeTypeList")
     public Result getModeTypeList(){
         List<Map> data = new ArrayList<>(4);
         Map<String,Object> groupMode1 = new HashMap<>();
         groupMode1.put("groupName","正常运行模式");
-        groupMode1.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_NORMAL));
+        groupMode1.put("modes", AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_NORMAL));
         Map<String,Object> groupMode2 = new HashMap<>();
         groupMode2.put("groupName","降级运行模式");
         groupMode2.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_DESCEND));
@@ -51,7 +55,8 @@ public class DicController extends BaseMultiActionController {
         return Result.success(data);
     }
 
-    //获取设备状态列表
+    @ApiOperation("获取设备状态列表")
+    @GetMapping("/deviceStatusList")
     public Result getDeviceStatusList(){
         return Result.success(DeviceStatus.getInstance().getByGroup("1"));
     }

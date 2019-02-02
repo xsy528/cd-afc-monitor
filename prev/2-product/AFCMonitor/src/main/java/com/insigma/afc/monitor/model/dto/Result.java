@@ -21,7 +21,7 @@ public class Result<T> {
     @JsonView(Base.class)
     private T data;
 
-    private Result(ErrorCode errorCode,T data){
+    private Result(ErrorCode errorCode, T data){
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
         this.data = data;

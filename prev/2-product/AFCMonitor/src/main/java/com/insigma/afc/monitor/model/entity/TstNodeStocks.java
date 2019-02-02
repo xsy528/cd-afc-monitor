@@ -8,17 +8,16 @@
  */
 package com.insigma.afc.monitor.model.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Ticket: TST_NODE_STOCKS实体
@@ -27,29 +26,24 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 @Entity
 @Table(name = "TST_NODE_STOCKS")
-@SuppressWarnings("serial")
 public class TstNodeStocks implements Serializable {
 
-	/** identifier field */
+	private static final long serialVersionUID = 1L;
+
 	// 设备节点标识
 	@Id
 	@Column(name = "node_id")
 	private Long nodeId;
 
 	@Column(name = "line_Id")
-	/** persistent field */
 	private Short lineId;
 
 	@Column(name = "station_Id")
-	/** persistent field */
 	private Integer stationId;
 
 	// 操作时间
 	@Column(name = "upload_Time")
-	/** nullable persistent field */
 	private Date uploadTime;
-
-	/** nullable persistent field */
 
 	@Column(name = "info_Item0")
 	private Long infoItem0;
@@ -58,42 +52,34 @@ public class TstNodeStocks implements Serializable {
 	private Long infoItem1;
 
 	@Column(name = "info_Item2")
-	/** nullable persistent field */
 	private Long infoItem2;
 
 	@Column(name = "info_Item3")
 	private Long infoItem3;
 
 	@Column(name = "info_Item4")
-	/** nullable persistent field */
 	private Long infoItem4;
 
 	// 预留
 	@Column(name = "info_Item5")
-	/** nullable persistent field */
 	private Long infoItem5;
 
 	// 预留
 	@Column(name = "info_Item6")
-	/** nullable persistent field */
 	private Long infoItem6;
 
 	// 预留
 	@Column(name = "info_Item7")
-	/** nullable persistent field */
 	private Long infoItem7;
 
 	// 预留
 	@Column(name = "info_Item8")
-	/** nullable persistent field */
 	private Long infoItem8;
 
 	// 预留
 	@Column(name = "info_Item9")
-	/** nullable persistent field */
 	private Long infoItem9;
 
-	/** full constructor */
 	public TstNodeStocks(Short lineId, Integer stationId, Date uploadTime, Long infoItem0, Long infoItem1,
 			Long infoItem2, Long infoItem3, Long infoItem4, Long infoItem5, Long infoItem6, Long infoItem7,
 			Long infoItem8, Long infoItem9) {
@@ -125,11 +111,9 @@ public class TstNodeStocks implements Serializable {
 		this.infoItem3 = infoItem3;
 	}
 
-	/** default constructor */
 	public TstNodeStocks() {
 	}
 
-	/** minimal constructor */
 	public TstNodeStocks(Short lineId, Integer stationId) {
 		this.lineId = lineId;
 		this.stationId = stationId;

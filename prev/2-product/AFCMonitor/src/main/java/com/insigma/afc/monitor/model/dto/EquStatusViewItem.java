@@ -1,34 +1,76 @@
 package com.insigma.afc.monitor.model.dto;
 
-import com.insigma.afc.topology.AFCNode;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class EquStatusViewItem extends AFCNode implements Serializable {
+/**
+ * 	ticket: 设备视图模型
+ *  @author: xuzhemin
+ */
+public class EquStatusViewItem implements Serializable {
 
-	private boolean isOnline;
+	private static final long serialVersionUID = 1L;
 
-	//0正常 1警告 2报警 4离线 0xff停止服务
-	private int status;
+	private Long nodeId;
 
-	//	@ColumnView(name = "正常事件")
+	private Short lineId;
+
+	private Integer stationId;
+
+	private Boolean isOnline;
+
+	/**
+	 * 0正常 1警告 2报警 4离线 0xff停止服务
+	 */
+	private Short status;
+
 	private String normalEvent;
 
-	//	@ColumnView(name = "警告事件")
 	private String warnEvent;
 
-	//	@ColumnView(name = "报警事件")
 	private String alarmEvent;
 
 	private Date updateTime;
 
-	public boolean isOnline() {
+	public Short getLineId() {
+		return lineId;
+	}
+
+	public void setLineId(Short lineId) {
+		this.lineId = lineId;
+	}
+
+	public Integer getStationId() {
+		return stationId;
+	}
+
+	public void setStationId(Integer stationId) {
+		this.stationId = stationId;
+	}
+
+	public Long getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
+	}
+
+	public Boolean getOnline() {
 		return isOnline;
 	}
 
-	public void setOnline(boolean status) {
-		this.isOnline = status;
+	public void setOnline(Boolean online) {
+		isOnline = online;
+	}
+
+	public Short getStatus() {
+		return status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
 	}
 
 	public String getNormalEvent() {
@@ -62,13 +104,4 @@ public class EquStatusViewItem extends AFCNode implements Serializable {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
 }

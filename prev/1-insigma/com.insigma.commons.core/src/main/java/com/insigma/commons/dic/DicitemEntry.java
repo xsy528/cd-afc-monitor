@@ -5,13 +5,13 @@
  */
 package com.insigma.commons.dic;
 
-import java.util.Comparator;
-
 import com.insigma.commons.dic.annotation.DicItem;
+
+import java.util.Comparator;
 
 public final class DicitemEntry {
 	public final static Comparator<DicitemEntry> DICCMPR = new Comparator<DicitemEntry>() {
-
+		@Override
 		public int compare(DicitemEntry o1, DicitemEntry o2) {
 			return o1.dicitem.index() - o2.dicitem.index();
 		}

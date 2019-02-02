@@ -1,24 +1,19 @@
 package com.insigma.afc.monitor.service.impl;
 
-import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.afc.monitor.model.entity.AFCResource;
 import com.insigma.afc.monitor.service.FileService;
+import com.insigma.afc.monitor.service.ITsyResourceService;
 import com.insigma.commons.util.ResourceUtils;
-import com.insigma.afc.entity.TsyResource;
-import com.insigma.afc.service.ITsyResourceService;
-import com.insigma.commons.op.OPException;
-import com.insigma.commons.service.CommonDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,19 +24,25 @@ public class FileServiceImpl implements FileService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);
 
-    @Autowired
     private ITsyResourceService resourceService;
 
     @Autowired
-    private CommonDAO commonDAO;
+    public FileServiceImpl(ITsyResourceService resourceService){
+        this.resourceService = resourceService;
+    }
 
-    //资源名称-序号
+    /**
+     * 资源名称-序号
+     */
     private static Map<String,Integer> resourceMap = new HashMap<>();
 
-    static{
+    @PostConstruct
+    public void init(){
         resourceMap.put("defaultPIC.png",0);
         //获取本地资源图片
         ResourceUtils.getImages().forEach(file ->putResource(file.getName()));
+        //同步数据库资源
+        synResources();
     }
 
     @Override
@@ -49,36 +50,15 @@ public class FileServiceImpl implements FileService {
         getResourceFromDB();
     }
 
-    @Override
-    public Result<String> saveTmpFile(byte[] data, String name) {
-        Path path = Paths.get("tmp");
-        File file = path.toFile();
-        if (!file.exists()){
-            file.mkdirs();
-        }
-        path = path.resolve(name);
-        try {
-            Files.write(path,data, StandardOpenOption.WRITE,StandardOpenOption.CREATE);
-            return Result.success(path.toString());
-        } catch (IOException e) {
-            LOGGER.error("保存临时文件失败",e);
-        }
-        return Result.error(ErrorCode.SAVE_FILE_FAILED);
-    }
-
     private void getResourceFromDB(){
         //同步数据库资源到本地
         resourceService.syncResouce();
-        try {
-            List<Map<String,String>> records = commonDAO.execSqlQueryList("SELECT NAME_SPACE,NAME FROM TSY_RESOURCE");
-            records.forEach(map-> {
-                String path = map.get("NAME_SPACE") + "/" + map.get("NAME");
-                LOGGER.info("数据库资源路径:"+path);
-                putResource(path);
-            });
-        } catch (OPException e) {
-            LOGGER.error("同步数据库资源到本地失败",e);
-        }
+        List<AFCResource> resources = resourceService.getAFCResourceList();
+        resources.forEach(resource-> {
+            String path = resource.getNameSpace() + "/"+resource.getName();
+            LOGGER.info("数据库资源路径:"+path);
+            putResource(path);
+        });
     }
 
     @Override
@@ -122,24 +102,10 @@ public class FileServiceImpl implements FileService {
         return Result.success(resourceList);
     }
 
-    //@Override
-    public Result<String> uploadFile(){
-        TsyResource tsyResource = new TsyResource();
-        resourceService.save(tsyResource);
-        return Result.success(tsyResource.getName());
-    }
-
     private static void putResource(String path){
         if (!resourceMap.containsKey(path)){
             resourceMap.put(path,resourceMap.size());
         }
     }
 
-    public void setResourceService(ITsyResourceService iTsyResourceService){
-        this.resourceService = iTsyResourceService;
-    }
-
-    public void setCommonDAO(CommonDAO commonDAO){
-        this.commonDAO = commonDAO;
-    }
 }

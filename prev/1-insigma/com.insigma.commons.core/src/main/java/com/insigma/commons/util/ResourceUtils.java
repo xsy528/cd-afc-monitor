@@ -36,14 +36,17 @@ public class ResourceUtils {
     }
     private static void getImages(File file,List<File> fileList){
         if (file.isDirectory()){
-            for(File subFile:file.listFiles()){
-                getImages(subFile,fileList);
+            File[] subFiles = file.listFiles();
+            if (subFiles!=null) {
+                for (File subFile : subFiles) {
+                    getImages(subFile, fileList);
+                }
             }
         }else {
             String filename = file.getName();
             for (String suffix:imageSuffixs){
                 if (filename.endsWith(suffix)) {
-                    LOGGER.info("扫描到图片:" + file.getPath());
+                    LOGGER.info("扫描到图片:{}",file.getPath());
                     fileList.add(file);
                     break;
                 }

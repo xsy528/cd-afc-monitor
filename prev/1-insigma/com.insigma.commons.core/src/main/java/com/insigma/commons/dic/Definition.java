@@ -1,13 +1,9 @@
 package com.insigma.commons.dic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.insigma.commons.dic.annotation.DicItem;
 import com.insigma.commons.lang.PairValue;
+
+import java.util.*;
 
 /**
  * Ticket: <br/>
@@ -15,11 +11,11 @@ import com.insigma.commons.lang.PairValue;
  * @author 邱昌进(qiuchangjin@zdwxjd.com)
  */
 public class Definition implements IDefinition {
-	String[] nameList = new String[0];
+	private String[] nameList = new String[0];
 
-	Object[] codeList = new Object[0];
+	private Object[] codeList = new Object[0];
 
-	public Map<String, DicitemEntry> dicItecEntryMap = new HashMap<String, DicitemEntry>();
+	public Map<String, DicitemEntry> dicItecEntryMap = new HashMap<>();
 
 	public Definition() {
 
@@ -31,6 +27,7 @@ public class Definition implements IDefinition {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public String getNameByValue(Object key) {
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			if (v.value.equals(key)) {
@@ -46,6 +43,7 @@ public class Definition implements IDefinition {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public Object getValueByName(String key) {
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			if (v.dicitem.name().equals(key)) {
@@ -55,20 +53,30 @@ public class Definition implements IDefinition {
 		return null;
 	}
 
+	public void setNameList(String[] nameList) {
+		this.nameList = nameList;
+	}
+
+	public void setCodeList(Object[] codeList) {
+		this.codeList = codeList;
+	}
+
+	@Override
 	public String[] getNameList() {
 		return nameList.clone();
 	}
 
+	@Override
 	public Object[] getValueList() {
 		return codeList.clone();
 	}
 
 	public List<PairValue<Object, String>> getByGroup(String group) {
-		List<DicitemEntry> groups1 = new ArrayList<DicitemEntry>();
-		List<PairValue<Object, String>> groups = new ArrayList<PairValue<Object, String>>();
+		List<DicitemEntry> groups1 = new ArrayList<>();
+		List<PairValue<Object, String>> groups = new ArrayList<>();
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			DicItem dicItem = v.dicitem;
-			if (group == "") {
+			if ("".equals(group)) {
 				groups1.add(v);
 			} else if (dicItem.group().equals(group)) {
 				groups1.add(v);
@@ -76,7 +84,7 @@ public class Definition implements IDefinition {
 		}
 		Collections.sort(groups1, DicitemEntry.DICCMPR);
 		for (DicitemEntry v : groups1) {
-			PairValue<Object, String> value = new PairValue<Object, String>();
+			PairValue<Object, String> value = new PairValue<>();
 			value.setKey(v.value);
 			value.setValue(v.dicitem.name());
 			groups.add(value);
@@ -85,7 +93,7 @@ public class Definition implements IDefinition {
 	}
 
 	public Object[] getNameListByGroup(String group) {
-		List<String> groups = new ArrayList<String>();
+		List<String> groups = new ArrayList<>();
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			DicItem dicItem = v.dicitem;
 			if (dicItem.group().equals(group)) {
@@ -96,7 +104,7 @@ public class Definition implements IDefinition {
 	}
 
 	public Object[] getValueListByGroup(String group) {
-		List<Object> groups = new ArrayList<Object>();
+		List<Object> groups = new ArrayList<>();
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			DicItem dicItem = v.dicitem;
 			if (dicItem.group().equals(group)) {
@@ -124,7 +132,7 @@ public class Definition implements IDefinition {
 	 * @return
 	 */
 	public List<DicitemEntry> getSortedDicitems() {
-		ArrayList<DicitemEntry> values = new ArrayList<DicitemEntry>(dicItecEntryMap.values());
+		ArrayList<DicitemEntry> values = new ArrayList<>(dicItecEntryMap.values());
 		Collections.sort(values, DicitemEntry.DICCMPR);
 		return values;
 	}
@@ -133,7 +141,7 @@ public class Definition implements IDefinition {
 	 * @return the dicItemMap
 	 */
 	public Map<Object, DicItem> getDicItemMap() {
-		Map<Object, DicItem> map = new HashMap<Object, DicItem>(dicItecEntryMap.size());
+		Map<Object, DicItem> map = new HashMap<>(dicItecEntryMap.size());
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			map.put(v.value, v.dicitem);
 		}
@@ -151,7 +159,7 @@ public class Definition implements IDefinition {
 	 * @return the codeMap
 	 */
 	public Map<Object, String> getCodeMap() {
-		Map<Object, String> map = new HashMap<Object, String>(dicItecEntryMap.size());
+		Map<Object, String> map = new HashMap<>(dicItecEntryMap.size());
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			map.put(v.value, v.dicitem.name());
 		}
@@ -162,7 +170,7 @@ public class Definition implements IDefinition {
 	 * @return the nameMap
 	 */
 	public Map<String, Object> getNameMap() {
-		Map<String, Object> map = new HashMap<String, Object>(dicItecEntryMap.size());
+		Map<String, Object> map = new HashMap<>(dicItecEntryMap.size());
 		for (DicitemEntry v : dicItecEntryMap.values()) {
 			map.put(v.dicitem.name(), v.value);
 		}

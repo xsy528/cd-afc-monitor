@@ -15,23 +15,15 @@ public class StationStatus implements Serializable {
 
 	private String mode;
 
-	private int normalEvent;
+	private Integer normalEvent;
 
-	private int warnEvent;
+	private Integer warnEvent;
 
-	private int alarmEvent;
+	private Integer alarmEvent;
 
 	private String updateTime;
 
-	private boolean isOnline;
-
-	public boolean isOnline() {
-		return isOnline;
-	}
-
-	public void setOnline(boolean online) {
-		isOnline = online;
-	}
+	private Boolean isOnline;
 
 	public String getName() {
 		return name;
@@ -57,27 +49,27 @@ public class StationStatus implements Serializable {
 		this.mode = mode;
 	}
 
-	public int getNormalEvent() {
+	public Integer getNormalEvent() {
 		return normalEvent;
 	}
 
-	public void setNormalEvent(int normalEvent) {
+	public void setNormalEvent(Integer normalEvent) {
 		this.normalEvent = normalEvent;
 	}
 
-	public int getWarnEvent() {
+	public Integer getWarnEvent() {
 		return warnEvent;
 	}
 
-	public void setWarnEvent(int warnEvent) {
+	public void setWarnEvent(Integer warnEvent) {
 		this.warnEvent = warnEvent;
 	}
 
-	public int getAlarmEvent() {
+	public Integer getAlarmEvent() {
 		return alarmEvent;
 	}
 
-	public void setAlarmEvent(int alarmEvent) {
+	public void setAlarmEvent(Integer alarmEvent) {
 		this.alarmEvent = alarmEvent;
 	}
 
@@ -87,5 +79,13 @@ public class StationStatus implements Serializable {
 
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public Boolean getOnline() {
+		return isOnline;
+	}
+
+	public void setOnline(Boolean online) {
+		isOnline = online;
 	}
 }

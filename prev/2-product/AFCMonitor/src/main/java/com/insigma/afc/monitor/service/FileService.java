@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 文件服务
- * author:徐哲民
+ * author:xuzhemin
  */
 public interface FileService {
 
@@ -25,7 +25,7 @@ public interface FileService {
 
     /**
      * 获取图片索引数组
-     * @param resourcePath 资源文件名称数组
+     * @param resourcePaths 资源文件名称数组
      * @return 索引数组
      */
     List<Integer> getResourcesIndexs(List<String> resourcePaths);
@@ -41,12 +41,4 @@ public interface FileService {
      * 同步数据库资源
      */
     void synResources();
-
-    /**
-     * 保存临时文件到本地
-     * @param data
-     * @param name
-     * @return 保存结果，包含文件路径
-     */
-    Result<String> saveTmpFile(byte[] data, String name) ;
 }

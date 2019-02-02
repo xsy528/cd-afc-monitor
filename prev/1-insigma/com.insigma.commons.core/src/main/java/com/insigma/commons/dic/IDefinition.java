@@ -2,11 +2,11 @@ package com.insigma.commons.dic;
 
 public interface IDefinition {
 
-	public String[] getNameList();
+	String[] getNameList();
 
-	public Object[] getValueList();
+	Object[] getValueList();
 
-	public String getNameByValue(Object key);
+	String getNameByValue(Object key);
 
-	public Object getValueByName(String key);
+	Object getValueByName(String key);
 }

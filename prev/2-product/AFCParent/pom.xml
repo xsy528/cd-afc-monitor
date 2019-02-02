@@ -9,6 +9,12 @@
     <version>1.0</version>
     <packaging>pom</packaging>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.1.2.RELEASE</version>
+    </parent>
+
     <properties>
         <java.version>1.8</java.version>
         <source.version>${java.version}</source.version>
@@ -18,66 +24,31 @@
     </properties>
 
     <modules>
-        <module>../AFCLog</module>
-        <module>../AFCApplication</module>
+        <!--<module>../AFCLog</module>-->
         <module>../AFCMonitor</module>
+        <module>../AFCTopology</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.insigma.commons</groupId>
-                <artifactId>commons-framework</artifactId>
+                <groupId>com.insigma.product</groupId>
+                <artifactId>AFCTopology</artifactId>
                 <version>1.0</version>
             </dependency>
-            <dependency>
-                <groupId>com.insigma.commons</groupId>
-                <artifactId>commons-editorframework</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr</artifactId>
-                <version>3.2</version>
-            </dependency>
-            <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib</artifactId>
-                <version>2.1_3</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.annotation</groupId>
-                <artifactId>jsr250-api</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.4</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${source.version}</source>
-                    <target>${target.version}</target>
-                    <compilerVersion>${compiler.version}</compilerVersion>
+                    <target>1.8</target>
+                    <source>1.8</source>
+                    <compilerVersion>1.8</compilerVersion>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>

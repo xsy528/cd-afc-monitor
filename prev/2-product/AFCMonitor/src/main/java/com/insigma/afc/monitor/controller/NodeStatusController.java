@@ -1,94 +1,76 @@
 package com.insigma.afc.monitor.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.monitor.service.impl.WZACCMetroNodeStatusServiceImpl;
-import com.insigma.afc.monitor.service.impl.WZModeServiceImpl;
-import com.insigma.afc.monitor.exception.ErrorCode;
-import com.insigma.afc.monitor.model.vo.*;
-import com.insigma.afc.monitor.service.NodeStatusService;
-import com.insigma.afc.monitor.util.HttpUtils;
-import com.insigma.afc.monitor.util.NodeUtils;
-import com.insigma.afc.dic.AFCModeCode;
-import com.insigma.afc.dic.DeviceStatus;
+import com.insigma.afc.monitor.constant.dic.AFCModeCode;
+import com.insigma.afc.monitor.constant.dic.DeviceStatus;
+import com.insigma.afc.monitor.model.dto.*;
+import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
+import com.insigma.afc.monitor.model.dto.condition.DeviceStatusCondition;
+import com.insigma.afc.monitor.model.dto.condition.StationStatusCondition;
 import com.insigma.afc.monitor.model.entity.TmoEquStatusCur;
 import com.insigma.afc.monitor.model.entity.TmoModeBroadcast;
 import com.insigma.afc.monitor.model.entity.TmoModeUploadInfo;
-import com.insigma.afc.monitor.model.dto.EquStatusFilterForm;
-import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
-import com.insigma.afc.monitor.model.dto.StationStatustViewItem;
-import com.insigma.afc.monitor.model.dto.EventFilterForm;
+import com.insigma.afc.monitor.model.vo.*;
+import com.insigma.afc.monitor.service.IMetroNodeStatusService;
+import com.insigma.afc.monitor.service.ModeService;
+import com.insigma.afc.monitor.service.MonitorService;
+import com.insigma.afc.topology.service.TopologyService;
 import com.insigma.commons.util.lang.DateTimeUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
- * Ticket: 节点状态控制器
+ * Ticket: 节点状态查询
  *
  * @author xuzhemin
  * 2018-12-28:18:06
  */
-public class NodeStatusController extends BaseMultiActionController{
+@Api(tags="节点状态接口")
+@RestController
+@RequestMapping("/monitor/query/")
+public class NodeStatusController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NodeStatusController.class);
 
-    static{
-        methodMapping.put("/monitor/query/stationStatus","getStationStatus");
-        methodMapping.put("/monitor/query/deviceStatus","getDeviceStatus");
-        methodMapping.put("/monitor/query/modeUpload","getModeUpload");
-        methodMapping.put("/monitor/query/modeBroadcast","getModeBroadcast");
-        methodMapping.put("/monitor/query/deviceEvent","getDeviceEvent");
-        methodMapping.put("/monitor/query/deviceDetail","getDeviceDetail");
-        methodMapping.put("/monitor/query/boxDetail","getBoxDetail");
-    }
-
-    private WZACCMetroNodeStatusServiceImpl metroNodeStatusService;
-    private WZModeServiceImpl modeService;
-    private NodeStatusService nodeStatusService;
+    private IMetroNodeStatusService metroNodeStatusService;
+    private ModeService modeService;
+    private MonitorService monitorService;
+    private TopologyService topologyService;
 
     @Autowired
-    public NodeStatusController(WZACCMetroNodeStatusServiceImpl metroNodeStatusService, WZModeServiceImpl modeService,
-                                NodeStatusService nodeStatusService) {
+    public NodeStatusController(IMetroNodeStatusService metroNodeStatusService, ModeService modeService,
+                                MonitorService monitorService,TopologyService topologyService) {
         this.metroNodeStatusService = metroNodeStatusService;
         this.modeService = modeService;
-        this.nodeStatusService = nodeStatusService;
+        this.monitorService = monitorService;
+        this.topologyService = topologyService;
     }
 
-    //车站状态列表
-    public Result<List<StationStatus>> getStationStatus(HttpServletRequest request, HttpServletResponse response) {
-        JsonNode jsonNode = HttpUtils.getBody(request);
-        List<Integer> idList = new ArrayList<>();
-        JsonNode nodeIds = jsonNode.get("nodeIds");
-        if (nodeIds==null||!nodeIds.isArray()){
-            return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
-        }
-        for(JsonNode id:nodeIds){
-            idList.add(id.intValue());
-        }
-        List<StationStatustViewItem> data = metroNodeStatusService
-                .getStationStatusView(null,idList.toArray(new Integer[idList.size()]));
+    @ApiOperation("获取车站状态列表")
+    @PostMapping("stationStatus")
+    public Result<List<StationStatus>> getStationStatus(@RequestBody StationStatusCondition condition) {
+        List<StationStatustViewItem> data = metroNodeStatusService.getStationStatusView(condition);
         List<StationStatus> stationStatusList = new ArrayList<>();
         for (StationStatustViewItem stationStatustViewItem:data){
             StationStatus stationStatus = new StationStatus();
             stationStatus.setAlarmEvent(stationStatustViewItem.getAlarmEvent());
             stationStatus.setNormalEvent(stationStatustViewItem.getNormalEvent());
             stationStatus.setWarnEvent(stationStatustViewItem.getWarnEvent());
-            stationStatus.setOnline(stationStatustViewItem.isOnline());
+            stationStatus.setOnline(stationStatustViewItem.getOnline());
             stationStatus.setUpdateTime(DateTimeUtil.formatDate(stationStatustViewItem.getUpdateTime()));
 
             //设置车站状态
-            Short status = Integer.valueOf(stationStatustViewItem.getStatus()).shortValue();
+            Short status = stationStatustViewItem.getStatus();
             stationStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
-            stationStatus.setName(stationStatustViewItem.name());
+            stationStatus.setName(topologyService.getNodeText(stationStatustViewItem.getNodeId()));
             //设置车站模式/编号
-            Integer mode = Long.valueOf(stationStatustViewItem.getMode()).intValue();
+            Integer mode = stationStatustViewItem.getMode().intValue();
             stationStatus.setMode(AFCModeCode.getInstance().getModeText(mode));
 
             stationStatusList.add(stationStatus);
@@ -96,16 +78,15 @@ public class NodeStatusController extends BaseMultiActionController{
         return Result.success(stationStatusList);
     }
 
-    //模式上传信息
-    public Result<List<ModeUploadInfo>> getModeUpload(HttpServletRequest request, HttpServletResponse response){
-        JsonNode jsonNode = HttpUtils.getBody(request);
-        long nodeId = jsonNode.get("nodeId").longValue();
-        List<TmoModeUploadInfo> tmoModeUploadInfos = nodeStatusService.getModeUpload(nodeId);
+    @ApiOperation("模式上传信息")
+    @PostMapping("modeUpload")
+    public Result<List<ModeUploadInfo>> getModeUpload(@RequestParam Long nodeId){
+        List<TmoModeUploadInfo> tmoModeUploadInfos = modeService.getModeUpload(nodeId);
         List<ModeUploadInfo> modeUploadInfos = new ArrayList<>();
         for (TmoModeUploadInfo tmoModeUploadInfo:tmoModeUploadInfos){
             ModeUploadInfo modeUploadInfo = new ModeUploadInfo();
-            modeUploadInfo.setLineName(NodeUtils.getNodeText(tmoModeUploadInfo.getLineId()));
-            modeUploadInfo.setStationName(NodeUtils.getNodeText(tmoModeUploadInfo.getStationId()));
+            modeUploadInfo.setLineName(topologyService.getNodeText(tmoModeUploadInfo.getLineId()));
+            modeUploadInfo.setStationName(topologyService.getNodeText(tmoModeUploadInfo.getStationId()));
             modeUploadInfo.setUploadTime(DateTimeUtil.formatDate(tmoModeUploadInfo.getModeUploadTime()));
             modeUploadInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeUploadInfo.getModeCode())));
             modeUploadInfos.add(modeUploadInfo);
@@ -113,15 +94,16 @@ public class NodeStatusController extends BaseMultiActionController{
         return Result.success(modeUploadInfos);
     }
 
-    //模式广播信息
-    public Result<List<ModeBroadcastInfo>> getModeBroadcast(HttpServletRequest request, HttpServletResponse response){
-        List<TmoModeBroadcast> tmoModeBroadcasts = nodeStatusService.getModeBroadcast();
+    @ApiOperation("模式广播信息")
+    @PostMapping("modeBroadcast")
+    public Result<List<ModeBroadcastInfo>> getModeBroadcast(){
+        List<TmoModeBroadcast> tmoModeBroadcasts = modeService.getModeBroadcast();
         List<ModeBroadcastInfo> modeBroadcastInfos = new ArrayList<>();
         for (TmoModeBroadcast tmoModeBroadcast:tmoModeBroadcasts){
             ModeBroadcastInfo modeBroadcastInfo = new ModeBroadcastInfo();
-            modeBroadcastInfo.setName(NodeUtils.getNodeText(tmoModeBroadcast.getNodeId()));
-            modeBroadcastInfo.setSourceName(NodeUtils.getNodeText(tmoModeBroadcast.getStationId()));
-            modeBroadcastInfo.setTargetName(NodeUtils.getNodeText(tmoModeBroadcast.getTargetId()));
+            modeBroadcastInfo.setName(topologyService.getNodeText(tmoModeBroadcast.getNodeId()));
+            modeBroadcastInfo.setSourceName(topologyService.getNodeText(tmoModeBroadcast.getStationId()));
+            modeBroadcastInfo.setTargetName(topologyService.getNodeText(tmoModeBroadcast.getTargetId()));
             modeBroadcastInfo.setModeBroadcastTime(DateTimeUtil.formatDate(tmoModeBroadcast.getModeBroadcastTime()));
             modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast.getModeCode())));
             modeBroadcastInfos.add(modeBroadcastInfo);
@@ -129,89 +111,32 @@ public class NodeStatusController extends BaseMultiActionController{
         return Result.success(modeBroadcastInfos);
     }
 
-    //设备状态列表
-    public Result<List<EquStatus>> getDeviceStatus(HttpServletRequest request, HttpServletResponse response) {
-        JsonNode jsonNode = HttpUtils.getBody(request);
-        List<Object> idList = new ArrayList<>();
-        for(JsonNode id:jsonNode.get("nodeIds")){
-            idList.add(id.longValue());
-        }
-        List<Short> statusList = new ArrayList<>();
-        if (jsonNode.get("status")!=null){
-            for (JsonNode id : jsonNode.get("status")) {
-                statusList.add(id.shortValue());
-            }
-        }
-        EquStatusFilterForm filterForm = new EquStatusFilterForm();
-        JsonNode startTimeNode = jsonNode.get("startTime");
-        if (startTimeNode!=null){
-            filterForm.setStartTime(new Date(Long.valueOf(startTimeNode.textValue())));
-        }
-        JsonNode endTimeNode = jsonNode.get("endTime");
-        if (endTimeNode!=null) {
-            filterForm.setEndTime(new Date(Long.valueOf(endTimeNode.textValue())));
-        }
-        filterForm.setSelections(idList);
-        filterForm.setStatusLevelList(statusList);
-        List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(filterForm);
+    @ApiOperation("设备状态列表")
+    @PostMapping("deviceStatus")
+    public Result<List<EquStatus>> getDeviceStatus(@RequestBody DeviceStatusCondition deviceStatusSearch) {
+        List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(deviceStatusSearch);
         List<EquStatus> equStatusList = new ArrayList<>();
         for (EquStatusViewItem equStatusViewItem:data){
             EquStatus equStatus = new EquStatus();
-            equStatus.setName(equStatusViewItem.name());
             Short status = Integer.valueOf(equStatusViewItem.getStatus()).shortValue();
             equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
-            equStatus.setOnline(equStatusViewItem.isOnline());
+            equStatus.setOnline(equStatusViewItem.getOnline());
             equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
             equStatusList.add(equStatus);
         }
         return Result.success(equStatusList);
     }
 
-    //设备事件列表
-    public Result<List<EquEvent>> getDeviceEvent(HttpServletRequest request, HttpServletResponse response){
-        JsonNode jsonNode = HttpUtils.getBody(request);
-        List<Object> idList = new ArrayList<>();
-        for(JsonNode id:jsonNode.get("nodeIds")){
-            idList.add(id.longValue());
-        }
-        List<Object> devTypeList = new ArrayList<>();
-        if (jsonNode.get("devType")!=null){
-            for (JsonNode id : jsonNode.get("devType")) {
-                devTypeList.add(id.shortValue());
-            }
-        }
-        EventFilterForm eventFilterForm = new EventFilterForm();
-        eventFilterForm.setSelections(idList);
-        eventFilterForm.setEquTypeList(devTypeList);
-
-        int maxCount = jsonNode.get("maxCount")==null?100:jsonNode.get("maxCount").intValue();
-        eventFilterForm.setPageSize(maxCount);
-
-        String orderField = jsonNode.get("orderField")==null?"occurTime":jsonNode.get("orderField").textValue();
-        eventFilterForm.setOrderField(orderField);
-
-        String orderType = jsonNode.get("orderType")==null?"ASC":jsonNode.get("orderType").textValue();
-        if (!(orderType.equals("ASC")||orderType.equals("AESC"))){
-            orderType="ASC";
-        }
-        eventFilterForm.setOrderType(orderType);
-
-        JsonNode startTimeNode = jsonNode.get("startTime");
-        if (startTimeNode!=null){
-            eventFilterForm.setStartTime(new Date(Long.valueOf(startTimeNode.textValue())));
-        }
-        JsonNode endTimeNode = jsonNode.get("endTime");
-        if (endTimeNode!=null) {
-            eventFilterForm.setEndTime(new Date(Long.valueOf(endTimeNode.textValue())));
-        }
-
-        List<TmoEquStatusCur> tmoEquStatusCurs = modeService.getEquStatusList(eventFilterForm,0).getDatas();
+    @ApiOperation("设备事件列表")
+    @PostMapping("deviceEvent")
+    public Result<List<EquEvent>> getDeviceEvent(@RequestBody DeviceEventCondition condition){
+        List<TmoEquStatusCur> tmoEquStatusCurs = modeService.getEquStatusList(condition);
         List<EquEvent> equEvents = new ArrayList<>();
         for (TmoEquStatusCur tmoEquStatusCur:tmoEquStatusCurs){
             EquEvent equEvent = new EquEvent();
             equEvent.setApplyDevice(tmoEquStatusCur.getApplyDevice());
             equEvent.setItem(tmoEquStatusCur.getItem1());
-            equEvent.setNodeName(NodeUtils.getNodeText(tmoEquStatusCur.getNodeId()));
+            equEvent.setNodeName(topologyService.getNodeText(tmoEquStatusCur.getNodeId()));
             equEvent.setOccurTime(DateTimeUtil.formatDate(tmoEquStatusCur.getOccurTime()));
             equEvent.setStatusName(tmoEquStatusCur.getStatusName()+"/"+tmoEquStatusCur.getStatusId());
             equEvent.setStatusDesc(tmoEquStatusCur.getStatusDesc()+"/"+tmoEquStatusCur.getStatusValue());
@@ -220,14 +145,16 @@ public class NodeStatusController extends BaseMultiActionController{
         return Result.success(equEvents);
     }
 
-    public Result getDeviceDetail(HttpServletRequest request, HttpServletResponse response){
-        JsonNode jsonNode = HttpUtils.getBody(request);
-        return nodeStatusService.getDeviceDetail(jsonNode.get("nodeId").longValue());
+    @ApiOperation("监视设备")
+    @PostMapping("deviceDetail")
+    public Result getDeviceDetail(@RequestParam Long nodeId){
+        return monitorService.getDeviceDetail(nodeId);
     }
 
-    public Result getBoxDetail(HttpServletRequest request, HttpServletResponse response){
-        JsonNode jsonNode = HttpUtils.getBody(request);
-        return nodeStatusService.getBoxDetail(jsonNode.get("nodeId").longValue());
+    @ApiOperation("钱箱票箱")
+    @PostMapping("boxDetail")
+    public Result getBoxDetail(@RequestParam Long nodeId){
+        return monitorService.getBoxDetail(nodeId);
     }
 
 }

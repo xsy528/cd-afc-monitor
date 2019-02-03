@@ -4,6 +4,7 @@ import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.model.dto.*;
 import com.insigma.afc.monitor.model.dto.condition.DeviceStatusCondition;
 import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
+import com.insigma.afc.monitor.model.dto.condition.StationStatusCondition;
 import com.insigma.afc.monitor.model.vo.NodeItem;
 import com.insigma.afc.monitor.service.FileService;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
@@ -100,7 +101,9 @@ public class NodeTreeServiceImpl implements NodeTreeService {
             //从数据库获取车站状态
             List<Integer> stationIds = new ArrayList<>();
             allMetroStations.forEach(metroStation -> stationIds.add(metroStation.getStationId()));
-            List<StationStatustViewItem> stationStatusViewItems = nodeStatusService.getStationStatusView(stationIds);
+            StationStatusCondition condition = new StationStatusCondition();
+            condition.setStationIds(stationIds);
+            List<StationStatustViewItem> stationStatusViewItems = nodeStatusService.getStationStatusView(condition);
             stationStatusViewItemMap = new HashMap<>();
             for (StationStatustViewItem stationStatustViewItem : stationStatusViewItems) {
                 stationStatusViewItemMap.put(stationStatustViewItem.getNodeId(), stationStatustViewItem);

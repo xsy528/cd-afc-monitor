@@ -100,17 +100,24 @@ public class TopologyServiceImpl implements TopologyService {
 
     @Override
     public MetroNode getNodeByNo(Long nodeNo) {
-        if (nodeNo==0){
-            return metroACCDao.findById((short)0).orElseThrow(()->new NodeNotFoundException(0L,AFCNodeLevel.ACC));
-        }else if(nodeNo>0&&nodeNo<=0xff000000L){
-            return metroLineDao.findById((short)(nodeNo>>24)).orElseThrow(()->
-                    new NodeNotFoundException(nodeNo>>24,AFCNodeLevel.LC));
-        }else if(nodeNo>0xff000000L&&nodeNo<=0xffff0000L){
-            return metroStationDao.findByStationId((int)(nodeNo>>16))
-                    .orElseThrow(()->new NodeNotFoundException(nodeNo>>16,AFCNodeLevel.SC));
-        }else if(nodeNo>0xffff0000L&&nodeNo<=0xffffffffL){
-            return metroDeviceDao.findByDeviceId(nodeNo).orElseThrow(()->
-                    new NodeNotFoundException(nodeNo,AFCNodeLevel.SLE));
+        AFCNodeLevel level = NodeIdUtils.getNodeLevelByNo(nodeNo);
+        switch (level){
+            case ACC:{
+                return metroACCDao.findById((short)0).orElseThrow(()->new NodeNotFoundException(0L,AFCNodeLevel.ACC));
+            }
+            case LC:{
+                return metroLineDao.findById((short)(nodeNo>>24)).orElseThrow(()->
+                        new NodeNotFoundException(nodeNo>>24,AFCNodeLevel.LC));
+            }
+            case SC:{
+                return metroStationDao.findByStationId((int)(nodeNo>>16))
+                        .orElseThrow(()->new NodeNotFoundException(nodeNo>>16,AFCNodeLevel.SC));
+            }
+            case SLE:{
+                return metroDeviceDao.findByDeviceId(nodeNo).orElseThrow(()->
+                        new NodeNotFoundException(nodeNo,AFCNodeLevel.SLE));
+            }
+            default:
         }
         throw new NodeNotFoundException(nodeNo);
     }

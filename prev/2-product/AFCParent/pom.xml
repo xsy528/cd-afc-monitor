@@ -24,7 +24,6 @@
     </properties>
 
     <modules>
-        <!--<module>../AFCLog</module>-->
         <module>../AFCMonitor</module>
         <module>../AFCTopology</module>
     </modules>

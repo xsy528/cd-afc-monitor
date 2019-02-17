@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
  * Ticket:
  *
  * @author xuzhemin
- * 2019-01-10:14:47
+ * 2019-01-10 14:47
  */
 @Api(tags = "节点管理服务接口")
 @RestController

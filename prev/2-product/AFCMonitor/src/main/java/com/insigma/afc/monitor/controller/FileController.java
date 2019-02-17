@@ -18,7 +18,7 @@ import java.io.OutputStream;
  * Ticket: 文件接口
  *
  * @author xuzhemin
- * 2018-12-25:10:12
+ * 2018-12-25 10:12
  */
 @Api(tags="文件服务接口")
 @RestController

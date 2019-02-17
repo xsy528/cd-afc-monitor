@@ -77,7 +77,6 @@ public class AnnotationReader {
 					}
 				} catch (IOException e) {
 					LOGGER.error("获取资源异常",e);
-					continue;
 				}
 			}
 		}
@@ -88,7 +87,11 @@ public class AnnotationReader {
 
 	private void getAnnotation(File file,Class<?> annotationClass,List<Class<?>> annotations){
 		if (file.isDirectory()){
-			for(File subFile:file.listFiles()) {
+			File[] files = file.listFiles();
+			if (files==null){
+				return;
+			}
+			for(File subFile:files) {
 				getAnnotation(subFile,annotationClass,annotations);
 			}
 		}else{

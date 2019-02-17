@@ -29,7 +29,7 @@ import java.util.List;
  * Ticket: 节点状态查询
  *
  * @author xuzhemin
- * 2018-12-28:18:06
+ * 2018-12-28 18:06
  */
 @Api(tags="节点状态接口")
 @RestController

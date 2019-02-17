@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * Ticket: 监控配置接口
  *
  * @author xuzhemin
- * 2019-01-09:14:37
+ * 2019-01-09 14:37
  */
 @Api(tags="监控配置接口")
 @RestController

@@ -19,7 +19,7 @@ import java.util.Map;
  * Ticket: 字典接口，获取程序中各类字典参数
  *
  * @author xuzhemin
- * 2019-01-14:16:18
+ * 2019-01-14 16:18
  */
 @Api(tags="字典接口")
 @RestController

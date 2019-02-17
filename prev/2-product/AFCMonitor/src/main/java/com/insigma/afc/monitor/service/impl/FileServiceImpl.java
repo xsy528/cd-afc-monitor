@@ -19,6 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ticket: 文件服务实现类
+ * @author xuzhemin
+ * date:
+ */
 @Service
 public class FileServiceImpl implements FileService {
 

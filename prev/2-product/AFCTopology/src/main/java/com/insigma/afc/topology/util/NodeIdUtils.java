@@ -4,12 +4,14 @@ import com.insigma.afc.topology.constant.AFCNodeLevel;
 import com.insigma.afc.topology.constant.dic.AFCDeviceType;
 
 /**
- * Ticket:
+ * Ticket: 节点id工具类
  *
  * @author xuzhemin
  * 2019-02-02:11:18
  */
 public class NodeIdUtils {
+
+    private NodeIdUtils(){}
 
     /**
      * 将id补全为八位十六进制
@@ -32,7 +34,7 @@ public class NodeIdUtils {
     /**
      * 获取节点等级
      * @param nodeId 节点id
-     * @return
+     * @return 节点等级
      */
     public static AFCNodeLevel getNodeLevel(Long nodeId) {
         return getNodeLevelByNo(getNodeNo(nodeId));
@@ -61,8 +63,8 @@ public class NodeIdUtils {
 
     /**
      * 获取节点类型
-     * @param nodeId
-     * @return
+     * @param nodeId 节点id
+     * @return 节点类型
      */
     public static short getNodeType(Long nodeId) {
         nodeId = getNodeNo(nodeId);
@@ -87,8 +89,8 @@ public class NodeIdUtils {
 
     /**
      * 获取设备类型
-     * @param deviceId
-     * @return
+     * @param deviceId 设备id
+     * @return 设备类型
      */
     public static short getDeviceType(Long deviceId) {
         return (short) ((deviceId & 0x0000ff00) >> 8);

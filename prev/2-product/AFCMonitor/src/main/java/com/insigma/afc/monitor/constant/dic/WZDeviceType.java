@@ -5,8 +5,8 @@
  */
 package com.insigma.afc.monitor.constant.dic;
 
-import com.insigma.afc.monitor.constant.xdr.typedef.DeviceType_t;
 import com.insigma.afc.topology.constant.dic.AFCDeviceType;
+import com.insigma.afc.topology.constant.xml.DeviceType_t;
 import com.insigma.commons.dic.annotation.Dic;
 import com.insigma.commons.dic.annotation.DicItem;
 

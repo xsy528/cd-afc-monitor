@@ -19,7 +19,7 @@ public class AppConfig {
 
     @Bean
     public CommandHandlerManager commandHandlerManager(){
-        List<ICommandHandler> commandHandlerList = new ArrayList();
+        List<ICommandHandler> commandHandlerList = new ArrayList<>();
         return new CommandHandlerManager(commandHandlerList);
     }
 }

@@ -50,7 +50,7 @@ public class NodeManagerController {
     }
 
     @ApiOperation("删除节点")
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public Result delete(@RequestParam Long nodeId){
         return metroNodeService.delete(nodeId);
     }

@@ -1,6 +1,6 @@
 openapi: 3.0.2
 servers:
-  - url: 'http://localhost:8060/'
+  - url: 'http://localhost:8080/'
 info:
   description: AFC监控系统前后台接口-路网监控-详细的表格数据
   version: 1.0.0
@@ -93,8 +93,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TmoEquStatusCurList'
+  /monitor/query/deviceDetail:
+    post:
+      tags:
+        - 路网监控
+      summary: 监视设备
+      operationId: monitor-query-deviceDetail
+      parameters: 
+        - in: query
+          name: 设备id
+          schema: 
+            $ref: '#/components/schemas/nodeId'
+      responses:
+        '200':
+          description: 返回设备事件列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoEquStatusCurList'
+  /monitor/query/boxDetail:
+    post:
+      tags:
+        - 路网监控
+      summary: 查看钱箱票箱
+      operationId: monitor-query-boxDetail
+      parameters: 
+        - in: query
+          name: 设备id
+          schema: 
+            $ref: '#/components/schemas/nodeId'
+      responses:
+        '200':
+          description: 返回设备事件列表。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TmoEquStatusCurList'
 components:
   schemas:
+    nodeId:
+      description: 节点id
+      type: string
     ModeUploadFilter:
       description: 模式上传的过滤条件
       type: object

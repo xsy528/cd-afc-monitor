@@ -48,7 +48,7 @@ public class CommandController{
     }
 
     @ApiOperation("修改运营模式")
-    @PostMapping("changeMode")
+    @PostMapping("/changeMode")
     public Result<List<CommandResult>> changeMode(@RequestBody SendCommand sendCommand){
         return commandService.sendChangeModeCommand(sendCommand.getNodeIds(),sendCommand.getCommand());
     }
@@ -60,32 +60,32 @@ public class CommandController{
     }
 
     @ApiOperation("时钟同步")
-    @PostMapping("timeSync")
+    @PostMapping("/timeSync")
     public Result<List<CommandResult>> timeSync(@RequestBody SendCommand sendCommand){
         return commandService.sendTimeSyncCommand(sendCommand.getNodeIds());
     }
 
     @ApiOperation("地图同步")
-    @PostMapping("mapSync")
+    @PostMapping("/mapSync")
     public Result<List<CommandResult>> mapSync(@RequestBody SendCommand sendCommand){
         return commandService.sendMapSyncCommand(sendCommand.getNodeIds());
     }
 
     @ApiOperation("发送设备控制命令")
-    @PostMapping("nodeControl")
+    @PostMapping("/nodeControl")
     public Result<List<CommandResult>> nodeControl(@RequestBody SendCommand sendCommand){
         return commandService.sendNodeControlCommand(sendCommand.getNodeIds(),sendCommand.getCommand().shortValue());
     }
 
     @ApiOperation("刷新数据库资源")
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     public Result<String> refresh(){
         fileService.synResources();
         return Result.success();
     }
 
     @ApiOperation("查询钱箱和票箱")
-    @PostMapping("queryBox")
+    @PostMapping("/queryBox")
     public Result<List<CommandResult>> queryBox(@RequestParam Long nodeId){
         return commandService.sendQueryBoxCommand(nodeId);
     }

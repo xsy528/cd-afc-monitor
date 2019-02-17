@@ -1,6 +1,6 @@
 openapi: 3.0.2
 servers:
-  - url: 'http://localhost:8060/'
+  - url: 'http://localhost:8080/'
 info:
   description: AFC监控系统前后台接口-公共结构
   version: 1.0.0
@@ -8,7 +8,7 @@ info:
 paths:
   /file/ref:
     get:
-      tags: 
+      tags:
         - 节点管理
       operationId: 图片引用
       summary: 返回图片字节数组
@@ -36,7 +36,7 @@ paths:
                 type: array
                 items:
                   type: string
-  '/node/list/{mode}':
+  '/node/tree/{mode}':
     get:
       tags:
         - 节点管理

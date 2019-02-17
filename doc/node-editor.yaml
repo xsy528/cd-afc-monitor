@@ -1,6 +1,6 @@
 openapi: 3.0.2
 servers:
-  - url: 'http://localhost:8060/'
+  - url: 'http://localhost:8080/'
 info:
   description: AFC监控系统前后台接口-节点管理
   version: 1.0.0
@@ -9,7 +9,7 @@ tags:
   - name: 节点管理
     description: 节点管理部分，就是对底图做增删改查。
 paths:
-  /editor/node/create:
+  /node/create:
     post:
       tags:
         - 节点管理
@@ -36,7 +36,7 @@ paths:
             application/json:
               schema:
                 type: object
-  /editor/node/remove:
+  /node/remove:
     post:
       tags:
         - 节点管理
@@ -51,15 +51,14 @@ paths:
               description: 要删除的节点Id。
               type: object
               properties:
-                nodeId: 
+                nodeId:
                   description: 节点id
                   type: number
-                  example: 
-                    19992835
+                  example: 19992835
       responses:
         '200':
           description: 成功
-  /editor/node/query:
+  /node/query:
     post:
       tags:
         - 节点管理
@@ -83,7 +82,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NodeData'
-  /editor/node/update:
+  /node/update:
     post:
       tags:
         - 节点管理
@@ -124,7 +123,7 @@ components:
           description: 线路编号
           type: number
         status:
-          description: 启用状态（0启用,1未启用）
+          description: '启用状态（0启用,1未启用）'
           type: number
         ip:
           description: 网络地址，比如192.168.144.183

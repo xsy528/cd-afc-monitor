@@ -1,6 +1,6 @@
 openapi: 3.0.2
 servers:
-  - url: 'http://localhost:8011/'
+  - url: 'http://localhost:8080/'
 info:
   description: AFC监控系统前后台接口-获取静态配置。
   version: 1.0.0
@@ -9,7 +9,7 @@ tags:
   - name: 获取静态配置
     description: 主要是用来AFC系统预定义的一些枚举值。比如设备类型、运行模式等。
 paths:
-  /config/devTypeList:
+  /dic/devTypeList:
     get:
       tags:
         - 获取静态配置
@@ -22,7 +22,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeviceTypeList'
-  /config/modeTypeList:
+  /dic/modeTypeList:
     get:
       tags:
         - 获取静态配置
@@ -38,7 +38,7 @@ paths:
                 properties:
                   schema:
                     $ref: '#/components/schemas/ModeTypeList'
-  /config/deviceStatusList:
+  /dic/deviceStatusList:
     get:
       tags:
         - 获取静态配置

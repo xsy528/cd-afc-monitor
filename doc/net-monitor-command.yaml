@@ -1,6 +1,6 @@
 openapi: 3.0.2
 servers:
-  - url: 'http://localhost:8060/'
+  - url: 'http://localhost:8080/'
 info:
   description: AFC监控系统前后台接口-路网监控-节点命令
   version: 1.0.0
@@ -8,7 +8,7 @@ info:
 tags:
   - name: 路网监控-命令
 paths:
-  /monitor/changeMode:
+  /monitor/command/changeMode:
     post:
       tags:
         - 路网监控
@@ -36,7 +36,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommandResponse'
-  /monitor/queryMode:
+  /monitor/command/queryMode:
     post:
       tags:
         - 路网监控
@@ -61,7 +61,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommandResponse'
-  /monitor/timeSync:
+  /monitor/command/timeSync:
     post:
       tags:
         - 路网监控
@@ -86,7 +86,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommandResponse'
-  /monitor/nodeControl:
+  /monitor/command/nodeControl:
     post:
       tags:
         - 路网监控
@@ -114,30 +114,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommandResponse'
-  /monitor/query/deviceDetail:
-    post:
-      tags:
-        - 路网监控
-      summary: 查询设备详细信息
-      description: 查询设备详细信息
-      operationId: monitor-query-deviceDetail
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nodeId:
-                  type: number
-                  description: 目标节点的Id
-      responses:
-        '200':
-          description: 返回命令执行结果。
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeviceDetail'
-  '/monitor/query/boxDetail':
+  /monitor/command/queryBox:
     post:
       tags:
         - 路网监控
@@ -160,7 +137,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommandBoxQueryResult'
-  /monitor/refresh:
+  /monitor/command/refresh:
     post:
       tags:
         - 路网监控
@@ -208,10 +185,10 @@ components:
         device:
           description: 设备名称和id
           type: string
-        imgUrl: 
+        imgUrl:
           description: 底图索引
           type: number
-        station: 
+        station:
           description: 车站名称
           type: string
         modules:
@@ -238,7 +215,7 @@ components:
                 properties:
                   x:
                     type: number
-                  y:
+                  'y':
                     type: number
                   angle:
                     type: number
@@ -267,7 +244,7 @@ components:
         ticketBoxList:
           type: array
           description: 票箱数据
-          items: 
+          items:
             type: object
             properties:
               deviceTicketBoxInfo:
@@ -279,7 +256,7 @@ components:
         cashBoxList:
           type: array
           description: 钱箱数据
-          items: 
+          items:
             type: object
             properties:
               deviceCashBoxInfo:

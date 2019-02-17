@@ -34,6 +34,7 @@ public class MetroEventServiceImpl implements IMetroEventService {
 
 		return tmoEquStatusCurDao.findAll((root,query,builder)->{
 
+			//根据deviceId和occurTime排序
 			query.orderBy(builder.desc(root.get("deviceId")),builder.desc(root.get("occurTime")));
 			List<Predicate> predicates = new ArrayList<>();
 			if (nodeId!=null){

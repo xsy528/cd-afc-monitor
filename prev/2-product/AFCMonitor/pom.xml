@@ -24,6 +24,11 @@
             <groupId>com.insigma.product</groupId>
             <artifactId>AFCTopology</artifactId>
         </dependency>
+        <!-- spring cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
         <!--spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

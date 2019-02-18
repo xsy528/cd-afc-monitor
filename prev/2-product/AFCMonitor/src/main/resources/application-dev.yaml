@@ -3,3 +3,8 @@ spring:
     url: jdbc:oracle:thin:@192.168.144.182:1521:afclc
     username: acc_wenzhou_v2
     password: afcapp
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

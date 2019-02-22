@@ -1,0 +1,76 @@
+#api信息
+api:
+  title: 节点管理服务接口
+  description:
+  version: 1.0
+  termsOfServiceUrl: "http://www.unittec.com/"
+  license:
+  licenseUrl:
+  contactName: xuzhemin
+  contactUrl:
+  contactEmail: xuzhemin@unittec.com
+
+#车站基本配置
+app:
+  applicationName: 温州ACC监控
+  lineNo: 0
+  stationNo: 0
+  nodeNo: 0x00000000
+
+#tomcat配置
+server:
+  port: 8081
+  tomcat:
+    #文件上传临时目录
+    basedir: ./tmp
+
+#数据源配置
+spring:
+  profiles:
+    active: test
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+  servlet:
+    multipart:
+      #上传文件最大1MB
+      max-file-size: 1MB
+  jpa:
+    open-in-view: false
+    show-sql: true
+  application:
+    name: monitor-service
+
+#监控配置
+management:
+  endpoint:
+    health:
+      show-details: always
+
+#与MessageServer通讯RMI配置
+rmiHostIpAddr: 10.0.30.2
+#rmiHostIpAddr=127.0.0.1
+communicationRegistRmiPort: 8527
+commandServiceRmiPort: 8528
+parameterManagerRmiPort: 8532
+qrKeyParamManagerRmiPort: 8536
+
+#与TaskServer通讯RMI配置
+rmiTaskHostIpAddr: 10.0.30.5
+#rmiTaskHostIpAddr=127.0.0.1
+dailyClearRmiPort: 8533
+
+#与YKTServer通讯RMI配置
+rmiYKTHostIpAddr: 10.0.30.11
+#rmiYKTHostIpAddr=127.0.0.1
+fileOperationRmiPort: 8534
+
+#和SS通讯RMI配置
+rmiSecertIpAddr: 10.12.92.235
+#rmiSecertIpAddr=127.0.0.1
+QRKeyRmiPort: 8535
+
+#模式履历计划任务生成查询天数
+waiverSearchDay: 90
+
+#资源文件的相对根目录（相对启动程序的根目录）
+root.resouce: resources

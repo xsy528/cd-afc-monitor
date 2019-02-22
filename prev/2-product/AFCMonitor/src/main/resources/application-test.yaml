@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:oracle:thin:@192.168.144.183:1521:afcdb100
-    username: acc_wenzhou_st3
-    password: afcapp

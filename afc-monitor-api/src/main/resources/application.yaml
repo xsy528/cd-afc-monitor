@@ -1,6 +1,6 @@
 #api信息
 api:
-  title: 节点管理服务接口
+  title: 监控服务接口
   description:
   version: 1.0
   termsOfServiceUrl: "http://www.unittec.com/"

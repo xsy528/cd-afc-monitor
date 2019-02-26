@@ -5,6 +5,7 @@
  */
 package com.insigma.afc.monitor;
 
+import com.insigma.commons.dic.annotation.DicScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
+@DicScan("com.insigma")
 public class ACCMonitorApp {
 
 	public static void main(String[] args) {

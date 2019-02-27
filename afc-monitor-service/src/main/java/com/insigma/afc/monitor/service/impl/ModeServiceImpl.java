@@ -25,6 +25,7 @@ import com.insigma.commons.util.NodeIdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,68 @@ public class ModeServiceImpl implements ModeService {
 	private TmoEquStatusCurDao tmoEquStatusCurDao;
 
 	@Override
+	public Page<TmoModeUploadInfo> getModeUploadInfo(List<Integer> stationIds, Short modeCode,
+													 Short broadCastStatus, Date startTime,
+													 Date endTime, int page, int pageSize) {
+		return tmoModeUploadInfoDao.findAll((root,query,builder)->{
+			List<Predicate> predicates = new ArrayList<>();
+			if (stationIds!=null){
+				predicates.add(root.get("stationId").in(stationIds));
+			}
+			if(modeCode!=null){
+				predicates.add(builder.equal(root.get("modeCode"),modeCode));
+			}
+			if (broadCastStatus!=null){
+				predicates.add(builder.equal(root.get("broadcastStatus"),broadCastStatus));
+			}
+			if (startTime!=null){
+				predicates.add(builder.greaterThanOrEqualTo(root.get("modeUploadTime"),startTime));
+			}
+			if (endTime!=null){
+				predicates.add(builder.lessThanOrEqualTo(root.get("modeUploadTime"),endTime));
+			}
+			query.orderBy(builder.desc(root.get("modeUploadTime")),builder.asc(root.get("modeCode")));
+			return builder.and(predicates.toArray(new Predicate[0]));
+		},PageRequest.of(page,pageSize));
+	}
+
+	@Override
+	public Page<TmoModeBroadcast> getModeBroadcastInfo(List<Integer> stationIds, Short modeCode, String operatorId,
+													   Integer desStationId, Short broadCastStatus, Short broadCastType,
+													   Date startTime, Date endTime, int page, int pageSize) {
+		return tmoModeBroadcastDao.findAll((root,query,builder)->{
+			List<Predicate> predicates = new ArrayList<>();
+			if (stationIds!=null){
+				predicates.add(root.get("stationId").in(stationIds));
+			}
+			if(modeCode!=null){
+				predicates.add(builder.equal(root.get("modeCode"),modeCode));
+			}
+			if (broadCastStatus!=null){
+				predicates.add(builder.equal(root.get("broadcastStatus"),broadCastStatus));
+			}
+			if (broadCastType!=null){
+				predicates.add(builder.equal(root.get("broadcastType"),broadCastType));
+			}
+			if (operatorId!=null){
+				predicates.add(builder.equal(root.get("operatorId"),operatorId));
+			}
+			if (desStationId!=null){
+				predicates.add(builder.equal(root.get("targetId"),desStationId));
+			}
+			if (startTime!=null){
+				predicates.add(builder.greaterThanOrEqualTo(root.get("modeEffectTime"),startTime));
+			}
+			if (endTime!=null){
+				predicates.add(builder.lessThanOrEqualTo(root.get("modeEffectTime"),endTime));
+			}
+			query.orderBy(builder.desc(root.get("modeEffectTime")),builder.desc(root.get("modeBroadcastTime")),
+					builder.asc(root.get("targetId")));
+			return builder.and(predicates.toArray(new Predicate[0]));
+		},PageRequest.of(page,pageSize));
+	}
+
+	@Override
 	public List<TmoModeUploadInfo> getModeUpload(long nodeId){
 
 		if(topologyService.getNode(nodeId)==null){
@@ -79,7 +142,7 @@ public class ModeServiceImpl implements ModeService {
 			}
 			//排序
 			query.orderBy(builder.desc(root.get("modeUploadTime")));
-			return builder.and(predicates.toArray(new Predicate[predicates.size()]));
+			return builder.and(predicates.toArray(new Predicate[0]));
 		});
 	}
 

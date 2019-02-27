@@ -5,6 +5,7 @@ import com.insigma.afc.monitor.model.entity.TmoEquStatusCur;
 import com.insigma.afc.monitor.model.entity.TmoItemStatus;
 import com.insigma.afc.monitor.model.entity.TmoModeBroadcast;
 import com.insigma.afc.monitor.model.entity.TmoModeUploadInfo;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -74,6 +75,45 @@ public interface ModeService {
 	 *
 	 */
 	List<TmoEquStatusCur> getEquStatusList(DeviceEventCondition condition);
+
+
+	/**
+	 * 获取模式上传信息列表
+	 *
+	 * @param stationIds
+	 *            车站编号
+	 * @param modeCode
+	 *            模式代码
+	 * @param broadCastStatus
+	 *            广播状态
+	 * @param startTime
+	 *            开始时间
+	 * @param endTime
+	 *            结束时间
+	 * @param page
+	 * @param pageSize
+	 * @return Page<TmoModeUploadInfo> 模式上传列表
+	 */
+	Page<TmoModeUploadInfo> getModeUploadInfo(List<Integer> stationIds,Short modeCode, Short broadCastStatus,
+											  Date startTime, Date endTime, int page, int pageSize);
+
+	/**
+	 * 获取模式广播信息
+	 * @param stationIds 车站数组
+	 * @param modeCode 进入的模式
+	 * @param operatorId 操作员id
+	 * @param desStationId 目标车站id
+	 * @param broadCastStatus 广播状态
+	 * @param broadCastType 广播类型
+	 * @param startTime 开始时间
+	 * @param endTime 结束时间
+	 * @param page 页码
+	 * @param pageSize 页大小
+	 * @return 分页数据
+	 */
+	Page<TmoModeBroadcast> getModeBroadcastInfo(List<Integer> stationIds, Short modeCode, String operatorId,
+												Integer desStationId, Short broadCastStatus, Short broadCastType,
+												Date startTime, Date endTime, int page, int pageSize);
 
 	/**
 	 * 模式上传信息

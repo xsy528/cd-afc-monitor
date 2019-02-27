@@ -16,31 +16,31 @@ import java.util.Map;
  */
 public interface TopologyService {
 
-    @RequestLine("GET /topology/getMetroAcc")
+    @RequestLine("GET /topology/query/getMetroAcc")
     Result<MetroACC> getMetroAcc();
 
-    @RequestLine("GET /topology/getDeviceNode?deviceId={deviceId}")
+    @RequestLine("GET /topology/query/getDeviceNode?deviceId={deviceId}")
     Result<MetroDevice> getDeviceNode(@Param("deviceId") Long deviceId);
 
-    @RequestLine("GET /topology/getNode?nodeId={nodeId}")
+    @RequestLine("GET /topology/query/getNode?nodeId={nodeId}")
     Result<MetroNode> getNode(@Param("nodeId") Long nodeId);
 
-    @RequestLine("GET /topology/getNodeText?nodeId={nodeId}")
+    @RequestLine("GET /topology/query/getNodeText?nodeId={nodeId}")
     Result<String> getNodeText(@Param("nodeId") Long nodeId);
 
-    @RequestLine("GET /topology/getAllMetroLine")
+    @RequestLine("GET /topology/query/getAllMetroLine")
     Result<List<MetroLine>> getAllMetroLine();
 
-    @RequestLine("GET /topology/getMetroStationsGroupByLineId")
+    @RequestLine("GET /topology/query/getMetroStationsGroupByLineId")
     Result<Map<Short,List<MetroStation>>> getMetroStationsGroupByLineId();
 
-    @RequestLine("GET /topology/getMetroDevicesGroupByStationId")
+    @RequestLine("GET /topology/query/getMetroDevicesGroupByStationId")
     Result<Map<Integer,List<MetroDevice>>> getMetroDevicesGroupByStationId();
 
-    @RequestLine("GET /topology/getMetroStationsByLineId?lineId={lineId}")
+    @RequestLine("GET /topology/query/getMetroStationsByLineId?lineId={lineId}")
     Result<List<MetroStation>> getMetroStationsByLineId(@Param("lineId")Short lineId);
 
-    @RequestLine("GET /topology/getMetroDeviceByStationId?stationId={stationId}")
+    @RequestLine("GET /topology/query/getMetroDeviceByStationId?stationId={stationId}")
     Result<List<MetroDevice>> getMetroDeviceByStationId(@Param("stationId")Integer stationId);
 
 }

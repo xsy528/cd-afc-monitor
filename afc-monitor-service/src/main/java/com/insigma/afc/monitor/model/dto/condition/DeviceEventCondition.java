@@ -14,7 +14,7 @@ import java.util.List;
  * @author xuzhemin
  * 2019-01-30:20:43
  */
-@ApiModel("设备事件查询条件")
+@ApiModel(description = "设备事件查询条件")
 public class DeviceEventCondition {
 
     @ApiModelProperty("设备节点数组")

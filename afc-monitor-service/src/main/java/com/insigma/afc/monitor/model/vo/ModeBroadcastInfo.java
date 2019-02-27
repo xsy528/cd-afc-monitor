@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author xuzhemin
  * 2019-01-03:14:56
  */
-@ApiModel("模式广播信息")
+@ApiModel(description = "模式广播信息")
 public class ModeBroadcastInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -31,9 +31,57 @@ public class ModeBroadcastInfo implements Serializable {
     @JsonProperty("mode_broadcast_time")
     private String modeBroadcastTime;
 
+    @ApiModelProperty("模式上传时间")
+    @JsonProperty("mode_effect_time")
+    private String modeEffectTime;
+
     @ApiModelProperty("目的车站名称")
     @JsonProperty("target_name")
     private String targetName;
+
+    @ApiModelProperty("广播方式")
+    @JsonProperty("mode_broadcast_type")
+    private String modeBroadcastType;
+
+    @ApiModelProperty("广播状态")
+    @JsonProperty("mode_broadcast_status")
+    private String modeBroadcastStatus;
+
+    @ApiModelProperty("操作员编号")
+    @JsonProperty("operator_id")
+    private String operatorId;
+
+    public String getModeEffectTime() {
+        return modeEffectTime;
+    }
+
+    public void setModeEffectTime(String modeEffectTime) {
+        this.modeEffectTime = modeEffectTime;
+    }
+
+    public String getModeBroadcastType() {
+        return modeBroadcastType;
+    }
+
+    public void setModeBroadcastType(String modeBroadcastType) {
+        this.modeBroadcastType = modeBroadcastType;
+    }
+
+    public String getModeBroadcastStatus() {
+        return modeBroadcastStatus;
+    }
+
+    public void setModeBroadcastStatus(String modeBroadcastStatus) {
+        this.modeBroadcastStatus = modeBroadcastStatus;
+    }
+
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
+    }
 
     public String getName() {
         return name;

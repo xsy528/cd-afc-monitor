@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Api(tags="字典接口")
 @RestController
-@RequestMapping("/dic")
+@RequestMapping("/monitor/dic")
 public class DicController {
 
     @ApiOperation("获取设备类型列表")

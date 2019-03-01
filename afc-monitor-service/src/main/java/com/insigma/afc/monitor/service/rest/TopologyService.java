@@ -19,11 +19,14 @@ public interface TopologyService {
     @RequestLine("GET /topology/query/getMetroAcc")
     Result<MetroACC> getMetroAcc();
 
+    @RequestLine("GET /topology/query/getLineNode?lineId={lineId}")
+    Result<MetroLine> getLineNode(@Param("lineId") Short lineId);
+
+    @RequestLine("GET /topology/query/getStationNode?stationId={stationId}")
+    Result<MetroStation> getStationNode(@Param("stationId") Integer stationId);
+
     @RequestLine("GET /topology/query/getDeviceNode?deviceId={deviceId}")
     Result<MetroDevice> getDeviceNode(@Param("deviceId") Long deviceId);
-
-    @RequestLine("GET /topology/query/getNode?nodeId={nodeId}")
-    Result<MetroNode> getNode(@Param("nodeId") Long nodeId);
 
     @RequestLine("GET /topology/query/getNodeText?nodeId={nodeId}")
     Result<String> getNodeText(@Param("nodeId") Long nodeId);

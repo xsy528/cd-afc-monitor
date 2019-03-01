@@ -48,7 +48,6 @@ management:
 
 #与MessageServer通讯RMI配置
 rmiHostIpAddr: 10.0.30.2
-#rmiHostIpAddr=127.0.0.1
 communicationRegistRmiPort: 8527
 commandServiceRmiPort: 8528
 parameterManagerRmiPort: 8532
@@ -71,6 +70,3 @@ QRKeyRmiPort: 8535
 
 #模式履历计划任务生成查询天数
 waiverSearchDay: 90
-
-#资源文件的相对根目录（相对启动程序的根目录）
-root.resouce: resources

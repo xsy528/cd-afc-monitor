@@ -1,4 +1,4 @@
-package com.insigma.afc.monitor.constant.dic;
+package com.insigma.afc.monitor.service.rmi;
 
 import com.insigma.commons.dic.Definition;
 import com.insigma.commons.dic.annotation.DicItem;
@@ -53,14 +53,14 @@ public class CommandType extends Definition {
 	@DicItem
 	public static Integer CMD_UD_REQUEST = 0x3314;
 
-	//	@DicItem
-	//	public static Integer CMD_QUERY_TVM_MONEY_TICKET_BOX = 0x4003;
-	//
-	//	@DicItem
-	//	public static Integer CMD_QUERY_BOM_AGM_TICKET_BOX = 0x4004;
-	//	
-	//	@DicItem
-	//	public static Integer CMD_QUERY_AVM_MONEY_BOX = 0x4005;
+	@DicItem
+	public static Integer CMD_QUERY_TVM_MONEY_TICKET_BOX = 0x4003;
+
+	@DicItem
+	public static Integer CMD_QUERY_BOM_AGM_TICKET_BOX = 0x4004;
+
+	@DicItem
+	public static Integer CMD_QUERY_AVM_MONEY_BOX = 0x4005;
 
 	@DicItem
 	public static Integer CMD_QUERY_MONEY_BOX = 0x4003;

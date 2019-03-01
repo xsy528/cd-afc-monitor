@@ -6,3 +6,4 @@ spring:
 
 #节点服务地址
 topology-server-url: http://localhost:8080
+rmiHostIpAddr: 127.0.0.1

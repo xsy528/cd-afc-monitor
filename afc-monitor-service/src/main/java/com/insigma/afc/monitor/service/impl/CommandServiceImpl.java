@@ -9,12 +9,11 @@ import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.afc.monitor.service.rmi.CmdHandlerResult;
-import com.insigma.afc.monitor.service.rmi.CommandHandlerManager;
+import com.insigma.afc.monitor.service.rmi.CommandType;
 import com.insigma.afc.monitor.service.rmi.ICommandService;
-import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.dic.PairValue;
-import com.insigma.commons.util.NodeIdUtils;
 import com.insigma.commons.util.DateTimeUtil;
+import com.insigma.commons.util.NodeIdUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
@@ -35,7 +33,7 @@ import java.util.concurrent.CountDownLatch;
  * 2019-01-04:13:59
  */
 @Service
-public class CommandServiceImpl implements CommandService,ICommandService {
+public class CommandServiceImpl implements CommandService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandServiceImpl.class);
 
@@ -45,73 +43,74 @@ public class CommandServiceImpl implements CommandService,ICommandService {
 
     private TmoCmdResultDao tmoCmdResultDao;
     private TopologyService topologyService;
-    private CommandHandlerManager commandHandlerManager;
+
+    private ICommandService rmiCommandService;
 
     @Autowired
     public CommandServiceImpl(TmoCmdResultDao tmoCmdResultDao, TopologyService topologyService,
-                              CommandHandlerManager commandHandlerManager) {
+                              ICommandService rmiCommandService) {
         this.tmoCmdResultDao = tmoCmdResultDao;
         this.topologyService = topologyService;
-        this.commandHandlerManager = commandHandlerManager;
+        this.rmiCommandService = rmiCommandService;
     }
 
-    @Override
-    public CmdHandlerResult command(int id, String userId, Long src, Object arg, List<MetroNode> targets) {
-        if (targets==null){
-            return null;
-        }
-        StringBuilder tagStr = new StringBuilder();
-        StringBuilder argStr = new StringBuilder();
-        for (MetroNode tag:targets) {
-            tagStr.append(tag.id());
-            logger.info(tag.toString());
-        }
-        if (arg instanceof int[]) {
-            int[] a = (int[]) arg;
-            argStr.append(a[0]).append(",").append(a[1]);
-            logger.info("ID=" + id + ",参数为" + argStr + " 目标为" + tagStr);
-        } else {
-            logger.info("ID=" + id + ",参数为" + arg + " 目标为" + tagStr);
-        }
-        if (commandHandlerManager != null) {
-            try {
-                CmdHandlerResult process = commandHandlerManager.process(id, userId, src, arg, targets);
-                return process;
-            } catch (Exception e) {
-                logger.error("命令执行异常", e);
-                CmdHandlerResult result = new CmdHandlerResult();
-                result.isOK = false;
-                result.messages.add("命令执行异常：" + e.getMessage());
-                return result;
-            }
-        } else {
-            logger.error("未配置命令管理器");
-        }
-        CmdHandlerResult result = new CmdHandlerResult();
-        result.isOK = false;
-        result.messages.add("该命令未定义");
-        return result;
-    }
-
-    @Override
-    public CmdHandlerResult command(int id, String userId, Long src, Object arg, MetroNode... targets) {
-        return command(id, userId, src, arg, Arrays.asList(targets));
-    }
-
-    @Override
-    public CmdHandlerResult command(int id, String userId, Long src, MetroNode... targets) {
-        return command(id, userId, src, null, Arrays.asList(targets));
-    }
-
-    @Override
-    public CmdHandlerResult command(int id, String userId, Long src, List<MetroNode> targets) {
-        return command(id, userId, src, null, targets);
-    }
-
-    @Override
-    public void alive() {
-
-    }
+//    @Override
+//    public CmdHandlerResult command(int id, String userId, Long src, Object arg, List<MetroNode> targets) {
+//        if (targets==null){
+//            return null;
+//        }
+//        StringBuilder tagStr = new StringBuilder();
+//        StringBuilder argStr = new StringBuilder();
+//        for (MetroNode tag:targets) {
+//            tagStr.append(tag.id());
+//            logger.info(tag.toString());
+//        }
+//        if (arg instanceof int[]) {
+//            int[] a = (int[]) arg;
+//            argStr.append(a[0]).append(",").append(a[1]);
+//            logger.info("ID=" + id + ",参数为" + argStr + " 目标为" + tagStr);
+//        } else {
+//            logger.info("ID=" + id + ",参数为" + arg + " 目标为" + tagStr);
+//        }
+//        if (commandHandlerManager != null) {
+//            try {
+//                CmdHandlerResult process = commandHandlerManager.process(id, userId, src, arg, targets);
+//                return process;
+//            } catch (Exception e) {
+//                logger.error("命令执行异常", e);
+//                CmdHandlerResult result = new CmdHandlerResult();
+//                result.isOK = false;
+//                result.messages.add("命令执行异常：" + e.getMessage());
+//                return result;
+//            }
+//        } else {
+//            logger.error("未配置命令管理器");
+//        }
+//        CmdHandlerResult result = new CmdHandlerResult();
+//        result.isOK = false;
+//        result.messages.add("该命令未定义");
+//        return result;
+//    }
+//
+//    @Override
+//    public CmdHandlerResult command(int id, String userId, Long src, Object arg, MetroNode... targets) {
+//        return command(id, userId, src, arg, Arrays.asList(targets));
+//    }
+//
+//    @Override
+//    public CmdHandlerResult command(int id, String userId, Long src, MetroNode... targets) {
+//        return command(id, userId, src, null, Arrays.asList(targets));
+//    }
+//
+//    @Override
+//    public CmdHandlerResult command(int id, String userId, Long src, List<MetroNode> targets) {
+//        return command(id, userId, src, null, targets);
+//    }
+//
+//    @Override
+//    public void alive() {
+//
+//    }
 
     @Override
     public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, int command) {
@@ -170,7 +169,7 @@ public class CommandServiceImpl implements CommandService,ICommandService {
 
         //先判断通信服务器连接是否正常
         try {
-            alive();
+            rmiCommandService.alive();
         } catch (Exception e) {
 //            if (logService != null) {
 //                logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
@@ -222,8 +221,8 @@ public class CommandServiceImpl implements CommandService,ICommandService {
         CmdHandlerResult command = null;
         List<MetroNode> ids = new ArrayList<>();
         for (Long lineId : lineIds) {
-            MetroNode metroNode = topologyService.getNode(lineId).getData();
-            if (metroNode.level() == AFCNodeLevel.LC) {
+            MetroLine metroNode = topologyService.getLineNode(lineId.shortValue()).getData();
+            if (metroNode!=null) {
                 ids.add(metroNode);
                 logger.info("地图同步数据 ：" + metroNode.name());
             }
@@ -243,7 +242,7 @@ public class CommandServiceImpl implements CommandService,ICommandService {
 
         CmdHandlerResult command = new CmdHandlerResult();
         try {
-            alive();
+            rmiCommandService.alive();
         } catch (Exception e) {
             command.messages.add("发送地图同步失败：工作台与通信服务器离线。" + e.getMessage());
             command.isOK = false;
@@ -251,7 +250,7 @@ public class CommandServiceImpl implements CommandService,ICommandService {
         }
         //TODO 需要获取当前用户id
         String userId = "0";
-        command = command(CommandType.CMD_EXPORT_MAP, userId, 1L);
+        command = rmiCommandService.command(CommandType.CMD_EXPORT_MAP, userId, 1L);
         return command;
     }
 
@@ -300,8 +299,8 @@ public class CommandServiceImpl implements CommandService,ICommandService {
         // 只留下车站节点
         List<MetroNode> stationIds = new ArrayList<>();
         for (Long id : nodeIds) {
-            MetroNode metroNode = topologyService.getNode(id).getData();
-            if (metroNode instanceof MetroStation) {
+            MetroStation metroNode = topologyService.getStationNode(id.intValue()).getData();
+            if (metroNode!=null) {
                 stationIds.add(metroNode);
             }
         }
@@ -324,8 +323,8 @@ public class CommandServiceImpl implements CommandService,ICommandService {
         // 只留下设备节点
         List<MetroNode> deviceIds = new ArrayList<>();
         for (Long id : nodeIds) {
-            MetroNode metroNode = topologyService.getNode(id).getData();
-            if (metroNode instanceof MetroDevice) {
+            MetroDevice metroNode = topologyService.getDeviceNode(id).getData();
+            if (metroNode!=null) {
                 deviceIds.add(metroNode);
             }
         }
@@ -391,7 +390,7 @@ public class CommandServiceImpl implements CommandService,ICommandService {
             try {
                 String userId = "0";
                 //AFCApplication.getAFCNode().id(),
-                CmdHandlerResult command = command(id, userId, 0L, arg, node);
+                CmdHandlerResult command = rmiCommandService.command(id, userId, 0L, arg, node);
                 Serializable returnValue = command.returnValue;
                 if (returnValue instanceof Integer) {
                     result = (Integer) returnValue;

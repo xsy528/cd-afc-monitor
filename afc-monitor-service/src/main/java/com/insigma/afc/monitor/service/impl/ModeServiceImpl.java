@@ -19,7 +19,6 @@ import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.ModeService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.constant.AFCNodeLevel;
-import com.insigma.commons.exception.NodeNotFoundException;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.commons.util.NodeIdUtils;
 import org.slf4j.Logger;
@@ -122,10 +121,6 @@ public class ModeServiceImpl implements ModeService {
 
 	@Override
 	public List<TmoModeUploadInfo> getModeUpload(long nodeId){
-
-		if(topologyService.getNode(nodeId)==null){
-			throw new NodeNotFoundException(nodeId);
-		}
 
 		return tmoModeUploadInfoDao.findAll((root, query, builder)->{
 			List<Predicate> predicates = new ArrayList<>();

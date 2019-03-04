@@ -15,11 +15,11 @@ import com.insigma.commons.dic.annotation.DicItem;
  * @author yao
  */
 @Dic(overClass = AFCDeviceType.class)
-public class WZDeviceType {
+public class XZDeviceType {
 
-	private static WZDeviceType instance = new WZDeviceType();
+	private static XZDeviceType instance = new XZDeviceType();
 
-	public static WZDeviceType getInstance() {
+	public static XZDeviceType getInstance() {
 		return instance;
 	}
 

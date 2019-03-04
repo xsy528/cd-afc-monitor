@@ -1,6 +1,6 @@
 package com.insigma.afc.monitor.controller;
 
-import com.insigma.afc.monitor.constant.dic.WZDeviceCmdControlType;
+import com.insigma.afc.monitor.constant.dic.XZDeviceCmdControlType;
 import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SendCommand;
@@ -40,7 +40,7 @@ public class CommandController{
     @PostMapping("/deviceControlCommandList")
     public Result<Map> getDeviceControlCommandList(){
         Map<String,Object> commandMap = new HashMap<>();
-        WZDeviceCmdControlType.getInstance().dicItecEntryMap.forEach((k,v)-> commandMap.put(v.dicitem.name(),v.value));
+        XZDeviceCmdControlType.getInstance().dicItecEntryMap.forEach((k, v)-> commandMap.put(v.dicitem.name(),v.value));
         return Result.success(commandMap);
     }
 

@@ -17,12 +17,12 @@ import com.insigma.commons.dic.annotation.DicItem;
  * @author chenfuchun
  *
  */
-@Dic(overClass = WZDeviceCmdControlType.class)
-public class WZDeviceCmdControlType extends Definition {
+@Dic(overClass = XZDeviceCmdControlType.class)
+public class XZDeviceCmdControlType extends Definition {
 
-	private static WZDeviceCmdControlType instance = new WZDeviceCmdControlType();
+	private static XZDeviceCmdControlType instance = new XZDeviceCmdControlType();
 
-	public static WZDeviceCmdControlType getInstance() {
+	public static XZDeviceCmdControlType getInstance() {
 		return instance;
 	}
 

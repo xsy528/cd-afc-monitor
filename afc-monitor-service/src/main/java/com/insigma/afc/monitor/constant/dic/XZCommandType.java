@@ -18,7 +18,7 @@ import com.insigma.commons.dic.annotation.DicItem;
  *
  */
 @Dic(overClass = CommandType.class)
-public class WZCommandType {
+public class XZCommandType {
 
 	@DicItem
 	public static Integer CMD_SYNC_INFO = 0x01;

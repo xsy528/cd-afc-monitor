@@ -17,11 +17,11 @@ import com.insigma.commons.dic.annotation.DicItem;
  *
  */
 @Dic(overClass = DeviceStatus.class)
-public class WZDeviceStatus {
+public class XZDeviceStatus {
 
-	private static WZDeviceStatus instance = new WZDeviceStatus();
+	private static XZDeviceStatus instance = new XZDeviceStatus();
 
-	public static WZDeviceStatus getInstance() {
+	public static XZDeviceStatus getInstance() {
 		return instance;
 	}
 

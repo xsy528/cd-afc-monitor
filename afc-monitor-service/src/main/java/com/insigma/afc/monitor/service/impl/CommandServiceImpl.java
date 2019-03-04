@@ -261,7 +261,7 @@ public class CommandServiceImpl implements CommandService {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
-        return Result.success(send(WZCommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
+        return Result.success(send(XZCommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
                 null, deviceIds, command));
     }
 
@@ -271,16 +271,16 @@ public class CommandServiceImpl implements CommandService {
         List<MetroNode> ids = new ArrayList<>();
         ids.add(device);
         List<CommandResult> commandResults = new ArrayList<>();
-        if (device.getDeviceType() == WZDeviceType.TVM) {
+        if (device.getDeviceType() == XZDeviceType.TVM) {
             commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
-        if (device.getDeviceType() == WZDeviceType.TVM
-                || device.getDeviceType() == WZDeviceType.POST
-                || device.getDeviceType() == WZDeviceType.ENG
-                || device.getDeviceType() == WZDeviceType.EXG
-                || device.getDeviceType() == WZDeviceType.REG) {
-            commandResults.addAll(send(WZCommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
+        if (device.getDeviceType() == XZDeviceType.TVM
+                || device.getDeviceType() == XZDeviceType.POST
+                || device.getDeviceType() == XZDeviceType.ENG
+                || device.getDeviceType() == XZDeviceType.EXG
+                || device.getDeviceType() == XZDeviceType.REG) {
+            commandResults.addAll(send(XZCommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
         return Result.success(commandResults);

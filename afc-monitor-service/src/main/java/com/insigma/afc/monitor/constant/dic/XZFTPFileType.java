@@ -10,10 +10,10 @@ import com.insigma.commons.dic.annotation.Dic;
 import com.insigma.commons.dic.annotation.DicItem;
 
 @Dic(overClass = AFCFTPFileType.class)
-public class WZFTPFileType {
-	private static WZFTPFileType instance = new WZFTPFileType();
+public class XZFTPFileType {
+	private static XZFTPFileType instance = new XZFTPFileType();
 
-	public static WZFTPFileType getInstance() {
+	public static XZFTPFileType getInstance() {
 		return instance;
 	}
 

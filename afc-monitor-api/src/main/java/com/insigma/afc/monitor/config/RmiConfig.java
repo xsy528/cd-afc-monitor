@@ -1,10 +1,9 @@
 package com.insigma.afc.monitor.config;
 
-import com.insigma.afc.monitor.service.rmi.ICommandService;
+import com.insigma.ms.rmi.ICommandService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.remoting.rmi.RmiProxyFactoryBean;
 
 /**
@@ -17,7 +16,6 @@ import org.springframework.remoting.rmi.RmiProxyFactoryBean;
 public class RmiConfig {
 
     @Bean
-    @Lazy
     public RmiProxyFactoryBean rmiCommandService(@Value("${rmiHostIpAddr}")String rmiHostIpAddr,
                                                  @Value("${commandServiceRmiPort}")Integer commandServiceRmiPort){
         RmiProxyFactoryBean bean = new RmiProxyFactoryBean();

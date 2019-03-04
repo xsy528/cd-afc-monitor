@@ -1,6 +1,9 @@
 package com.insigma.afc.monitor.service.impl;
 
-import com.insigma.afc.monitor.constant.dic.*;
+import com.insigma.afc.monitor.constant.dic.AFCCmdLogType;
+import com.insigma.afc.monitor.constant.dic.AFCModeCode;
+import com.insigma.afc.monitor.constant.dic.XZCommandType;
+import com.insigma.afc.monitor.constant.dic.XZDeviceType;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.CommandResult;
@@ -8,23 +11,23 @@ import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
-import com.insigma.afc.monitor.service.rmi.CmdHandlerResult;
-import com.insigma.afc.monitor.service.rmi.CommandType;
-import com.insigma.afc.monitor.service.rmi.ICommandService;
+import com.insigma.afc.monitor.thread.CommandSendTask;
+import com.insigma.afc.monitor.thread.CommandThreadPoolExecutor;
 import com.insigma.commons.dic.PairValue;
 import com.insigma.commons.util.DateTimeUtil;
-import com.insigma.commons.util.NodeIdUtils;
+import com.insigma.ms.rmi.CmdHandlerResult;
+import com.insigma.ms.rmi.CommandType;
+import com.insigma.ms.rmi.ICommandService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Ticket: 命令服务实现类
@@ -37,13 +40,14 @@ public class CommandServiceImpl implements CommandService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandServiceImpl.class);
 
-    private List<CommandResult> results = new Vector<>();
-    private CountDownLatch countDownLatch;
-    private ThreadLocal<List<MetroNode>> threadLocalNodes = new ThreadLocal<>();
+    private int corePoolSize = 10;
+    private int maxPoolSize = 200;
+    private int keepAliveTime = 60;
+    private CommandThreadPoolExecutor threadPoolExecutor = new CommandThreadPoolExecutor(corePoolSize,maxPoolSize,
+            keepAliveTime);
 
     private TmoCmdResultDao tmoCmdResultDao;
     private TopologyService topologyService;
-
     private ICommandService rmiCommandService;
 
     @Autowired
@@ -53,64 +57,6 @@ public class CommandServiceImpl implements CommandService {
         this.topologyService = topologyService;
         this.rmiCommandService = rmiCommandService;
     }
-
-//    @Override
-//    public CmdHandlerResult command(int id, String userId, Long src, Object arg, List<MetroNode> targets) {
-//        if (targets==null){
-//            return null;
-//        }
-//        StringBuilder tagStr = new StringBuilder();
-//        StringBuilder argStr = new StringBuilder();
-//        for (MetroNode tag:targets) {
-//            tagStr.append(tag.id());
-//            logger.info(tag.toString());
-//        }
-//        if (arg instanceof int[]) {
-//            int[] a = (int[]) arg;
-//            argStr.append(a[0]).append(",").append(a[1]);
-//            logger.info("ID=" + id + ",参数为" + argStr + " 目标为" + tagStr);
-//        } else {
-//            logger.info("ID=" + id + ",参数为" + arg + " 目标为" + tagStr);
-//        }
-//        if (commandHandlerManager != null) {
-//            try {
-//                CmdHandlerResult process = commandHandlerManager.process(id, userId, src, arg, targets);
-//                return process;
-//            } catch (Exception e) {
-//                logger.error("命令执行异常", e);
-//                CmdHandlerResult result = new CmdHandlerResult();
-//                result.isOK = false;
-//                result.messages.add("命令执行异常：" + e.getMessage());
-//                return result;
-//            }
-//        } else {
-//            logger.error("未配置命令管理器");
-//        }
-//        CmdHandlerResult result = new CmdHandlerResult();
-//        result.isOK = false;
-//        result.messages.add("该命令未定义");
-//        return result;
-//    }
-//
-//    @Override
-//    public CmdHandlerResult command(int id, String userId, Long src, Object arg, MetroNode... targets) {
-//        return command(id, userId, src, arg, Arrays.asList(targets));
-//    }
-//
-//    @Override
-//    public CmdHandlerResult command(int id, String userId, Long src, MetroNode... targets) {
-//        return command(id, userId, src, null, Arrays.asList(targets));
-//    }
-//
-//    @Override
-//    public CmdHandlerResult command(int id, String userId, Long src, List<MetroNode> targets) {
-//        return command(id, userId, src, null, targets);
-//    }
-//
-//    @Override
-//    public void alive() {
-//
-//    }
 
     @Override
     public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, int command) {
@@ -334,169 +280,42 @@ public class CommandServiceImpl implements CommandService {
         return deviceIds;
     }
 
-    private List<CommandResult> send(final int id, final String name, final Object arg,
-                                    final List<MetroNode> nodes, final short cmdType) {
-        if (nodes == null || countDownLatch != null) {
+    private List<CommandResult> send(int id, String name, Object arg, List<MetroNode> nodes, short cmdType) {
+        if (nodes == null) {
             return null;
         }
-        threadLocalNodes.set(nodes);
-        results.clear();
-        countDownLatch = new CountDownLatch(nodes.size());
+        List<Future<TmoCmdResult>> futures = new ArrayList<>();
         for (MetroNode node : nodes) {
-            CommandThread thread = new CommandThread(id, name, arg, node, cmdType);
-            thread.start();
+            futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg, cmdType,node,rmiCommandService)));
         }
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            logger.error("", e);
-        }
-        countDownLatch = null;
-        return results = sortResults(results);
-    }
-
-    public class CommandThread extends Thread{
-
-        private final int id;
-
-        private final String name;
-
-        private final Object arg;
-
-        private final MetroNode node;
-
-        private final short cmdType;
-
-        CommandThread(final int id, final String name, final Object arg,
-                      final MetroNode node, final short cmdType) {
-            super("命令发送线程");
-            this.id = id;
-            this.name = name;
-            this.arg = arg;
-            this.node = node;
-            this.cmdType = cmdType;
-        }
-
-        @Override
-        public void run() {
-            if (arg instanceof int[]) {
-                int[] a = (int[]) arg;
-                logger.info("向节点" + node.name() + "发送" + name + " 参数：" + a[0] + "," + a[1]);
-            } else {
-                logger.info("向节点" + node.name() + "发送" + name + " 参数：" + arg);
-            }
-            int result = AFCCmdResultType.SEND_FAILED;
-            String resultDesc = null;
+        List<CommandResult> results = new ArrayList<>();
+        List<TmoCmdResult> tmoCmdResults = new ArrayList<>();
+        for (Future<TmoCmdResult> future:futures){
             try {
-                String userId = "0";
-                //AFCApplication.getAFCNode().id(),
-                CmdHandlerResult command = rmiCommandService.command(id, userId, 0L, arg, node);
-                Serializable returnValue = command.returnValue;
-                if (returnValue instanceof Integer) {
-                    result = (Integer) returnValue;
-                } else if (command.isOK) {
-                    result = AFCCmdResultType.SEND_SUCCESSFUL;
+                TmoCmdResult tmoCmdResult = future.get();
+                if (tmoCmdResult!=null){
+                    CommandResult commandResult = new CommandResult();
+                    commandResult.setId(topologyService.getNodeText(tmoCmdResult.getNodeId()).getData());
+                    commandResult.setCmdName(tmoCmdResult.getCmdName());
+                    commandResult.setResult(tmoCmdResult.getCmdResult());
+                    commandResult.setCmdResult(tmoCmdResult.getRemark());
+                    commandResult.setOccurTime(DateTimeUtil.formatCurrentDateToString("yyyy-MM-dd HH:mm:ss"));
+                    if (arg != null) {
+                        commandResult.setArg(arg.toString());
+                    } else {
+                        commandResult.setArg("无");
+                    }
+                    tmoCmdResults.add(tmoCmdResult);
+                    results.add(commandResult);
                 }
-                resultDesc = command.getResultMessage();
-            } catch (Exception e) {
-                logger.error("发送" + name + "错误", e);
-            }
-            logger.info("向节点" + node.name() + "发送" + name + "  返回：" + result);
-            results.add(save(node, name, arg, result, cmdType, resultDesc));
-            countDownLatch.countDown();
-        }
-    }
-
-    private List<CommandResult> sortResults(final List<CommandResult> results) {
-        List<CommandResult> orderResults = new ArrayList<>();
-
-        List<MetroNode> nodes = threadLocalNodes.get();
-        if (threadLocalNodes.get() == null || results == null) {
-            return orderResults;
-        }
-
-        for (int i = 0; i < nodes.size(); i++) {
-            for (int j = 0; j < results.size(); j++) {
-                String id = nodes.get(i).name() + "/0x" + String.format("%08x", nodes.get(i).id());
-                if (id.equals(results.get(j).getId())) {
-                    orderResults.add(results.get(j));
-                    // break;
-                }
+            } catch (ExecutionException e) {
+                logger.error("发送命令异常",e);
+            } catch (InterruptedException e) {
+                logger.error("发送命令被中断",e);
             }
         }
-
-        return orderResults;
-    }
-
-    public CommandResult save(final MetroNode node, String command, final Object arg, final int result,
-                              final short cmdType, final String resultDesc) {
-
-        String resultMessageShow = "发送结果：\n\n";
-
-        if (result == 0) {
-            resultMessageShow += "向节点" + node.name() + "发送 " + command + " 命令发送成功。\n";
-//            if (this.logService != null) {
-//                logService.doBizLog(resultMessageShow);
-//            }
-        } else {
-            resultMessageShow += "向节点" + node.name() + "发送 " + command + " 命令失败。错误码：" + result + "。";
-//            if (this.logService != null) {
-//                try {
-//                    logService.doBizErrorLog(resultMessageShow);
-//                } catch (Exception e) {
-//                    logger.error("发送命令保存日志失败", e);
-//                }
-//            }
-        }
-
-        TmoCmdResult tmoCmdResult = new TmoCmdResult();
-        tmoCmdResult.setOccurTime(DateTimeUtil.getNow());
-        tmoCmdResult.setCmdName(command);
-
-        if (node instanceof MetroLine) {
-            MetroLine line = (MetroLine) node;
-            tmoCmdResult.setLineId(line.getLineID());
-            tmoCmdResult.setStationId(0);
-            tmoCmdResult.setNodeId(NodeIdUtils.nodeIdStrategy.getNodeNo(line.id()));
-            tmoCmdResult.setNodeType(AFCDeviceType.LC);
-        }
-
-        if (node instanceof MetroStation) {
-            MetroStation station = (MetroStation) node;
-            tmoCmdResult.setLineId(station.getLineId());
-            tmoCmdResult.setStationId(station.getStationId());
-            tmoCmdResult.setNodeId(NodeIdUtils.nodeIdStrategy.getNodeNo(station.id()));
-            tmoCmdResult.setNodeType(AFCDeviceType.SC);
-        }
-
-        if (node instanceof MetroDevice) {
-            MetroDevice device = (MetroDevice) node;
-            tmoCmdResult.setLineId(device.getLineId());
-            tmoCmdResult.setStationId(device.getStationId());
-            tmoCmdResult.setNodeId(device.getDeviceId());
-            tmoCmdResult.setNodeType(device.getDeviceType());
-        }
-
-        tmoCmdResult.setUploadStatus((short) 0);
-        //操作员id
-        //tmoCmdResult.setOperatorId(Application.getUser().getUserID());
-        tmoCmdResult.setCmdResult((short) result);
-        tmoCmdResult.setRemark(resultDesc);
-        tmoCmdResult.setCmdType(cmdType);
-        tmoCmdResultDao.save(tmoCmdResult);
-
-        CommandResult resultitem = new CommandResult();
-        resultitem.setId(node.name() + "/0x" + String.format("%08x", node.id()));
-        resultitem.setCmdName(tmoCmdResult.getCmdName());
-        resultitem.setResult((short) result);
-        resultitem.setCmdResult(tmoCmdResult.getRemark());
-        resultitem.setOccurTime(DateTimeUtil.formatCurrentDateToString("yyyy-MM-dd HH:mm:ss"));
-        if (arg != null) {
-            resultitem.setArg(arg.toString());
-        } else {
-            resultitem.setArg("无");
-        }
-        return resultitem;
+        tmoCmdResultDao.saveAll(tmoCmdResults);
+        return results;
     }
 
 }

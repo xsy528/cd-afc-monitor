@@ -1,4 +1,4 @@
-package com.insigma.afc.monitor.service.rmi;
+package com.insigma.ms.rmi;
 
 import com.insigma.commons.dic.Definition;
 import com.insigma.commons.dic.annotation.DicItem;

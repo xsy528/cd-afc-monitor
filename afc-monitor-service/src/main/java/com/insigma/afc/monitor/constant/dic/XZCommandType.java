@@ -8,7 +8,7 @@
  */
 package com.insigma.afc.monitor.constant.dic;
 
-import com.insigma.afc.monitor.service.rmi.CommandType;
+import com.insigma.ms.rmi.CommandType;
 import com.insigma.commons.dic.annotation.Dic;
 import com.insigma.commons.dic.annotation.DicItem;
 
@@ -30,7 +30,7 @@ public class XZCommandType {
 	public static Integer CMD_CHANGE_MODE = 0x03;
 
 	@DicItem
-	public static Integer CMD_TIME_SYNC = 0x1104;
+	public static Integer CMD_TIME_SYNC = 0x04;
 
 	@DicItem
 	public static Integer CMD_QUERY_MODE = 0x05;

@@ -5,7 +5,7 @@ import com.insigma.afc.monitor.constant.dic.AFCDeviceType;
 import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.service.IDeviceModuleFactory;
 import com.insigma.afc.monitor.service.IMetroEventService;
-import com.insigma.commons.util.NodeIdUtils;
+import com.insigma.afc.monitor.service.rest.TopologyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +24,29 @@ public class DeviceModuleFactoryImpl implements IDeviceModuleFactory {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MetroNodeStatusServiceImpl.class);
 
 	private IMetroEventService metroEventservice;
+	private TopologyService topologyService;
 
 	@Autowired
-	private DeviceModuleFactoryImpl(IMetroEventService iMetroEventService){
+	private DeviceModuleFactoryImpl(IMetroEventService iMetroEventService,TopologyService topologyService){
 		this.metroEventservice = iMetroEventService;
+		this.topologyService = topologyService;
 	}
 
 	@Override
 	public List<MetroDeviceModule> getMetroDeviceModuleList(MetroDevice equipment) {
 		List<MetroDeviceModule> result = new ArrayList<>();
-		short deviceType = NodeIdUtils.nodeIdStrategy.getDeviceType(equipment.getDeviceId());
-		if (deviceType == AFCDeviceType.ENG || deviceType == AFCDeviceType.EXG
-				|| deviceType == AFCDeviceSubType.DEVICE_GATE_BOTH) {
+		Short deviceType = equipment.getDeviceType();
+		Short deviceSubType = equipment.getDeviceSubType();
+		if (AFCDeviceType.GATE.equals(deviceType)) {
 			List<Object[]> gateList = new ArrayList<>();
 			gateList.add(new Object[] { 1L, "RDR", "维修门状态", 0, 110, 1, 1101 });
 
-			if (deviceType == AFCDeviceType.ENG || deviceType == AFCDeviceSubType.DEVICE_GATE_BOTH) {
+			if (AFCDeviceSubType.DEVICE_GATE_ENTRY.equals(deviceSubType)
+					|| AFCDeviceSubType.DEVICE_GATE_BOTH.equals(deviceSubType)) {
 				gateList.add(new Object[] { 2L, "CS1", "读写器1总体状态", 210, 230, 1, 600 });
 			}
-			if (deviceType == AFCDeviceType.ENG || deviceType == AFCDeviceSubType.DEVICE_GATE_BOTH) {
+			if (AFCDeviceSubType.DEVICE_GATE_EXIT.equals(deviceSubType)
+					|| AFCDeviceSubType.DEVICE_GATE_BOTH.equals(deviceSubType)) {
 				gateList.add(new Object[] { 3L, "CTN", "票卡回收模块总体状态", 0, 150, 1, 1500 });
 				gateList.add(new Object[] { 4L, "CS2", "读写器2总体状态", 0, 190, 1, 700 });
 			}
@@ -53,7 +57,7 @@ public class DeviceModuleFactoryImpl implements IDeviceModuleFactory {
 			gateList.add(new Object[] { 6L, "ECU", "主控单元总体状态", 210, 190, 1, 500 });
 
 			setResult(result, gateList, equipment);
-		} else if (AFCDeviceType.POST == deviceType) {
+		} else if (AFCDeviceType.POST.equals(deviceType)) {
 			List<Object[]> postList = new ArrayList<>();
 			postList.add(new Object[] { 7L, "RPU1", "打印机1总体状态", 13, 120, 1, 900 });
 			postList.add(new Object[] { 8L, "TIM", "票卡发售模块总体状态", 13, 170, 1, 1400 });
@@ -62,7 +66,7 @@ public class DeviceModuleFactoryImpl implements IDeviceModuleFactory {
 			postList.add(new Object[] { 11L, "CS1", "读写器1总体状态", 260, 170, 1, 600 });
 			postList.add(new Object[] { 12L, "EOD", "参数生效状态", 260, 220, 1, 300 });
 			setResult(result, postList, equipment);
-		} else if (AFCDeviceType.TVM == deviceType) {
+		} else if (AFCDeviceType.TVM.equals(deviceType)) {
 			List<Object[]> tvmList = new ArrayList<>();
 			tvmList.add(new Object[] { 13L, "EOD", "参数生效状态", 0, 60, 1, 300 });
 			tvmList.add(new Object[] { 14L, "ECU", "主控单元总体状态", 0, 100, 1, 500 });
@@ -79,17 +83,6 @@ public class DeviceModuleFactoryImpl implements IDeviceModuleFactory {
 			tvmList.add(new Object[] { 22L, "CHS", "硬币模块总体状态", 120, 240, 1, 1300 });
 			tvmList.add(new Object[] { 24L, "CS2", "读写器2总体状态", 120, 280, 1, 700 });
 			setResult(result, tvmList, equipment);
-		} else if (AFCDeviceType.TCM == deviceType) {
-			List<Object[]> ismList = new ArrayList<>();
-			ismList.add(new Object[] { 25L, "CS1", "读写器总体状态", 0, 180, 1, 600 });
-			ismList.add(new Object[] { 26L, "BNC", "纸币找零模块总体状态", 0, 220, 1, 1600 });
-			ismList.add(new Object[] { 27L, "BNA", "纸币接收模块总体状态", 0, 260, 1, 1200 });
-
-			ismList.add(new Object[] { 28L, "RDR", "维修门状态", 240, 60, 1, 1101 });
-			ismList.add(new Object[] { 29L, "EOD", "参数生效状态", 240, 100, 1, 300 });
-			ismList.add(new Object[] { 30L, "RPU1", "打印机总体状态", 240, 140, 1, 900 });
-			ismList.add(new Object[] { 31L, "ECU", "主控单元总体状态", 240, 180, 1, 500 });
-			setResult(result, ismList, equipment);
 		}
 
 		return result;

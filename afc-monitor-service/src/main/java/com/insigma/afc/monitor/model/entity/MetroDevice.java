@@ -1,7 +1,6 @@
 package com.insigma.afc.monitor.model.entity;
 
 
-import com.insigma.afc.monitor.constant.dic.AFCDeviceSubType;
 import com.insigma.afc.monitor.constant.dic.AFCDeviceType;
 import com.insigma.commons.constant.AFCNodeLevel;
 
@@ -88,17 +87,11 @@ public class MetroDevice implements MetroNode {
 
     public String getPicName() {
         String imagePathName = "BOM.png";
-        if (getDeviceType() == AFCDeviceType.POST.shortValue()) {
+        if (AFCDeviceType.POST.equals(deviceType)) {
             imagePathName = "BOM.png";
-        } else if (getDeviceType() == AFCDeviceType.TVM.shortValue()) {
+        } else if (AFCDeviceType.TVM.equals(deviceType)) {
             imagePathName = "TVM.png";
-        } else if (getDeviceType() == AFCDeviceType.TCM.shortValue()) {
-            imagePathName = "TCM.png";
-        } else if (getDeviceType() == AFCDeviceType.AVM.shortValue()) {
-            imagePathName = "AVM.png";
-        } else if ((AFCDeviceType.GATE == null
-                && AFCDeviceSubType.getInstance().getDicItemMap().containsKey(getDeviceType()))
-                || (AFCDeviceType.GATE != null && getDeviceType() == AFCDeviceType.GATE)) {
+        } else if (AFCDeviceType.GATE.equals(deviceType)) {
             imagePathName = "GATE.png";
         }
         return imagePathName;

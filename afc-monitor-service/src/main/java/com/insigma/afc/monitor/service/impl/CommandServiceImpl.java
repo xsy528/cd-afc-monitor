@@ -132,7 +132,6 @@ public class CommandServiceImpl implements CommandService {
         if (stationIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
-
         return Result.success(send(CommandType.CMD_QUERY_MODE, "模式查询命令",
                 null, stationIds, AFCCmdLogType.LOG_MODE.shortValue()));
     }
@@ -143,21 +142,6 @@ public class CommandServiceImpl implements CommandService {
         if (stationIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
-
-        //TODO 需要解释
-//        if (AFCApplication.getAFCNodeType().equals(AFCNodeLevel.SC)) {
-//            int i = 0;
-//            for (; i < stationIds.size(); i++) {
-//                MetroNode node = stationIds.get(i);
-//                if (node instanceof MetroStation) {
-//                    break;
-//                }
-//            }
-//            if (i < stationIds.size()) {
-//                stationIds.remove(i);
-//            }
-//        }
-
         return Result.success(send(CommandType.CMD_TIME_SYNC, "时间同步命令",
                 null, stationIds, AFCCmdLogType.LOG_TIME_SYNC.shortValue()));
     }

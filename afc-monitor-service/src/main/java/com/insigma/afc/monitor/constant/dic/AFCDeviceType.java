@@ -5,7 +5,6 @@
  */
 package com.insigma.afc.monitor.constant.dic;
 
-import com.insigma.afc.monitor.constant.xdr.typedef.DeviceSubType_t;
 import com.insigma.afc.monitor.constant.xdr.typedef.DeviceType_t;
 import com.insigma.commons.dic.Definition;
 import com.insigma.commons.dic.annotation.Dic;
@@ -26,48 +25,37 @@ public class AFCDeviceType extends Definition {
 		return instance;
 	}
 
-	//@DicItem(name = "自动检票机", group = "SLE")
-	public static Short GATE = null;//0x04;
+	@DicItem(name = "自动检票机", group = "SLE")
+	public static Short GATE = DeviceType_t.DT_AGM;
 
-
-	@DicItem(name = "编码分拣机", group = "E/S")
-	public static Short E_S = 0x09;
-
-	@DicItem(name = "清分中心设备", key = "ACC")
-	public static Short CCHS = 0x01;
-
-	@DicItem(name = "线路中心设备", key = "LC")
-	public static Short LC = 0x02;
-
-	@DicItem(name = "车站中心设备", key = "SC")
-	public static Short SC = 0x03;
-
-	@DicItem(name = "进站闸机", key = "ENG", group = "SLE", index = 4)
-	public static Short ENG = DeviceSubType_t.DTSub_EnG;
-
-	@DicItem(name = "出站闸机", key = "EXG", group = "SLE", index = 5)
-	public static Short EXG = DeviceSubType_t.DTSub_ExG;
-
-	@DicItem(name = "双向闸机", key = "REG", group = "SLE", index = 6)
-	public static Short REG = DeviceSubType_t.DTSub_DoubleAgm;
-
-	@DicItem(name = "半自动售票机", key = "BOM", group = "SLE", index = 1)
-	public static Short POST = DeviceType_t.DT_BOM;
-
-	@DicItem(name = "自动售票机", key = "TVM", group = "SLE", index = 2)
+	@DicItem(name = "自动售票机", group = "SLE")
 	public static Short TVM = DeviceType_t.DT_TVM;
 
-	@DicItem(name = "手持式验票机", key = "PCA", group = "SLE", index = 8)
+	@DicItem(name = "半自动售票机", group = "SLE")
+	public static Short POST = DeviceType_t.DT_BOM;
+
+	@DicItem(name = "个性化发卡机",group = "SLE")
+	public static Short CUS = DeviceType_t.DT_CUS;
+
+	@DicItem(name = "手持式验票机", group = "SLE")
 	public static Short PCA = DeviceType_t.DT_PCA;
 
-	@DicItem(name = "编码分拣机", key = "ES")
-	public static Short ES = DeviceType_t.DT_ES;
+	@DicItem(name = "互联网取票机",group = "SLE")
+	public static Short ITVM = DeviceType_t.DT_ITVM;
 
-	//为了字典类覆盖
-	@DicItem(name = "自动加值机")
-	public static Short AVM = 0x05;
+	@DicItem(name = "编码分拣机", group = "E/S")
+	public static Short E_S = DeviceType_t.DT_ES;
 
-	@DicItem(name = "自动查询机")
-	public static Short TCM = 0x0b;
+	@DicItem(name = "服务器")
+	public static Short SERVER = DeviceType_t.DT_Server;
+
+	@DicItem(name = "工作站")
+	public static Short WORKSTATION = DeviceType_t.DT_Workstation;
+
+	@DicItem(name = "网络设备")
+	public static Short NETWORK = DeviceType_t.DT_Network;
+
+	@DicItem(name = "UPS")
+	public static Short UPS = DeviceType_t.DT_UPS;
 
 }

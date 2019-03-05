@@ -1,6 +1,5 @@
 package com.insigma.afc.monitor.controller;
 
-import com.insigma.afc.monitor.constant.dic.AFCDeviceType;
 import com.insigma.afc.monitor.constant.dic.AFCModeCode;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.model.dto.Result;
@@ -25,12 +24,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/monitor/dic")
 public class DicController {
-
-    @ApiOperation("获取设备类型列表")
-    @PostMapping("/devTypeList")
-    public Result getDeviceTypeList(){
-        return Result.success(AFCDeviceType.getInstance().getByGroup("SLE"));
-    }
 
     @ApiOperation("获取运营模式列表")
     @PostMapping("/modeTypeList")

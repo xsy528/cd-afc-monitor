@@ -1,7 +1,6 @@
 package com.insigma.afc.monitor.model.entity;
 
 
-import com.insigma.afc.monitor.constant.dic.AFCDeviceType;
 import com.insigma.commons.constant.AFCNodeLevel;
 
 import javax.persistence.*;
@@ -86,15 +85,7 @@ public class MetroDevice implements MetroNode {
     private AFCNodeLocation textLocation;
 
     public String getPicName() {
-        String imagePathName = "BOM.png";
-        if (AFCDeviceType.POST.equals(deviceType)) {
-            imagePathName = "BOM.png";
-        } else if (AFCDeviceType.TVM.equals(deviceType)) {
-            imagePathName = "TVM.png";
-        } else if (AFCDeviceType.GATE.equals(deviceType)) {
-            imagePathName = "GATE.png";
-        }
-        return imagePathName;
+        return picName;
     }
 
     @Override

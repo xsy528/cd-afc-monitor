@@ -27,6 +27,8 @@ public enum ErrorCode {
     UNKNOW_ERROR(100,"未知异常"),
     TOO_LARGE_FILE(101,"文件过大"),
     DATABASE_ERROR(102,"数据库异常"),
+    MEDIATYPE_NOT_SUPPORT(103,"不支持的媒体类型"),
+    REQUEST_METHOD_NOT_SUPPORT(104,"不支持的请求方法"),
     MONITOR_CONFIG_SAVE_ERROR(1000,"监控参数设置失败");
 
 

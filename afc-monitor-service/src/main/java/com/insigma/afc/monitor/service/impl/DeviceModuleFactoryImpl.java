@@ -24,12 +24,10 @@ public class DeviceModuleFactoryImpl implements IDeviceModuleFactory {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MetroNodeStatusServiceImpl.class);
 
 	private IMetroEventService metroEventservice;
-	private TopologyService topologyService;
 
 	@Autowired
-	private DeviceModuleFactoryImpl(IMetroEventService iMetroEventService,TopologyService topologyService){
+	private DeviceModuleFactoryImpl(IMetroEventService iMetroEventService){
 		this.metroEventservice = iMetroEventService;
-		this.topologyService = topologyService;
 	}
 
 	@Override

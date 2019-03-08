@@ -5,6 +5,7 @@ import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SendCommand;
 import com.insigma.afc.monitor.service.CommandService;
+import com.insigma.commons.dic.PairValue;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -38,10 +39,8 @@ public class CommandController{
 
     @ApiOperation("获取设备控制命令列表")
     @PostMapping("/deviceControlCommandList")
-    public Result<Map> getDeviceControlCommandList(){
-        Map<String,Object> commandMap = new HashMap<>();
-        XZDeviceCmdControlType.getInstance().dicItecEntryMap.forEach((k, v)-> commandMap.put(v.dicitem.name(),v.value));
-        return Result.success(commandMap);
+    public Result<List<PairValue<Object,String>>> getDeviceControlCommandList(){
+        return Result.success(XZDeviceCmdControlType.getInstance().getByGroup(""));
     }
 
     @ApiOperation("修改运营模式")

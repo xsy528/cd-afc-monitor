@@ -14,6 +14,10 @@ public class StationStatus implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@ApiModelProperty("车站id")
+	@JsonProperty("node_id")
+	private Long nodeId;
+
 	@ApiModelProperty("车站名称")
 	private String name;
 
@@ -42,6 +46,14 @@ public class StationStatus implements Serializable {
 	@ApiModelProperty("收否在线")
 	@JsonProperty("is_online")
 	private Boolean isOnline;
+
+	public Long getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
+	}
 
 	public String getName() {
 		return name;

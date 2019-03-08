@@ -60,12 +60,12 @@ public class NodeStatusController {
         List<StationStatus> stationStatusList = new ArrayList<>();
         for (StationStatustViewItem stationStatustViewItem : data) {
             StationStatus stationStatus = new StationStatus();
+            stationStatus.setNodeId(stationStatustViewItem.getStationId().longValue());
             stationStatus.setAlarmEvent(stationStatustViewItem.getAlarmEvent());
             stationStatus.setNormalEvent(stationStatustViewItem.getNormalEvent());
             stationStatus.setWarnEvent(stationStatustViewItem.getWarnEvent());
             stationStatus.setOnline(stationStatustViewItem.getOnline());
             stationStatus.setUpdateTime(DateTimeUtil.formatDate(stationStatustViewItem.getUpdateTime()));
-
             //设置车站状态
             Short status = stationStatustViewItem.getStatus();
             stationStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
@@ -78,6 +78,23 @@ public class NodeStatusController {
             stationStatusList.add(stationStatus);
         }
         return Result.success(stationStatusList);
+    }
+
+    @ApiOperation("设备状态列表")
+    @PostMapping("deviceStatus")
+    public Result<List<EquStatus>> getDeviceStatus(@RequestBody DeviceStatusCondition deviceStatusSearch) {
+        List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(deviceStatusSearch);
+        List<EquStatus> equStatusList = new ArrayList<>();
+        for (EquStatusViewItem equStatusViewItem : data) {
+            EquStatus equStatus = new EquStatus();
+            Short status = Integer.valueOf(equStatusViewItem.getStatus()).shortValue();
+            equStatus.setNodeId(equStatusViewItem.getNodeId());
+            equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
+            equStatus.setOnline(equStatusViewItem.getOnline());
+            equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
+            equStatusList.add(equStatus);
+        }
+        return Result.success(equStatusList);
     }
 
     @ApiOperation("模式上传信息")
@@ -160,22 +177,6 @@ public class NodeStatusController {
             modeBroadcastInfos.add(modeBroadcastInfo);
         }
         return Result.success(modeBroadcastInfos);
-    }
-
-    @ApiOperation("设备状态列表")
-    @PostMapping("deviceStatus")
-    public Result<List<EquStatus>> getDeviceStatus(@RequestBody DeviceStatusCondition deviceStatusSearch) {
-        List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(deviceStatusSearch);
-        List<EquStatus> equStatusList = new ArrayList<>();
-        for (EquStatusViewItem equStatusViewItem : data) {
-            EquStatus equStatus = new EquStatus();
-            Short status = Integer.valueOf(equStatusViewItem.getStatus()).shortValue();
-            equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
-            equStatus.setOnline(equStatusViewItem.getOnline());
-            equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
-            equStatusList.add(equStatus);
-        }
-        return Result.success(equStatusList);
     }
 
     @ApiOperation("设备事件列表")

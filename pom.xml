@@ -25,6 +25,7 @@
     <modules>
         <module>afc-monitor-api</module>
         <module>afc-monitor-service</module>
+        <module>afc-monitor-rmi</module>
     </modules>
 
     <repositories>

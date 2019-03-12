@@ -47,7 +47,6 @@ management:
       show-details: always
 
 #与MessageServer通讯RMI配置
-rmiHostIpAddr: 10.0.30.2
 communicationRegistRmiPort: 8527
 commandServiceRmiPort: 8528
 parameterManagerRmiPort: 8532

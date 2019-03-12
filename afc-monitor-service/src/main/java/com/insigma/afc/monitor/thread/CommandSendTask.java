@@ -1,11 +1,13 @@
 package com.insigma.afc.monitor.thread;
 
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
+import com.insigma.afc.monitor.constant.dic.AFCDeviceType;
 import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.workbench.rmi.CmdHandlerResult;
+import com.insigma.afc.workbench.rmi.ICommandService;
+import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.util.DateTimeUtil;
-import com.insigma.ms.rmi.CmdHandlerResult;
-import com.insigma.ms.rmi.ICommandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +55,36 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
         try {
             String userId = "0";
             //AFCApplication.getAFCNode().id(),
-            CmdHandlerResult command = rmiCommandService.command(cmdId, userId, 0L, cmdArg, node.id());
+            com.insigma.afc.topology.MetroNode metroNode = null;
+            switch (node.level()){
+                case ACC:{
+                    metroNode = new com.insigma.afc.topology.MetroACC();
+                    break;
+                }
+                case LC:{
+                    metroNode = new com.insigma.afc.topology.MetroLine();
+                    break;
+                }
+                case SC:{
+                    MetroStation metroStation = (MetroStation)node;
+                    metroNode = new com.insigma.afc.topology.MetroStation();
+                    ((com.insigma.afc.topology.MetroStation) metroNode)
+                            .setId(new com.insigma.afc.topology.MetroStationId(metroStation.getLineId(),
+                                    metroStation.getStationId()));
+                    break;
+                }
+                case SLE:{
+                    MetroDevice metroDevice = (MetroDevice)node;
+                    metroNode = new com.insigma.afc.topology.MetroDevice();
+                    ((com.insigma.afc.topology.MetroDevice) metroNode)
+                            .setId(new com.insigma.afc.topology.MetroDeviceId(metroDevice.getLineId(),
+                                    metroDevice.getStationId(),metroDevice.getDeviceId()));
+                    break;
+                }
+                default:
+            }
+            metroNode.setNodeId(node.id());
+            CmdHandlerResult command = rmiCommandService.command(cmdId, userId, 0L, cmdArg, metroNode);
             Serializable returnValue = command.returnValue;
             if (returnValue instanceof Integer) {
                 result = (Integer) returnValue;
@@ -100,7 +131,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
             tmoCmdResult.setLineId(line.getLineID());
             tmoCmdResult.setStationId(0);
             tmoCmdResult.setNodeId(line.id());
-            //tmoCmdResult.setNodeType(AFCDeviceType.LC);
+            tmoCmdResult.setNodeType(AFCNodeLevel.LC.getStatusCode().shortValue());
         }
 
         if (node instanceof MetroStation) {
@@ -108,7 +139,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
             tmoCmdResult.setLineId(station.getLineId());
             tmoCmdResult.setStationId(station.getStationId());
             tmoCmdResult.setNodeId(station.id());
-            //tmoCmdResult.setNodeType(AFCDeviceType.SC);
+            tmoCmdResult.setNodeType(AFCNodeLevel.SC.getStatusCode().shortValue());
         }
 
         if (node instanceof MetroDevice) {

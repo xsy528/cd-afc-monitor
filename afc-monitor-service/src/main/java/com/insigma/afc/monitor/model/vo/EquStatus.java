@@ -31,7 +31,7 @@ public class EquStatus implements Serializable {
     private String updateTime;
 
     @ApiModelProperty("设备是否在线")
-    @JsonProperty("isOnline")
+    @JsonProperty("is_online")
     private boolean isOnline;
 
     public Long getNodeId() {

@@ -1,6 +1,6 @@
 package com.insigma.afc.monitor.config;
 
-import com.insigma.ms.rmi.ICommandService;
+import com.insigma.afc.workbench.rmi.ICommandService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

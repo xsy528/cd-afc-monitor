@@ -92,6 +92,7 @@ public class NodeStatusController {
             equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
             equStatus.setOnline(equStatusViewItem.getOnline());
             equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
+            equStatus.setName(topologyService.getNodeText(equStatusViewItem.getNodeId().longValue()).getData());
             equStatusList.add(equStatus);
         }
         return Result.success(equStatusList);

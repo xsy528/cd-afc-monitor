@@ -225,10 +225,14 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 continue;
             }
             if (temp.getNodeId()!=null) {
-                for (Long nodeid : deviceList) {
-                    if (nodeid.equals(temp.getNodeId())) {
-                        viewItemList.add(temp);
-                        break;
+                if (deviceList.size() == 0) {
+                    viewItemList.add(temp);
+                } else {
+                    for (Long nodeid : deviceList) {
+                        if (nodeid.equals(temp.getNodeId())) {
+                            viewItemList.add(temp);
+                            break;
+                        }
                     }
                 }
             }

@@ -5,7 +5,12 @@ import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SendCommand;
 import com.insigma.afc.monitor.service.CommandService;
+import com.insigma.afc.monitor.service.RegisterPingService;
+import com.insigma.afc.workbench.rmi.IBaseCommandService;
+import com.insigma.afc.workbench.rmi.RegisterResult;
+import com.insigma.commons.communication.ftp.FtpInfo;
 import com.insigma.commons.dic.PairValue;
+import com.insigma.commons.spring.datasource.DESUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -13,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +37,12 @@ public class CommandController{
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandController.class);
 
     private CommandService commandService;
+    private RegisterPingService registerPingService;
 
     @Autowired
-    public CommandController(CommandService commandService){
+    public CommandController(CommandService commandService,RegisterPingService registerPingService){
         this.commandService = commandService;
+        this.registerPingService = registerPingService;
     }
 
     @ApiOperation("获取设备控制命令列表")
@@ -84,5 +92,11 @@ public class CommandController{
     @PostMapping("/queryBox")
     public Result<List<CommandResult>> queryBox(@RequestParam Long nodeId){
         return commandService.sendQueryBoxCommand(nodeId);
+    }
+
+    @ApiOperation("通讯服务器连接状态")
+    @PostMapping("/isRegisterOnline")
+    public Result<Integer> isRegisterOnline(){
+        return registerPingService.isRegisterOnline();
     }
 }

@@ -13,6 +13,7 @@ import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.model.properties.NetworkConfig;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.MonitorConfigService;
+import com.insigma.afc.monitor.service.RegisterPingService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.exception.ServiceException;
@@ -41,14 +42,17 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
     private TmoItemStatusDao tmoItemStatusDao;
     private NetworkConfig networkConfig;
     private MonitorConfigService monitorConfigService;
+    private RegisterPingService registerPingService;
 
     @Autowired
     public MetroNodeStatusServiceImpl(TopologyService topologyService, TmoItemStatusDao tmoItemStatusDao,
-                                      MonitorConfigService monitorConfigService,NetworkConfig networkConfig) {
+                                      MonitorConfigService monitorConfigService,NetworkConfig networkConfig,
+                                      RegisterPingService registerPingService) {
         this.topologyService = topologyService;
         this.tmoItemStatusDao = tmoItemStatusDao;
         this.networkConfig = networkConfig;
         this.monitorConfigService = monitorConfigService;
+        this.registerPingService = registerPingService;
     }
 
     @Override
@@ -248,8 +252,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         int warningRate;
         int alarmRate;
 
-        //TODO 服务在线状态需要有地方维护
-        Number onLine = 1;//(Number) Application.getData(ApplicationKey.STATUS_COMMUNICATION);
+        Integer onLine = registerPingService.isRegisterOnline().getData();
         boolean hasStatus = true;
         boolean hasOff = true;
 
@@ -262,15 +265,13 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 }
             }
         }
-
-        if (null != tmoItemStatus.getItemActivity() && tmoItemStatus.getItemActivity() && onLine != null
-                && onLine.intValue() == 0 && isOnline) {
+        Boolean itemActivity = tmoItemStatus.getItemActivity();
+        if (itemActivity!=null && itemActivity && onLine != null && onLine == 0 && isOnline) {
             if (null != tmoItemStatus.getItemStatus()) {
-
                 if (statusLevel.size() > 0) {
                     hasStatus = false;
-                    for (Short staus : statusLevel) {
-                        if (tmoItemStatus.getItemStatus().equals(staus)) {
+                    for (Short status : statusLevel) {
+                        if (tmoItemStatus.getItemStatus().equals(status)) {
                             hasStatus = true;
                             break;
                         }
@@ -316,7 +317,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
     public List<StationStatustViewItem> getStationStatusView(StationStatusCondition condition) {
         List<Integer> stationIds = condition.getStationIds();
         //获取通信前置机状态
-        Number onLine = 1;//(Number) Application.getData(ApplicationKey.STATUS_COMMUNICATION);
+        Integer onLine = registerPingService.isRegisterOnline().getData();
 
         Result<MonitorConfigInfo> monitorConfigInfoResult = monitorConfigService.getMonitorConfig();
         if (!monitorConfigInfoResult.isSuccess()){
@@ -345,11 +346,11 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             deviceMaps.put(tmoItemStatus.getNodeId(), tmoItemStatus);
         }
 
-        MetroNode afcNode = topologyService.getMetroAcc().getData();
+        AFCNodeLevel localNodeLevel = NodeIdUtils.nodeIdStrategy.getNodeLevel(networkConfig.getNodeNo());
         if (stationStatus.size() == 0) {
             return result;
         }
-        if (afcNode.level().equals(AFCNodeLevel.ACC)) {
+        if (localNodeLevel.equals(AFCNodeLevel.ACC)) {
             List<MetroLine> subNodes = topologyService.getAllMetroLine().getData();
             for (MetroLine metroLine : subNodes) {
                 List<MetroStation> subStationNodes = topologyService
@@ -359,15 +360,15 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                             stationIds);
                 }
             }
-        } else if (afcNode.level().equals(AFCNodeLevel.LC)) {
-            MetroLine line = (MetroLine) afcNode;
+        } else if (localNodeLevel.equals(AFCNodeLevel.LC)) {
+            MetroLine line = topologyService.getLineNode(networkConfig.getLineNo().shortValue()).getData();
             List<MetroStation> subNodes = topologyService.getMetroStationsByLineId(line.getLineID()).getData();
             for (MetroStation metroStation : subNodes) {
                 getStationStatusView(metroStation, stationMaps, deviceMaps, onLine, alarmNum, warningNum, result,
                         stationIds);
             }
-        } else if (afcNode.level().equals(AFCNodeLevel.SC)) {
-            MetroStation station = (MetroStation) afcNode;
+        } else if (localNodeLevel.equals(AFCNodeLevel.SC)) {
+            MetroStation station = topologyService.getStationNode(networkConfig.getStationNo()).getData();
             getStationStatusView(station, stationMaps, deviceMaps, onLine, alarmNum, warningNum, result, stationIds);
         }
         return result;
@@ -399,7 +400,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         viewItem.setLineId(lineId);
         viewItem.setStationId(stationId);
         viewItem.setNodeId(station.id());
-        //viewItem.setNodeType(NodeIdUtils.getNodeType(stationId.longValue()));
+        viewItem.setNodeType(AFCNodeLevel.SC.getStatusCode().shortValue());
         TmoItemStatus tmoItemStatus = stationMaps.get(station.getStationId());
         if (tmoItemStatus!=null) {
             viewItem.setMode(getCurrentmode(tmoItemStatus));

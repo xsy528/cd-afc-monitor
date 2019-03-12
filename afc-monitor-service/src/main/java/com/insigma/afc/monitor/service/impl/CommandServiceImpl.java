@@ -14,10 +14,10 @@ import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.afc.monitor.thread.CommandSendTask;
 import com.insigma.afc.monitor.thread.CommandThreadPoolExecutor;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
+import com.insigma.afc.workbench.rmi.CommandType;
 import com.insigma.commons.dic.PairValue;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.afc.workbench.rmi.ICommandService;
-import com.insigma.ms.rmi.CommandType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -264,6 +264,15 @@ public class CommandServiceImpl implements CommandService {
         return deviceIds;
     }
 
+    /**
+     * 发送命令
+     * @param id 命令id
+     * @param name 命令名称
+     * @param arg 命令参数
+     * @param nodes 目标节点
+     * @param cmdType 命令类型
+     * @return 命令执行结果
+     */
     private List<CommandResult> send(int id, String name, Object arg, List<MetroNode> nodes, short cmdType) {
         if (nodes == null) {
             return null;

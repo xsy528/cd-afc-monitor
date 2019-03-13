@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.model.dto.condition;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class DeviceStatusCondition {
     private Date startTime;
     private Date endTime;
     private List<Long> nodeIds;
+    @NotNull
     private List<Short> statusList;
     private OrderDirection orderType = OrderDirection.ASC;
 

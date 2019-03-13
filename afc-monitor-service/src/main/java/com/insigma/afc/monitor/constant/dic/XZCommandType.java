@@ -8,7 +8,7 @@
  */
 package com.insigma.afc.monitor.constant.dic;
 
-import com.insigma.ms.rmi.CommandType;
+import com.insigma.afc.workbench.rmi.CommandType;
 import com.insigma.commons.dic.annotation.Dic;
 import com.insigma.commons.dic.annotation.DicItem;
 

@@ -121,6 +121,6 @@ public class RegisterPingServiceImpl implements RegisterPingService {
                 isOnline = false;
             }
         }
-        return Result.success(isOnline?1:0);
+        return Result.success(isOnline?ON_LINE:OFF_LINE);
     }
 }

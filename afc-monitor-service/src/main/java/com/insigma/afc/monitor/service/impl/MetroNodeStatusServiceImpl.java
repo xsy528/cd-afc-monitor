@@ -122,9 +122,12 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 Map<Integer, List<MetroDevice>> metroDevices = topologyService.getMetroDevicesGroupByStationId()
                         .getData();
                 for (MetroLine metroLine : metroLines) {
-                    for (MetroStation metroStation : metroStations.get(metroLine.getLineID())) {
+                    List<MetroStation> metroStationList = metroStations.get(metroLine.getLineID());
+                    if (metroStationList==null){
+                        continue;
+                    }
+                    for (MetroStation metroStation : metroStationList) {
                         Integer stationId = metroStation.getStationId();
-
                         addDevicesToViewItemList(viewItemList, deviceList, startTime, endTime, statusLevel,
                                 metroDevices.get(stationId), deviceMaps,
                                 stationMaps.get(NodeIdUtils.nodeIdStrategy.getNodeNo(stationId.longValue())));
@@ -290,7 +293,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
         //前通讯前置机置机是否在线
         Integer onLine = registerPingService.isRegisterOnline().getData();
-        boolean hasStatus = false;
+        boolean hasStatus = statusLevel.isEmpty();
         boolean hasOff = false;
 
         //是否需要包含离线设备

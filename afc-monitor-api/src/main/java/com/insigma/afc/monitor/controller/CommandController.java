@@ -28,12 +28,10 @@ import java.util.List;
 public class CommandController{
 
     private CommandService commandService;
-    private RegisterPingService registerPingService;
 
     @Autowired
-    public CommandController(CommandService commandService,RegisterPingService registerPingService){
+    public CommandController(CommandService commandService){
         this.commandService = commandService;
-        this.registerPingService = registerPingService;
     }
 
     @ApiOperation("获取设备控制命令列表")
@@ -78,9 +76,4 @@ public class CommandController{
         return commandService.sendQueryBoxCommand(nodeId);
     }
 
-    @ApiOperation("通讯服务器连接状态")
-    @PostMapping("/isRegisterOnline")
-    public Result<Integer> isRegisterOnline(){
-        return registerPingService.isRegisterOnline();
-    }
 }

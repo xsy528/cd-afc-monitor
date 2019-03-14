@@ -6,10 +6,8 @@
 /**
  *
  */
-package com.insigma.afc.monitor.service.impl;
+package com.insigma.afc.monitor.healthIndicator;
 
-import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.monitor.service.RegisterPingService;
 import com.insigma.afc.workbench.rmi.IBaseCommandService;
 import com.insigma.afc.workbench.rmi.RegisterResult;
 import com.insigma.commons.communication.ftp.FtpInfo;
@@ -17,38 +15,46 @@ import com.insigma.commons.spring.datasource.DESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.AbstractHealthIndicator;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Ticket:
+ * Ticket: 通讯前置机连接检测
  *
  * @author: xuzhemin
  * 2019/3/12 20:51
  */
 @Service
-public class RegisterPingServiceImpl implements RegisterPingService {
+public class RegisterHealthIndicator extends AbstractHealthIndicator {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(RegisterPingServiceImpl.class);
-    
-    private static final int ON_LINE = 0;
-    private static final int OFF_LINE = 1;
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegisterHealthIndicator.class);
+
     private boolean isOnline;
     private IBaseCommandService cmdService;
-    
+    private ApplicationContext applicationContext;
+
     @Autowired
-    public RegisterPingServiceImpl(IBaseCommandService cmdService){
-        this.cmdService = cmdService;
+    public RegisterHealthIndicator(ApplicationContext applicationContext){
+        this.applicationContext = applicationContext;
     }
-    
+
     @Override
-    public Result<Integer> isRegisterOnline() {
+    protected void doHealthCheck(Health.Builder builder) throws Exception {
+        if (cmdService==null){
+            cmdService = applicationContext.getBean(IBaseCommandService.class);
+        }
         if (isOnline) {
             try {
                 cmdService.isAlive();
+                builder.up();
+                isOnline = true;
             } catch (Exception e) {
+                builder.down(e);
                 isOnline = false;
                 LOGGER.error("检测到服务器离线。", e);
             }
@@ -110,6 +116,7 @@ public class RegisterPingServiceImpl implements RegisterPingService {
                             LOGGER.info("-----------------------------------");
                         }
                     }
+                    builder.up();
                     isOnline = true;
                     LOGGER.info("注册服务端成功。");
                 } else {
@@ -118,9 +125,9 @@ public class RegisterPingServiceImpl implements RegisterPingService {
             } catch (Exception e) {
                 LOGGER.error("无法注册到到服务器。", e);
                 // 修改状态
+                builder.down(e);
                 isOnline = false;
             }
         }
-        return Result.success(isOnline?ON_LINE:OFF_LINE);
     }
 }

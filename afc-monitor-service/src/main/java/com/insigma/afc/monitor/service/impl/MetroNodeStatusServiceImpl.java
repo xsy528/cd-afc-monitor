@@ -3,6 +3,7 @@ package com.insigma.afc.monitor.service.impl;
 import com.insigma.afc.monitor.constant.OrderDirection;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.dao.TmoItemStatusDao;
+import com.insigma.afc.monitor.healthIndicator.RegisterHealthIndicator;
 import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
 import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
 import com.insigma.afc.monitor.model.dto.Result;
@@ -13,7 +14,6 @@ import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.model.properties.NetworkConfig;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.MonitorConfigService;
-import com.insigma.afc.monitor.service.RegisterPingService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.exception.ServiceException;
@@ -22,6 +22,7 @@ import com.insigma.commons.util.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
@@ -43,17 +44,17 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
     private TmoItemStatusDao tmoItemStatusDao;
     private NetworkConfig networkConfig;
     private MonitorConfigService monitorConfigService;
-    private RegisterPingService registerPingService;
+    private RegisterHealthIndicator registerHealthIndicator;
 
     @Autowired
     public MetroNodeStatusServiceImpl(TopologyService topologyService, TmoItemStatusDao tmoItemStatusDao,
                                       MonitorConfigService monitorConfigService, NetworkConfig networkConfig,
-                                      RegisterPingService registerPingService) {
+                                      RegisterHealthIndicator registerHealthIndicator) {
         this.topologyService = topologyService;
         this.tmoItemStatusDao = tmoItemStatusDao;
         this.networkConfig = networkConfig;
         this.monitorConfigService = monitorConfigService;
-        this.registerPingService = registerPingService;
+        this.registerHealthIndicator = registerHealthIndicator;
     }
 
     @Override
@@ -292,7 +293,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         int alarmRate;
 
         //前通讯前置机置机是否在线
-        Integer onLine = registerPingService.isRegisterOnline().getData();
+        boolean onLine = Status.UP.equals(registerHealthIndicator.health().getStatus());
         boolean hasStatus = statusLevel.isEmpty();
         boolean hasOff = false;
 
@@ -304,7 +305,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             }
         }
         Boolean itemActivity = tmoItemStatus.getItemActivity();
-        if (itemActivity != null && itemActivity && onLine != null && onLine == 0 && isOnline) {
+        if (itemActivity != null && itemActivity && onLine && isOnline) {
             if (tmoItemStatus.getItemStatus() != null) {
                 for (Short status : statusLevel) {
                     if (tmoItemStatus.getItemStatus().equals(status)) {
@@ -346,7 +347,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
     public List<StationStatustViewItem> getStationStatusView(StationStatusCondition condition) {
         List<Integer> stationIds = condition.getStationIds();
         //获取通信前置机状态
-        Integer onLine = registerPingService.isRegisterOnline().getData();
+        boolean onLine = Status.UP.equals(registerHealthIndicator.health().getStatus());
 
         Result<MonitorConfigInfo> monitorConfigInfoResult = monitorConfigService.getMonitorConfig();
         if (!monitorConfigInfoResult.isSuccess()) {
@@ -404,7 +405,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
     }
 
     public void getStationStatusView(MetroStation station, Map<Integer, TmoItemStatus> stationMaps,
-                                     Map<Long, TmoItemStatus> deviceMaps, Number onLine, Integer alarmNum,
+                                     Map<Long, TmoItemStatus> deviceMaps, boolean onLine, Integer alarmNum,
                                      Integer warningNum, List<StationStatustViewItem> result, List<Integer>
                                              stationIDs) {
 
@@ -435,13 +436,12 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         if (tmoItemStatus != null) {
             viewItem.setMode(getCurrentmode(tmoItemStatus));
             viewItem.setUpdateTime(tmoItemStatus.getModeChangeTime());
-            if (onLine != null && onLine.intValue() == 0) {
+            if (onLine) {
                 viewItem.setOnline(tmoItemStatus.getItemActivity());
             } else {
                 viewItem.setOnline(false);
             }
-            if (null != tmoItemStatus.getItemActivity() && tmoItemStatus.getItemActivity() && onLine != null
-                    && onLine.intValue() == 0) {
+            if (null != tmoItemStatus.getItemActivity() && tmoItemStatus.getItemActivity() && onLine) {
                 viewItem.setStatus(DeviceStatus.NORMAL);
             } else {
                 viewItem.setStatus(DeviceStatus.OFF_LINE);
@@ -457,8 +457,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             equViewItem.setLineId(lineId);
             equViewItem.setStationId(stationId);
             equViewItem.setNodeId(metroDevice.getDeviceId());
-            if (deviceMaps.containsKey(metroDevice.id()) && onLine != null
-                    && onLine.intValue() == 0) {
+            if (deviceMaps.containsKey(metroDevice.id()) && onLine) {
                 TmoItemStatus deviceStatus = deviceMaps.get(metroDevice.id());
                 equViewItem.setOnline(deviceStatus.getItemActivity());
                 //启用设备才纳入报警，警告的设备数的计算

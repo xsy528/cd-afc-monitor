@@ -63,7 +63,7 @@ public class ModeServiceImpl implements ModeService {
 													 Date endTime, int page, int pageSize) {
 		return tmoModeUploadInfoDao.findAll((root,query,builder)->{
 			List<Predicate> predicates = new ArrayList<>();
-			if (stationIds!=null){
+			if (stationIds!=null&&!stationIds.isEmpty()){
 				predicates.add(root.get("stationId").in(stationIds));
 			}
 			if(modeCode!=null){
@@ -89,7 +89,7 @@ public class ModeServiceImpl implements ModeService {
 													   Date startTime, Date endTime, int page, int pageSize) {
 		return tmoModeBroadcastDao.findAll((root,query,builder)->{
 			List<Predicate> predicates = new ArrayList<>();
-			if (stationIds!=null){
+			if (stationIds!=null&&!stationIds.isEmpty()){
 				predicates.add(root.get("stationId").in(stationIds));
 			}
 			if(modeCode!=null){

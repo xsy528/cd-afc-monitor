@@ -27,11 +27,11 @@ public class DeviceStatus extends Definition {
 
 	// 检查不到设备的存在，一般是设备没有启动或设备离线
 	@DicItem(name = "离线", group = "1")
-	public static Short OFF_LINE = 0x04;
+	public static Short OFF_LINE = 0x03;
 
 	// 停止服务时通讯是正常的
-	@DicItem(name = "停止服务", group = "1")
-	public static Short STOP_SERVICE = 0x5;
+	@DicItem(name = "暂停服务", group = "1")
+	public static Short STOP_SERVICE = 0xff;
 
 	// 设备或是车站未启用，自定义-yang
 	@DicItem(name = "未启用", group = "1")

@@ -1,9 +1,6 @@
 package com.insigma.afc.monitor.service.impl;
 
-import com.insigma.afc.monitor.constant.dic.AFCCmdLogType;
-import com.insigma.afc.monitor.constant.dic.AFCModeCode;
-import com.insigma.afc.monitor.constant.dic.XZCommandType;
-import com.insigma.afc.monitor.constant.dic.XZDeviceType;
+import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.CommandResult;
@@ -14,7 +11,6 @@ import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.afc.monitor.thread.CommandSendTask;
 import com.insigma.afc.monitor.thread.CommandThreadPoolExecutor;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
-import com.insigma.afc.workbench.rmi.CommandType;
 import com.insigma.commons.dic.PairValue;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.afc.workbench.rmi.ICommandService;
@@ -61,8 +57,8 @@ public class CommandServiceImpl implements CommandService {
     @Override
     public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, int command) {
 
-        List<MetroNode> stationIds = getStationNodeFromIds(nodeIds);
-        if (stationIds == null) {
+        List<MetroNode> targetIds = getTargetNodeFromIds(nodeIds);
+        if (targetIds==null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
@@ -122,33 +118,34 @@ public class CommandServiceImpl implements CommandService {
 //            }
             return Result.error(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
-        return Result.success(send(CommandType.CMD_CHANGE_MODE, name, arg, stationIds,
+        return Result.success(send(CommandType.CMD_MODE_UPDATE, name, arg, targetIds,
                 AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
     @Override
     public Result<List<CommandResult>> sendModeQueryCommand(List<Long> nodeIds) {
-        List<MetroNode> stationIds = getStationNodeFromIds(nodeIds);
-        if (stationIds == null) {
+        List<MetroNode> targetIds = getTargetNodeFromIds(nodeIds);
+        if (targetIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
-        return Result.success(send(CommandType.CMD_QUERY_MODE, "模式查询命令",
-                null, stationIds, AFCCmdLogType.LOG_MODE.shortValue()));
+        return Result.success(send(CommandType.CMD_MODE_QUERY,
+                CommandType.getInstance().getNameByValue(CommandType.CMD_MODE_QUERY), null, targetIds,
+                AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
     @Override
     public Result<List<CommandResult>> sendTimeSyncCommand(List<Long> nodeIds) {
-        List<MetroNode> stationIds = getStationNodeFromIds(nodeIds);
-        if (stationIds == null) {
+        List<MetroNode> targetIds = getTargetNodeFromIds(nodeIds);
+        if (targetIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
-        return Result.success(send(CommandType.CMD_TIME_SYNC, "时间同步命令",
-                null, stationIds, AFCCmdLogType.LOG_TIME_SYNC.shortValue()));
+        return Result.success(send(CommandType.CMD_TIME_SYNC,
+                CommandType.getInstance().getNameByValue(CommandType.CMD_TIME_SYNC), null, targetIds,
+                AFCCmdLogType.LOG_TIME_SYNC.shortValue()));
     }
 
     @Override
     public Result<List<CommandResult>> sendMapSyncCommand(List<Long> lineIds) {
-        CmdHandlerResult command = null;
         List<MetroNode> ids = new ArrayList<>();
         for (Long lineId : lineIds) {
             MetroLine metroNode = topologyService.getLineNode(lineId.shortValue()).getData();
@@ -160,7 +157,7 @@ public class CommandServiceImpl implements CommandService {
         if (ids.isEmpty()) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
-        command = rmiGenerateFiles();
+        CmdHandlerResult command = rmiGenerateFiles();
         if (command.isOK) {
             return Result.success(send(CommandType.CMD_SYNC_MAP, "地图同步命令", null, ids,
                     AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
@@ -191,7 +188,7 @@ public class CommandServiceImpl implements CommandService {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
-        return Result.success(send(XZCommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
+        return Result.success(send(CommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
                 null, deviceIds, command));
     }
 
@@ -201,43 +198,41 @@ public class CommandServiceImpl implements CommandService {
         List<MetroNode> ids = new ArrayList<>();
         ids.add(device);
         List<CommandResult> commandResults = new ArrayList<>();
-        if (device.getDeviceType() == XZDeviceType.TVM) {
+        Short deviceType = device.getDeviceType();
+        if (AFCDeviceType.TVM.equals(deviceType)) {
             commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
-        if (device.getDeviceType() == XZDeviceType.TVM
-                || device.getDeviceType() == XZDeviceType.POST
-                || device.getDeviceType() == XZDeviceType.ENG
-                || device.getDeviceType() == XZDeviceType.EXG
-                || device.getDeviceType() == XZDeviceType.REG) {
-            commandResults.addAll(send(XZCommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
+        if (AFCDeviceType.TVM.equals(deviceType) || AFCDeviceType.POST.equals(deviceType)
+                || AFCDeviceType.GATE.equals(deviceType)) {
+            commandResults.addAll(send(CommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
         return Result.success(commandResults);
     }
 
     /**
-     * 从传过来的节点id中获取车站节点
+     * 从传过来的节点id中获取目标节点
      *
      * @param nodeIds 节点id数组
-     * @return 车站节点数组
+     * @return 目标节点数组
      */
-    private List<MetroNode> getStationNodeFromIds(List<Long> nodeIds) {
+    private List<MetroNode> getTargetNodeFromIds(List<Long> nodeIds) {
         if (nodeIds == null || nodeIds.isEmpty()) {
             return null;
         }
-        // 只留下车站节点
-        List<MetroNode> stationIds = new ArrayList<>();
+        // 只留下目标节点
+        List<MetroNode> targetdIds = new ArrayList<>();
         for (Long id : nodeIds) {
-            MetroStation metroNode = topologyService.getStationNode(id.intValue()).getData();
+            MetroLine metroNode = topologyService.getLineNode(id.shortValue()).getData();
             if (metroNode!=null) {
-                stationIds.add(metroNode);
+                targetdIds.add(metroNode);
             }
         }
-        if (stationIds.isEmpty()) {
+        if (targetdIds.isEmpty()) {
             return null;
         }
-        return stationIds;
+        return targetdIds;
     }
 
     /**

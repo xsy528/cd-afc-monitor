@@ -48,6 +48,10 @@ public class MetroLine extends MetroNode implements java.io.Serializable {
 		return imageLocation;
 	}
 
+	public long id() {
+		return lineID;
+	}
+
 	/**
 	 * @param imageLocation the imageLocation to set
 	 */

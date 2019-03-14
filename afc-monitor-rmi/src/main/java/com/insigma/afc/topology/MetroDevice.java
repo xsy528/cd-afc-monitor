@@ -104,6 +104,10 @@ public class MetroDevice extends MetroNode implements java.io.Serializable {
 		return textLocation;
 	}
 
+	public long id() {
+		return id.getDeviceId();
+	}
+
 	/**
 	 * @param textLocation the textLocation to set
 	 */

@@ -1,7 +1,6 @@
 package com.insigma.afc.monitor.thread;
 
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
-import com.insigma.afc.monitor.constant.dic.AFCDeviceType;
 import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
@@ -51,18 +50,19 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
         }
         int result = AFCCmdResultType.SEND_FAILED;
         String resultDesc = null;
-        CommandResult commandResult = null;
         try {
             String userId = "0";
-            //AFCApplication.getAFCNode().id(),
             com.insigma.afc.topology.MetroNode metroNode = null;
             switch (node.level()){
                 case ACC:{
                     metroNode = new com.insigma.afc.topology.MetroACC();
+                    ((com.insigma.afc.topology.MetroACC) metroNode).setAccID((short)0);
                     break;
                 }
                 case LC:{
                     metroNode = new com.insigma.afc.topology.MetroLine();
+                    MetroLine metroLine = (MetroLine)node;
+                    ((com.insigma.afc.topology.MetroLine)metroNode).setLineID(metroLine.getLineID());
                     break;
                 }
                 case SC:{
@@ -83,7 +83,6 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
                 }
                 default:
             }
-            metroNode.setNodeId(node.id());
             CmdHandlerResult command = rmiCommandService.command(cmdId, userId, 0L, cmdArg, metroNode);
             Serializable returnValue = command.returnValue;
             if (returnValue instanceof Integer) {

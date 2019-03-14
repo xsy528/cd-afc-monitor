@@ -8,8 +8,8 @@
  */
 package com.insigma.afc.monitor.service.impl;
 
+import com.insigma.afc.monitor.constant.dic.AFCDeviceType;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
-import com.insigma.afc.monitor.constant.dic.XZDeviceType;
 import com.insigma.afc.monitor.dao.TstNodeStocksDao;
 import com.insigma.afc.monitor.dao.TstTvmBoxStocksDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
@@ -125,7 +125,7 @@ public class MonitorServiceImpl implements MonitorService {
 		Optional<TstNodeStocks> tstNodeStocksOptional = tstNodeStocksDao.findById(id);
 		Map<String,Object> data = new HashMap<>();
 		//设备钱箱信息,根据规范只有TVM和TSM有钱箱
-		if (device.getDeviceType() == XZDeviceType.TVM.shortValue()) {
+		if (AFCDeviceType.TVM.equals(device.getDeviceType())) {
 			Optional<TstTvmBoxStocks> tstTvmBoxStocksOptional = tstTvmBoxStocksDao.findById(id);
 			try {
 				List<DeviceCashBoxViewItem> cashBoxViewlist = new ArrayList<>();

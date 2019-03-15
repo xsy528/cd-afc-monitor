@@ -44,8 +44,8 @@ public class StationStatus implements Serializable {
 	private String updateTime;
 
 	@ApiModelProperty("收否在线")
-	@JsonProperty("is_online")
-	private Boolean isOnline;
+	@JsonProperty("online")
+	private Boolean online;
 
 	public Long getNodeId() {
 		return nodeId;
@@ -112,10 +112,10 @@ public class StationStatus implements Serializable {
 	}
 
 	public Boolean getOnline() {
-		return isOnline;
+		return online;
 	}
 
 	public void setOnline(Boolean online) {
-		isOnline = online;
+		this.online = online;
 	}
 }

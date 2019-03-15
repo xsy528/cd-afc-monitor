@@ -2,29 +2,39 @@ package com.insigma.afc.monitor.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 @ApiModel("命令执行结果")
 public class CommandResult{
 
 	private String logId;
 
+	@ApiModelProperty("目标节点")
 	private String id;
 
+	@ApiModelProperty("操作员id")
 	@JsonProperty("operator_id")
 	private String operatorId;
 
+	@ApiModelProperty("命令名称")
 	@JsonProperty("cmd_name")
 	private String cmdName;
 
+	@ApiModelProperty("命令参数")
 	private String arg;
 
+	@ApiModelProperty("命令结果码")
 	private short result;
 
+	@ApiModelProperty("命令执行结果")
 	@JsonProperty("cmd_result")
 	private String cmdResult;
 
+	@ApiModelProperty("发生时间")
 	@JsonProperty("occur_time")
-	private String occurTime;
+	private Date occurTime;
 
 	public String getLogId() {
 		return logId;
@@ -66,11 +76,11 @@ public class CommandResult{
 		this.cmdResult = cmdResult;
 	}
 
-	public String getOccurTime() {
+	public Date getOccurTime() {
 		return occurTime;
 	}
 
-	public void setOccurTime(String occurTime) {
+	public void setOccurTime(Date occurTime) {
 		this.occurTime = occurTime;
 	}
 

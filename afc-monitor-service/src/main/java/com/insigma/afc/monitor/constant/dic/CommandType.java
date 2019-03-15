@@ -2,8 +2,10 @@ package com.insigma.afc.monitor.constant.dic;
 
 import com.insigma.afc.monitor.constant.xdr.typedef.MessageType_t;
 import com.insigma.commons.dic.Definition;
+import com.insigma.commons.dic.annotation.Dic;
 import com.insigma.commons.dic.annotation.DicItem;
 
+@Dic(overClass = CommandType.class)
 public class CommandType extends Definition {
 
 	public static CommandType commandType = new CommandType();

@@ -16,7 +16,6 @@
         <dependency>
             <groupId>com.insigma.product</groupId>
             <artifactId>afc-monitor-rmi</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

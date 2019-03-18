@@ -121,7 +121,7 @@ public class CommandServiceImpl implements CommandService {
 
     @Override
     public Result<List<CommandResult>> sendTimeSyncCommand(List<Long> nodeIds) {
-        List<MetroLine> targetIds = getLineNodeFromStations(getStationNodeFromIds(nodeIds));
+        List<MetroLine> targetIds = getLineNodeFromIds(nodeIds);
         if (targetIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
@@ -211,6 +211,30 @@ public class CommandServiceImpl implements CommandService {
         List<MetroStation> targetdIds = new ArrayList<>();
         for (Long id : nodeIds) {
             MetroStation metroNode = topologyService.getStationNode(id.intValue()).getData();
+            if (metroNode!=null) {
+                targetdIds.add(metroNode);
+            }
+        }
+        if (targetdIds.isEmpty()) {
+            return null;
+        }
+        return targetdIds;
+    }
+
+    /**
+     * 从传过来的节点id中获取线路节点
+     *
+     * @param nodeIds 节点id数组
+     * @return 线路节点数组
+     */
+    private List<MetroLine> getLineNodeFromIds(List<Long> nodeIds) {
+        if (nodeIds == null || nodeIds.isEmpty()) {
+            return null;
+        }
+        // 只留下目标节点
+        List<MetroLine> targetdIds = new ArrayList<>();
+        for (Long id : nodeIds) {
+            MetroLine metroNode = topologyService.getLineNode(id.shortValue()).getData();
             if (metroNode!=null) {
                 targetdIds.add(metroNode);
             }

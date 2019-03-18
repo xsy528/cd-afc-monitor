@@ -1,10 +1,9 @@
 package com.insigma.afc.monitor.service;
 
+import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
-import com.insigma.afc.monitor.model.entity.TmoEquStatusCur;
-import com.insigma.afc.monitor.model.entity.TmoItemStatus;
-import com.insigma.afc.monitor.model.entity.TmoModeBroadcast;
-import com.insigma.afc.monitor.model.entity.TmoModeUploadInfo;
+import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
+import com.insigma.afc.monitor.model.entity.*;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -96,6 +95,13 @@ public interface ModeService {
 	 */
 	Page<TmoModeUploadInfo> getModeUploadInfo(List<Integer> stationIds,Short modeCode, Short broadCastStatus,
 											  Date startTime, Date endTime, int page, int pageSize);
+
+	/**
+	 *获取模式日志信息
+	 * @param condition
+	 * @return
+	 */
+    Page<TmoCmdResult> getModeCmdSearch(ModeCmdCondition condition);
 
 	/**
 	 * 获取模式广播信息

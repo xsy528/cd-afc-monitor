@@ -292,7 +292,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         int warningRate;
         int alarmRate;
 
-        //前通讯前置机置机是否在线
+        //通讯前置机置机是否在线
         boolean onLine = Status.UP.equals(registerHealthIndicator.health().getStatus());
         boolean hasStatus = statusLevel.isEmpty();
         boolean hasOff = false;

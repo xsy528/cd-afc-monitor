@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,27 +36,28 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
 
     @Override
     public Result<MonitorConfigInfo> getMonitorConfig(){
-        TsyConfig warningConfig = tsyConfigDao.findById(SystemConfigKey.WARNING_THRESHHOLD).orElse(null);
-        TsyConfig alarmConfig = tsyConfigDao.findById(SystemConfigKey.ALARM_THRESHHOLD).orElse(null);
-        TsyConfig refreshIntervalConfig = tsyConfigDao.findById(SystemConfigKey.VIEW_REFRESH_INTERVAL)
-                .orElse(null);
-        Integer warning;
-        Integer alarm;
-        Integer interval;
-        if (warningConfig==null){
-            warning = 0;
-        }else{
-            warning = Integer.valueOf(warningConfig.getConfigValue());
-        }
-        if (alarmConfig==null){
-            alarm = 0;
-        }else{
-            alarm = Integer.valueOf(alarmConfig.getConfigValue());
-        }
-        if (refreshIntervalConfig==null){
-            interval = 0;
-        }else{
-            interval = Integer.valueOf(refreshIntervalConfig.getConfigValue());
+        List<TsyConfig> tsyConfigs = tsyConfigDao.findAllById(Arrays.asList(SystemConfigKey.WARNING_THRESHHOLD,
+                SystemConfigKey.ALARM_THRESHHOLD, SystemConfigKey.VIEW_REFRESH_INTERVAL));
+
+        Integer warning = 0;
+        Integer alarm = 0;
+        Integer interval = 0;
+        for (TsyConfig tsyConfig:tsyConfigs){
+            switch (tsyConfig.getConfigKey()){
+                case SystemConfigKey.WARNING_THRESHHOLD:{
+                    warning = Integer.valueOf(tsyConfig.getConfigValue());
+                    break;
+                }
+                case SystemConfigKey.ALARM_THRESHHOLD:{
+                    alarm = Integer.valueOf(tsyConfig.getConfigValue());
+                    break;
+                }
+                case SystemConfigKey.VIEW_REFRESH_INTERVAL:{
+                    interval = Integer.valueOf(tsyConfig.getConfigValue());
+                    break;
+                }
+                default:
+            }
         }
         return Result.success(new MonitorConfigInfo(warning,alarm,interval));
     }

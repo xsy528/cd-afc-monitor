@@ -43,18 +43,10 @@ public class ModeServiceImpl implements ModeService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ModeServiceImpl.class);
 
-	@Autowired
-	private TopologyService topologyService;
-	@Autowired
 	private IMetroNodeStatusService modeNodeStatusService;
-	@Autowired
 	private TmoModeUploadInfoDao tmoModeUploadInfoDao;
-	@Autowired
 	private TmoModeBroadcastDao tmoModeBroadcastDao;
-
-	@Autowired
 	private TmoItemStatusDao tmoItemStatusDao;
-	@Autowired
 	private TmoEquStatusCurDao tmoEquStatusCurDao;
 
 	@Override
@@ -277,5 +269,30 @@ public class ModeServiceImpl implements ModeService {
 	@Override
 	public void saveModeBroadcastInfo(TmoModeBroadcast modeBroadcast) {
 		tmoModeBroadcastDao.save(modeBroadcast);
+	}
+
+	@Autowired
+	public void setModeNodeStatusService(IMetroNodeStatusService modeNodeStatusService) {
+		this.modeNodeStatusService = modeNodeStatusService;
+	}
+
+	@Autowired
+	public void setTmoModeUploadInfoDao(TmoModeUploadInfoDao tmoModeUploadInfoDao) {
+		this.tmoModeUploadInfoDao = tmoModeUploadInfoDao;
+	}
+
+	@Autowired
+	public void setTmoModeBroadcastDao(TmoModeBroadcastDao tmoModeBroadcastDao) {
+		this.tmoModeBroadcastDao = tmoModeBroadcastDao;
+	}
+
+	@Autowired
+	public void setTmoItemStatusDao(TmoItemStatusDao tmoItemStatusDao) {
+		this.tmoItemStatusDao = tmoItemStatusDao;
+	}
+
+	@Autowired
+	public void setTmoEquStatusCurDao(TmoEquStatusCurDao tmoEquStatusCurDao) {
+		this.tmoEquStatusCurDao = tmoEquStatusCurDao;
 	}
 }

@@ -10,6 +10,14 @@ import java.util.List;
  */
 public class StationStatusCondition {
 
+    public StationStatusCondition(){
+
+    }
+
+    public StationStatusCondition(List<Integer> stationIds){
+        this.stationIds = stationIds;
+    }
+
     private List<Integer> stationIds;
 
     public List<Integer> getStationIds() {

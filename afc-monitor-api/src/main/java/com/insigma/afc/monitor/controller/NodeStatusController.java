@@ -3,6 +3,7 @@ package com.insigma.afc.monitor.controller;
 import com.insigma.afc.monitor.constant.dic.AFCModeCode;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
+import com.insigma.afc.monitor.model.dto.NodeItem;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.StationStatustViewItem;
 import com.insigma.afc.monitor.model.dto.condition.*;
@@ -13,6 +14,7 @@ import com.insigma.afc.monitor.model.vo.*;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.ModeService;
 import com.insigma.afc.monitor.service.MonitorService;
+import com.insigma.afc.monitor.service.NodeTreeService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.util.DateTimeUtil;
 import io.swagger.annotations.Api;
@@ -44,14 +46,17 @@ public class NodeStatusController {
     private ModeService modeService;
     private MonitorService monitorService;
     private TopologyService topologyService;
+    private NodeTreeService nodeTreeService;
 
     @Autowired
     public NodeStatusController(IMetroNodeStatusService metroNodeStatusService, ModeService modeService,
-                                MonitorService monitorService, TopologyService topologyService) {
+                                MonitorService monitorService, TopologyService topologyService,
+                                NodeTreeService nodeTreeService) {
         this.metroNodeStatusService = metroNodeStatusService;
         this.modeService = modeService;
         this.monitorService = monitorService;
         this.topologyService = topologyService;
+        this.nodeTreeService = nodeTreeService;
     }
 
     @ApiOperation("获取车站状态列表")
@@ -209,6 +214,12 @@ public class NodeStatusController {
     @PostMapping("boxDetail")
     public Result getBoxDetail(@RequestParam Long nodeId) {
         return monitorService.getBoxDetail(nodeId);
+    }
+
+    @ApiOperation("获取监控树")
+    @PostMapping("tree")
+    public Result<NodeItem> getMonitorTree(){
+        return nodeTreeService.getMonitorTree();
     }
 
 }

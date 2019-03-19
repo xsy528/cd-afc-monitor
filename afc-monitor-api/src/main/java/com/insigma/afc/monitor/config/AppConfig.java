@@ -1,5 +1,6 @@
 package com.insigma.afc.monitor.config;
 
+import com.insigma.afc.monitor.service.rest.NodeTreeRestService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import feign.Feign;
 import feign.jackson.JacksonDecoder;
@@ -27,5 +28,15 @@ public class AppConfig {
                 .encoder(new JacksonEncoder())
                 .decoder(new JacksonDecoder())
                 .target(TopologyService.class, url);
+    }
+
+    @Bean
+    public NodeTreeRestService nodeTreeRestService(@Value("${topology-server-url}")String url){
+        return Feign.builder()
+                .client(new OkHttpClient())
+                .logger(new Slf4jLogger())
+                .encoder(new JacksonEncoder())
+                .decoder(new JacksonDecoder())
+                .target(NodeTreeRestService.class, url);
     }
 }

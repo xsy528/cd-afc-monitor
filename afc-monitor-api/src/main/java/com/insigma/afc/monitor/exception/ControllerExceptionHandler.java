@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -41,6 +42,12 @@ public class ControllerExceptionHandler {
     public Result httpMediaTypeNotSupportedException(HttpRequestMethodNotSupportedException e){
         LOGGER.error("不支持的请求方法",e);
         return Result.error(ErrorCode.REQUEST_METHOD_NOT_SUPPORT);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Result missingServletRequestParameterException(MissingServletRequestParameterException e){
+        LOGGER.error("请求缺少必要参数",e.getMessage());
+        return Result.error(ErrorCode.REQUIRED_PARAMETER_NOT_FOUND);
     }
 
     @ExceptionHandler(BindException.class)

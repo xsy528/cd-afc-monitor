@@ -31,8 +31,8 @@ public class EquStatus implements Serializable {
     private String updateTime;
 
     @ApiModelProperty("设备是否在线")
-    @JsonProperty("isOnline")
-    private boolean isOnline;
+    @JsonProperty("online")
+    private Boolean online;
 
     public Long getNodeId() {
         return nodeId;
@@ -66,11 +66,11 @@ public class EquStatus implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public boolean isOnline() {
-        return isOnline;
+    public Boolean getOnline() {
+        return online;
     }
 
-    public void setOnline(boolean online) {
-        isOnline = online;
+    public void setOnline(Boolean online) {
+        this.online = online;
     }
 }

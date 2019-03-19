@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class NodeStatusController {
 
     @ApiOperation("获取车站状态列表")
     @PostMapping("stationStatus")
-    public Result<List<StationStatus>> getStationStatus(@RequestBody StationStatusCondition condition) {
+    public Result<List<StationStatus>> getStationStatus(@Valid @RequestBody StationStatusCondition condition) {
         List<StationStatustViewItem> data = metroNodeStatusService.getStationStatusView(condition);
         List<StationStatus> stationStatusList = new ArrayList<>();
         for (StationStatustViewItem stationStatustViewItem : data) {
@@ -83,7 +84,7 @@ public class NodeStatusController {
 
     @ApiOperation("设备状态列表")
     @PostMapping("deviceStatus")
-    public Result<List<EquStatus>> getDeviceStatus(@RequestBody DeviceStatusCondition deviceStatusSearch) {
+    public Result<List<EquStatus>> getDeviceStatus(@Valid @RequestBody DeviceStatusCondition deviceStatusSearch) {
         List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(deviceStatusSearch);
         List<EquStatus> equStatusList = new ArrayList<>();
         for (EquStatusViewItem equStatusViewItem : data) {
@@ -93,6 +94,7 @@ public class NodeStatusController {
             equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
             equStatus.setOnline(equStatusViewItem.getOnline());
             equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
+            equStatus.setName(topologyService.getNodeText(equStatusViewItem.getNodeId()).getData());
             equStatusList.add(equStatus);
         }
         return Result.success(equStatusList);

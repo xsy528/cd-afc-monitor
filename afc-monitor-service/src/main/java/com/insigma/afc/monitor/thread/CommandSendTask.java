@@ -1,11 +1,11 @@
 package com.insigma.afc.monitor.thread;
 
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
-import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.workbench.rmi.CmdHandlerResult;
+import com.insigma.afc.workbench.rmi.ICommandService;
+import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.util.DateTimeUtil;
-import com.insigma.ms.rmi.CmdHandlerResult;
-import com.insigma.ms.rmi.ICommandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,12 +25,12 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
     private final int cmdId;
     private final String cmdName;
     private final Object cmdArg;
-    private final short cmdType;
+    private final Short cmdType;
     private final MetroNode node;
     private ICommandService rmiCommandService;
 
-    public CommandSendTask(int cmdId, String cmdName, Object cmdArg, short cmdType, MetroNode node,
-                    ICommandService rmiCommandService) {
+    public CommandSendTask(int cmdId, String cmdName, Object cmdArg, Short cmdType, MetroNode node,
+                           ICommandService rmiCommandService) {
         this.cmdId = cmdId;
         this.cmdName = cmdName;
         this.cmdArg = cmdArg;
@@ -40,20 +40,32 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
     }
 
     @Override
-    public TmoCmdResult call() throws Exception{
-        if (cmdArg instanceof int[]) {
-            int[] a = (int[]) cmdArg;
-            LOGGER.info("向节点" + node.name() + "发送" + cmdName + " 参数：" + a[0] + "," + a[1]);
-        } else {
-            LOGGER.info("向节点" + node.name() + "发送" + cmdName + " 参数：" + cmdArg);
-        }
+    public TmoCmdResult call() throws Exception {
+        LOGGER.info("向节点" + node.name() + "发送" + cmdName + " 参数：" + cmdArg);
         int result = AFCCmdResultType.SEND_FAILED;
         String resultDesc = null;
-        CommandResult commandResult = null;
         try {
             String userId = "0";
-            //AFCApplication.getAFCNode().id(),
-            CmdHandlerResult command = rmiCommandService.command(cmdId, userId, 0L, cmdArg, node.id());
+            com.insigma.afc.topology.MetroLine target = new com.insigma.afc.topology.MetroLine();
+            switch (node.level()) {
+                case LC: {
+                    MetroLine metroLine = (MetroLine) node;
+                    target.setLineID(metroLine.getLineID());
+                    break;
+                }
+                case SC: {
+                    MetroStation metroStation = (MetroStation) node;
+                    target.setLineID(metroStation.getLineId());
+                    break;
+                }
+                case SLE: {
+                    MetroDevice metroDevice = (MetroDevice) node;
+                    target.setLineID(metroDevice.getLineId());
+                    break;
+                }
+                default:
+            }
+            CmdHandlerResult command = rmiCommandService.command(cmdId, userId, 0L, cmdArg, target);
             Serializable returnValue = command.returnValue;
             if (returnValue instanceof Integer) {
                 result = (Integer) returnValue;
@@ -66,14 +78,12 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
             LOGGER.error("发送" + cmdName + "错误", e);
         }
         LOGGER.info("向节点" + node.name() + "发送" + cmdName + "  返回：" + result);
-        return getResult(node, cmdName, cmdArg, result, cmdType, resultDesc);
+        return getResult(node, cmdName, result, cmdType, resultDesc);
     }
 
-    private TmoCmdResult getResult(final MetroNode node, String command, final Object arg, final int result,
-                              final short cmdType, final String resultDesc) {
+    private TmoCmdResult getResult(MetroNode node, String command, int result, Short cmdType, String resultDesc) {
 
         String resultMessageShow = "发送结果：\n";
-
         if (result == 0) {
             resultMessageShow += "向节点" + node.name() + "发送 " + command + " 命令发送成功。\n";
 //            if (this.logService != null) {
@@ -100,7 +110,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
             tmoCmdResult.setLineId(line.getLineID());
             tmoCmdResult.setStationId(0);
             tmoCmdResult.setNodeId(line.id());
-            //tmoCmdResult.setNodeType(AFCDeviceType.LC);
+            tmoCmdResult.setNodeType(AFCNodeLevel.LC.getStatusCode().shortValue());
         }
 
         if (node instanceof MetroStation) {
@@ -108,7 +118,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
             tmoCmdResult.setLineId(station.getLineId());
             tmoCmdResult.setStationId(station.getStationId());
             tmoCmdResult.setNodeId(station.id());
-            //tmoCmdResult.setNodeType(AFCDeviceType.SC);
+            tmoCmdResult.setNodeType(AFCNodeLevel.SC.getStatusCode().shortValue());
         }
 
         if (node instanceof MetroDevice) {

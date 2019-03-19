@@ -42,7 +42,7 @@ public class MetroDevice implements MetroNode {
     private String deviceName;
 
     @Column(name = "DEVICE_TYPE", nullable = false, precision = 5)
-    private short deviceType;
+    private Short deviceType;
 
     @Column(name = "DEVICE_SUB_TYPE", precision = 5)
     private Short deviceSubType;
@@ -151,11 +151,11 @@ public class MetroDevice implements MetroNode {
         this.deviceName = deviceName;
     }
 
-    public short getDeviceType() {
+    public Short getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(short deviceType) {
+    public void setDeviceType(Short deviceType) {
         this.deviceType = deviceType;
     }
 

@@ -11,10 +11,10 @@ import io.swagger.annotations.ApiModelProperty;
 public class PageBean {
 
     @ApiModelProperty("页码")
-    protected Integer pageNumber;
+    protected Integer pageNumber = 0;
 
     @ApiModelProperty("页大小")
-    protected Integer pageSize;
+    protected Integer pageSize = 20;
 
     public Integer getPageNumber() {
         return pageNumber;

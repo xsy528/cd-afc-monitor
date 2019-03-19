@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,22 +78,22 @@ public class ModeServiceImpl implements ModeService {
 													 Date endTime, int page, int pageSize) {
 		return tmoModeUploadInfoDao.findAll((root,query,builder)->{
 			List<Predicate> predicates = new ArrayList<>();
-			if (stationIds!=null){
-				predicates.add(root.get("stationId").in(stationIds));  //将站点ID存入root中
+			if (stationIds!=null&&!stationIds.isEmpty()){
+				predicates.add(root.get("stationId").in(stationIds));
 			}
 			if(modeCode!=null){
-				predicates.add(builder.equal(root.get("modeCode"),modeCode));//比较modeCode
+				predicates.add(builder.equal(root.get("modeCode"),modeCode));
 			}
 			if (broadCastStatus!=null){
-				predicates.add(builder.equal(root.get("broadcastStatus"),broadCastStatus));//比较broadCastStatus
+				predicates.add(builder.equal(root.get("broadcastStatus"),broadCastStatus));
 			}
 			if (startTime!=null){
-				predicates.add(builder.greaterThanOrEqualTo(root.get("modeUploadTime"),startTime));//获取开始时间之后
+				predicates.add(builder.greaterThanOrEqualTo(root.get("modeUploadTime"),startTime));
 			}
 			if (endTime!=null){
-				predicates.add(builder.lessThanOrEqualTo(root.get("modeUploadTime"),endTime));//获取结束时间之前
+				predicates.add(builder.lessThanOrEqualTo(root.get("modeUploadTime"),endTime));
 			}
-			query.orderBy(builder.desc(root.get("modeUploadTime")),builder.asc(root.get("modeCode")));//以modeUploadtime降序，以modeCode升序
+			query.orderBy(builder.desc(root.get("modeUploadTime")),builder.asc(root.get("modeCode")));
 			return builder.and(predicates.toArray(new Predicate[0]));
 		},PageRequest.of(page,pageSize));
 	}
@@ -117,7 +118,7 @@ public class ModeServiceImpl implements ModeService {
 													   Date startTime, Date endTime, int page, int pageSize) {
 		return tmoModeBroadcastDao.findAll((root,query,builder)->{
 			List<Predicate> predicates = new ArrayList<>();
-			if (stationIds!=null){
+			if (stationIds!=null&&!stationIds.isEmpty()){
 				predicates.add(root.get("stationId").in(stationIds));
 			}
 			if(modeCode!=null){

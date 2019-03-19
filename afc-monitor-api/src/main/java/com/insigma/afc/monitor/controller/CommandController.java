@@ -1,10 +1,11 @@
 package com.insigma.afc.monitor.controller;
 
-import com.insigma.afc.monitor.constant.dic.XZDeviceCmdControlType;
+import com.insigma.afc.monitor.constant.dic.DeviceCmdControlType;
 import com.insigma.afc.monitor.model.dto.CommandResult;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SendCommand;
 import com.insigma.afc.monitor.service.CommandService;
+import com.insigma.afc.monitor.service.RegisterPingService;
 import com.insigma.commons.dic.PairValue;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Ticket: 命令接口
@@ -28,8 +27,6 @@ import java.util.Map;
 @RequestMapping("/monitor/command")
 public class CommandController{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommandController.class);
-
     private CommandService commandService;
 
     @Autowired
@@ -40,7 +37,7 @@ public class CommandController{
     @ApiOperation("获取设备控制命令列表")
     @PostMapping("/deviceControlCommandList")
     public Result<List<PairValue<Object,String>>> getDeviceControlCommandList(){
-        return Result.success(XZDeviceCmdControlType.getInstance().getByGroup(""));
+        return Result.success(DeviceCmdControlType.getInstance().getByGroup(""));
     }
 
     @ApiOperation("修改运营模式")
@@ -73,16 +70,10 @@ public class CommandController{
         return commandService.sendNodeControlCommand(sendCommand.getNodeIds(),sendCommand.getCommand().shortValue());
     }
 
-    @ApiOperation("刷新数据库资源")
-    @PostMapping("/refresh")
-    public Result<String> refresh(){
-        //fileService.synResources();
-        return Result.success();
-    }
-
     @ApiOperation("查询钱箱和票箱")
     @PostMapping("/queryBox")
     public Result<List<CommandResult>> queryBox(@RequestParam Long nodeId){
         return commandService.sendQueryBoxCommand(nodeId);
     }
+
 }

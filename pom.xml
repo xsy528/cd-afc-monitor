@@ -25,6 +25,7 @@
     <modules>
         <module>afc-monitor-api</module>
         <module>afc-monitor-service</module>
+        <module>afc-monitor-rmi</module>
     </modules>
 
     <repositories>
@@ -53,6 +54,11 @@
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-api</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.insigma.product</groupId>
+                <artifactId>afc-monitor-rmi</artifactId>
                 <version>1.0</version>
             </dependency>
         </dependencies>
@@ -93,8 +99,25 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${source.version}</source>
+                    <target>${target.version}</target>
+                    <compilerVersion>${compiler.version}</compilerVersion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

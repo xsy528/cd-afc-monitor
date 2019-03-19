@@ -3,13 +3,13 @@
  *  
  * 版权所有：浙江浙大网新众合轨道交通工程有限公司
  */
-package com.insigma.ms.rmi;
-
-import org.apache.commons.lang3.StringUtils;
+package com.insigma.afc.workbench.rmi;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Ticket: <br/>
@@ -30,7 +30,7 @@ public class CmdHandlerResult implements Serializable {
 	/**
 	 * rmi接口返回的描述信息：一般是错误信息描述
 	 */
-	public List<String> messages = new ArrayList<>();
+	public List<String> messages = new ArrayList<String>();
 
 	/**
 	 * rmi接口返回的结果信息，对象须序列化

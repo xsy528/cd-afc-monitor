@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.model.dto.condition;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 

@@ -3,6 +3,7 @@ package com.insigma.afc.monitor.service.impl;
 import com.insigma.afc.monitor.constant.OrderDirection;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.dao.TmoItemStatusDao;
+import com.insigma.afc.monitor.healthIndicator.RegisterHealthIndicator;
 import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
 import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
 import com.insigma.afc.monitor.model.dto.Result;
@@ -21,6 +22,7 @@ import com.insigma.commons.util.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ import java.util.*;
 
 /**
  * 设备状态相关Service
+ *
  * @author xuzhemin
  */
 @Service
@@ -41,14 +44,17 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
     private TmoItemStatusDao tmoItemStatusDao;
     private NetworkConfig networkConfig;
     private MonitorConfigService monitorConfigService;
+    private RegisterHealthIndicator registerHealthIndicator;
 
     @Autowired
     public MetroNodeStatusServiceImpl(TopologyService topologyService, TmoItemStatusDao tmoItemStatusDao,
-                                      MonitorConfigService monitorConfigService,NetworkConfig networkConfig) {
+                                      MonitorConfigService monitorConfigService, NetworkConfig networkConfig,
+                                      RegisterHealthIndicator registerHealthIndicator) {
         this.topologyService = topologyService;
         this.tmoItemStatusDao = tmoItemStatusDao;
         this.networkConfig = networkConfig;
         this.monitorConfigService = monitorConfigService;
+        this.registerHealthIndicator = registerHealthIndicator;
     }
 
     @Override
@@ -72,14 +78,21 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         OrderDirection orderType = condition.getOrderType();
         List<Long> deviceList = condition.getNodeIds();
 
+        if (statusLevel==null){
+            statusLevel = new ArrayList<>();
+        }
+        if (deviceList==null){
+            deviceList = new ArrayList<>();
+        }
+
         //成都无法用设备类型区分SC、LC
         List<TmoItemStatus> deviceStatus = tmoItemStatusDao.findAll((root, query, builder) -> {
-            switch (orderType){
-                case ASC:{
+            switch (orderType) {
+                case ASC: {
                     query.orderBy(builder.asc(root.get(orderField)));
                     break;
                 }
-                case DESC:{
+                case DESC: {
                     query.orderBy(builder.desc(root.get(orderField)));
                     break;
                 }
@@ -105,13 +118,20 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         switch (nodeType) {
             case ACC: {
                 List<MetroLine> metroLines = topologyService.getAllMetroLine().getData();
-                Map<Short, List<MetroStation>> metroStations = topologyService.getMetroStationsGroupByLineId().getData();
-                Map<Integer, List<MetroDevice>> metroDevices = topologyService.getMetroDevicesGroupByStationId().getData();
+                Map<Short, List<MetroStation>> metroStations = topologyService.getMetroStationsGroupByLineId()
+                        .getData();
+                Map<Integer, List<MetroDevice>> metroDevices = topologyService.getMetroDevicesGroupByStationId()
+                        .getData();
                 for (MetroLine metroLine : metroLines) {
-                    for (MetroStation metroStation : metroStations.get(metroLine.getLineID())) {
+                    List<MetroStation> metroStationList = metroStations.get(metroLine.getLineID());
+                    if (metroStationList==null){
+                        continue;
+                    }
+                    for (MetroStation metroStation : metroStationList) {
+                        Integer stationId = metroStation.getStationId();
                         addDevicesToViewItemList(viewItemList, deviceList, startTime, endTime, statusLevel,
-                                metroDevices.get(metroStation.getStationId()), deviceMaps,
-                                stationMaps.get(metroStation.getStationId().longValue() << 16));
+                                metroDevices.get(stationId), deviceMaps,
+                                stationMaps.get(NodeIdUtils.nodeIdStrategy.getNodeNo(stationId.longValue())));
                     }
                 }
                 break;
@@ -119,7 +139,8 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             case LC: {
                 List<MetroStation> stations = topologyService
                         .getMetroStationsByLineId(networkConfig.getLineNo().shortValue()).getData();
-                Map<Integer, List<MetroDevice>> metroDevices = topologyService.getMetroDevicesGroupByStationId().getData();
+                Map<Integer, List<MetroDevice>> metroDevices = topologyService.getMetroDevicesGroupByStationId()
+                        .getData();
                 for (MetroStation metroStation : stations) {
                     addDevicesToViewItemList(viewItemList, deviceList, startTime, endTime, statusLevel,
                             metroDevices.get(metroStation.getStationId()), deviceMaps,
@@ -161,7 +182,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             query.orderBy(builder.desc(root.get("itemActivity")));
             return builder.and(predicates.toArray(new Predicate[0]));
         });
-        if (tmoItemStatusList != null && !tmoItemStatusList.isEmpty()) {
+        if (!tmoItemStatusList.isEmpty()) {
             logger.error("******成功获取模式上传信息列表数据");
             return tmoItemStatusList.get(0);
         } else {
@@ -169,20 +190,35 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         }
     }
 
+    /**
+     * 获取设备状态数据
+     *
+     * @param viewItemList    设备状态列表
+     * @param deviceList      设备列表
+     * @param startTime       开始时间
+     * @param endTime         结束时间
+     * @param statusLevel     状态列表
+     * @param metroDeviceList 设备列表
+     * @param deviceMaps      设备状态
+     * @param stationStatus   车站状态
+     */
     private void addDevicesToViewItemList(List<EquStatusViewItem> viewItemList, List<Long> deviceList, Date startTime,
                                           Date endTime, List<Short> statusLevel, List<MetroDevice> metroDeviceList,
                                           Map<Long, TmoItemStatus> deviceMaps, TmoItemStatus stationStatus) {
+        boolean showAll = deviceList.size() == 0;
+        boolean showAllStatus = statusLevel.size() == 0;
         //判断车站是否在线
         boolean isOnLine = false;
         if (stationStatus != null) {
             isOnLine = stationStatus.getItemActivity();
         }
-        if (metroDeviceList==null){
+        if (metroDeviceList == null) {
             return;
         }
         for (MetroDevice metroDevice : metroDeviceList) {
-            EquStatusViewItem temp = new EquStatusViewItem();
+            EquStatusViewItem temp = null;
             if (deviceMaps.containsKey(metroDevice.getDeviceId())) {
+                //数据库存在设备状态
                 TmoItemStatus tmoItemStatus = deviceMaps.get(metroDevice.getDeviceId());
                 temp = getEquStatusViewItem(tmoItemStatus, statusLevel, isOnLine);
                 Date updateTime = tmoItemStatus.getUpdateTime();
@@ -194,37 +230,44 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                     continue;
                 }
             } else if (startTime == null && endTime == null) {
-                boolean deviceBo = false;
-                boolean statusBo = false;
+                //是否是查询的设备
+                boolean showDevice = false;
+                //是否包含离线状态
+                boolean showOfflineStatus = false;
                 for (Long deviceId : deviceList) {
                     if (deviceId.equals(metroDevice.getDeviceId())) {
-                        deviceBo = true;
+                        showDevice = true;
                         break;
                     }
                 }
 
                 for (Short status : statusLevel) {
                     if (status.equals(DeviceStatus.OFF_LINE)) {
-                        statusBo = true;
+                        showOfflineStatus = true;
                         break;
                     }
                 }
-                if ((deviceList.size() == 0 || deviceBo) && (statusLevel.size() == 0 || statusBo)) {
+                boolean show = (showAll || showDevice) && (showAllStatus || showOfflineStatus);
+                if (show) {
+                    temp = new EquStatusViewItem();
                     temp.setNodeId(metroDevice.getDeviceId());
                     temp.setStatus(DeviceStatus.OFF_LINE);
                     temp.setNormalEvent("0 个(0%)");
                     temp.setWarnEvent("0 个(0%)");
                     temp.setAlarmEvent("0 个(100%)");
+                    temp.setOnline(false);
                 }
-
-            } else {
-                continue;
             }
-            if (temp.getNodeId()!=null) {
-                for (Long nodeid : deviceList) {
-                    if (nodeid.equals(temp.getNodeId())) {
-                        viewItemList.add(temp);
-                        break;
+            if (temp != null) {
+                if (showAll) {
+                    viewItemList.add(temp);
+                } else {
+                    //过滤设备
+                    for (Long nodeId : deviceList) {
+                        if (nodeId.equals(temp.getNodeId())) {
+                            viewItemList.add(temp);
+                            break;
+                        }
                     }
                 }
             }
@@ -233,10 +276,11 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
     /**
      * 获取设备状态信息
+     *
      * @param tmoItemStatus 节点状态
-     * @param statusLevel 状态等级
-     * @param isOnline 前置机是否在线
-     * @return
+     * @param statusLevel   状态列表
+     * @param isOnline      车站是否在线
+     * @return 设备转态视图
      */
     private EquStatusViewItem getEquStatusViewItem(TmoItemStatus tmoItemStatus, List<Short> statusLevel,
                                                    boolean isOnline) {
@@ -248,54 +292,40 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         int warningRate;
         int alarmRate;
 
-        //TODO 服务在线状态需要有地方维护
-        Number onLine = 1;//(Number) Application.getData(ApplicationKey.STATUS_COMMUNICATION);
-        boolean hasStatus = true;
-        boolean hasOff = true;
+        //前通讯前置机置机是否在线
+        boolean onLine = Status.UP.equals(registerHealthIndicator.health().getStatus());
+        boolean hasStatus = statusLevel.isEmpty();
+        boolean hasOff = false;
 
-        if (statusLevel.size() > 0) {
-            hasOff = false;
-            for (Short staus : statusLevel) {
-                if (staus.shortValue() == DeviceStatus.OFF_LINE) {
-                    hasOff = true;
-                    break;
-                }
+        //是否需要包含离线设备
+        for (Short status : statusLevel) {
+            if (DeviceStatus.OFF_LINE.equals(status)) {
+                hasOff = true;
+                break;
             }
         }
-
-        if (null != tmoItemStatus.getItemActivity() && tmoItemStatus.getItemActivity() && onLine != null
-                && onLine.intValue() == 0 && isOnline) {
-            if (null != tmoItemStatus.getItemStatus()) {
-
-                if (statusLevel.size() > 0) {
-                    hasStatus = false;
-                    for (Short staus : statusLevel) {
-                        if (tmoItemStatus.getItemStatus().equals(staus)) {
-                            hasStatus = true;
-                            break;
-                        }
+        Boolean itemActivity = tmoItemStatus.getItemActivity();
+        if (itemActivity != null && itemActivity && onLine && isOnline) {
+            if (tmoItemStatus.getItemStatus() != null) {
+                for (Short status : statusLevel) {
+                    if (tmoItemStatus.getItemStatus().equals(status)) {
+                        hasStatus = true;
+                        break;
                     }
                 }
-
                 temp.setStatus(tmoItemStatus.getItemStatus());
             } else {
-                hasStatus = false;
                 temp.setStatus(DeviceStatus.OFF_LINE);
-
             }
         } else {
-            hasStatus = false;
             temp.setStatus(DeviceStatus.OFF_LINE);
-
         }
 
         temp.setNodeId(tmoItemStatus.getNodeId());
         temp.setUpdateTime(tmoItemStatus.getUpdateTime());
-        if (temp.getStatus() != DeviceStatus.OFF_LINE.intValue()) {
+        temp.setOnline(false);
+        if (!temp.getStatus().equals(DeviceStatus.OFF_LINE)) {
             temp.setOnline(tmoItemStatus.getItemActivity());
-
-        } else {
-            temp.setOnline(false);
         }
         long total = 1;
         normalRate = (int) (normal * 100.0 / total + 0.5);
@@ -306,20 +336,21 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         temp.setWarnEvent(warning + " 个(" + warningRate + "%)");
         temp.setAlarmEvent(alarm + " 个(" + alarmRate + "%)");
 
-        if ((hasOff && DeviceStatus.OFF_LINE.equals(temp.getStatus())) || hasStatus) {
+        boolean show = (hasOff && DeviceStatus.OFF_LINE.equals(temp.getStatus())) || hasStatus;
+        if (show) {
             return temp;
         }
-        return new EquStatusViewItem();
+        return null;
     }
 
     @Override
     public List<StationStatustViewItem> getStationStatusView(StationStatusCondition condition) {
         List<Integer> stationIds = condition.getStationIds();
         //获取通信前置机状态
-        Number onLine = 1;//(Number) Application.getData(ApplicationKey.STATUS_COMMUNICATION);
+        boolean onLine = Status.UP.equals(registerHealthIndicator.health().getStatus());
 
         Result<MonitorConfigInfo> monitorConfigInfoResult = monitorConfigService.getMonitorConfig();
-        if (!monitorConfigInfoResult.isSuccess()){
+        if (!monitorConfigInfoResult.isSuccess()) {
             throw new ServiceException("获取监控配置信息异常");
         }
         MonitorConfigInfo monitorConfigInfo = monitorConfigInfoResult.getData();
@@ -345,11 +376,11 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             deviceMaps.put(tmoItemStatus.getNodeId(), tmoItemStatus);
         }
 
-        MetroNode afcNode = topologyService.getMetroAcc().getData();
+        AFCNodeLevel localNodeLevel = NodeIdUtils.nodeIdStrategy.getNodeLevel(networkConfig.getNodeNo());
         if (stationStatus.size() == 0) {
             return result;
         }
-        if (afcNode.level().equals(AFCNodeLevel.ACC)) {
+        if (localNodeLevel.equals(AFCNodeLevel.ACC)) {
             List<MetroLine> subNodes = topologyService.getAllMetroLine().getData();
             for (MetroLine metroLine : subNodes) {
                 List<MetroStation> subStationNodes = topologyService
@@ -359,23 +390,24 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                             stationIds);
                 }
             }
-        } else if (afcNode.level().equals(AFCNodeLevel.LC)) {
-            MetroLine line = (MetroLine) afcNode;
+        } else if (localNodeLevel.equals(AFCNodeLevel.LC)) {
+            MetroLine line = topologyService.getLineNode(networkConfig.getLineNo().shortValue()).getData();
             List<MetroStation> subNodes = topologyService.getMetroStationsByLineId(line.getLineID()).getData();
             for (MetroStation metroStation : subNodes) {
                 getStationStatusView(metroStation, stationMaps, deviceMaps, onLine, alarmNum, warningNum, result,
                         stationIds);
             }
-        } else if (afcNode.level().equals(AFCNodeLevel.SC)) {
-            MetroStation station = (MetroStation) afcNode;
+        } else if (localNodeLevel.equals(AFCNodeLevel.SC)) {
+            MetroStation station = topologyService.getStationNode(networkConfig.getStationNo()).getData();
             getStationStatusView(station, stationMaps, deviceMaps, onLine, alarmNum, warningNum, result, stationIds);
         }
         return result;
     }
 
     public void getStationStatusView(MetroStation station, Map<Integer, TmoItemStatus> stationMaps,
-                                     Map<Long, TmoItemStatus> deviceMaps, Number onLine, Integer alarmNum,
-                                     Integer warningNum, List<StationStatustViewItem> result, List<Integer> stationIDs) {
+                                     Map<Long, TmoItemStatus> deviceMaps, boolean onLine, Integer alarmNum,
+                                     Integer warningNum, List<StationStatustViewItem> result, List<Integer>
+                                             stationIDs) {
 
         Integer stationId = station.getStationId();
         boolean isNeed = true;
@@ -399,18 +431,17 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         viewItem.setLineId(lineId);
         viewItem.setStationId(stationId);
         viewItem.setNodeId(station.id());
-        //viewItem.setNodeType(NodeIdUtils.getNodeType(stationId.longValue()));
+        viewItem.setNodeType(AFCNodeLevel.SC.getStatusCode().shortValue());
         TmoItemStatus tmoItemStatus = stationMaps.get(station.getStationId());
-        if (tmoItemStatus!=null) {
+        if (tmoItemStatus != null) {
             viewItem.setMode(getCurrentmode(tmoItemStatus));
             viewItem.setUpdateTime(tmoItemStatus.getModeChangeTime());
-            if (onLine != null && onLine.intValue() == 0) {
+            if (onLine) {
                 viewItem.setOnline(tmoItemStatus.getItemActivity());
             } else {
                 viewItem.setOnline(false);
             }
-            if (null != tmoItemStatus.getItemActivity() && tmoItemStatus.getItemActivity() && onLine != null
-                    && onLine.intValue() == 0) {
+            if (null != tmoItemStatus.getItemActivity() && tmoItemStatus.getItemActivity() && onLine) {
                 viewItem.setStatus(DeviceStatus.NORMAL);
             } else {
                 viewItem.setStatus(DeviceStatus.OFF_LINE);
@@ -426,8 +457,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             equViewItem.setLineId(lineId);
             equViewItem.setStationId(stationId);
             equViewItem.setNodeId(metroDevice.getDeviceId());
-            if (deviceMaps.containsKey(metroDevice.id()) && onLine != null
-                    && onLine.intValue() == 0) {
+            if (deviceMaps.containsKey(metroDevice.id()) && onLine) {
                 TmoItemStatus deviceStatus = deviceMaps.get(metroDevice.id());
                 equViewItem.setOnline(deviceStatus.getItemActivity());
                 //启用设备才纳入报警，警告的设备数的计算

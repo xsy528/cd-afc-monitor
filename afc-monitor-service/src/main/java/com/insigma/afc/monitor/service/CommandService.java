@@ -18,10 +18,10 @@ public interface CommandService {
     /**
      * 修改运营模式
      * @param stationIds 车站节点id数组
-     * @param command 运营模式
+     * @param mode 运营模式
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendChangeModeCommand(List<Long> stationIds, int command);
+    Result<List<CommandResult>> sendChangeModeCommand(List<Long> stationIds, Integer mode);
 
     /**
      * 模式查询
@@ -50,7 +50,7 @@ public interface CommandService {
      * @param command 控制命令
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendNodeControlCommand(List<Long> deviceIds, short command);
+    Result<List<CommandResult>> sendNodeControlCommand(List<Long> deviceIds, Short command);
 
     /**
      * 查询钱箱票箱命令

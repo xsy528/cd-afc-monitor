@@ -69,9 +69,9 @@ public class ModeServiceImpl implements ModeService {
 	 *            开始时间
 	 * @param endTime
 	 *            结束时间
-	 * @param page
-	 * @param pageSize
-	 * @return
+	 * @param page  页
+	 * @param pageSize  页大小
+	 * @return  分页数据
 	 */
 	@Override
 	public Page<TmoModeUploadInfo> getModeUploadInfo(List<Integer> stationIds, Short modeCode,
@@ -111,7 +111,7 @@ public class ModeServiceImpl implements ModeService {
 	 * @param endTime 结束时间
 	 * @param page 页码
 	 * @param pageSize 页大小
-	 * @return
+	 * @return 分页数据
 	 */
 	@Override
 	public Page<TmoModeBroadcast> getModeBroadcastInfo(List<Integer> stationIds, Short modeCode, String operatorId,
@@ -151,8 +151,8 @@ public class ModeServiceImpl implements ModeService {
 
 	/**
 	 * 获取模式上传
-	 * @param nodeId
-	 * @return
+	 * @param nodeId 节点ID
+	 * @return 分页数据
 	 */
 	@Override
 	public List<TmoModeUploadInfo> getModeUpload(long nodeId){
@@ -178,7 +178,7 @@ public class ModeServiceImpl implements ModeService {
 
 	/**
 	 * 获取模式广播
-	 * @return
+	 * @return 分页数据
 	 */
 	@Override
 	public List<TmoModeBroadcast> getModeBroadcast(){
@@ -192,15 +192,15 @@ public class ModeServiceImpl implements ModeService {
 
 	/**
 	 * 获得模式日志
-	 * @param condition
-	 * @return
+	 * @param condition 模式日志查询条件实体类
+	 * @return 分页数据
 	 */
 	@Override
 	public Page<TmoCmdResult> getModeCmdSearch(ModeCmdCondition condition){
 
 		String operatorId = condition.getOperatorId();
 		Integer cmdResult = condition.getCmdResult();
-		Integer[] stationIds = condition.getStationIds();
+		List<Integer> stationIds = condition.getStationIds();
 		Date startTime = condition.getStartTime();
 		Date endTime = condition.getEndTime();
 		Short cmdType = condition.getCmdType();
@@ -242,7 +242,7 @@ public class ModeServiceImpl implements ModeService {
 	/**
 	 * 手动命令模式
 	 * @param senderId
-	 * @param stationId
+	 * @param stationId 节点ID
 	 * @param newModeId
 	 * @param operationId
 	 * @return

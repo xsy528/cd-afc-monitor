@@ -5,6 +5,7 @@ import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 设备事件查询条件实体类
@@ -17,15 +18,15 @@ public class EquEventCondition extends PageBean {
 
     @ApiModelProperty("节点ID")
     @JsonProperty("node_ids")
-    private Long[] nodeIds;
+    private List<Long> nodeIds;
 
     @ApiModelProperty("站点ID")
     @JsonProperty("station_ids")
-    private Short[] stationIds;
+    private List<Short> stationIds;
 
     @ApiModelProperty("路线ID")
     @JsonProperty("line_ids")
-    private Integer[] lineIds;
+    private List<Integer> lineIds;
 
 
     @ApiModelProperty("开始时间")
@@ -40,27 +41,27 @@ public class EquEventCondition extends PageBean {
     @JsonProperty("event_level")
     private Short eventLevel;
 
-    public Long[] getNodeIds() {
+    public List<Long> getNodeIds() {
         return nodeIds;
     }
 
-    public void setNodeIds(Long[] nodeIds) {
+    public void setNodeIds(List<Long> nodeIds) {
         this.nodeIds = nodeIds;
     }
 
-    public Short[] getStationIds() {
+    public List<Short> getStationIds() {
         return stationIds;
     }
 
-    public void setStationIds(Short[] stationIds) {
+    public void setStationIds(List<Short> stationIds) {
         this.stationIds = stationIds;
     }
 
-    public Integer[] getLineIds() {
+    public List<Integer> getLineIds() {
         return lineIds;
     }
 
-    public void setLineIds(Integer[] lineIds) {
+    public void setLineIds(List<Integer> lineIds) {
         this.lineIds = lineIds;
     }
 
@@ -86,5 +87,17 @@ public class EquEventCondition extends PageBean {
 
     public void setEventLevel(Short eventLevel) {
         this.eventLevel = eventLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "EquEventCondition{" +
+                "nodeIds=" + nodeIds +
+                ", stationIds=" + stationIds +
+                ", lineIds=" + lineIds +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", eventLevel=" + eventLevel +
+                '}';
     }
 }

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 模式日志查询条件
@@ -13,19 +13,20 @@ import java.util.Date;
  */
 public class ModeCmdCondition extends PageBean {
 
+    private static final long serialVersionUID = 1L;
     //站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
 
-    @ApiModelProperty("线路id数组")
-    @JsonProperty("line_ids")
-    private Short[] lineIds;
-
-    @ApiModelProperty("车站id数组")
-    @JsonProperty("station_ids")
-    private Integer[] stationIds;
-
-    @ApiModelProperty("节点id数组")
+    @ApiModelProperty("节点ID")
     @JsonProperty("node_ids")
-    private Long[] nodeIds;
+    private List<Long> nodeIds;
+
+    @ApiModelProperty("站点ID")
+    @JsonProperty("station_ids")
+    private List<Short> stationIds;
+
+    @ApiModelProperty("路线ID")
+    @JsonProperty("line_ids")
+    private List<Integer> lineIds;
     //默认为null
 
     @ApiModelProperty("操作员ID")
@@ -54,29 +55,28 @@ public class ModeCmdCondition extends PageBean {
     @JsonProperty("cmd_type")
     private Short cmdType;
 
-
-    public Short[] getLineIds() {
-        return lineIds;
-    }
-
-    public void setLineIds(Short[] lineIds) {
-        this.lineIds = lineIds;
-    }
-
-    public Integer[] getStationIds() {
-        return stationIds;
-    }
-
-    public void setStationIds(Integer[] stationIds) {
-        this.stationIds = stationIds;
-    }
-
-    public Long[] getNodeIds() {
+    public List<Long> getNodeIds() {
         return nodeIds;
     }
 
-    public void setNodeIds(Long[] nodeIds) {
+    public void setNodeIds(List<Long> nodeIds) {
         this.nodeIds = nodeIds;
+    }
+
+    public List<Short> getStationIds() {
+        return stationIds;
+    }
+
+    public void setStationIds(List<Short> stationIds) {
+        this.stationIds = stationIds;
+    }
+
+    public List<Integer> getLineIds() {
+        return lineIds;
+    }
+
+    public void setLineIds(List<Integer> lineIds) {
+        this.lineIds = lineIds;
     }
 
     public String getOperatorId() {
@@ -127,30 +127,18 @@ public class ModeCmdCondition extends PageBean {
         this.cmdType = cmdType;
     }
 
-
-    @Override
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
     @Override
     public String toString() {
         return "ModeCmdCondition{" +
-                "lineIds=" + Arrays.toString(lineIds) +
-                ", stationIds=" + Arrays.toString(stationIds) +
-                ", nodeIds=" + Arrays.toString(nodeIds) +
+                "nodeIds=" + nodeIds +
+                ", stationIds=" + stationIds +
+                ", lineIds=" + lineIds +
                 ", operatorId='" + operatorId + '\'' +
                 ", cmdResult=" + cmdResult +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", successResult=" + successResult +
                 ", cmdType=" + cmdType +
-                ", page=" + pageNumber +
-                ", pageSize=" + pageSize +
                 '}';
     }
 }

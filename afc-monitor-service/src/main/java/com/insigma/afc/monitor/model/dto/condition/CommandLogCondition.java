@@ -5,8 +5,8 @@ import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 命令日志查询条件实体类
@@ -18,17 +18,17 @@ public class CommandLogCondition extends PageBean {
     private static final long serialVersionUID = 1L;
     //路线、站点，节点并在开始时间和结束时间内，如果有操作员编号，要包含操作员编号，如果有日志类型要包含日志类型,如果有命令结果要包含命令结果。
 
-    @ApiModelProperty("线路id数组")
-    @JsonProperty("line_ids")
-    protected Short[] lineIds;
-
-    @ApiModelProperty("车站id数组")
-    @JsonProperty("station_ids")
-    private Integer[] stationIds;
-
-    @ApiModelProperty("节点id数组")
+    @ApiModelProperty("节点ID")
     @JsonProperty("node_ids")
-    private Long[] nodeIds;
+    private List<Long> nodeIds;
+
+    @ApiModelProperty("站点ID")
+    @JsonProperty("station_ids")
+    private List<Short> stationIds;
+
+    @ApiModelProperty("路线ID")
+    @JsonProperty("line_ids")
+    private List<Integer> lineIds;
     //默认为null
 
     @ApiModelProperty("操作员ID")
@@ -51,28 +51,28 @@ public class CommandLogCondition extends PageBean {
     @JsonProperty("end_time")
     private Date endTime;
 
-    public Short[] getLineIds() {
-        return lineIds;
-    }
-
-    public void setLineIds(Short[] lineIds) {
-        this.lineIds = lineIds;
-    }
-
-    public Integer[] getStationIds() {
-        return stationIds;
-    }
-
-    public void setStationIds(Integer[] stationIds) {
-        this.stationIds = stationIds;
-    }
-
-    public Long[] getNodeIds() {
+    public List<Long> getNodeIds() {
         return nodeIds;
     }
 
-    public void setNodeIds(Long[] nodeIds) {
+    public void setNodeIds(List<Long> nodeIds) {
         this.nodeIds = nodeIds;
+    }
+
+    public List<Short> getStationIds() {
+        return stationIds;
+    }
+
+    public void setStationIds(List<Short> stationIds) {
+        this.stationIds = stationIds;
+    }
+
+    public List<Integer> getLineIds() {
+        return lineIds;
+    }
+
+    public void setLineIds(List<Integer> lineIds) {
+        this.lineIds = lineIds;
     }
 
     public String getOperatorId() {
@@ -118,9 +118,9 @@ public class CommandLogCondition extends PageBean {
     @Override
     public String toString() {
         return "CommandLogCondition{" +
-                "lineIds=" + Arrays.toString(lineIds) +
-                ", stationIds=" + Arrays.toString(stationIds) +
-                ", nodeIds=" + Arrays.toString(nodeIds) +
+                "nodeIds=" + nodeIds +
+                ", stationIds=" + stationIds +
+                ", lineIds=" + lineIds +
                 ", operatorId='" + operatorId + '\'' +
                 ", logType='" + logType + '\'' +
                 ", commandResult='" + commandResult + '\'' +

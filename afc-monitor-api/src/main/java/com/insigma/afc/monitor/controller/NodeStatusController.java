@@ -46,21 +46,6 @@ public class NodeStatusController {
     private CommandLogService cmdLogService;
     private DeviceEventService deviceEventService;
 
-    @Autowired
-    public NodeStatusController(IMetroNodeStatusService metroNodeStatusService, ModeService modeService,
-                                MonitorService monitorService, TopologyService topologyService ,
-                                CommandLogService cmdLogService,DeviceEventService deviceEventService) {
-                                MonitorService monitorService, TopologyService topologyService,
-                                NodeTreeService nodeTreeService) {
-        this.metroNodeStatusService = metroNodeStatusService;
-        this.modeService = modeService;
-        this.monitorService = monitorService;
-        this.topologyService = topologyService;
-        this.cmdLogService = cmdLogService;
-        this.deviceEventService = deviceEventService;
-        this.nodeTreeService = nodeTreeService;
-    }
-
     @ApiOperation("获取车站状态列表")
     @PostMapping("stationStatus")
     public Result<List<StationStatus>> getStationStatus(@Valid @RequestBody StationStatusCondition condition) {
@@ -134,10 +119,13 @@ public class NodeStatusController {
 
         return Result.success(tmoModeUploadInfos.map(tmoModeUploadInfo -> {
             ModeUploadInfo modeUploadInfo = new ModeUploadInfo();
-            modeUploadInfo.setLineName(topologyService.getNodeText(tmoModeUploadInfo.getLineId().longValue()).getData());
-            modeUploadInfo.setStationName(topologyService.getNodeText(tmoModeUploadInfo.getStationId().longValue()).getData());
+            modeUploadInfo.setLineName(topologyService.getNodeText(tmoModeUploadInfo.getLineId().longValue()).getData
+                    ());
+            modeUploadInfo.setStationName(topologyService.getNodeText(tmoModeUploadInfo.getStationId().longValue())
+                    .getData());
             modeUploadInfo.setUploadTime(DateTimeUtil.formatDate(tmoModeUploadInfo.getModeUploadTime()));
-            modeUploadInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeUploadInfo.getModeCode())));
+            modeUploadInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeUploadInfo
+                    .getModeCode())));
             return modeUploadInfo;
         }));
     }
@@ -153,10 +141,12 @@ public class NodeStatusController {
         return Result.success(tmoModeBroadcasts.map(tmoModeBroadcast -> {
             ModeBroadcastInfo modeBroadcastInfo = new ModeBroadcastInfo();
             modeBroadcastInfo.setName(topologyService.getNodeText(tmoModeBroadcast.getNodeId()).getData());
-            modeBroadcastInfo.setSourceName(topologyService.getNodeText(tmoModeBroadcast.getStationId().longValue()).getData());
+            modeBroadcastInfo.setSourceName(topologyService.getNodeText(tmoModeBroadcast.getStationId().longValue())
+                    .getData());
             modeBroadcastInfo.setTargetName(topologyService.getNodeText(tmoModeBroadcast.getTargetId()).getData());
             modeBroadcastInfo.setModeBroadcastTime(DateTimeUtil.formatDate(tmoModeBroadcast.getModeBroadcastTime()));
-            modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast.getModeCode())));
+            modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast
+                    .getModeCode())));
             modeBroadcastInfo.setModeBroadcastType(tmoModeBroadcast.getBroadcastType() == 0 ? "手动" : "自动");
             modeBroadcastInfo.setModeEffectTime(DateTimeUtil.formatDate(tmoModeBroadcast.getModeEffectTime()));
             if (tmoModeBroadcast.getBroadcastStatus() == 0) {
@@ -183,7 +173,8 @@ public class NodeStatusController {
             //序号，发送时间，操作员姓名/编号,车站/编号，模式名称,发送结果
             modeCmdInfo.setUploadTime(DateTimeUtil.formatDate(tmoModeCmdInfo.getOccurTime()));
             modeCmdInfo.setOperatorId(tmoModeCmdInfo.getOperatorId());
-            modeCmdInfo.setStationName(topologyService.getNodeText(tmoModeCmdInfo.getStationId().longValue()).getData());
+            modeCmdInfo.setStationName(topologyService.getNodeText(tmoModeCmdInfo.getStationId().longValue()).getData
+                    ());
             modeCmdInfo.setStationId(tmoModeCmdInfo.getStationId());
             modeCmdInfo.setCmdName(tmoModeCmdInfo.getCmdName());
             modeCmdInfo.setCmdResult(tmoModeCmdInfo.getCmdResult().toString());
@@ -203,7 +194,7 @@ public class NodeStatusController {
             //节点名称/编码，命令名称,操作员名称/编号，发送时间，命令结果/应答码
             CommandLogInfo commandLogInfo = new CommandLogInfo();
 
-            commandLogInfo.setNodeName(topologyService.getNodeText(tmoCommandLogInfo.getNodeId()+0L).getData());
+            commandLogInfo.setNodeName(topologyService.getNodeText(tmoCommandLogInfo.getNodeId()).getData());
             commandLogInfo.setNodeId(tmoCommandLogInfo.getNodeId());
             commandLogInfo.setCmdName(tmoCommandLogInfo.getCmdName());
             commandLogInfo.setOperatotId(tmoCommandLogInfo.getOperatorId());
@@ -213,6 +204,7 @@ public class NodeStatusController {
             return commandLogInfo;
         }));
     }
+
     @ApiOperation("各类查询-设备事件")
     @PostMapping("DeviceEventSearch")
     public Result<Page<DeviceEvent>> getDeviceEventSearch(@RequestBody DeviceEventCondition condition) {//查询条件model
@@ -224,7 +216,7 @@ public class NodeStatusController {
             //节点名称/节点编码,事件名称/编号，事件描述,发生时间
             DeviceEvent deviceEventInfo = new DeviceEvent();
 
-            deviceEventInfo.setNodeName(topologyService.getNodeText(tmoDeviceEventInfo.getNodeId()+0L).getData());
+            deviceEventInfo.setNodeName(topologyService.getNodeText(tmoDeviceEventInfo.getNodeId()).getData());
             deviceEventInfo.setNodeId(tmoDeviceEventInfo.getNodeId().toString());
             deviceEventInfo.setEventName(tmoDeviceEventInfo.getStatusName());
             deviceEventInfo.setEventDesc(tmoDeviceEventInfo.getStatusDesc());
@@ -234,7 +226,6 @@ public class NodeStatusController {
         }));
     }
 
-
     @ApiOperation("模式广播信息")
     @PostMapping("modeBroadcast")
     public Result<List<ModeBroadcastInfo>> getModeBroadcast() {
@@ -243,10 +234,12 @@ public class NodeStatusController {
         for (TmoModeBroadcast tmoModeBroadcast : tmoModeBroadcasts) {
             ModeBroadcastInfo modeBroadcastInfo = new ModeBroadcastInfo();
             modeBroadcastInfo.setName(topologyService.getNodeText(tmoModeBroadcast.getNodeId()).getData());
-            modeBroadcastInfo.setSourceName(topologyService.getNodeText(tmoModeBroadcast.getStationId().longValue()).getData());
+            modeBroadcastInfo.setSourceName(topologyService.getNodeText(tmoModeBroadcast.getStationId().longValue())
+                    .getData());
             modeBroadcastInfo.setTargetName(topologyService.getNodeText(tmoModeBroadcast.getTargetId()).getData());
             modeBroadcastInfo.setModeBroadcastTime(DateTimeUtil.formatDate(tmoModeBroadcast.getModeBroadcastTime()));
-            modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast.getModeCode())));
+            modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast
+                    .getModeCode())));
             modeBroadcastInfos.add(modeBroadcastInfo);
         }
         return Result.success(modeBroadcastInfos);
@@ -284,8 +277,42 @@ public class NodeStatusController {
 
     @ApiOperation("获取监控树")
     @PostMapping("tree")
-    public Result<NodeItem> getMonitorTree(){
+    public Result<NodeItem> getMonitorTree() {
         return nodeTreeService.getMonitorTree();
     }
 
+    @Autowired
+    public void setMetroNodeStatusService(IMetroNodeStatusService metroNodeStatusService) {
+        this.metroNodeStatusService = metroNodeStatusService;
+    }
+
+    @Autowired
+    public void setModeService(ModeService modeService) {
+        this.modeService = modeService;
+    }
+
+    @Autowired
+    public void setMonitorService(MonitorService monitorService) {
+        this.monitorService = monitorService;
+    }
+
+    @Autowired
+    public void setTopologyService(TopologyService topologyService) {
+        this.topologyService = topologyService;
+    }
+
+    @Autowired
+    public void setNodeTreeService(NodeTreeService nodeTreeService) {
+        this.nodeTreeService = nodeTreeService;
+    }
+
+    @Autowired
+    public void setCmdLogService(CommandLogService cmdLogService) {
+        this.cmdLogService = cmdLogService;
+    }
+
+    @Autowired
+    public void setDeviceEventService(DeviceEventService deviceEventService) {
+        this.deviceEventService = deviceEventService;
+    }
 }

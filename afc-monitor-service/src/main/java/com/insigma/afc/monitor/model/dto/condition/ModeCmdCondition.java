@@ -40,7 +40,7 @@ public class ModeCmdCondition extends PageBean {
     private Date startTime;
 
     @ApiModelProperty("结束时间")
-    @JsonProperty("endTime")
+    @JsonProperty("end_time")
     private Date endTime;
 
     @ApiModelProperty("结果是否成功")

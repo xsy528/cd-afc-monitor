@@ -22,11 +22,11 @@ public class EquEventCondition extends PageBean {
 
     @ApiModelProperty("站点ID")
     @JsonProperty("station_ids")
-    private List<Short> stationIds;
+    private List<Integer> stationIds;
 
     @ApiModelProperty("路线ID")
     @JsonProperty("line_ids")
-    private List<Integer> lineIds;
+    private List<Short> lineIds;
 
 
     @ApiModelProperty("开始时间")
@@ -49,19 +49,19 @@ public class EquEventCondition extends PageBean {
         this.nodeIds = nodeIds;
     }
 
-    public List<Short> getStationIds() {
+    public List<Integer> getStationIds() {
         return stationIds;
     }
 
-    public void setStationIds(List<Short> stationIds) {
+    public void setStationIds(List<Integer> stationIds) {
         this.stationIds = stationIds;
     }
 
-    public List<Integer> getLineIds() {
+    public List<Short> getLineIds() {
         return lineIds;
     }
 
-    public void setLineIds(List<Integer> lineIds) {
+    public void setLineIds(List<Short> lineIds) {
         this.lineIds = lineIds;
     }
 

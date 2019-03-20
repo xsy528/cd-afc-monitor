@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.model.dto.condition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.constant.OrderDirection;
+import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +16,9 @@ import java.util.List;
  * 2019-01-30:20:43
  */
 @ApiModel(description = "设备事件查询条件")
-public class DeviceEventCondition {
+public class DeviceEventCondition extends PageBean {
+
+    //根据总线路、分支线路、站点并在开始时间和结束时间内，并且事件等级（非用户限制）in(1,2,3)内
 
     @ApiModelProperty("设备节点数组")
     @JsonProperty("node_ids")

@@ -90,7 +90,7 @@ public class TmoCmdResult implements Serializable {
 		return this.lineId;
 	}
 
-	public int getStationId() {
+	public Integer getStationId() {
 		return this.stationId;
 	}
 

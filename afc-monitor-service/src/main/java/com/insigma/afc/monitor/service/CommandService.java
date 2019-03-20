@@ -2,6 +2,8 @@ package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.CommandResult;
+import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -56,5 +58,6 @@ public interface CommandService {
      * @return 执行结果
      */
     Result<List<CommandResult>> sendQueryBoxCommand(Long deviceId);
+
 
 }

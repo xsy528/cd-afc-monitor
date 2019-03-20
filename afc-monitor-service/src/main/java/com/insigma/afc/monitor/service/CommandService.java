@@ -59,5 +59,4 @@ public interface CommandService {
      */
     Result<List<CommandResult>> sendQueryBoxCommand(Long deviceId);
 
-
 }

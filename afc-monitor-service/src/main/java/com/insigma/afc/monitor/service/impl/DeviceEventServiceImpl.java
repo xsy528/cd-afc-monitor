@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.dao.TmoEquEventDao;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
+import com.insigma.afc.monitor.model.dto.condition.EquEventCondition;
 import com.insigma.afc.monitor.model.entity.TmoEquStatus;
 import com.insigma.afc.monitor.service.DeviceEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class DeviceEventServiceImpl implements DeviceEventService {
     private TmoEquEventDao tmoEquEventDao;
 
     @Override
-    public Page<TmoEquStatus> getDeviceEventSearch(DeviceEventCondition condition) {
+    public Page<TmoEquStatus> getDeviceEventSearch(EquEventCondition condition) {
         //根据总线路、分支线路、站点并在开始时间和结束时间内，并且事件等级（非用户限制）in(1,2,3)内
         //节点id
         Long[] nodeIds = condition.getNodeIds();

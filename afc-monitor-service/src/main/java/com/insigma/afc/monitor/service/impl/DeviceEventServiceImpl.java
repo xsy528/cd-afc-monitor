@@ -33,7 +33,7 @@ public class DeviceEventServiceImpl implements DeviceEventService {
     public Page<TmoEquStatus> getDeviceEventSearch(EquEventCondition condition) {
         //根据总线路、分支线路、站点并在开始时间和结束时间内，并且事件等级（非用户限制）in(1,2,3)内
         //节点id
-        Long[] nodeIds = condition.getNodeIds();
+        List<Long> nodeIds = condition.getNodeIds();
         //开始时间
         Date startTime = condition.getStartTime();
         //结束时间

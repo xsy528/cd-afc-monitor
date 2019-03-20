@@ -28,7 +28,7 @@ public class CommandLogServiceImpl implements CommandLogService {
 
 
         //节点ID
-        Long[] nodeIds = condition.getNodeIds();
+        List<Long> nodeIds = condition.getNodeIds();
         //开始时间
         Date startTime = condition.getStartTime();
         //结束时间

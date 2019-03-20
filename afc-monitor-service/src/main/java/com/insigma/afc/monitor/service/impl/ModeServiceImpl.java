@@ -6,6 +6,7 @@
 package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
+import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.dao.*;
 import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;

@@ -209,7 +209,7 @@ public class NodeStatusController {
     }
     @ApiOperation("各类查询-设备事件")
     @PostMapping("DeviceEventSearch")
-    public Result<Page<DeviceEvent>> getDeviceEventSearch(@RequestBody DeviceEventCondition condition) {//查询条件model
+    public Result<Page<DeviceEvent>> getDeviceEventSearch(@RequestBody EquEventCondition condition) {//查询条件model
         //返回的值的集合,数据库表实体类
         Page<TmoEquStatus> tmoDeviceEventInfos = deviceEventService.getDeviceEventSearch(condition);
         //显示结果：

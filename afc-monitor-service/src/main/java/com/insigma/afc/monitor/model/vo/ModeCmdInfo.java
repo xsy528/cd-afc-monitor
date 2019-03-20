@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- *Ticket: 模式上传信息
+ *Ticket: 模式日志信息
  *
  * @author xingshaoya
  * 2019-03-13:11:57
@@ -16,8 +16,8 @@ import java.io.Serializable;
 @ApiModel("模式日志信息")
 public class ModeCmdInfo implements Serializable {
     private static final long serialVersionUID = 1L;
-
     //显示结果： "发送时间", "操作员姓名/编号", "车站/编号", "模式名称", "发送结果/编号"
+
     @ApiModelProperty("更新时间")
     @JsonProperty("update_time")
     private String uploadTime;

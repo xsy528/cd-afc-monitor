@@ -7,16 +7,20 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
+/**
+ * 命令日志查询条件实体类
+ * @author  xingshaoya
+ */
 @ApiModel(description = "命令日志查询条件")
 public class CommandLogCondition extends PageBean {
 
     private static final long serialVersionUID = 1L;
     //路线、站点，节点并在开始时间和结束时间内，如果有操作员编号，要包含操作员编号，如果有日志类型要包含日志类型,如果有命令结果要包含命令结果。
+
     @ApiModelProperty("线路id数组")
     @JsonProperty("line_ids")
-    private Short[] lineIds;
+    protected Short[] lineIds;
 
     @ApiModelProperty("车站id数组")
     @JsonProperty("station_ids")
@@ -28,7 +32,7 @@ public class CommandLogCondition extends PageBean {
     //默认为null
 
     @ApiModelProperty("操作员ID")
-    @JsonProperty("opertor_id")
+    @JsonProperty("operator_id")
     private String operatorId;
 
     @ApiModelProperty("日志类型")

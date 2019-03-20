@@ -26,10 +26,7 @@ public class CommandLogServiceImpl implements CommandLogService {
     public Page<TmoCmdResult> getCommandLogSearch(CommandLogCondition condition) {
         //路线、站点，节点并在开始时间和结束时间内，如果有操作员编号，要包含操作员编号，如果有日志类型要包含日志类型,如果有命令结果要包含命令结果。
 
-        //线路ID
-        Short[] lineIds = condition.getLineIds();
-        //站点ID
-        Integer[] stationIds = condition.getStationIds();
+
         //节点ID
         Long[] nodeIds = condition.getNodeIds();
         //开始时间
@@ -62,19 +59,19 @@ public class CommandLogServiceImpl implements CommandLogService {
                 //获取结束时间之前
             }
             if (operatorId!=null){
-                predicates.add(root.get("operatorId").in(operatorId));
+                predicates.add(builder.equal(root.get("operatorId"),operatorId));
                 //操作员ID
             }
             if (logType!=null){
-                predicates.add(root.get("logType").in(logType));
+                predicates.add(builder.equal(root.get("logType"),logType));
                 //日志类型
             }
             if (commandResult!=null){
-                predicates.add(root.get("commandResult").in(commandResult));
+                predicates.add(builder.equal(root.get("commandResult"),commandResult));
                 //命令结果
             }
             query.orderBy(builder.desc(root.get("occurTime")));
-            //以modeUploadtime降序
+            //以occurTime降序
             return builder.and(predicates.toArray(new Predicate[0]));
         }, PageRequest.of(page,pageSize));
     }

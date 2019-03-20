@@ -6,13 +6,15 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * 各类查询-设备事件
+ * Tiket:各类查询-设备事件
+ * @author  xingshaoya
  */
 @ApiModel("设备事件")
 public class DeviceEvent implements Serializable{
 
         private static final long serialVersionUID = 1L;
-    //节点名称/节点编码,事件名称/编号，事件描述,发生时间
+        //节点名称/节点编码,事件名称/编号，事件描述,发生时间
+
         @ApiModelProperty("节点名称")
         @JsonProperty("node_name")
         private String nodeName;

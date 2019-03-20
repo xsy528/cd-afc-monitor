@@ -6,11 +6,16 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
+/**
+ * 命令日志信息显示实体类
+ * @author  xingshaoya
+ */
 @ApiModel(description = "命令日志信息")
 public class CommandLogInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //节点名称/编码，命令名称,操作员名称/编号，发送时间，命令结果/应答码
+
     @ApiModelProperty("节点名称")
     @JsonProperty("node_name")
     private String nodeName;
@@ -25,7 +30,7 @@ public class CommandLogInfo implements Serializable {
 
     @ApiModelProperty("操作员编号")
     @JsonProperty("operator_id")
-    private String operatotId;
+    private String operatorId;
 
     @ApiModelProperty("更新时间")
     @JsonProperty("update_time")
@@ -59,12 +64,12 @@ public class CommandLogInfo implements Serializable {
         this.cmdName = cmdName;
     }
 
-    public String getOperatotId() {
-        return operatotId;
+    public String getOperatorId() {
+        return operatorId;
     }
 
-    public void setOperatotId(String operatotId) {
-        this.operatotId = operatotId;
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
     }
 
     public String getUploadTime() {
@@ -89,7 +94,7 @@ public class CommandLogInfo implements Serializable {
                 "nodeName='" + nodeName + '\'' +
                 ", nodeId='" + nodeId + '\'' +
                 ", cmdName='" + cmdName + '\'' +
-                ", operatotId='" + operatotId + '\'' +
+                ", operatotId='" + operatorId + '\'' +
                 ", uploadTime='" + uploadTime + '\'' +
                 ", cmdResult='" + cmdResult + '\'' +
                 '}';

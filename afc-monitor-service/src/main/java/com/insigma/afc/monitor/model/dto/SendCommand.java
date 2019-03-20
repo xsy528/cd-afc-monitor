@@ -19,7 +19,7 @@ public class SendCommand {
     @JsonProperty("node_ids")
     private List<Long> nodeIds;
 
-    @ApiModelProperty("命令编号")
+    @ApiModelProperty("命令参数")
     private Integer command;
 
     public List<Long> getNodeIds() {

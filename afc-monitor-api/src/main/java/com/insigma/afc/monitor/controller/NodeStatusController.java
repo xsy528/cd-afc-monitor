@@ -162,8 +162,8 @@ public class NodeStatusController {
     }
 
     @ApiOperation("各类查询-模式日志")
-    @PostMapping("modeCmdSearch")    //查询条件：站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
-    public Result<Page<ModeCmdInfo>> getmodeCmdSearch(@RequestBody ModeCmdCondition condition) {//查询条件model
+    @PostMapping("modeCmdSearch")
+    public Result<Page<ModeCmdInfo>> getmodeCmdSearch(@RequestBody ModeCmdCondition condition) {
         //返回的值的集合,数据库表实体类
         Page<TmoCmdResult> tmoModeCmdInfos = modeService.getModeCmdSearch(condition);
         //显示结果： "发送时间", "操作员姓名/编号", "车站/编号", "模式名称", "发送结果/编号"
@@ -197,7 +197,7 @@ public class NodeStatusController {
             commandLogInfo.setNodeName(topologyService.getNodeText(tmoCommandLogInfo.getNodeId()).getData());
             commandLogInfo.setNodeId(tmoCommandLogInfo.getNodeId());
             commandLogInfo.setCmdName(tmoCommandLogInfo.getCmdName());
-            commandLogInfo.setOperatotId(tmoCommandLogInfo.getOperatorId());
+            commandLogInfo.setOperatorId(tmoCommandLogInfo.getOperatorId());
             commandLogInfo.setUploadTime(DateTimeUtil.formatDate(tmoCommandLogInfo.getOccurTime()));
             commandLogInfo.setCmdResult(tmoCommandLogInfo.getCmdResult().toString());
 

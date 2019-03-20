@@ -6,13 +6,15 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 模式日志查询条件
+ * @author  xingshaoya
  */
 public class ModeCmdCondition extends PageBean {
+
     //站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
+
     @ApiModelProperty("线路id数组")
     @JsonProperty("line_ids")
     private Short[] lineIds;

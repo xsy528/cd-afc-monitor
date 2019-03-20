@@ -215,18 +215,16 @@ public class ModeServiceImpl implements ModeService {
 			}
 			if (startTime!=null){
 				predicates.add(builder.greaterThanOrEqualTo(root.get("occurTime"),startTime));
-				//获取开始时间之后
 			}
 			if (endTime!=null){
 				predicates.add(builder.lessThanOrEqualTo(root.get("occurTime"),endTime));
-				//获取结束时间之前
 			}
 			if(cmdType!=null){
 				predicates.add(builder.equal(root.get("cmdType"),cmdType));
 				//比较指令类型
 			}
 			query.orderBy(builder.desc(root.get("occurTime")));
-			//以modeUploadtime降序
+			//以occurTime降序
 			return builder.and(predicates.toArray(new Predicate[0]));
 		},PageRequest.of(page,pageSize));
 	}

@@ -97,11 +97,11 @@ public interface ModeService {
 											  Date startTime, Date endTime, int page, int pageSize);
 
 	/**
-	 *获取模式日志信息
+	 * 获取模式日志信息
 	 * 注意：使用此接口时，如果开始时间与结束时间相同，请将结束时间加一秒
      * 因为数据库中时间精确到了毫秒
-	 * @param condition
-	 * @return
+	 * @param condition 模式日志查询条件实体类
+	 * @return 分页数据
 	 */
     Page<TmoCmdResult> getModeCmdSearch(ModeCmdCondition condition);
 

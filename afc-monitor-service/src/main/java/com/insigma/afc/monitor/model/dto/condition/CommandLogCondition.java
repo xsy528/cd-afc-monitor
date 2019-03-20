@@ -44,7 +44,7 @@ public class CommandLogCondition extends PageBean {
     private Date startTime;
 
     @ApiModelProperty("结束时间")
-    @JsonProperty("endTime")
+    @JsonProperty("end_time")
     private Date endTime;
 
     public Short[] getLineIds() {

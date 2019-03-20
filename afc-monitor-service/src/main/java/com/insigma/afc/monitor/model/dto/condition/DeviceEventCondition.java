@@ -45,7 +45,7 @@ public class DeviceEventCondition extends PageBean {
     private Date startTime;
 
     @ApiModelProperty("结束时间")
-    @JsonProperty("endTime")
+    @JsonProperty("end_time")
     private Date endTime;
 
     public List<Short> getDevTypeList() {

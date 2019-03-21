@@ -12,7 +12,7 @@ api:
 
 #车站基本配置
 app:
-  applicationName: 温州ACC监控
+  applicationName: 徐州ACC监控
   lineNo: 0
   stationNo: 0
   nodeNo: 0x00000000
@@ -43,12 +43,18 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  pid:
+    fail-on-write-error: true
 
 #监控配置
 management:
   endpoint:
     health:
       show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
 
 #与MessageServer通讯RMI配置
 communicationRegistRmiPort: 8527

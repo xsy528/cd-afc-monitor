@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,7 @@ import java.util.*;
  */
 @Service
 @Configuration
+@EnableConfigurationProperties(NetworkConfig.class)
 public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
     private static final Logger logger = LoggerFactory.getLogger(MetroNodeStatusServiceImpl.class);

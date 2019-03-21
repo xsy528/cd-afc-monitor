@@ -14,11 +14,8 @@ import com.insigma.commons.communication.ftp.FtpInfo;
 import com.insigma.commons.spring.datasource.DESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,28 +23,22 @@ import java.util.List;
 /**
  * Ticket: 通讯前置机连接检测
  *
- * @author: xuzhemin
+ * @author xuzhemin
  * 2019/3/12 20:51
  */
-@Service
 public class RegisterHealthIndicator extends AbstractHealthIndicator {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisterHealthIndicator.class);
 
     private boolean isOnline;
     private IBaseCommandService cmdService;
-    private ApplicationContext applicationContext;
 
-    @Autowired
-    public RegisterHealthIndicator(ApplicationContext applicationContext){
-        this.applicationContext = applicationContext;
+    public RegisterHealthIndicator(IBaseCommandService cmdService){
+        this.cmdService = cmdService;
     }
 
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
-        if (cmdService==null){
-            cmdService = applicationContext.getBean(IBaseCommandService.class);
-        }
         if (isOnline) {
             try {
                 cmdService.isAlive();

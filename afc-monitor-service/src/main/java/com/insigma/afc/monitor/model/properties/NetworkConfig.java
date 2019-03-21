@@ -5,10 +5,13 @@
  */
 package com.insigma.afc.monitor.model.properties;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 /**
  * ticket: app配置
  * @author xuzhemin
  */
+@ConfigurationProperties(prefix = "app")
 public class NetworkConfig{
 
 	private Integer lineNo = 0;

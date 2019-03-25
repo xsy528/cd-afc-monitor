@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author xuzhemin
  */
 @ConfigurationProperties(prefix = "app")
-public class NetworkConfig{
+public class NetworkProperties {
 
 	private Integer lineNo = 0;
 

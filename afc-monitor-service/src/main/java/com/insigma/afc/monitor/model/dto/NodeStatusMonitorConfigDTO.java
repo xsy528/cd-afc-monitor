@@ -4,8 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-@ApiModel("监控参数")
-public class MonitorConfigInfo implements Serializable {
+@ApiModel("节点监控参数")
+public class NodeStatusMonitorConfigDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,10 +18,10 @@ public class MonitorConfigInfo implements Serializable {
 	@ApiModelProperty("刷新时间")
 	private Integer interval = 30;
 
-	public MonitorConfigInfo() {
+	public NodeStatusMonitorConfigDTO() {
 	}
 
-	public MonitorConfigInfo(Integer warning, Integer alarm, Integer interval) {
+	public NodeStatusMonitorConfigDTO(Integer warning, Integer alarm, Integer interval) {
 		this.warning = warning;
 		this.alarm = alarm;
 		this.interval = interval;

@@ -41,6 +41,7 @@ public class MetroStationId implements java.io.Serializable {
 		this.stationId = stationId;
 	}
 
+	@Override
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -50,12 +51,13 @@ public class MetroStationId implements java.io.Serializable {
 			return false;
 		MetroStationId castOther = (MetroStationId) other;
 
-		return ((this.getLineId() == castOther.getLineId()) || (this.getLineId() != null
+		return ((this.getLineId().equals(castOther.getLineId())) || (this.getLineId() != null
 				&& castOther.getLineId() != null && this.getLineId().equals(castOther.getLineId())))
-				&& ((this.getStationId() == castOther.getStationId()) || (this.getStationId() != null
+				&& ((this.getStationId().equals(castOther.getStationId())) || (this.getStationId() != null
 						&& castOther.getStationId() != null && this.getStationId().equals(castOther.getStationId())));
 	}
 
+	@Override
 	public int hashCode() {
 		int result = 17;
 

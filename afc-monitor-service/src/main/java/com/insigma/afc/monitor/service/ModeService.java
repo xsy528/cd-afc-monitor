@@ -1,6 +1,5 @@
 package com.insigma.afc.monitor.service;
 
-import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
 import com.insigma.afc.monitor.model.entity.*;

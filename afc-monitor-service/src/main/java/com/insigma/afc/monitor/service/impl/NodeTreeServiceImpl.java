@@ -4,7 +4,7 @@ import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.healthIndicator.RegisterHealthIndicator;
 import com.insigma.afc.monitor.model.dto.*;
 import com.insigma.afc.monitor.model.dto.condition.DeviceStatusCondition;
-import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
+import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
 import com.insigma.afc.monitor.model.dto.condition.StationStatusCondition;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.MonitorConfigService;
@@ -168,7 +168,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
     }
 
     private int getStationStatus(StationStatustViewItem statusItem) {
-        MonitorConfigInfo monitorConfigInfo = monitorConfigService.getMonitorConfig().getData();
+        NodeStatusMonitorConfigDTO monitorConfigInfo = monitorConfigService.getMonitorConfig().getData();
         long currentMode = statusItem.getMode();
         // 报警阀值
         Integer alarmNum = monitorConfigInfo.getAlarm();

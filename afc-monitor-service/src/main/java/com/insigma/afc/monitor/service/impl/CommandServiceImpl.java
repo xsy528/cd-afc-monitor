@@ -3,7 +3,7 @@ package com.insigma.afc.monitor.service.impl;
 import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
-import com.insigma.afc.monitor.model.dto.CommandResult;
+import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.service.CommandService;
@@ -54,7 +54,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendChangeModeCommand(List<Long> nodeIds, Integer mode) {
+    public Result<List<CommandResultDTO>> sendChangeModeCommand(List<Long> nodeIds, Integer mode) {
 
         List<MetroStation> targetIds = getStationNodeFromIds(nodeIds);
         if (targetIds == null) {
@@ -105,7 +105,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendModeQueryCommand(List<Long> nodeIds) {
+    public Result<List<CommandResultDTO>> sendModeQueryCommand(List<Long> nodeIds) {
         List<MetroStation> targetIds = getStationNodeFromIds(nodeIds);
         if (targetIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
@@ -120,7 +120,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendTimeSyncCommand(List<Long> nodeIds) {
+    public Result<List<CommandResultDTO>> sendTimeSyncCommand(List<Long> nodeIds) {
         List<MetroLine> targetIds = getLineNodeFromIds(nodeIds);
         if (targetIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
@@ -131,7 +131,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendMapSyncCommand(List<Long> lineIds) {
+    public Result<List<CommandResultDTO>> sendMapSyncCommand(List<Long> lineIds) {
         List<MetroNode> ids = new ArrayList<>();
         for (Long lineId : lineIds) {
             MetroLine metroNode = topologyService.getLineNode(lineId.shortValue()).getData();
@@ -168,7 +168,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendNodeControlCommand(List<Long> nodeIds, Short command) {
+    public Result<List<CommandResultDTO>> sendNodeControlCommand(List<Long> nodeIds, Short command) {
         List<MetroNode> deviceIds = getDeviceNodeFromIds(nodeIds);
         if (deviceIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
@@ -179,11 +179,11 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public Result<List<CommandResult>> sendQueryBoxCommand(Long nodeId) {
+    public Result<List<CommandResultDTO>> sendQueryBoxCommand(Long nodeId) {
         MetroDevice device = topologyService.getDeviceNode(nodeId).getData();
         List<MetroNode> ids = new ArrayList<>();
         ids.add(device);
-        List<CommandResult> commandResults = new ArrayList<>();
+        List<CommandResultDTO> commandResults = new ArrayList<>();
         Short deviceType = device.getDeviceType();
         if (AFCDeviceType.TVM.equals(deviceType)) {
             commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
@@ -308,8 +308,8 @@ public class CommandServiceImpl implements CommandService {
      * @param cmdType 命令类型
      * @return 命令执行结果
      */
-    private List<CommandResult> send(int id, String name, Map<Long, Object> args, List<? extends MetroNode> nodes,
-                                     Short cmdType) {
+    private List<CommandResultDTO> send(int id, String name, Map<Long, Object> args, List<? extends MetroNode> nodes,
+                                        Short cmdType) {
         if (nodes == null) {
             return null;
         }
@@ -322,13 +322,13 @@ public class CommandServiceImpl implements CommandService {
             futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg,
                     cmdType, node, rmiCommandService)));
         }
-        List<CommandResult> results = new ArrayList<>();
+        List<CommandResultDTO> results = new ArrayList<>();
         List<TmoCmdResult> tmoCmdResults = new ArrayList<>();
         for (Future<TmoCmdResult> future : futures) {
             try {
                 TmoCmdResult tmoCmdResult = future.get();
                 if (tmoCmdResult != null) {
-                    CommandResult commandResult = new CommandResult();
+                    CommandResultDTO commandResult = new CommandResultDTO();
                     commandResult.setId(topologyService.getNodeText(tmoCmdResult.getNodeId()).getData());
                     commandResult.setCmdName(tmoCmdResult.getCmdName());
                     commandResult.setResult(tmoCmdResult.getCmdResult());

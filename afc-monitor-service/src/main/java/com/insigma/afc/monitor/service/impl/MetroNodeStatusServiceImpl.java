@@ -5,13 +5,13 @@ import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.dao.TmoItemStatusDao;
 import com.insigma.afc.monitor.healthIndicator.RegisterHealthIndicator;
 import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
-import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
+import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.StationStatustViewItem;
 import com.insigma.afc.monitor.model.dto.condition.DeviceStatusCondition;
 import com.insigma.afc.monitor.model.dto.condition.StationStatusCondition;
 import com.insigma.afc.monitor.model.entity.*;
-import com.insigma.afc.monitor.model.properties.NetworkConfig;
+import com.insigma.afc.monitor.model.properties.NetworkProperties;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.MonitorConfigService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
@@ -38,20 +37,20 @@ import java.util.*;
  */
 @Service
 @Configuration
-@EnableConfigurationProperties(NetworkConfig.class)
+@EnableConfigurationProperties(NetworkProperties.class)
 public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
     private static final Logger logger = LoggerFactory.getLogger(MetroNodeStatusServiceImpl.class);
 
     private TopologyService topologyService;
     private TmoItemStatusDao tmoItemStatusDao;
-    private NetworkConfig networkConfig;
+    private NetworkProperties networkConfig;
     private MonitorConfigService monitorConfigService;
     private RegisterHealthIndicator registerHealthIndicator;
 
     @Autowired
     public MetroNodeStatusServiceImpl(TopologyService topologyService, TmoItemStatusDao tmoItemStatusDao,
-                                      MonitorConfigService monitorConfigService, NetworkConfig networkConfig,
+                                      MonitorConfigService monitorConfigService, NetworkProperties networkConfig,
                                       RegisterHealthIndicator registerHealthIndicator) {
         this.topologyService = topologyService;
         this.tmoItemStatusDao = tmoItemStatusDao;
@@ -352,11 +351,11 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         //获取通信前置机状态
         boolean onLine = Status.UP.equals(registerHealthIndicator.health().getStatus());
 
-        Result<MonitorConfigInfo> monitorConfigInfoResult = monitorConfigService.getMonitorConfig();
+        Result<NodeStatusMonitorConfigDTO> monitorConfigInfoResult = monitorConfigService.getMonitorConfig();
         if (!monitorConfigInfoResult.isSuccess()) {
             throw new ServiceException("获取监控配置信息异常");
         }
-        MonitorConfigInfo monitorConfigInfo = monitorConfigInfoResult.getData();
+        NodeStatusMonitorConfigDTO monitorConfigInfo = monitorConfigInfoResult.getData();
         //获取告警阈值
         Integer alarmNum = monitorConfigInfo.getAlarm();
         //获取警告阈值

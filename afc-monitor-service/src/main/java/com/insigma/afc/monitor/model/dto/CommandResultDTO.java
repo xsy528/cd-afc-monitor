@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 
 @ApiModel("命令执行结果")
-public class CommandResult{
+public class CommandResultDTO {
 
 	private String logId;
 

@@ -1,9 +1,7 @@
 package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.monitor.model.dto.CommandResult;
-import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
-import org.springframework.data.domain.Page;
+import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 
 import java.util.List;
 
@@ -21,28 +19,28 @@ public interface CommandService {
      * @param mode 运营模式
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendChangeModeCommand(List<Long> stationIds, Integer mode);
+    Result<List<CommandResultDTO>> sendChangeModeCommand(List<Long> stationIds, Integer mode);
 
     /**
      * 模式查询
      * @param stationIds 车站节点id数组
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendModeQueryCommand(List<Long> stationIds);
+    Result<List<CommandResultDTO>> sendModeQueryCommand(List<Long> stationIds);
 
     /**
      * 时钟同步
      * @param nodeIds 车站或者设备id数组
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendTimeSyncCommand(List<Long> nodeIds);
+    Result<List<CommandResultDTO>> sendTimeSyncCommand(List<Long> nodeIds);
 
     /**
      * 时钟同步
      * @param lineIds 线路id数组
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendMapSyncCommand(List<Long> lineIds);
+    Result<List<CommandResultDTO>> sendMapSyncCommand(List<Long> lineIds);
 
     /**
      * 发送设备控制命令
@@ -50,13 +48,13 @@ public interface CommandService {
      * @param command 控制命令
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendNodeControlCommand(List<Long> deviceIds, Short command);
+    Result<List<CommandResultDTO>> sendNodeControlCommand(List<Long> deviceIds, Short command);
 
     /**
      * 查询钱箱票箱命令
      * @param deviceId 设备id
      * @return 执行结果
      */
-    Result<List<CommandResult>> sendQueryBoxCommand(Long deviceId);
+    Result<List<CommandResultDTO>> sendQueryBoxCommand(Long deviceId);
 
 }

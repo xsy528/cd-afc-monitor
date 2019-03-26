@@ -36,6 +36,16 @@ public class CommandResultDTO {
 	@JsonProperty("occur_time")
 	private Date occurTime;
 
+	private boolean success;
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
 	public String getLogId() {
 		return logId;
 	}

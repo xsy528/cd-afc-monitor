@@ -1,5 +1,6 @@
 package com.insigma.afc.monitor.service;
 
+import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
 import com.insigma.afc.monitor.model.entity.*;
@@ -64,6 +65,18 @@ public interface ModeService {
 	 * @param modeBroadcast
 	 */
 	void saveModeBroadcastInfo(TmoModeBroadcast modeBroadcast);
+
+	/**
+	 * 保存模式广播
+	 * @param modeBroadcast
+	 */
+	void saveModeBroadcastInfos(List<TmoModeBroadcast> modeBroadcast);
+
+	/**
+	 * 删除模式广播
+	 * @param ids 主键id数组
+	 */
+	void deleteModeBroadcasts(Long ...ids);
 
 	/**
 	 * 获取当前设备事件
@@ -134,5 +147,18 @@ public interface ModeService {
 	 * @return
 	 */
 	List<TmoModeBroadcast> getModeBroadcast();
+
+	/**
+	 * 重新发送模式广播
+	 * @param resultIds 广播信息id
+	 * @return 结果
+	 */
+	List<CommandResultDTO> resendModeBroadcast(List<Long> resultIds);
+
+	/**
+	 * 模式广播信息
+	 * @return
+	 */
+	List<TmoModeBroadcast> getModeBroadcastByIds(List<Long> recordIds);
 
 }

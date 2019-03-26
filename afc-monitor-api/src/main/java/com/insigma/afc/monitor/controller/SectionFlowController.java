@@ -12,6 +12,7 @@ import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
 import com.insigma.afc.monitor.service.SectionODFlowService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +27,14 @@ import javax.validation.Valid;
  * @author xuzhemin
  * 2019/3/22 10:50
  */
-@Api(tags="断面客流查询接口")
+@Api(tags="断面客流接口")
 @RestController
 @RequestMapping("/monitor/sectionflow")
 public class SectionFlowController {
 
     private SectionODFlowService sectionODFlowService;
 
+    @ApiOperation("断面客流查询")
     @PostMapping("/search")
     public Result search(@Valid @RequestBody SectionFlowCondition condition){
         return Result.success(sectionODFlowService.getSectionODFlowStatsViewList(condition));

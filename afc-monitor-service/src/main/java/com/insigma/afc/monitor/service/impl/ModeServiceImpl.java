@@ -6,12 +6,16 @@
 package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
+import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.dao.*;
+import com.insigma.afc.monitor.model.dto.CommandResultDTO;
+import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
 import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.ModeService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
@@ -27,10 +31,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Ticket: 模式服务实现类
@@ -42,6 +43,10 @@ public class ModeServiceImpl implements ModeService {
 
     private static final Logger logger = LoggerFactory.getLogger(ModeServiceImpl.class);
 
+    private final short SEND_SUCCESS = 1;
+    private final short SEND_FAILURE = 2;
+
+    private CommandService commandService;
     private IMetroNodeStatusService modeNodeStatusService;
     private TmoModeUploadInfoDao tmoModeUploadInfoDao;
     private TmoModeBroadcastDao tmoModeBroadcastDao;
@@ -117,7 +122,7 @@ public class ModeServiceImpl implements ModeService {
         return tmoModeUploadInfoDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(builder.greaterThanOrEqualTo(root.get("modeUploadTime"), DateTimeUtil.beginDate(new Date()
-			)));
+            )));
             predicates.add(builder.lessThanOrEqualTo(root.get("modeUploadTime"), new Date()));
             switch (NodeIdUtils.nodeIdStrategy.getNodeLevel(nodeId)) {
                 case LC:
@@ -132,6 +137,36 @@ public class ModeServiceImpl implements ModeService {
             query.orderBy(builder.desc(root.get("modeUploadTime")));
             return builder.and(predicates.toArray(new Predicate[0]));
         });
+    }
+
+    @Override
+    public List<CommandResultDTO> resendModeBroadcast(List<Long> resultIds) {
+        List<CommandResultDTO> commandResultDTOs = new ArrayList<>();
+        if (resultIds == null || resultIds.isEmpty()) {
+            return commandResultDTOs;
+        }
+        List<TmoModeBroadcast> tmoModeBroadcasts = tmoModeBroadcastDao.findAllById(resultIds);
+        for (TmoModeBroadcast tmoModeBroadcast : tmoModeBroadcasts) {
+            Result<List<CommandResultDTO>> result = commandService.sendChangeModeCommand(Arrays.asList(tmoModeBroadcast
+                    .getStationId().longValue()), tmoModeBroadcast.getModeCode().intValue());
+            if (result.isSuccess()) {
+                CommandResultDTO commandResultDTO = result.getData().get(0);
+                commandResultDTOs.add(commandResultDTO);
+                if (commandResultDTO.getResult() == AFCCmdResultType.SEND_SUCCESSFUL) {
+                    tmoModeBroadcast.setBroadcastStatus(SEND_SUCCESS);
+                } else {
+                    tmoModeBroadcast.setBroadcastStatus(SEND_FAILURE);
+                }
+                tmoModeBroadcast.setModeBroadcastTime(new Date());
+            }
+        }
+        tmoModeBroadcastDao.saveAll(tmoModeBroadcasts);
+        return commandResultDTOs;
+    }
+
+    @Override
+    public List<TmoModeBroadcast> getModeBroadcastByIds(List<Long> recordIds) {
+        return tmoModeBroadcastDao.findAllById(recordIds);
     }
 
     @Override
@@ -263,7 +298,7 @@ public class ModeServiceImpl implements ModeService {
             calendar.setTime(new Date());
             calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
             predicates.add(builder.lessThanOrEqualTo(root.get("occurTime"), endTime == null ? calendar.getTime() :
-					endTime));
+                    endTime));
             if (equType != null && !equType.isEmpty()) {
                 root.get("deviceType").in(equType);
             }
@@ -309,6 +344,18 @@ public class ModeServiceImpl implements ModeService {
         tmoModeBroadcastDao.save(modeBroadcast);
     }
 
+    @Override
+    public void saveModeBroadcastInfos(List<TmoModeBroadcast> modeBroadcast) {
+        tmoModeBroadcastDao.saveAll(modeBroadcast);
+    }
+
+    @Override
+    public void deleteModeBroadcasts(Long... ids) {
+        if (ids != null && ids.length > 0) {
+            tmoModeBroadcastDao.deleteAll(tmoModeBroadcastDao.findAllById(Arrays.asList(ids)));
+        }
+    }
+
     @Autowired
     public void setModeNodeStatusService(IMetroNodeStatusService modeNodeStatusService) {
         this.modeNodeStatusService = modeNodeStatusService;
@@ -332,6 +379,11 @@ public class ModeServiceImpl implements ModeService {
     @Autowired
     public void setTmoEquStatusCurDao(TmoEquStatusCurDao tmoEquStatusCurDao) {
         this.tmoEquStatusCurDao = tmoEquStatusCurDao;
+    }
+
+    @Autowired
+    public void setCommandService(CommandService commandService) {
+        this.commandService = commandService;
     }
 
     @Autowired

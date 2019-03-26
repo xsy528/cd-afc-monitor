@@ -9,7 +9,6 @@
 package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.dao.TccSectionValuesDao;
-import com.insigma.afc.monitor.dao.TmoSectionOdFlowStatsDao;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
 import com.insigma.afc.monitor.model.entity.MetroStation;
@@ -28,10 +27,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -45,9 +44,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SectionODFlowServiceImpl.class);
 
-    private Map<Long, TccSectionValues> sectionmap;
-    private int lowFlow = 1000;
-    private int highFlow = 2000;
+    private ThreadLocal<Map<Long, TccSectionValues>> sectionmap = ThreadLocal.withInitial(()->new HashMap<>());
     /**
      * 五分钟一个时间段
      */
@@ -57,7 +54,6 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
      */
     private int maxPeriods = 3;
 
-    private TmoSectionOdFlowStatsDao sectionOdFlowStatsDao;
     private TccSectionValuesDao sectionValuesDao;
     private MonitorConfigService configService;
     private TopologyService topologyService;
@@ -96,27 +92,21 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         if (secOdFlowStatslist==null||secOdFlowStatslist.isEmpty()) {
             return secOdFlowViewlist;
         }
-        SectionOdFlowStatsView flowStatsView;
 
         SectionFlowMonitorConfigDTO sectionFlowMonitorConfigDTO = configService.getSectionFlowMonitorConfig().getData();
-        lowFlow = sectionFlowMonitorConfigDTO.getWarning();
-        highFlow = sectionFlowMonitorConfigDTO.getAlarm();
+        int lowFlow = sectionFlowMonitorConfigDTO.getWarning();
+        int highFlow = sectionFlowMonitorConfigDTO.getAlarm();
 
-        int minutes = timeIntervalIds.size() * 5;
-        int index = 1;
+        int minutes = timeIntervalIds.size() * timePeriod;
         for (TmoSectionOdFlowStats flowStats : secOdFlowStatslist) {
-
-            flowStatsView = new SectionOdFlowStatsView();
-            TccSectionValues sectionValues = sectionmap.get(flowStats.getSectionId());
-
+            SectionOdFlowStatsView flowStatsView = new SectionOdFlowStatsView();
+            TccSectionValues sectionValues = sectionmap.get().get(flowStats.getSectionId());
             flowStatsView.setSectionId(flowStats.getSectionId());
-
             flowStatsView.setLine(topologyService.getNodeText(sectionValues.getLineId().longValue()).getData());
             flowStatsView.setUpstation(topologyService.getNodeText(sectionValues.getPreStationId().longValue())
                     .getData());
             flowStatsView.setDownstation(topologyService.getNodeText(sectionValues.getDownStationId().longValue())
                     .getData());
-
             flowStatsView.setBusinessday(DateTimeUtil.formatDate(flowStats.getGatheringDate(), "yyyy-MM-dd"));
             // 上行客流密度
             double flowcount = 0;
@@ -181,14 +171,13 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             short odLevelFlag = 0;
             double count = flowcount / minutes;
 
-            odLevelFlag = getOdLevelFlag(count);
+            odLevelFlag = getOdLevelFlag(count,lowFlow,highFlow);
             // 上行客流密度
             flowStatsView.setOdLevelFlag(odLevelFlag);
             // 下行客流密度
             count = downFlowcount / minutes;
-            odLevelFlag = getOdLevelFlag(count);
+            odLevelFlag = getOdLevelFlag(count,lowFlow,highFlow);
             flowStatsView.setDownOdLevelFlag(odLevelFlag);
-            flowStatsView.setIndex(index++);
             secOdFlowViewlist.add(flowStatsView);
         }
         return secOdFlowViewlist;
@@ -200,8 +189,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         if (sectionList.isEmpty()) {
             return null;
         }
-        sectionmap = new HashMap<>();
-        sectionList.forEach((s) -> sectionmap.put(s.getSectionId(), s));
+        sectionList.forEach((s) -> sectionmap.get().put(s.getSectionId(), s));
 
         // 当天的时段
         List<Long> timeIntervalIds1 = null;
@@ -244,9 +232,9 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             parameters.put("timeIntervalId2",timeIntervalIds2);
             parameters.put("gatheringDate",DateTimeUtil.getDateDiff(date, -1));
         }
-        if (sectionmap!=null){
+        if (!sectionmap.get().isEmpty()){
             qlBuilder.append(" and t.sectionId in :sectionIds ");
-            parameters.put("sectionIds",sectionmap.keySet());
+            parameters.put("sectionIds",sectionmap.get().keySet());
         }
         qlBuilder.append(" group by t.sectionId order by t.sectionId asc ");
 
@@ -274,7 +262,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         return secOdFlowStatslist;
     }
 
-    private short getOdLevelFlag(double count) {
+    private short getOdLevelFlag(double count,int lowFlow,int highFlow) {
         short odLevelFlag;
         if (count <= lowFlow) {
             odLevelFlag = 0;
@@ -301,11 +289,6 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     @Autowired
     public void setSectionValuesDao(TccSectionValuesDao sectionValuesDao) {
         this.sectionValuesDao = sectionValuesDao;
-    }
-
-    @Autowired
-    public void setSectionOdFlowStatsDao(TmoSectionOdFlowStatsDao sectionOdFlowStatsDao) {
-        this.sectionOdFlowStatsDao = sectionOdFlowStatsDao;
     }
 
     @Autowired

@@ -8,6 +8,7 @@
  */
 package com.insigma.afc.monitor.model.dto.condition;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModel;
@@ -33,6 +34,7 @@ public class SectionFlowCondition extends PageBean {
     private Short direction;
 
     @ApiModelProperty("日期")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     @ApiModelProperty("时间段")

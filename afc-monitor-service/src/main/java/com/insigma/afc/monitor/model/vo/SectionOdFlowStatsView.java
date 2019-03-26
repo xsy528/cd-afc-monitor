@@ -20,9 +20,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("断面客流查询结果")
 public class SectionOdFlowStatsView {
 
-    @ApiModelProperty("序号")
-    private long index;
-
     @ApiModelProperty("运营日期")
     private String businessday;
 
@@ -84,14 +81,6 @@ public class SectionOdFlowStatsView {
      * 下行客流高中低标记位(0:低，1：中，2：高)
      */
     private short downOdLevelFlag;
-
-    public long getIndex() {
-        return index;
-    }
-
-    public void setIndex(long index) {
-        this.index = index;
-    }
 
     public String getBusinessday() {
         return businessday;

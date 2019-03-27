@@ -9,7 +9,6 @@ import com.insigma.afc.monitor.model.vo.BarChartData;
 import com.insigma.afc.monitor.model.vo.PieChartData;
 import com.insigma.afc.monitor.model.vo.SeriesChartData;
 import com.insigma.afc.monitor.service.PassengerFlowService;
-import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -16,6 +16,10 @@ import java.io.Serializable;
 public class ModeBroadcastInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("记录id")
+    @JsonProperty("record_id")
+    private Long recordId;
+
     @ApiModelProperty("节点名称")
     private String name;
 
@@ -50,6 +54,14 @@ public class ModeBroadcastInfo implements Serializable {
     @ApiModelProperty("操作员编号")
     @JsonProperty("operator_id")
     private String operatorId;
+
+    public Long getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(Long recordId) {
+        this.recordId = recordId;
+    }
 
     public String getModeEffectTime() {
         return modeEffectTime;

@@ -13,13 +13,13 @@ import java.util.List;
  * 2019-01-29:16:19
  */
 @ApiModel("发送命令数据模型")
-public class SendCommand {
+public class SendCommandDTO {
 
     @ApiModelProperty("节点id数组")
     @JsonProperty("node_ids")
     private List<Long> nodeIds;
 
-    @ApiModelProperty("命令编号")
+    @ApiModelProperty("命令参数")
     private Integer command;
 
     public List<Long> getNodeIds() {

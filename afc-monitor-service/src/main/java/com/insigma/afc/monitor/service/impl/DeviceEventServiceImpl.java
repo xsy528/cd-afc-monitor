@@ -16,19 +16,14 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Tiket:设备事件查询接口
+ * Ticket:设备事件查询接口
  * @author  xingshaoya
  */
 @Service
 public class DeviceEventServiceImpl implements DeviceEventService {
 
-    @Autowired
     private TmoEquEventDao tmoEquEventDao;
-    /**
-     * 获取设备事件
-     * @param condition 设备事件查询实体类
-     * @return 分页数据
-     */
+
     @Override
     public Page<TmoEquStatus> getDeviceEventSearch(EquEventCondition condition) {
         //根据总线路、分支线路、站点并在开始时间和结束时间内，并且事件等级（非用户限制）in(1,2,3)内
@@ -43,7 +38,6 @@ public class DeviceEventServiceImpl implements DeviceEventService {
 
         Integer pageSize = condition.getPageSize();
         Integer page = condition.getPageNumber();
-
 
         return tmoEquEventDao.findAll((root,query,builder)->{
             List<Predicate> predicates = new ArrayList<>();
@@ -69,4 +63,8 @@ public class DeviceEventServiceImpl implements DeviceEventService {
         }, PageRequest.of(page,pageSize));
     }
 
+    @Autowired
+    public void setTmoEquEventDao(TmoEquEventDao tmoEquEventDao) {
+        this.tmoEquEventDao = tmoEquEventDao;
+    }
 }

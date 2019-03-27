@@ -1,7 +1,8 @@
 package com.insigma.afc.monitor.service;
 
-import com.insigma.afc.monitor.model.dto.MonitorConfigInfo;
+import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
 import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 
 /**
  * Ticket: 监控配置信息服务
@@ -11,15 +12,28 @@ import com.insigma.afc.monitor.model.dto.Result;
  */
 public interface MonitorConfigService {
     /**
-     * 获取监控配置
-     * @return
+     * 获取节点状态监控配置
+     * @return 配置信息
      */
-    Result<MonitorConfigInfo> getMonitorConfig();
+    Result<NodeStatusMonitorConfigDTO> getMonitorConfig();
 
     /**
-     * 保存监控配置
-     * @param monitorConfigInfo
-     * @return
+     * 保存节点状态监控配置
+     * @param monitorConfigInfo 配置信息
+     * @return 配置信息
      */
-    Result<MonitorConfigInfo> save(MonitorConfigInfo monitorConfigInfo);
+    Result<NodeStatusMonitorConfigDTO> save(NodeStatusMonitorConfigDTO monitorConfigInfo);
+
+    /**
+     * 获取断面客流监控配置
+     * @return 配置信息
+     */
+    Result<SectionFlowMonitorConfigDTO> getSectionFlowMonitorConfig();
+
+    /**
+     * 保存断面客流监控配置
+     * @param monitorConfigDTO 配置信息
+     * @return 配置信息
+     */
+    Result<SectionFlowMonitorConfigDTO> save(SectionFlowMonitorConfigDTO monitorConfigDTO);
 }

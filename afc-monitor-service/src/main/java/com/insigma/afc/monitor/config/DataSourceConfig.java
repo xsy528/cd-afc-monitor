@@ -1,6 +1,7 @@
 package com.insigma.afc.monitor.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ public class DataSourceConfig {
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
+    @ConditionalOnMissingBean(DataSource.class)
     public DataSource dataSource(){
         return DataSourceBuilder.create().type(BasicDataSource.class).build();
     }

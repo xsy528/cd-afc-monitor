@@ -13,7 +13,9 @@ target
 
 #日志文件
 log
-
+*.log
+*.pid
+*.log.gz
 #临时文件
 conf
 tmp

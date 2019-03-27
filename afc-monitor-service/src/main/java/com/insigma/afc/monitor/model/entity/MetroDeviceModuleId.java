@@ -56,6 +56,7 @@ public class MetroDeviceModuleId implements java.io.Serializable {
 		this.moduleId = moduleId;
 	}
 
+	@Override
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -73,6 +74,7 @@ public class MetroDeviceModuleId implements java.io.Serializable {
 						&& castOther.getModuleId() != null && this.getModuleId().equals(castOther.getModuleId())));
 	}
 
+	@Override
 	public int hashCode() {
 		int result = 17;
 

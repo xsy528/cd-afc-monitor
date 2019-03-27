@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 
 @ApiModel("命令执行结果")
-public class CommandResult{
+public class CommandResultDTO {
 
 	private String logId;
 
@@ -35,6 +35,16 @@ public class CommandResult{
 	@ApiModelProperty("发生时间")
 	@JsonProperty("occur_time")
 	private Date occurTime;
+
+	private boolean success;
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
 
 	public String getLogId() {
 		return logId;

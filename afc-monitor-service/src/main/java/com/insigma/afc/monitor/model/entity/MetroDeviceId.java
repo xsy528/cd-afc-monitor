@@ -53,6 +53,7 @@ public class MetroDeviceId implements java.io.Serializable {
 		this.deviceId = deviceId;
 	}
 
+	@Override
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;
@@ -65,14 +66,15 @@ public class MetroDeviceId implements java.io.Serializable {
 		}
 		MetroDeviceId castOther = (MetroDeviceId) other;
 
-		return ((this.getLineId() == castOther.getLineId()) || (this.getLineId() != null
+		return ((this.getLineId().equals(castOther.getLineId())) || (this.getLineId() != null
 				&& castOther.getLineId() != null && this.getLineId().equals(castOther.getLineId())))
-				&& ((this.getStationId() == castOther.getStationId()) || (this.getStationId() != null
+				&& ((this.getStationId().equals(castOther.getStationId())) || (this.getStationId() != null
 						&& castOther.getStationId() != null && this.getStationId().equals(castOther.getStationId())))
-				&& ((this.getDeviceId() == castOther.getDeviceId()) || (this.getDeviceId() != null
+				&& ((this.getDeviceId().equals(castOther.getDeviceId())) || (this.getDeviceId() != null
 						&& castOther.getDeviceId() != null && this.getDeviceId().equals(castOther.getDeviceId())));
 	}
 
+	@Override
 	public int hashCode() {
 		int result = 17;
 

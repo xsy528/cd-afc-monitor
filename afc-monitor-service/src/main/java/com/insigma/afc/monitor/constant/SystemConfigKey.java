@@ -121,6 +121,12 @@ public class SystemConfigKey {
 	// 报警临界值
 	public static final String ALARM_THRESHHOLD = "ALARM_THRESHHOLD";
 
+	// 断面客流中低分界阈值（注意：此变量值要与com.insigma.afc.odmonitor.config.ConfigKey中变量值一致）
+	public static final String SECTION_PASSENGERFLOW_LOW = "SectionPassengerflowLow";
+
+	// 断面客流中高分界阈值（注意：此变量值要与com.insigma.afc.odmonitor.config.ConfigKey中变量值一致）
+	public static final String SECTION_PASSENGERFLOW_HIGH = "SectionPassengerflowHigh";
+
 	// 界面刷新间隔
 	public static final String VIEW_REFRESH_INTERVAL = "VIEW_REFRESH_INTERVAL";
 

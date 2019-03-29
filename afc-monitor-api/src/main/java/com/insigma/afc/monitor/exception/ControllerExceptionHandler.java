@@ -63,8 +63,14 @@ public class ControllerExceptionHandler {
         return Result.error(ErrorCode.INVALID_ARGUMENT);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Result illegalArgumentException(IllegalArgumentException e){
+        LOGGER.error("参数异常",e);
+        return Result.error(ErrorCode.INVALID_ARGUMENT);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result mthodArgumentNotValidException(MethodArgumentNotValidException e){
+    public Result methodArgumentNotValidException(MethodArgumentNotValidException e){
         Object target = e.getBindingResult().getTarget();
         String className;
         if (target==null){

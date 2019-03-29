@@ -8,6 +8,7 @@
  */
 package com.insigma.afc.monitor.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -41,46 +42,24 @@ public class SectionOdFlowStatsView {
     @ApiModelProperty("总客流")
     private String totalcount;
 
-    private long sectionId;
+    @ApiModelProperty("断面id")
+    private Long sectionId;
 
-    private long downSectionId;
+    @ApiModelProperty("客流报警密度阈值")
+    @JsonProperty("density_alarm")
+    private Double densityAlarm;
 
-    private Long downFlowCount;
+    @ApiModelProperty("客流警告密度阈值")
+    @JsonProperty("density_warning")
+    private Double densityWarning;
 
-    /**
-     * 上行车站位置X
-     */
-    private long upStationPosX;
+    @ApiModelProperty("上行客流密度")
+    @JsonProperty("up_density")
+    private Double upDensity;
 
-    /**
-     * 上行车站位置Y
-     */
-    private long upStationPosY;
-
-    /**
-     * 下行车站位置X
-     */
-    private long downStationPosX;
-
-    /**
-     * 下行车站位置
-     */
-    private long downStationPosY;
-
-    /**
-     * 上下行标记位(0:上行，1：下行)
-     */
-    private short upDownFlag;
-
-    /**
-     * 客流高中低标记位(0:低，1：中，2：高)
-     */
-    private short OdLevelFlag;
-
-    /**
-     * 下行客流高中低标记位(0:低，1：中，2：高)
-     */
-    private short downOdLevelFlag;
+    @ApiModelProperty("下行客流密度")
+    @JsonProperty("down_density")
+    private Double downDensity;
 
     public String getBusinessday() {
         return businessday;
@@ -138,83 +117,43 @@ public class SectionOdFlowStatsView {
         this.totalcount = totalcount;
     }
 
-    public long getSectionId() {
+    public Long getSectionId() {
         return sectionId;
     }
 
-    public void setSectionId(long sectionId) {
+    public void setSectionId(Long sectionId) {
         this.sectionId = sectionId;
     }
 
-    public long getDownSectionId() {
-        return downSectionId;
+    public Double getDensityAlarm() {
+        return densityAlarm;
     }
 
-    public void setDownSectionId(long downSectionId) {
-        this.downSectionId = downSectionId;
+    public void setDensityAlarm(Double densityAlarm) {
+        this.densityAlarm = densityAlarm;
     }
 
-    public Long getDownFlowCount() {
-        return downFlowCount;
+    public Double getDensityWarning() {
+        return densityWarning;
     }
 
-    public void setDownFlowCount(Long downFlowCount) {
-        this.downFlowCount = downFlowCount;
+    public void setDensityWarning(Double densityWarning) {
+        this.densityWarning = densityWarning;
     }
 
-    public long getUpStationPosX() {
-        return upStationPosX;
+    public Double getUpDensity() {
+        return upDensity;
     }
 
-    public void setUpStationPosX(long upStationPosX) {
-        this.upStationPosX = upStationPosX;
+    public void setUpDensity(Double upDensity) {
+        this.upDensity = upDensity;
     }
 
-    public long getUpStationPosY() {
-        return upStationPosY;
+    public Double getDownDensity() {
+        return downDensity;
     }
 
-    public void setUpStationPosY(long upStationPosY) {
-        this.upStationPosY = upStationPosY;
-    }
-
-    public long getDownStationPosX() {
-        return downStationPosX;
-    }
-
-    public void setDownStationPosX(long downStationPosX) {
-        this.downStationPosX = downStationPosX;
-    }
-
-    public long getDownStationPosY() {
-        return downStationPosY;
-    }
-
-    public void setDownStationPosY(long downStationPosY) {
-        this.downStationPosY = downStationPosY;
-    }
-
-    public short getUpDownFlag() {
-        return upDownFlag;
-    }
-
-    public void setUpDownFlag(short upDownFlag) {
-        this.upDownFlag = upDownFlag;
-    }
-
-    public short getOdLevelFlag() {
-        return OdLevelFlag;
-    }
-
-    public void setOdLevelFlag(short odLevelFlag) {
-        OdLevelFlag = odLevelFlag;
-    }
-
-    public short getDownOdLevelFlag() {
-        return downOdLevelFlag;
-    }
-
-    public void setDownOdLevelFlag(short downOdLevelFlag) {
-        this.downOdLevelFlag = downOdLevelFlag;
+    public void setDownDensity(Double downDensity) {
+        this.downDensity = downDensity;
     }
 }

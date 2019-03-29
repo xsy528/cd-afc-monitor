@@ -5,9 +5,12 @@ import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
 import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
 import com.insigma.afc.monitor.model.entity.PassengerData;
 import com.insigma.afc.monitor.model.vo.BarChartData;
+import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.model.vo.PieChartData;
 import com.insigma.afc.monitor.model.vo.SeriesChartData;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 
 /**
@@ -37,6 +40,6 @@ public interface PassengerFlowService {
      */
     SeriesChartData getSeriesChart(SeriesCondition condition);
 
-    Page<PassengerData> getODSerchResult(PassengerCondition condition);
+    List<ODSearchResultItem> getODSerchResult(PassengerCondition condition);
 
 }

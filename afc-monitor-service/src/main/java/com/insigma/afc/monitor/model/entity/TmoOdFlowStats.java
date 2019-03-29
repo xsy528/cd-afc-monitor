@@ -1,43 +1,68 @@
 package com.insigma.afc.monitor.model.entity;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.Date;
 
 /**
- * TmoOdFlowStats entity.
+ * Ticket:
  *
- * @author MyEclipse Persistence Tools
+ * @author: xingshaoya
+ * create time: 2019-03-27 17:54
  */
 @Entity
-@Table(name = "tmo_od_flow_stats")
+@Table(name = "TMO_OD_FLOW_STATS")
+@IdClass(TmoOdFlowStats.class)
 public class TmoOdFlowStats implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private TmoOdFlowStatsId id;
+    @Id
+    @Column(name = "LINE_ID", length = 5, nullable = false)
+    private Short lineId;
 
+    @Id
+    @Column(name = "STATION_ID", length = 11, nullable = false)
+    private Long stationId;
+
+    @Id
+    @Temporal(TemporalType.DATE)
+    @Column(name = "GATHERING_DATE", length = 7, nullable = false)
+    private Date gatheringDate;
+
+    @Id
+    @Column(name = "TIME_INTERVAL_ID", length = 19, nullable = false)
+    private Long timeIntervalId;
+
+    @Id
+    @Column(name = "TICKET_FAMILY", length = 5, nullable = false)
+    private Short ticketFamily;
+
+    @Column(name = "UP_IN_HEAD_COUNT", length = 11)
     private Integer upInHeadCount;
 
+    @Column(name = "DOWN_IN_HEAD_COUNT", length = 11)
     private Integer downInHeadCount;
 
+    @Column(name = "UP_OUT_HEAD_COUNT", length = 11)
     private Integer upOutHeadCount;
 
+    @Column(name = "DOWN_OUT_HEAD_COUNT", length = 11)
     private Integer downOutHeadCount;
 
+    @Column(name = "add_count", length = 11, nullable = false)
     private Integer addCount;
 
+    @Column(name = "sale_count", length = 11, nullable = false)
     private Integer saleCount;
 
+    @Column(name = "total_in", length = 11)
     private Integer totalIn;
 
+    @Column(name = "total_out", length = 11)
     private Integer totalOut;
 
+    @Column(name = "ref_date_time")
     private Timestamp refDateTime;
 
     // Constructors
@@ -47,18 +72,16 @@ public class TmoOdFlowStats implements java.io.Serializable {
     }
 
     /** minimal constructor */
-    public TmoOdFlowStats(TmoOdFlowStatsId id, Integer addCount,
+    public TmoOdFlowStats( Integer addCount,
                           Integer saleCount) {
-        this.id = id;
         this.addCount = addCount;
         this.saleCount = saleCount;
     }
 
     /** full constructor */
-    public TmoOdFlowStats(TmoOdFlowStatsId id, Integer upInHeadCount,
+    public TmoOdFlowStats(Integer upInHeadCount,
                           Integer downInHeadCount, Integer upOutHeadCount,
                           Integer downOutHeadCount) {
-        this.id = id;
         this.upInHeadCount = upInHeadCount;
         this.downInHeadCount = downInHeadCount;
         this.upOutHeadCount = upOutHeadCount;
@@ -66,11 +89,10 @@ public class TmoOdFlowStats implements java.io.Serializable {
     }
 
     /** full constructor */
-    public TmoOdFlowStats(TmoOdFlowStatsId id, Integer upInHeadCount,
+    public TmoOdFlowStats(Integer upInHeadCount,
                           Integer downInHeadCount, Integer upOutHeadCount,
                           Integer downOutHeadCount, Integer addCount, Integer saleCount,
                           Integer totalIn, Integer totalOut, Timestamp refDateTime) {
-        this.id = id;
         this.upInHeadCount = upInHeadCount;
         this.downInHeadCount = downInHeadCount;
         this.upOutHeadCount = upOutHeadCount;
@@ -83,22 +105,40 @@ public class TmoOdFlowStats implements java.io.Serializable {
     }
 
     // Property access
-    @EmbeddedId
-    @AttributeOverrides({
-            @AttributeOverride(name = "lineId", column = @Column(name = "line_id", length = 5, nullable = false)),
-            @AttributeOverride(name = "stationId", column = @Column(name = "station_id", length = 11, nullable = false)),
-            @AttributeOverride(name = "gatheringDate", column = @Column(name = "gathering_date", nullable = false, length = 11)),
-            @AttributeOverride(name = "timeIntervalId", column = @Column(name = "time_interval_id", length = 20, nullable = false)),
-            @AttributeOverride(name = "ticketFamily", column = @Column(name = "TICKET_FAMILY", length = 5, nullable = false)) })
-    public TmoOdFlowStatsId getId() {
-        return this.id;
+
+
+    public Long getStationId() {
+        return stationId;
     }
 
-    public void setId(TmoOdFlowStatsId id) {
-        this.id = id;
+    public void setStationId(Long sectionId) {
+        this.stationId = sectionId;
     }
 
-    @Column(name = "UP_IN_HEAD_COUNT", length = 11)
+    public Date getGatheringDate() {
+        return gatheringDate;
+    }
+
+    public void setGatheringDate(Date gatheringDate) {
+        this.gatheringDate = gatheringDate;
+    }
+
+    public Long getTimeIntervalId() {
+        return timeIntervalId;
+    }
+
+    public void setTimeIntervalId(Long timeIntervalId) {
+        this.timeIntervalId = timeIntervalId;
+    }
+
+    public Short getTicketFamily() {
+        return ticketFamily;
+    }
+
+    public void setTicketFamily(Short ticketFamily) {
+        this.ticketFamily = ticketFamily;
+    }
+
     public Integer getUpInHeadCount() {
         return this.upInHeadCount;
     }
@@ -107,7 +147,7 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.upInHeadCount = upInHeadCount;
     }
 
-    @Column(name = "DOWN_IN_HEAD_COUNT", length = 11)
+
     public Integer getDownInHeadCount() {
         return this.downInHeadCount;
     }
@@ -116,7 +156,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.downInHeadCount = downInHeadCount;
     }
 
-    @Column(name = "UP_OUT_HEAD_COUNT", length = 11)
     public Integer getUpOutHeadCount() {
         return this.upOutHeadCount;
     }
@@ -125,7 +164,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.upOutHeadCount = upOutHeadCount;
     }
 
-    @Column(name = "DOWN_OUT_HEAD_COUNT", length = 11)
     public Integer getDownOutHeadCount() {
         return this.downOutHeadCount;
     }
@@ -134,7 +172,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.downOutHeadCount = downOutHeadCount;
     }
 
-    @Column(name = "add_count", length = 11, nullable = false)
     public Integer getAddCount() {
         return this.addCount;
     }
@@ -143,7 +180,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.addCount = addCount;
     }
 
-    @Column(name = "sale_count", length = 11, nullable = false)
     public Integer getSaleCount() {
         return this.saleCount;
     }
@@ -152,7 +188,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.saleCount = saleCount;
     }
 
-    @Column(name = "total_in", length = 11)
     public Integer getTotalIn() {
         return this.totalIn;
     }
@@ -161,7 +196,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.totalIn = totalIn;
     }
 
-    @Column(name = "total_out", length = 11)
     public Integer getTotalOut() {
         return this.totalOut;
     }
@@ -170,7 +204,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.totalOut = totalOut;
     }
 
-    @Column(name = "ref_date_time")
     public Timestamp getRefDateTime() {
         return this.refDateTime;
     }
@@ -179,4 +212,11 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.refDateTime = refDateTime;
     }
 
+    public Short getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(Short lineId) {
+        this.lineId = lineId;
+    }
 }

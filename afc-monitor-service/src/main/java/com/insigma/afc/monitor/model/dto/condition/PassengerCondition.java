@@ -1,10 +1,13 @@
 package com.insigma.afc.monitor.model.dto.condition;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,9 +16,10 @@ import java.util.Map;
  * @author: xingshaoya
  * create time: 2019-03-22 14:33
  */
-public class PassengerCondition {
+public class PassengerCondition extends PageBean {
     @ApiModelProperty("选择日期")
     @JsonProperty("date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     protected Date date;
 
     @ApiModelProperty("选择时间")
@@ -32,7 +36,7 @@ public class PassengerCondition {
 
     private int endTimeIndex;
 
-    private Integer[] stationId;
+    private List<Long> stationId;
 
     private String[] partNames;
 
@@ -86,11 +90,11 @@ public class PassengerCondition {
         this.endTimeIndex = endTimeIndex;
     }
 
-    public Integer[] getStationId() {
+    public List<Long> getStationId() {
         return stationId;
     }
 
-    public void setStationId(Integer[] stationId) {
+    public void setStationId(List<Long> stationId) {
         this.stationId = stationId;
     }
 

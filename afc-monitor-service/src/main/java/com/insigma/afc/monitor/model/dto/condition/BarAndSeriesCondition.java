@@ -44,7 +44,7 @@ public class BarAndSeriesCondition extends PageBean {
 
     private int endTimeIndex;
 
-    private List<Integer> stationId;
+    private List<Long> stationId;
 
     private String[] partNames;
 
@@ -94,11 +94,11 @@ public class BarAndSeriesCondition extends PageBean {
         this.endTimeIndex = endTimeIndex;
     }
 
-    public List<Integer> getStationId() {
+    public List<Long> getStationId() {
         return stationId;
     }
 
-    public void setStationId(List<Integer> stationId) {
+    public void setStationId(List<Long> stationId) {
         this.stationId = stationId;
     }
 
@@ -124,5 +124,13 @@ public class BarAndSeriesCondition extends PageBean {
 
     public void setTransType(Integer transType) {
         this.transType = transType;
+    }
+
+    public int getTimeInterval() {
+        return timeInterval;
+    }
+
+    public void setTimeInterval(int timeInterval) {
+        this.timeInterval = timeInterval;
     }
 }

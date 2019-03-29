@@ -51,7 +51,7 @@ public class MonitorPassengerController {
     @ApiOperation("获取客流柱状图")
     @PostMapping("barChart")
     public Result<BarChartData> getBarChart(@Valid @RequestBody BarAndSeriesCondition barAndSeriesCondition) {
-        try {
+      //  try {
             BarChartData data = passengerFlowService.getBarChart(barAndSeriesCondition);
             Integer transType = barAndSeriesCondition.getTransType();
             if (data != null) {
@@ -67,15 +67,15 @@ public class MonitorPassengerController {
 
             }
             return Result.success(data);
-        } catch (Exception e) {
-            return Result.error(ErrorCode.DATABASE_ERROR);
-        }
+      //  } catch (Exception e) {
+       //     return Result.error(ErrorCode.DATABASE_ERROR);
+      //  }
     }
 
     @ApiOperation("获取客流饼状图")
     @PostMapping("pieChart")
     public Result<PieChartData> getPieChart(@Valid @RequestBody BarAndSeriesCondition barAndSeriesCondition) {
-        try {
+    //    try {
             PieChartData data = passengerFlowService.getPieChat(barAndSeriesCondition);
             Integer transType = barAndSeriesCondition.getTransType();
             if (data != null) {
@@ -90,15 +90,15 @@ public class MonitorPassengerController {
                 data.setShowRows(showRows);
             }
             return Result.success(data);
-        } catch (Exception e) {
-            return Result.error(ErrorCode.DATABASE_ERROR);
-        }
+    //    } catch (Exception e) {
+     //       return Result.error(ErrorCode.DATABASE_ERROR);
+     //   }
     }
 
     @ApiOperation("获取客流曲线图")
     @PostMapping("seriesChart")
     public Result<SeriesChartData> getSeriesChart(@Valid @RequestBody SeriesCondition seriesCondition) {
-        try {
+       // try {
             SeriesChartData data = passengerFlowService.getSeriesChart(seriesCondition);
             Integer transType = seriesCondition.getTransType();
             if (data != null) {
@@ -113,29 +113,18 @@ public class MonitorPassengerController {
                 data.setShowRows(showRows);
             }
             return Result.success(data);
-        } catch (Exception e) {
-            return Result.error(ErrorCode.DATABASE_ERROR);
-        }
+      //  } catch (Exception e) {
+      //      return Result.error(ErrorCode.DATABASE_ERROR);
+      //  }
     }
 
     @ApiOperation("客流查询接口")
     @PostMapping("passengerFlow")
-    public Result<Page<ODSearchResultItem>> getPassengerFlow(@Valid @RequestBody PassengerCondition passengerCondition) {
+    public Result<List<ODSearchResultItem>> getPassengerFlow(@Valid @RequestBody PassengerCondition passengerCondition) {
 
-        Page<PassengerData> results = passengerFlowService.getODSerchResult(passengerCondition);
+        List<ODSearchResultItem> results = passengerFlowService.getODSerchResult(passengerCondition);
 
 
-        return Result.success(results.map(result->{
-            ODSearchResultItem odSearchResultItem = new ODSearchResultItem();
-
-            odSearchResultItem.setStationId(passengerCondition.getStationId()+"");
-            odSearchResultItem.setOdIn(result.getOd_id()+"");
-            odSearchResultItem.setOdOut(result.getOd_out()+"");
-            odSearchResultItem.setOdBuy(result.getOd_buy()+"");
-            odSearchResultItem.setOdAdd(result.getOd_add()+"");
-            odSearchResultItem.setStationName(topologyService.getNodeText(result.getLine_id()+0L).getData());
-
-            return odSearchResultItem;
-        }));
+        return Result.success(results);
     }
 }

@@ -24,17 +24,13 @@ public class PassengerCondition extends PageBean {
 
     @ApiModelProperty("选择时间")
     @JsonProperty("time")
-    protected Date time;
+    protected String time;
 
     @ApiModelProperty("统计类型")
     @JsonProperty("stat_type")
     protected Short statType;
 
     private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
-
-    private int startTimeIndex;
-
-    private int endTimeIndex;
 
     private List<Long> stationId;
 
@@ -50,11 +46,11 @@ public class PassengerCondition extends PageBean {
         this.date = date;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -72,22 +68,6 @@ public class PassengerCondition extends PageBean {
 
     public void setStationNameMap(Map<Integer, String> stationNameMap) {
         this.stationNameMap = stationNameMap;
-    }
-
-    public int getStartTimeIndex() {
-        return startTimeIndex;
-    }
-
-    public void setStartTimeIndex(int startTimeIndex) {
-        this.startTimeIndex = startTimeIndex;
-    }
-
-    public int getEndTimeIndex() {
-        return endTimeIndex;
-    }
-
-    public void setEndTimeIndex(int endTimeIndex) {
-        this.endTimeIndex = endTimeIndex;
     }
 
     public List<Long> getStationId() {

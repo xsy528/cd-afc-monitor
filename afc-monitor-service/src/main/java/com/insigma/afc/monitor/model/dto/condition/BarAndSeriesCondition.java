@@ -40,10 +40,6 @@ public class BarAndSeriesCondition extends PageBean {
 
     private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
 
-    private int startTimeIndex;
-
-    private int endTimeIndex;
-
     private List<Long> stationId;
 
     private String[] partNames;
@@ -76,22 +72,6 @@ public class BarAndSeriesCondition extends PageBean {
 
     public void setStationNameMap(Map<Integer, String> stationNameMap) {
         this.stationNameMap = stationNameMap;
-    }
-
-    public int getStartTimeIndex() {
-        return startTimeIndex;
-    }
-
-    public void setStartTimeIndex(int startTimeIndex) {
-        this.startTimeIndex = startTimeIndex;
-    }
-
-    public int getEndTimeIndex() {
-        return endTimeIndex;
-    }
-
-    public void setEndTimeIndex(int endTimeIndex) {
-        this.endTimeIndex = endTimeIndex;
     }
 
     public List<Long> getStationId() {

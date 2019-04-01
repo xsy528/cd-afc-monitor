@@ -46,7 +46,7 @@ public class CommandLogServiceImpl implements CommandLogService {
 
         return tmoCmdResultDao.findAll((root,query,builder)->{
             List<Predicate> predicates = new ArrayList<>();
-            if (nodeIds!=null){
+            if (nodeIds!=null&&!nodeIds.isEmpty()){
                 predicates.add(root.get("nodeId").in(nodeIds));
                 //将站点ID存入root中
             }

@@ -194,7 +194,7 @@ public class ModeServiceImpl implements ModeService {
         //站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
         return tmoCmdResultDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (stationIds != null && stationIds.isEmpty()) {
+            if (stationIds != null && !stationIds.isEmpty()) {
                 predicates.add(root.get("stationId").in(stationIds));
                 //将站点ID存入root中
             }

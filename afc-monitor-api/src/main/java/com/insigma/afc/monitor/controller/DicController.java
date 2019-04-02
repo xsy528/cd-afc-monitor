@@ -1,7 +1,6 @@
 package com.insigma.afc.monitor.controller;
 
-import com.insigma.afc.monitor.constant.dic.AFCModeCode;
-import com.insigma.afc.monitor.constant.dic.DeviceStatus;
+import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,5 +51,19 @@ public class DicController {
     @PostMapping("/deviceStatusList")
     public Result getDeviceStatusList(){
         return Result.success(DeviceStatus.getInstance().getByGroup("1"));
+    }
+
+    @ApiOperation("获取日志类型列表")
+    @PostMapping("/CmdTypeList")
+    public Result getCmdTypeList(){
+
+        return Result.success(AFCCmdLogType.getInstance().getByGroup("1"));
+    }
+
+    @ApiOperation("获取命令结果列表")
+    @PostMapping("/modeCmdResultList")
+    public Result getCmdResultList(){
+
+        return Result.success(AFCMackCode.getInstance().getByGroup("1"));
     }
 }

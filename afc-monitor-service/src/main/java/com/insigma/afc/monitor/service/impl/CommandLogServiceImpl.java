@@ -67,7 +67,7 @@ public class CommandLogServiceImpl implements CommandLogService {
                 //日志类型
             }
             if (commandResult!=null){
-                predicates.add(builder.equal(root.get("commandResult"),commandResult));
+                predicates.add(builder.equal(root.get("commandResult"),Integer.parseInt(commandResult)));
                 //命令结果
             }
             query.orderBy(builder.desc(root.get("occurTime")));

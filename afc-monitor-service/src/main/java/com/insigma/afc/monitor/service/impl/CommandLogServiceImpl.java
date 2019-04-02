@@ -46,7 +46,7 @@ public class CommandLogServiceImpl implements CommandLogService {
 
         return tmoCmdResultDao.findAll((root,query,builder)->{
             List<Predicate> predicates = new ArrayList<>();
-            if (nodeIds!=null){
+            if (nodeIds!=null&&!nodeIds.isEmpty()){
                 predicates.add(root.get("nodeId").in(nodeIds));
                 //将站点ID存入root中
             }
@@ -63,7 +63,7 @@ public class CommandLogServiceImpl implements CommandLogService {
                 //操作员ID
             }
             if (logType!=null){
-                predicates.add(builder.equal(root.get("logType"),logType));
+                predicates.add(builder.equal(root.get("cmdType"),logType));
                 //日志类型
             }
             if (commandResult!=null){

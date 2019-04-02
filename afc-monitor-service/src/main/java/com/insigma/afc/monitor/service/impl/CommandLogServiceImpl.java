@@ -63,7 +63,7 @@ public class CommandLogServiceImpl implements CommandLogService {
                 //操作员ID
             }
             if (logType!=null){
-                predicates.add(builder.equal(root.get("logType"),logType));
+                predicates.add(builder.equal(root.get("cmdType"),logType));
                 //日志类型
             }
             if (commandResult!=null){

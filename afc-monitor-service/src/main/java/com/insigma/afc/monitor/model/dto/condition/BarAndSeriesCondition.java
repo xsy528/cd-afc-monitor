@@ -35,12 +35,16 @@ public class BarAndSeriesCondition extends PageBean {
     @JsonProperty("trans_type")
     protected List<Integer> transType = new ArrayList<>(LEGEND.length);
 
+    @JsonProperty("station_name_map")
     private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
 
+    @JsonProperty("station_id")
     private List<Long> stationId;
 
+    @JsonProperty("part_names")
     private String[] partNames;
 
+    @JsonProperty("time_interval")
     private int timeInterval = 5;
 
     public BarAndSeriesCondition() {

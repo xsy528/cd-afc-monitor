@@ -72,7 +72,7 @@ public class DicController {
     @PostMapping("/ticketTypeResultList")
     public Result getTicketTypeList(){
 
-        return Result.success(AFCTicketFamily.getInstance().getByGroup("Spinner"));
+        return Result.success(AFCTicketFamily.getInstance().getByGroup("1"));
     }
 
     @ApiOperation("获取交易类型列表")
@@ -85,6 +85,7 @@ public class DicController {
             Map<String,Object> groupMode1 = new HashMap<>();
             groupMode1.put("groupName",legend[i]);
             groupMode1.put("modes", i);
+            data.add(groupMode1);
         }
 
         return Result.success(data);

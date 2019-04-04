@@ -113,4 +113,12 @@ public class BarAndSeriesCondition extends PageBean {
     public void setTimeInterval(int timeInterval) {
         this.timeInterval = timeInterval;
     }
+
+    public static String[] getLEGEND() {
+        return LEGEND;
+    }
+
+    public static void setLEGEND(String[] LEGEND) {
+        BarAndSeriesCondition.LEGEND = LEGEND;
+    }
 }

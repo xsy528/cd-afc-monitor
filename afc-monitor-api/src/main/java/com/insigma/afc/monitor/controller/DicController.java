@@ -66,4 +66,5 @@ public class DicController {
 
         return Result.success(AFCMackCode.getInstance().getByGroup("1"));
     }
+
 }

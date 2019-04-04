@@ -18,6 +18,7 @@ build:
   only:
     refs:
       - master
+      - XSY
 
 deploy:
   stage: deploy
@@ -31,3 +32,4 @@ deploy:
   only:
     refs:
       - master
+      - XSY

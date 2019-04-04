@@ -70,7 +70,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         }
         chartData.setRowNames(names);
 
-        Map<Integer, String> stationNameMap = condition.getStationNameMap();
         List<BarChartData.ColumnData> columnItems = new ArrayList<BarChartData.ColumnData>();
         int columnIndex = 0;
         for (Object[] objects : bars) {
@@ -89,9 +88,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                     valueOfRows.add((BigDecimal) objects[j + 1]);
                 }
             }
-            LOGGER.debug(stationId.toString());
-            LOGGER.debug(stationNameMap.toString());
-            String culumnName = stationNameMap.get(Integer.parseInt(stationId.toString()));
+           // LOGGER.debug(stationId.toString());
+            //LOGGER.debug(stationNameMap.toString());
+            String culumnName = topologyService.getNodeText(stationId.longValue()).getData();
 
             if (culumnName.equals("车站名未知")) {
                 culumnName = culumnName + columnIndex;
@@ -123,7 +122,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         }
         chartData.setPartNames(names);
 
-        Map<Integer, String> stationNameMap = condition.getStationNameMap();
         List<PieChartData.PieData> pieItems = new ArrayList<>();
         // double[] v = new double[names.size()];
         int pieIndex = 0;
@@ -144,7 +142,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 }
                 valueOfPies.add(value);
             }
-            String pieName = stationNameMap.get(Integer.parseInt(stationId.toString()));
+            String pieName = topologyService.getNodeText(stationId.longValue()).getData();
             if (pieName.equals("车站名未知")) {
                 pieName = pieName + pieIndex;
                 pieIndex++;
@@ -194,7 +192,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         chartData.setTicketType(condition.getTicketFamily()+0);
 
-        Map<Integer, String> stationNameMap = condition.getStationNameMap();
         Map<String, List<SeriesChartData.SeriesData>> seriersItems = new HashMap<>();
         int stationIndex = 0;
         // 生成各条曲线数据
@@ -264,7 +261,8 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 seriesData.setValueOfPart(new long[] { pointodin, pointodout, pointodbuy, pointodadd });
                 valueOfSeries.add(seriesData);
             }
-            String seriesName = stationNameMap.get(Integer.valueOf(stationId));
+
+            String seriesName = topologyService.getNodeText(Long.parseLong(stationId)).getData();
             if (seriesName.equals("车站名未知")) {
                 seriesName = seriesName + stationIndex;
             }

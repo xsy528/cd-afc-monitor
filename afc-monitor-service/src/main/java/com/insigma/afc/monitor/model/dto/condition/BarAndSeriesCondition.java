@@ -35,8 +35,8 @@ public class BarAndSeriesCondition extends PageBean {
     @JsonProperty("trans_type")
     protected List<Integer> transType = new ArrayList<>(LEGEND.length);
 
-    @JsonProperty("station_name_map")
-    private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
+   /// @JsonProperty("station_name_map")
+    //private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
 
     @JsonProperty("station_id")
     private List<Long> stationId;
@@ -65,14 +65,6 @@ public class BarAndSeriesCondition extends PageBean {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public Map<Integer, String> getStationNameMap() {
-        return stationNameMap;
-    }
-
-    public void setStationNameMap(Map<Integer, String> stationNameMap) {
-        this.stationNameMap = stationNameMap;
     }
 
     public List<Long> getStationId() {

@@ -30,8 +30,8 @@ public class PassengerCondition extends PageBean {
     @JsonProperty("stat_type")
     protected Short statType;
 
-    @JsonProperty("station_name_map")
-    private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
+    //@JsonProperty("station_name_map")
+    //private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
 
     @JsonProperty("station_id")
     private List<Long> stationId;
@@ -64,14 +64,6 @@ public class PassengerCondition extends PageBean {
 
     public void setStatType(Short statType) {
         this.statType = statType;
-    }
-
-    public Map<Integer, String> getStationNameMap() {
-        return stationNameMap;
-    }
-
-    public void setStationNameMap(Map<Integer, String> stationNameMap) {
-        this.stationNameMap = stationNameMap;
     }
 
     public List<Long> getStationId() {

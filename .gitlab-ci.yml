@@ -1,7 +1,27 @@
-image: busybox
+stages:
+  - build
+  - deploy
 
-test:
+build:
+  stage: build
+  image: maven:3.6-jdk-8
   script:
-  - mkdir -p /publish/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME; cp -fr ./doc/* /publish/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME/;
+    - mvn clean
+    - mvn compile
+    - mvn package
+    - pwd
+  artifacts:
+    paths:
+      - ./afc-monitor-api/target/afc-monitor-api-1.0.jar
   tags:
-  - swagger
+    - build
+
+deploy:
+  stage: deploy
+  script:
+    - ls
+    - pwd
+    - scp ./afc-monitor-api/target/afc-monitor-api-1.0.jar afc@192.168.140.100:/home/afc/xz-monitor/afc-monitor-dev/
+    - ssh root@10.0.75.2 "cd /home/afc/xz-monitor/afc-monitor-dev/;kill `cat application.pid`;nohup java -jar afc-monitor-api-1.0.jar &"
+  tags:
+    - deploy

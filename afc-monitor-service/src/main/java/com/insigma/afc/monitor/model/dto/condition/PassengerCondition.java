@@ -30,12 +30,16 @@ public class PassengerCondition extends PageBean {
     @JsonProperty("stat_type")
     protected Short statType;
 
+    @JsonProperty("station_name_map")
     private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
 
+    @JsonProperty("station_id")
     private List<Long> stationId;
 
+    @JsonProperty("part_names")
     private String[] partNames;
 
+    @JsonProperty("time_interval")
     private int timeInterval = 5;
 
     public Date getDate() {

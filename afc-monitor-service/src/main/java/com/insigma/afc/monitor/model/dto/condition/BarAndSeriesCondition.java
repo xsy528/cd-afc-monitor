@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Ticket:客流查询基础条件
@@ -36,14 +33,18 @@ public class BarAndSeriesCondition extends PageBean {
 
     @ApiModelProperty("交易类型")
     @JsonProperty("trans_type")
-    protected Integer transType;
+    protected List<Integer> transType = new ArrayList<>(LEGEND.length);
 
+    @JsonProperty("station_name_map")
     private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
 
+    @JsonProperty("station_id")
     private List<Long> stationId;
 
+    @JsonProperty("part_names")
     private String[] partNames;
 
+    @JsonProperty("time_interval")
     private int timeInterval = 5;
 
     public BarAndSeriesCondition() {
@@ -98,11 +99,11 @@ public class BarAndSeriesCondition extends PageBean {
         this.ticketFamily = ticketFamily;
     }
 
-    public Integer getTransType() {
+    public List<Integer> getTransType() {
         return transType;
     }
 
-    public void setTransType(Integer transType) {
+    public void setTransType(List<Integer> transType) {
         this.transType = transType;
     }
 
@@ -112,5 +113,9 @@ public class BarAndSeriesCondition extends PageBean {
 
     public void setTimeInterval(int timeInterval) {
         this.timeInterval = timeInterval;
+    }
+
+    public static String[] getLEGEND() {
+        return LEGEND;
     }
 }

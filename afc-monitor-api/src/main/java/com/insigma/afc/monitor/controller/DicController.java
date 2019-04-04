@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.afc.monitor.model.dto.condition.BarAndSeriesCondition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,5 +66,28 @@ public class DicController {
     public Result getCmdResultList(){
 
         return Result.success(AFCMackCode.getInstance().getByGroup("1"));
+    }
+
+    @ApiOperation("获取票种类型列表")
+    @PostMapping("/ticketTypeResultList")
+    public Result getTicketTypeList(){
+
+        return Result.success(AFCTicketFamily.getInstance().getByGroup("1"));
+    }
+
+    @ApiOperation("获取交易类型列表")
+    @PostMapping("/transTypeResultList")
+    public Result getTransTypeList(){
+
+        String[] legend = BarAndSeriesCondition.getLEGEND();
+        List<Map> data = new ArrayList<>(legend.length);
+        for (int i=0;i<legend.length;i++) {
+            Map<String,Object> groupMode1 = new HashMap<>();
+            groupMode1.put("groupName",legend[i]);
+            groupMode1.put("modes", i);
+            data.add(groupMode1);
+        }
+
+        return Result.success(data);
     }
 }

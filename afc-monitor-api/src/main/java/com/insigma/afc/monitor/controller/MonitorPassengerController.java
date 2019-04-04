@@ -18,7 +18,6 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,11 +52,11 @@ public class MonitorPassengerController {
     public Result<BarChartData> getBarChart(@Valid @RequestBody BarAndSeriesCondition barAndSeriesCondition) {
       //  try {
             BarChartData data = passengerFlowService.getBarChart(barAndSeriesCondition);
-            Integer transType = barAndSeriesCondition.getTransType();
-            if (data != null) {
+             List<Integer> transType = barAndSeriesCondition.getTransType();
+        if (data != null) {
                 List<Boolean> showRows = new ArrayList<Boolean>();
                 for (int i = 0; i < BarAndSeriesCondition.LEGEND.length; i++) {
-                    if ((transType & (0x1 << i)) != 0) {
+                    if (transType.get(i) != 0) {
                         showRows.add(true);
                     } else {
                         showRows.add(false);
@@ -77,11 +76,11 @@ public class MonitorPassengerController {
     public Result<PieChartData> getPieChart(@Valid @RequestBody BarAndSeriesCondition barAndSeriesCondition) {
     //    try {
             PieChartData data = passengerFlowService.getPieChat(barAndSeriesCondition);
-            Integer transType = barAndSeriesCondition.getTransType();
+             List<Integer> transType = barAndSeriesCondition.getTransType();
             if (data != null) {
                 List<Boolean> showRows = new ArrayList<Boolean>();
                 for (int i = 0; i < BarAndSeriesCondition.LEGEND.length - 1; i++) {
-                    if ((transType & (0x1 << i)) != 0) {
+                    if (transType.get(i) != 0) {
                         showRows.add(true);
                     } else {
                         showRows.add(false);
@@ -100,11 +99,11 @@ public class MonitorPassengerController {
     public Result<SeriesChartData> getSeriesChart(@Valid @RequestBody SeriesCondition seriesCondition) {
        // try {
             SeriesChartData data = passengerFlowService.getSeriesChart(seriesCondition);
-            Integer transType = seriesCondition.getTransType();
+        List<Integer> transType = seriesCondition.getTransType();
             if (data != null) {
                 List<Boolean> showRows = new ArrayList<Boolean>();
                 for (int i = 0; i < SeriesCondition.LEGEND.length - 1; i++) {
-                    if ((transType & (0x1 << i)) != 0) {
+                    if (transType.get(i) != 0)  {
                         showRows.add(true);
                     } else {
                         showRows.add(false);

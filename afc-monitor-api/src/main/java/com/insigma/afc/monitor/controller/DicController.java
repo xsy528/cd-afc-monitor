@@ -67,4 +67,10 @@ public class DicController {
         return Result.success(AFCMackCode.getInstance().getByGroup("1"));
     }
 
+    @ApiOperation("获取票种类型列表")
+    @PostMapping("/ticketTypeResultList")
+    public Result getTicketTypeList(){
+
+        return Result.success(AFCTicketFamily.getInstance().getByGroup("Spinner"));
+    }
 }

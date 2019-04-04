@@ -16,7 +16,8 @@ build:
   tags:
     - build
   only:
-    - master
+    refs:
+      - master
 
 deploy:
   stage: deploy
@@ -28,4 +29,5 @@ deploy:
   tags:
     - deploy
   only:
-    - master
+    refs:
+      - master

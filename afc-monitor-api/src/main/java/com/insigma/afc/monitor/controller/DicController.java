@@ -84,7 +84,8 @@ public class DicController {
 
         for (int i=0;i<legend.length;i++) {
             Map<String,Object> groupMode = new HashMap<>();
-            groupMode.put(i+"",legend[i]);
+            groupMode.put("key",i);
+            groupMode.put("value",legend[i]);
             data.add(groupMode);
         }
 

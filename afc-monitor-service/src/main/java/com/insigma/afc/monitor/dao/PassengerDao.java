@@ -24,21 +24,40 @@ public interface PassengerDao extends JpaRepository<TmoOdFlowStats,Integer>,
     @Query(value = " select station_id,sum(total_in),sum (total_out),sum (sale_count),sum(add_count) " +
             "from TMO_OD_FLOW_STATS " +
             "where gathering_date=?1 and time_interval_id in(?2) and " +
-            "station_id in (?3) and (ticket_family =?4 or ticket_family is null )" +
+            "station_id in (?3) and ticket_family =?4 " +
             "group by station_id order by station_id",nativeQuery = true)
     Page<Object[]> findAllBarAndPieByConditon(Date gatheringDate,List<Long> timeIntervals, List<Long> stationId,
                                         short ticketFamily, Pageable pageable);
+
+    @Query(value = " select station_id,sum(total_in),sum (total_out),sum (sale_count),sum(add_count) " +
+            "from TMO_OD_FLOW_STATS " +
+            "where gathering_date=?1 and time_interval_id in(?2) and " +
+            "station_id in (?3) " +
+            "group by station_id order by station_id",nativeQuery = true)
+    Page<Object[]> findAllBarAndPieByConditon2(Date gatheringDate,List<Long> timeIntervals, List<Long> stationId,
+                                               Pageable pageable);
 
     @Query(value = "select t.stationId,t.timeIntervalId," +
             "sum(t.totalIn),sum (t.totalOut),sum (t.saleCount),sum(t.addCount) " +
         "from TmoOdFlowStats t where" +
         " t.gatheringDate=?1 and " +
             "   t.timeIntervalId in(?2) " +
-        "and t.stationId in(?3) and (t.ticketFamily =?4 or t.ticketFamily is null ) " +
+        "and t.stationId in(?3) and t.ticketFamily =?4  " +
         "group by t.stationId ,t.timeIntervalId " +
             "order by t.stationId ,t.timeIntervalId ")
     Page<Object[]> findAllSeriesBySeriesCondition(Date gatheringDate,List<Long> timeIntervals,List<Long> stationId,
                                             short ticketFamily, Pageable pageable);
+
+    @Query(value = "select t.stationId,t.timeIntervalId," +
+            "sum(t.totalIn),sum (t.totalOut),sum (t.saleCount),sum(t.addCount) " +
+            "from TmoOdFlowStats t where" +
+            " t.gatheringDate=?1 and " +
+            "   t.timeIntervalId in(?2) " +
+            "and t.stationId in(?3) " +
+            "group by t.stationId ,t.timeIntervalId " +
+            "order by t.stationId ,t.timeIntervalId ")
+    Page<Object[]> findAllSeriesBySeriesCondition2(Date gatheringDate,List<Long> timeIntervals,List<Long> stationId,
+                                                   Pageable pageable);
 
 
     @Query(value = " select station_id,'全部票种',sum(total_in),sum (total_out),sum (sale_count),sum(add_count) " +

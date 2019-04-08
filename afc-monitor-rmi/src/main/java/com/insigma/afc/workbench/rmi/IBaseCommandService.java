@@ -16,11 +16,7 @@ public interface IBaseCommandService extends IService {
 
 	/**
 	 * 工作台注册
-	 * 
-	 * @param destLogicAddress
-	 * @param srcLogicAddress
-	 * @param destDeviceID
-	 * @param registerTime
+	 *
 	 * @return 注册结果信息
 	 */
 	RegisterResult register();

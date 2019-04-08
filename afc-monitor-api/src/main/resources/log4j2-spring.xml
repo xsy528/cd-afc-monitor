@@ -63,7 +63,7 @@
 
     <Loggers>
         <!-- 各应用按实际情况自行定义相关类的输出级别 -->
-        <Logger name="org.hibernate" level="DEBUG" />
+        <Logger name="org.hibernate" level="ERROR" />
         <Logger name="org.springframework" level="ERROR" />
         <Logger name="jacorb" level="ERROR" />
         <Logger name="scala" level="ERROR" />

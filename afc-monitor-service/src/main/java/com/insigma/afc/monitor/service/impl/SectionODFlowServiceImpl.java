@@ -10,8 +10,9 @@ package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.dao.TccSectionValuesDao;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
+import com.insigma.afc.monitor.model.dto.SectionMonitorDTO;
+import com.insigma.afc.monitor.model.dto.SectionMonitorDataDTO;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
-import com.insigma.afc.monitor.model.entity.MetroStation;
 import com.insigma.afc.monitor.model.entity.TccSectionValues;
 import com.insigma.afc.monitor.model.entity.TmoSectionOdFlowStats;
 import com.insigma.afc.monitor.model.vo.SectionOdFlowStatsView;
@@ -30,7 +31,6 @@ import javax.persistence.Query;
 import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -57,8 +57,25 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     private TccSectionValuesDao sectionValuesDao;
     private MonitorConfigService configService;
     private TopologyService topologyService;
-
     private EntityManager entityManager;
+
+    @Override
+    public SectionMonitorDTO getSectionODFlowDensity(SectionFlowCondition condition){
+        SectionMonitorDTO data = new SectionMonitorDTO();
+        SectionFlowMonitorConfigDTO monitorConfigDTO = configService.getSectionFlowMonitorConfig().getData();
+        data.setDensityAlarm(monitorConfigDTO.getAlarm().doubleValue());
+        data.setDensityWarning(monitorConfigDTO.getWarning().doubleValue());
+        List<SectionMonitorDataDTO> sectionMonitorDataDTOS = new ArrayList<>();
+        getSectionODFlowStatsViewList(condition).forEach(s->{
+            SectionMonitorDataDTO dataDTO = new SectionMonitorDataDTO();
+            dataDTO.setSectionId(s.getSectionId());
+            dataDTO.setDownDensity(s.getDownDensity());
+            dataDTO.setUpDensity(s.getUpDensity());
+            sectionMonitorDataDTOS.add(dataDTO);
+        });
+        data.setSections(sectionMonitorDataDTOS);
+        return data;
+    }
 
     @Override
     public List<SectionOdFlowStatsView> getSectionODFlowStatsViewList(SectionFlowCondition condition) {
@@ -78,7 +95,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
                 period2 = 289;
             }
             int len = period2-period1;
-            if (len>=maxPeriods){
+            if (len>maxPeriods){
                 throw new IllegalArgumentException();
             }
             for (int i = 0; i < len; i++) {
@@ -92,10 +109,6 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         if (secOdFlowStatslist==null||secOdFlowStatslist.isEmpty()) {
             return secOdFlowViewlist;
         }
-
-        SectionFlowMonitorConfigDTO sectionFlowMonitorConfigDTO = configService.getSectionFlowMonitorConfig().getData();
-        int lowFlow = sectionFlowMonitorConfigDTO.getWarning();
-        int highFlow = sectionFlowMonitorConfigDTO.getAlarm();
 
         int minutes = timeIntervalIds.size() * timePeriod;
         for (TmoSectionOdFlowStats flowStats : secOdFlowStatslist) {
@@ -150,34 +163,12 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
                 decimal = new BigDecimal(flowcount);
                 flowStatsView.setTotalcount(Integer.toString(decimal.setScale(0, RoundingMode.UP).intValue()));
             }
-
-            // 获取车站位置
-            MetroStation mapItem = topologyService.getStationNode(sectionValues.getPreStationId()).getData();
-            if (mapItem == null) {
-                LOGGER.debug("车站[" + sectionValues.getPreStationId() + "] 未找到。");
-                continue;
-            }
-            flowStatsView.setUpStationPosX(mapItem.getImageLocation().getX());
-            flowStatsView.setUpStationPosY(mapItem.getImageLocation().getY());
-
-            mapItem = topologyService.getStationNode((sectionValues.getDownStationId())).getData();
-            if (mapItem == null) {
-                LOGGER.debug("车站[" + sectionValues.getDownStationId() + "] 未找到。");
-                continue;
-            }
-            flowStatsView.setDownStationPosX(mapItem.getImageLocation().getX());
-            flowStatsView.setDownStationPosY(mapItem.getImageLocation().getY());
-            //
-            short odLevelFlag = 0;
             double count = flowcount / minutes;
-
-            odLevelFlag = getOdLevelFlag(count,lowFlow,highFlow);
             // 上行客流密度
-            flowStatsView.setOdLevelFlag(odLevelFlag);
+            flowStatsView.setUpDensity(count);
             // 下行客流密度
             count = downFlowcount / minutes;
-            odLevelFlag = getOdLevelFlag(count,lowFlow,highFlow);
-            flowStatsView.setDownOdLevelFlag(odLevelFlag);
+            flowStatsView.setDownDensity(count);
             secOdFlowViewlist.add(flowStatsView);
         }
         return secOdFlowViewlist;
@@ -260,18 +251,6 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             secOdFlowStatslist.add(value);
         }
         return secOdFlowStatslist;
-    }
-
-    private short getOdLevelFlag(double count,int lowFlow,int highFlow) {
-        short odLevelFlag;
-        if (count <= lowFlow) {
-            odLevelFlag = 0;
-        } else if (count >= highFlow) {
-            odLevelFlag = 2;
-        } else {
-            odLevelFlag = 1;
-        }
-        return odLevelFlag;
     }
 
     private List<TccSectionValues> getSectionValuesList(List<Short> lines) {

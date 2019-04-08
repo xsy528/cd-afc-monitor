@@ -40,6 +40,12 @@ public class SectionFlowController {
         return Result.success(sectionODFlowService.getSectionODFlowStatsViewList(condition));
     }
 
+    @ApiOperation("断面客流监控图")
+    @PostMapping("/monitor")
+    public Result monitor(@Valid @RequestBody SectionFlowCondition condition){
+        return Result.success(sectionODFlowService.getSectionODFlowDensity(condition));
+    }
+
     @Autowired
     public void setSectionODFlowService(SectionODFlowService sectionODFlowService) {
         this.sectionODFlowService = sectionODFlowService;

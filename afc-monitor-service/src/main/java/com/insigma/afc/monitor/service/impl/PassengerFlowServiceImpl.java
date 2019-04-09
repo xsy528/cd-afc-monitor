@@ -188,8 +188,8 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         // 数据库中一个timeIntervalId数据点包含的分钟数，比如timePeriod=5，则表明timeIntervalId包含5分钟的客流数据。默认值为5
         // 通过该值可以获取对于的时间点
         int timePeriod = 5;
-        if (condition.getTimeInterval() > 1) {
-            timePeriod = condition.getTimeInterval();
+        if (timeInterval.get(0) > 1) {
+            timePeriod = timeInterval.get(0).intValue();
         }
         // 每个曲线上的点包含timeIntervalId的个数inclueTimeIdCount(默认值为1)
         int inclueTimeIdCount = 1;

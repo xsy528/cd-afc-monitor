@@ -9,7 +9,9 @@
 package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.afc.monitor.model.dto.SectionMonitorDTO;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
+import com.insigma.afc.monitor.model.vo.SectionOdFlowStatsView;
 import com.insigma.afc.monitor.service.SectionODFlowService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Ticket:
@@ -36,13 +39,13 @@ public class SectionFlowController {
 
     @ApiOperation("断面客流查询")
     @PostMapping("/search")
-    public Result search(@Valid @RequestBody SectionFlowCondition condition){
+    public Result<List<SectionOdFlowStatsView>> search(@Valid @RequestBody SectionFlowCondition condition){
         return Result.success(sectionODFlowService.getSectionODFlowStatsViewList(condition));
     }
 
     @ApiOperation("断面客流监控图")
     @PostMapping("/monitor")
-    public Result monitor(@Valid @RequestBody SectionFlowCondition condition){
+    public Result<SectionMonitorDTO> monitor(@Valid @RequestBody SectionFlowCondition condition){
         return Result.success(sectionODFlowService.getSectionODFlowDensity(condition));
     }
 

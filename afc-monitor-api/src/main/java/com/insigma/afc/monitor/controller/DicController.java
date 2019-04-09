@@ -113,7 +113,7 @@ public class DicController {
         return Result.success(data);
 
     }
-    public Map<String,Object> getModel(String key,String value){
+    private Map<String,Object> getModel(String key,String value){
         Map<String,Object> groupMode1 = new HashMap<>();
         groupMode1.put("key",key);
         groupMode1.put("value",value);

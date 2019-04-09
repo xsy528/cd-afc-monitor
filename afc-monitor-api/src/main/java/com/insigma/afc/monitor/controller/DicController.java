@@ -91,4 +91,33 @@ public class DicController {
 
         return Result.success(data);
     }
+
+    @ApiOperation("获取曲线图时间间隔类型列表")
+    @PostMapping("/timeIntervalResultList")
+    public Result getTimeInterval(){
+        //时间间隔的选择个数
+        int len = 10;
+        List<Map> data = new ArrayList<>(len);
+
+        data.add(getModel("1","1"));
+        data.add(getModel("2","2"));
+        data.add(getModel("5","5"));
+        data.add(getModel("6","6"));
+        data.add(getModel("8","8"));
+        data.add(getModel("10","10"));
+        data.add(getModel("15","15"));
+        data.add(getModel("20","20"));
+        data.add(getModel("25","25"));
+        data.add(getModel("30","30"));
+
+        return Result.success(data);
+
+    }
+    public Map<String,Object> getModel(String key,String value){
+        Map<String,Object> groupMode1 = new HashMap<>();
+        groupMode1.put("key",key);
+        groupMode1.put("value",value);
+
+        return  groupMode1;
+    }
 }

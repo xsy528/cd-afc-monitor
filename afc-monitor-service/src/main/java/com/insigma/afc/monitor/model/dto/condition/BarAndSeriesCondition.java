@@ -33,7 +33,7 @@ public class BarAndSeriesCondition extends PageBean {
 
     @ApiModelProperty("交易类型")
     @JsonProperty("trans_type")
-    protected List<Integer> transType = new ArrayList<>(LEGEND.length);
+    protected List<Integer> transType;
 
    /// @JsonProperty("station_name_map")
     //private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();

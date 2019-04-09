@@ -7,7 +7,6 @@ import com.insigma.afc.monitor.model.dto.condition.*;
 import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.model.vo.*;
 import com.insigma.afc.monitor.service.*;
-import com.insigma.afc.monitor.service.NodeTreeService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.util.DateTimeUtil;
 import io.swagger.annotations.Api;
@@ -186,10 +185,7 @@ public class NodeStatusController {
     @ApiOperation("各类查询-模式广播")
     @PostMapping("modeBroadcastInfo")
     public Result<Page<ModeBroadcastInfo>> getModeBroadcastInfo(@RequestBody ModeBroadcastCondition condition) {
-        Page<TmoModeBroadcast> tmoModeBroadcasts = modeService.getModeBroadcastInfo(condition.getStationIds(),
-                condition.getEntryMode(), null, condition.getDestStationId(), condition.getBroadcastStatus(),
-                condition.getBroadcastType(), condition.getStartTime(),
-                condition.getEndTime(), condition.getPageNumber(), condition.getPageSize());
+        Page<TmoModeBroadcast> tmoModeBroadcasts = modeService.getModeBroadcastInfo(condition);
 
         return Result.success(tmoModeBroadcasts.map(tmoModeBroadcast -> {
             ModeBroadcastInfo modeBroadcastInfo = new ModeBroadcastInfo();

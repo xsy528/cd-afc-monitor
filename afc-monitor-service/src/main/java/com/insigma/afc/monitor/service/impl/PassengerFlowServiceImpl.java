@@ -215,17 +215,17 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             long pointtotal = 0;
             // 每个点包含的各项值
             int count = 0;
-            BigDecimal timeIntervalId = null;
+            Long timeIntervalId = null;
             // 曲线上数据点
             List<SeriesChartData.SeriesData> valueOfSeries = new ArrayList<>();
             for (Object[] objects : dataList) {
                 // int stationId = (Integer) objects[0];
-                timeIntervalId = (BigDecimal) objects[1];
-                BigDecimal odin = (BigDecimal) objects[2];
-                BigDecimal odout = (BigDecimal) objects[3];
-                BigDecimal odbuy = (BigDecimal) objects[4];
-                BigDecimal odadd = (BigDecimal) objects[5];
-                BigDecimal total = odin.add(odout).add(odbuy).add(odadd);
+                timeIntervalId = (Long) objects[1];
+                Long odin = (Long) objects[2];
+                Long odout = (Long) objects[3];
+                Long odbuy = (Long) objects[4];
+                Long odadd = (Long) objects[5];
+                Long total = odin+odout+odbuy+odadd;
 
                 pointodin = odin.longValue();
                 pointodout += odout.longValue();
@@ -410,7 +410,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         }
         // 将数据按照各自的车站分配到数组中
         for (Object[] odData : data) {
-            int id = (Integer) odData[0];
+            long id = (Long) odData[0];
             if (dataMap.containsKey("" + id)) {
                 dataMap.get("" + id).add(odData);
             }

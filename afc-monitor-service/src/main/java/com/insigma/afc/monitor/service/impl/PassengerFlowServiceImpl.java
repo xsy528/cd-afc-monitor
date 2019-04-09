@@ -135,7 +135,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             List<Double> valueOfPies = new ArrayList<Double>();
             for (int j = 0; j < names.size(); j++) {
                 double value = 0.0;
-                if (j >= 4) {
+                if (j > 4) {
                     value = total.doubleValue();
                 } else {
                     value = ((BigDecimal) objects[j + 1]).doubleValue();

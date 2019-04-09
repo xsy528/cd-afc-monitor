@@ -437,9 +437,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 period2 = 289;
             }
             int len = period2-period1;
-            if (len>=maxPeriods){
-                throw new IllegalArgumentException();
-            }
+//            if (len>=maxPeriods){
+//                throw new IllegalArgumentException();
+//            }
             LOGGER.debug(period2+"="+period1);
             for (int i = 0; i < len; i++) {
                 timeIntervalIds.add((long)(period1 + i));

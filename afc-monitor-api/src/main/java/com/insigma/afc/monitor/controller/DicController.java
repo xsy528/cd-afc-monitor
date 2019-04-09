@@ -81,13 +81,14 @@ public class DicController {
 
         String[] legend = BarAndSeriesCondition.getLEGEND();
         List<Map> data = new ArrayList<>(legend.length);
-        Map<String,Object> groupMode = new HashMap<>();
+
         for (int i=0;i<legend.length;i++) {
-
-            groupMode.put(i+"",legend[i]);
-
+            Map<String,Object> groupMode = new HashMap<>();
+            groupMode.put("key",i);
+            groupMode.put("value",legend[i]);
+            data.add(groupMode);
         }
-        data.add(groupMode);
+
         return Result.success(data);
     }
 }

@@ -70,7 +70,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         }
         chartData.setRowNames(names);
 
-        Map<Integer, String> stationNameMap = condition.getStationNameMap();
         List<BarChartData.ColumnData> columnItems = new ArrayList<BarChartData.ColumnData>();
         int columnIndex = 0;
         for (Object[] objects : bars) {
@@ -89,9 +88,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                     valueOfRows.add((BigDecimal) objects[j + 1]);
                 }
             }
-            LOGGER.debug(stationId.toString());
-            LOGGER.debug(stationNameMap.toString());
-            String culumnName = stationNameMap.get(Integer.parseInt(stationId.toString()));
+           // LOGGER.debug(stationId.toString());
+            //LOGGER.debug(stationNameMap.toString());
+            String culumnName = topologyService.getNodeText(stationId.longValue()).getData();
 
             if (culumnName.equals("车站名未知")) {
                 culumnName = culumnName + columnIndex;
@@ -123,7 +122,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         }
         chartData.setPartNames(names);
 
-        Map<Integer, String> stationNameMap = condition.getStationNameMap();
         List<PieChartData.PieData> pieItems = new ArrayList<>();
         // double[] v = new double[names.size()];
         int pieIndex = 0;
@@ -144,7 +142,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 }
                 valueOfPies.add(value);
             }
-            String pieName = stationNameMap.get(Integer.parseInt(stationId.toString()));
+            String pieName = topologyService.getNodeText(stationId.longValue()).getData();
             if (pieName.equals("车站名未知")) {
                 pieName = pieName + pieIndex;
                 pieIndex++;
@@ -158,12 +156,20 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
     @Override
     public SeriesChartData getSeriesChart(SeriesCondition condition) {
-        Page<Object[]> bars = passengerDao.findAllSeriesBySeriesCondition(condition.getDate()
-                ,getTimeInterval(condition.getTime()),
-                condition.getStationId(),
-                condition.getTicketFamily(),
-                PageRequest.of(condition.getPageNumber(),condition.getPageSize()));
-
+        Date date1 = condition.getDate();
+        List<Long> timeInterval = getTimeInterval(condition.getTime());
+        List<Long> stationId1 = condition.getStationId();
+        Short ticketFamily = condition.getTicketFamily();
+        Integer page = condition.getPageNumber();
+        Integer pageSize = condition.getPageSize();
+        Page<Object[]> bars;
+        if(ticketFamily!=null){
+        bars = passengerDao.findAllSeriesBySeriesCondition(date1, timeInterval,
+                stationId1, ticketFamily, PageRequest.of(page, pageSize));
+        }else{
+        bars = passengerDao.findAllSeriesBySeriesCondition2(date1, timeInterval,
+                    stationId1, PageRequest.of(page, pageSize));
+        }
         LOGGER.debug("-----------------------------");
         String[] partNames = condition.getPartNames();
         if (partNames == null || partNames.length <= 0) {
@@ -178,7 +184,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         chartData.setPartNames(names);
         Calendar cal = Calendar.getInstance();
 
-        Map<String, List<Object[]>> sortData = sortData(bars, condition.getStationId());
+        Map<String, List<Object[]>> sortData = sortData(bars, stationId1);
         // 数据库中一个timeIntervalId数据点包含的分钟数，比如timePeriod=5，则表明timeIntervalId包含5分钟的客流数据。默认值为5
         // 通过该值可以获取对于的时间点
         int timePeriod = 5;
@@ -192,9 +198,8 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         }
         chartData.setIntervalCount(condition.getIntervalCount());
 
-        chartData.setTicketType(condition.getTicketFamily()+0);
+        chartData.setTicketType(ticketFamily +0);
 
-        Map<Integer, String> stationNameMap = condition.getStationNameMap();
         Map<String, List<SeriesChartData.SeriesData>> seriersItems = new HashMap<>();
         int stationIndex = 0;
         // 生成各条曲线数据
@@ -231,7 +236,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 count++;
                 // 客流值点加入到曲线
                 if (count >= inclueTimeIdCount) {
-                    Date date = condition.getDate();
+                    Date date = date1;
                     cal.setTime(date);
                     cal.set(Calendar.HOUR_OF_DAY, 0);
                     cal.set(Calendar.MINUTE, 0);
@@ -253,7 +258,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             }
             // 判断是否还有剩余的最后数据点没加到曲线上，有的话就加上
             if (count > 0) {
-                Date date = condition.getDate();
+                Date date = date1;
                 cal.setTime(date);
                 cal.set(Calendar.HOUR_OF_DAY, 0);
                 cal.set(Calendar.MINUTE, 0);
@@ -264,7 +269,8 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 seriesData.setValueOfPart(new long[] { pointodin, pointodout, pointodbuy, pointodadd });
                 valueOfSeries.add(seriesData);
             }
-            String seriesName = stationNameMap.get(Integer.valueOf(stationId));
+
+            String seriesName = topologyService.getNodeText(Long.parseLong(stationId)).getData();
             if (seriesName.equals("车站名未知")) {
                 seriesName = seriesName + stationIndex;
             }
@@ -382,8 +388,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         Integer page = condition.getPageNumber();
         Integer pageSize = condition.getPageSize();
         List<Long> timeInterval = getTimeInterval(condition.getTime());
-
-        Page<Object[]> bars = passengerDao.findAllBarAndPieByConditon(date,timeInterval, stationIds,ticketFamily, PageRequest.of(page,pageSize));
+        Page<Object[]> bars;
+        if(ticketFamily!=null) {
+             bars = passengerDao.findAllBarAndPieByConditon(date, timeInterval, stationIds, ticketFamily, PageRequest.of(page, pageSize));
+        }else{
+            bars = passengerDao.findAllBarAndPieByConditon2(date, timeInterval, stationIds, PageRequest.of(page, pageSize));
+        }
         return bars;
     }
 
@@ -438,4 +448,14 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         LOGGER.debug(timeIntervalIds.get(0).toString());
         return  timeIntervalIds;
     }
+//    public String[] getPartNames(List<Integer> list){
+//        List<String> partNames = new ArrayList<>();
+//        String[] legend = BarAndSeriesCondition.getLEGEND();
+//        for (int i = 0;i<list.size();i++) {
+//            if (list.get(i)!=0){
+//                partNames.add(legend[i]);
+//            }
+//        }
+//        return partNames.toArray(new String[partNames.size()]);
+//    }
 }

@@ -7,18 +7,16 @@ package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
-import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.dao.*;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
+import com.insigma.afc.monitor.model.dto.condition.ModeBroadcastCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
 import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.ModeService;
-import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.commons.util.NodeIdUtils;
@@ -29,7 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.*;
 
@@ -81,9 +78,18 @@ public class ModeServiceImpl implements ModeService {
     }
 
     @Override
-    public Page<TmoModeBroadcast> getModeBroadcastInfo(List<Integer> stationIds, Short modeCode, String operatorId,
-                                                       Integer desStationId, Short broadCastStatus, Short broadCastType,
-                                                       Date startTime, Date endTime, int page, int pageSize) {
+    public Page<TmoModeBroadcast> getModeBroadcastInfo(ModeBroadcastCondition condition) {
+        List<Integer> stationIds = condition.getStationIds();
+        Short modeCode = condition.getEntryMode();
+        Integer desStationId = condition.getDestStationId();
+        Short broadCastStatus = condition.getBroadcastStatus();
+        Short broadCastType = condition.getBroadcastType();
+        Date startTime = condition.getStartTime();
+        Date endTime = condition.getEndTime();
+        int page = condition.getPageNumber();
+        int pageSize = condition.getPageSize();
+        String operatorId = "";
+
         return tmoModeBroadcastDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (stationIds != null && !stationIds.isEmpty()) {
@@ -148,7 +154,7 @@ public class ModeServiceImpl implements ModeService {
         List<TmoModeBroadcast> tmoModeBroadcasts = tmoModeBroadcastDao.findAllById(resultIds);
         for (TmoModeBroadcast tmoModeBroadcast : tmoModeBroadcasts) {
             Result<List<CommandResultDTO>> result = commandService.sendChangeModeCommand(Arrays.asList(tmoModeBroadcast
-                    .getStationId().longValue()), tmoModeBroadcast.getModeCode().intValue());
+                    .getTargetId()), tmoModeBroadcast.getModeCode().intValue());
             if (result.isSuccess()) {
                 CommandResultDTO commandResultDTO = result.getData().get(0);
                 commandResultDTOs.add(commandResultDTO);
@@ -188,8 +194,6 @@ public class ModeServiceImpl implements ModeService {
         Date startTime = condition.getStartTime();
         Date endTime = condition.getEndTime();
         Short cmdType = condition.getCmdType();
-        int page = condition.getPageNumber();
-        Integer pageSize = condition.getPageSize();
 
         //站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
         return tmoCmdResultDao.findAll((root, query, builder) -> {
@@ -219,7 +223,7 @@ public class ModeServiceImpl implements ModeService {
             query.orderBy(builder.desc(root.get("occurTime")));
             //以occurTime降序
             return builder.and(predicates.toArray(new Predicate[0]));
-        }, PageRequest.of(page, pageSize));
+        }, PageRequest.of(condition.getPageNumber(), condition.getPageSize()));
     }
 
     @Override

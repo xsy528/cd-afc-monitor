@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
+import com.insigma.afc.monitor.model.dto.condition.ModeBroadcastCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
 import com.insigma.afc.monitor.model.entity.*;
 import org.springframework.data.domain.Page;
@@ -118,22 +119,11 @@ public interface ModeService {
     Page<TmoCmdResult> getModeCmdSearch(ModeCmdCondition condition);
 
 	/**
-	 * 获取模式广播信息
-	 * @param stationIds 车站数组
-	 * @param modeCode 进入的模式
-	 * @param operatorId 操作员id
-	 * @param desStationId 目标车站id
-	 * @param broadCastStatus 广播状态
-	 * @param broadCastType 广播类型
-	 * @param startTime 开始时间
-	 * @param endTime 结束时间
-	 * @param page 页码
-	 * @param pageSize 页大小
-	 * @return 分页数据
+	 * 各类查询模式广播查询
+	 * @param condition
+	 * @return
 	 */
-	Page<TmoModeBroadcast> getModeBroadcastInfo(List<Integer> stationIds, Short modeCode, String operatorId,
-												Integer desStationId, Short broadCastStatus, Short broadCastType,
-												Date startTime, Date endTime, int page, int pageSize);
+	Page<TmoModeBroadcast> getModeBroadcastInfo(ModeBroadcastCondition condition);
 
 	/**
 	 * 模式上传信息

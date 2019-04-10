@@ -33,7 +33,7 @@ public class BarAndSeriesCondition extends PageBean {
 
     @ApiModelProperty("交易类型")
     @JsonProperty("trans_type")
-    protected List<Integer> transType = new ArrayList<>(LEGEND.length);
+    protected List<Integer> transType;
 
    /// @JsonProperty("station_name_map")
     //private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
@@ -44,8 +44,8 @@ public class BarAndSeriesCondition extends PageBean {
     @JsonProperty("part_names")
     private String[] partNames;
 
-    @JsonProperty("time_interval")
-    private int timeInterval = 5;
+//    @JsonProperty("time_interval")
+//    private int timeInterval = 5;
 
     public BarAndSeriesCondition() {
 
@@ -97,14 +97,6 @@ public class BarAndSeriesCondition extends PageBean {
 
     public void setTransType(List<Integer> transType) {
         this.transType = transType;
-    }
-
-    public int getTimeInterval() {
-        return timeInterval;
-    }
-
-    public void setTimeInterval(int timeInterval) {
-        this.timeInterval = timeInterval;
     }
 
     public static String[] getLEGEND() {

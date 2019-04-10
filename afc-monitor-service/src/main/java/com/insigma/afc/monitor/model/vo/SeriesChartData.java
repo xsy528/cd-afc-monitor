@@ -29,6 +29,7 @@ public class SeriesChartData {
     private int IntervalCount = 5;
 
     //横坐标类型 1：时 2：日 3:月
+
     private int xaxisType = 1;
 
     private Date startDate;

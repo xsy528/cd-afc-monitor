@@ -188,8 +188,8 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         // 数据库中一个timeIntervalId数据点包含的分钟数，比如timePeriod=5，则表明timeIntervalId包含5分钟的客流数据。默认值为5
         // 通过该值可以获取对于的时间点
         int timePeriod = 5;
-        if (condition.getTimeInterval() > 1) {
-            timePeriod = condition.getTimeInterval();
+        if (timeInterval.get(0) > 1) {
+            timePeriod = timeInterval.get(0).intValue();
         }
         // 每个曲线上的点包含timeIntervalId的个数inclueTimeIdCount(默认值为1)
         int inclueTimeIdCount = 1;
@@ -215,17 +215,17 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             long pointtotal = 0;
             // 每个点包含的各项值
             int count = 0;
-            BigDecimal timeIntervalId = null;
+            Long timeIntervalId = null;
             // 曲线上数据点
             List<SeriesChartData.SeriesData> valueOfSeries = new ArrayList<>();
             for (Object[] objects : dataList) {
                 // int stationId = (Integer) objects[0];
-                timeIntervalId = (BigDecimal) objects[1];
-                BigDecimal odin = (BigDecimal) objects[2];
-                BigDecimal odout = (BigDecimal) objects[3];
-                BigDecimal odbuy = (BigDecimal) objects[4];
-                BigDecimal odadd = (BigDecimal) objects[5];
-                BigDecimal total = odin.add(odout).add(odbuy).add(odadd);
+                timeIntervalId = (Long) objects[1];
+                Long odin = (Long) objects[2];
+                Long odout = (Long) objects[3];
+                Long odbuy = (Long) objects[4];
+                Long odadd = (Long) objects[5];
+                Long total = odin+odout+odbuy+odadd;
 
                 pointodin = odin.longValue();
                 pointodout += odout.longValue();
@@ -410,7 +410,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         }
         // 将数据按照各自的车站分配到数组中
         for (Object[] odData : data) {
-            int id = (Integer) odData[0];
+            long id = (Long) odData[0];
             if (dataMap.containsKey("" + id)) {
                 dataMap.get("" + id).add(odData);
             }
@@ -437,9 +437,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 period2 = 289;
             }
             int len = period2-period1;
-            if (len>=maxPeriods){
-                throw new IllegalArgumentException();
-            }
+//            if (len>=maxPeriods){
+//                throw new IllegalArgumentException();
+//            }
             LOGGER.debug(period2+"="+period1);
             for (int i = 0; i < len; i++) {
                 timeIntervalIds.add((long)(period1 + i));

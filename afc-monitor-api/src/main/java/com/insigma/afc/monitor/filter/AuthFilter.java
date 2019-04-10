@@ -3,9 +3,6 @@
  *
  * 版权所有：浙江浙大网新众合轨道交通工程有限公司
  */
-/**
- *
- */
 package com.insigma.afc.monitor.filter;
 
 import com.insigma.afc.monitor.util.SecurityUtils;
@@ -29,8 +26,7 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String userId = request.getHeader("userId");
         if (userId==null){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+            userId = "1";
         }
         SecurityUtils.setUserId(userId);
         filterChain.doFilter(servletRequest,servletResponse);

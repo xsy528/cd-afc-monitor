@@ -10,7 +10,6 @@ package com.insigma.afc.monitor.model.dto.condition;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -22,17 +21,14 @@ import java.util.List;
  * Ticket:
  *
  * @author xuzhemin
- * 2019/3/22 14:15
+ * 2019/4/10 9:55
  */
-@ApiModel("断面客流查询条件")
-public class SectionFlowCondition extends PageBean {
+@ApiModel("断面客流监控图查询条件")
+public class SectionFlowMonitorCondition {
 
-    @ApiModelProperty("线路id")
+    @ApiModelProperty("线路数组")
     @JsonProperty("line_ids")
     private List<Short> lineIds;
-
-    @ApiModelProperty("方向")
-    private Short direction;
 
     @ApiModelProperty("开始时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -44,20 +40,17 @@ public class SectionFlowCondition extends PageBean {
     @JsonProperty("end_time")
     private Date endTime;
 
+    @ApiModelProperty("最近时间")
+    @JsonProperty("last_time")
+    @Pattern(regexp = "5|10|15")
+    private String lastTime;
+
     public List<Short> getLineIds() {
         return lineIds;
     }
 
     public void setLineIds(List<Short> lineIds) {
         this.lineIds = lineIds;
-    }
-
-    public Short getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Short direction) {
-        this.direction = direction;
     }
 
     public Date getStartTime() {
@@ -74,5 +67,13 @@ public class SectionFlowCondition extends PageBean {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getLastTime() {
+        return lastTime;
+    }
+
+    public void setLastTime(String lastTime) {
+        this.lastTime = lastTime;
     }
 }

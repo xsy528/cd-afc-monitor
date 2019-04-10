@@ -1,7 +1,6 @@
 package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.dao.TmoEquEventDao;
-import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
 import com.insigma.afc.monitor.model.dto.condition.EquEventCondition;
 import com.insigma.afc.monitor.model.entity.TmoEquStatus;
 import com.insigma.afc.monitor.service.DeviceEventService;

@@ -335,17 +335,17 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                     if (condition.getStatType() == 1) {
                         t.setTicketFamily(totalData[1].toString() + "/无");
                     } else if (ticketFamily == null
-                            || ticketFamily.get(((BigDecimal) totalData[1]).intValue()) == null) {
+                            || ticketFamily.get(((Short) totalData[1]).intValue()) == null) {
                         t.setTicketFamily("票种未知/" + totalData[1]);
                     } else {
                         t.setTicketFamily(
-                                ticketFamily.get(((BigDecimal) totalData[1]).intValue()) + "/" + totalData[1]);
+                                ticketFamily.get(((Short) totalData[1]).intValue()) + "/" + totalData[1]);
                     }
 
-                    t.setOdIn((String) totalData[2]);
-                    t.setOdOut((String) totalData[3]);
-                    t.setOdBuy((String) totalData[4]);
-                    t.setOdAdd((String) totalData[5]);
+                    t.setOdIn(totalData[2].toString());
+                    t.setOdOut( totalData[3].toString());
+                    t.setOdBuy(totalData[4].toString());
+                    t.setOdAdd(totalData[5].toString());
                     formData.add(t);
                 }
             }

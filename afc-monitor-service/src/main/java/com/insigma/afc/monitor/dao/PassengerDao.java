@@ -63,7 +63,7 @@ public interface PassengerDao extends JpaRepository<TmoOdFlowStats,Integer>,
     @Query(value = " select station_id,'全部票种',sum(total_in),sum (total_out),sum (sale_count),sum(add_count) " +
             "from TMO_OD_FLOW_STATS " +
             "where gathering_date=?1 and time_interval_id in(?2) and " +
-            "station_id in (?4) " +
+            "station_id in (?3) " +
             "group by station_id " +
             "order by station_id",nativeQuery = true)
     Page<Object[]> findAllByCondition(Date gatheringDate, List<Long> timeIntervals,List<Long> stationId
@@ -72,7 +72,7 @@ public interface PassengerDao extends JpaRepository<TmoOdFlowStats,Integer>,
     @Query(value = " select station_id,ticket_family,sum(total_in),sum (total_out),sum (sale_count),sum(add_count) " +
             "from TMO_OD_FLOW_STATS " +
             "where gathering_date=?1 and time_interval_id in(?2) and " +
-            "station_id in (?4) " +
+            "station_id in (?3) " +
             "group by station_id,ticket_family " +
             "order by station_id,ticket_family",nativeQuery = true)
     Page<Object[]> findAllByCondition2(Date gatheringDate, List<Long> timeIntervals,List<Long> stationId, Pageable pageable);

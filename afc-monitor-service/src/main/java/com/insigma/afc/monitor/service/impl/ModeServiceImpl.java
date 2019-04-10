@@ -194,8 +194,6 @@ public class ModeServiceImpl implements ModeService {
         Date startTime = condition.getStartTime();
         Date endTime = condition.getEndTime();
         Short cmdType = condition.getCmdType();
-        int page = condition.getPageNumber();
-        Integer pageSize = condition.getPageSize();
 
         //站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
         return tmoCmdResultDao.findAll((root, query, builder) -> {
@@ -225,7 +223,7 @@ public class ModeServiceImpl implements ModeService {
             query.orderBy(builder.desc(root.get("occurTime")));
             //以occurTime降序
             return builder.and(predicates.toArray(new Predicate[0]));
-        }, PageRequest.of(page, pageSize));
+        }, PageRequest.of(condition.getPageNumber(), condition.getPageSize()));
     }
 
     @Override

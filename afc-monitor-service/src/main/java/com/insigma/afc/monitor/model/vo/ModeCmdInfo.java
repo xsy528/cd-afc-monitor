@@ -32,7 +32,7 @@ public class ModeCmdInfo implements Serializable {
 
     @ApiModelProperty("车站编号")
     @JsonProperty("station_id")
-    private int stationId;
+    private Integer stationId;
 
     @ApiModelProperty("模式名称")
     @JsonProperty("cmd_name")
@@ -66,11 +66,11 @@ public class ModeCmdInfo implements Serializable {
         this.stationName = stationName;
     }
 
-    public int getStationId() {
+    public Integer getStationId() {
         return stationId;
     }
 
-    public void setStationId(int stationId) {
+    public void setStationId(Integer stationId) {
         this.stationId = stationId;
     }
 

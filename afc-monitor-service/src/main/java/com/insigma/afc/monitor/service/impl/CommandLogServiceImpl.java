@@ -20,12 +20,12 @@ import java.util.List;
  */
 @Service
 public class CommandLogServiceImpl implements CommandLogService {
-    @Autowired
+
     private TmoCmdResultDao tmoCmdResultDao;
+
     @Override
     public Page<TmoCmdResult> getCommandLogSearch(CommandLogCondition condition) {
         //路线、站点，节点并在开始时间和结束时间内，如果有操作员编号，要包含操作员编号，如果有日志类型要包含日志类型,如果有命令结果要包含命令结果。
-
 
         //节点ID
         List<Long> nodeIds = condition.getNodeIds();
@@ -74,5 +74,10 @@ public class CommandLogServiceImpl implements CommandLogService {
             //以occurTime降序
             return builder.and(predicates.toArray(new Predicate[0]));
         }, PageRequest.of(page,pageSize));
+    }
+
+    @Autowired
+    public void setTmoCmdResultDao(TmoCmdResultDao tmoCmdResultDao) {
+        this.tmoCmdResultDao = tmoCmdResultDao;
     }
 }

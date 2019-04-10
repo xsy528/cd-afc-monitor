@@ -46,7 +46,7 @@ public class DeviceEventServiceImpl implements DeviceEventService {
                 //将站点ID存入root中
             }
             if (eventLevel!=null){
-                predicates.add(builder.equal(root.get("nodeId"),eventLevel));
+                predicates.add(builder.equal(root.get("statusValue"),eventLevel));
                 //将站点ID存入root中
             }
             if (startTime!=null){

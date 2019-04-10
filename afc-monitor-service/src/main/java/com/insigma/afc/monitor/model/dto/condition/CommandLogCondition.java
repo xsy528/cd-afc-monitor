@@ -22,13 +22,13 @@ public class CommandLogCondition extends PageBean {
     @JsonProperty("node_ids")
     private List<Long> nodeIds;
 
-    @ApiModelProperty("站点ID")
-    @JsonProperty("station_ids")
-    private List<Integer> stationIds;
+//    @ApiModelProperty("站点ID")
+//    @JsonProperty("station_ids")
+//    private List<Integer> stationIds;
 
-    @ApiModelProperty("路线ID")
-    @JsonProperty("line_ids")
-    private List<Short> lineIds;
+//    @ApiModelProperty("路线ID")
+//    @JsonProperty("line_ids")
+//    private List<Short> lineIds;
     //默认为null
 
     @ApiModelProperty("操作员ID")
@@ -57,22 +57,6 @@ public class CommandLogCondition extends PageBean {
 
     public void setNodeIds(List<Long> nodeIds) {
         this.nodeIds = nodeIds;
-    }
-
-    public List<Integer> getStationIds() {
-        return stationIds;
-    }
-
-    public void setStationIds(List<Integer> stationIds) {
-        this.stationIds = stationIds;
-    }
-
-    public List<Short> getLineIds() {
-        return lineIds;
-    }
-
-    public void setLineIds(List<Short> lineIds) {
-        this.lineIds = lineIds;
     }
 
     public String getOperatorId() {
@@ -119,8 +103,6 @@ public class CommandLogCondition extends PageBean {
     public String toString() {
         return "CommandLogCondition{" +
                 "nodeIds=" + nodeIds +
-                ", stationIds=" + stationIds +
-                ", lineIds=" + lineIds +
                 ", operatorId='" + operatorId + '\'' +
                 ", logType='" + logType + '\'' +
                 ", commandResult='" + commandResult + '\'' +

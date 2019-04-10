@@ -6,9 +6,7 @@ import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Ticket:客流查询接口
@@ -36,11 +34,11 @@ public class PassengerCondition extends PageBean {
     @JsonProperty("station_id")
     private List<Long> stationId;
 
-    @JsonProperty("part_names")
-    private String[] partNames;
+//    @JsonProperty("part_names")
+//    private String[] partNames;
 
-    @JsonProperty("time_interval")
-    private int timeInterval = 5;
+//    @JsonProperty("time_interval")
+//    private int timeInterval = 5;
 
     public Date getDate() {
         return date;
@@ -74,19 +72,4 @@ public class PassengerCondition extends PageBean {
         this.stationId = stationId;
     }
 
-    public String[] getPartNames() {
-        return partNames;
-    }
-
-    public void setPartNames(String[] partNames) {
-        this.partNames = partNames;
-    }
-
-    public int getTimeInterval() {
-        return timeInterval;
-    }
-
-    public void setTimeInterval(int timeInterval) {
-        this.timeInterval = timeInterval;
-    }
 }

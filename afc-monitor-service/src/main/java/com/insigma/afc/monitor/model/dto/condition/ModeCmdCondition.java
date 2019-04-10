@@ -16,17 +16,17 @@ public class ModeCmdCondition extends PageBean {
     private static final long serialVersionUID = 1L;
     //站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
 
-    @ApiModelProperty("节点ID")
-    @JsonProperty("node_ids")
-    private List<Long> nodeIds;
+//    @ApiModelProperty("节点ID")
+//    @JsonProperty("node_ids")
+//    private List<Long> nodeIds;
 
     @ApiModelProperty("站点ID")
     @JsonProperty("station_ids")
     private List<Integer> stationIds;
 
-    @ApiModelProperty("路线ID")
-    @JsonProperty("line_ids")
-    private List<Short> lineIds;
+//    @ApiModelProperty("路线ID")
+//    @JsonProperty("line_ids")
+//    private List<Short> lineIds;
     //默认为null
 
     @ApiModelProperty("操作员ID")
@@ -46,22 +46,14 @@ public class ModeCmdCondition extends PageBean {
     @JsonProperty("end_time")
     private Date endTime;
 
-    @ApiModelProperty("结果是否成功")
-    @JsonProperty("success_result")
-    private Boolean successResult;
+//    @ApiModelProperty("结果是否成功")
+//    @JsonProperty("success_result")
+//    private Boolean successResult;
     //默认为null
 
     @ApiModelProperty("指令类型")
     @JsonProperty("cmd_type")
     private Short cmdType;
-
-    public List<Long> getNodeIds() {
-        return nodeIds;
-    }
-
-    public void setNodeIds(List<Long> nodeIds) {
-        this.nodeIds = nodeIds;
-    }
 
     public List<Integer> getStationIds() {
         return stationIds;
@@ -69,14 +61,6 @@ public class ModeCmdCondition extends PageBean {
 
     public void setStationIds(List<Integer> stationIds) {
         this.stationIds = stationIds;
-    }
-
-    public List<Short> getLineIds() {
-        return lineIds;
-    }
-
-    public void setLineIds(List<Short> lineIds) {
-        this.lineIds = lineIds;
     }
 
     public String getOperatorId() {
@@ -111,14 +95,6 @@ public class ModeCmdCondition extends PageBean {
         this.endTime = endTime;
     }
 
-    public Boolean getSuccessResult() {
-        return successResult;
-    }
-
-    public void setSuccessResult(Boolean successResult) {
-        this.successResult = successResult;
-    }
-
     public Short getCmdType() {
         return cmdType;
     }
@@ -130,14 +106,11 @@ public class ModeCmdCondition extends PageBean {
     @Override
     public String toString() {
         return "ModeCmdCondition{" +
-                "nodeIds=" + nodeIds +
                 ", stationIds=" + stationIds +
-                ", lineIds=" + lineIds +
                 ", operatorId='" + operatorId + '\'' +
                 ", cmdResult=" + cmdResult +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", successResult=" + successResult +
                 ", cmdType=" + cmdType +
                 '}';
     }

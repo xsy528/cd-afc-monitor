@@ -20,13 +20,13 @@ public class EquEventCondition extends PageBean {
     @JsonProperty("node_ids")
     private List<Long> nodeIds;
 
-    @ApiModelProperty("站点ID")
-    @JsonProperty("station_ids")
-    private List<Integer> stationIds;
+//    @ApiModelProperty("站点ID")
+//    @JsonProperty("station_ids")
+//    private List<Integer> stationIds;
 
-    @ApiModelProperty("路线ID")
-    @JsonProperty("line_ids")
-    private List<Short> lineIds;
+//    @ApiModelProperty("路线ID")
+//    @JsonProperty("line_ids")
+//    private List<Short> lineIds;
 
 
     @ApiModelProperty("开始时间")
@@ -37,9 +37,9 @@ public class EquEventCondition extends PageBean {
     @JsonProperty("end_time")
     private Date endTime;
 
-    @ApiModelProperty("事件等级")
-    @JsonProperty("event_level")
-    private Short eventLevel;
+//    @ApiModelProperty("事件等级")
+//    @JsonProperty("event_level")
+//    private Short eventLevel;
 
     public List<Long> getNodeIds() {
         return nodeIds;
@@ -47,22 +47,6 @@ public class EquEventCondition extends PageBean {
 
     public void setNodeIds(List<Long> nodeIds) {
         this.nodeIds = nodeIds;
-    }
-
-    public List<Integer> getStationIds() {
-        return stationIds;
-    }
-
-    public void setStationIds(List<Integer> stationIds) {
-        this.stationIds = stationIds;
-    }
-
-    public List<Short> getLineIds() {
-        return lineIds;
-    }
-
-    public void setLineIds(List<Short> lineIds) {
-        this.lineIds = lineIds;
     }
 
     public Date getStartTime() {
@@ -81,23 +65,12 @@ public class EquEventCondition extends PageBean {
         this.endTime = endTime;
     }
 
-    public Short getEventLevel() {
-        return eventLevel;
-    }
-
-    public void setEventLevel(Short eventLevel) {
-        this.eventLevel = eventLevel;
-    }
-
     @Override
     public String toString() {
         return "EquEventCondition{" +
                 "nodeIds=" + nodeIds +
-                ", stationIds=" + stationIds +
-                ", lineIds=" + lineIds +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", eventLevel=" + eventLevel +
                 '}';
     }
 }

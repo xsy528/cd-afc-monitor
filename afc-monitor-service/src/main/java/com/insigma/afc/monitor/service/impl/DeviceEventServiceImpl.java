@@ -34,7 +34,8 @@ public class DeviceEventServiceImpl implements DeviceEventService {
         //结束时间
         Date endTime = condition.getEndTime();
         //事件等级
-        Short eventLevel = condition.getEventLevel();
+
+       // Short eventLevel = condition.getEventLevel();
 
         Integer pageSize = condition.getPageSize();
         Integer page = condition.getPageNumber();
@@ -43,10 +44,6 @@ public class DeviceEventServiceImpl implements DeviceEventService {
             List<Predicate> predicates = new ArrayList<>();
             if (nodeIds!=null&&!nodeIds.isEmpty()){
                 predicates.add(root.get("nodeId").in(nodeIds));
-                //将站点ID存入root中
-            }
-            if (eventLevel!=null){
-                predicates.add(builder.equal(root.get("nodeId"),eventLevel));
                 //将站点ID存入root中
             }
             if (startTime!=null){

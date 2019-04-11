@@ -12,7 +12,7 @@ build:
     - pwd
   artifacts:
     paths:
-      - ./afc-monitor-api/target/afc-monitor-api-1.0.jar
+      - ./afc-monitor-api/target/afc-monitor-api-0.0.1-SNAPSHOT.jar
   tags:
     - build
   only:
@@ -25,8 +25,8 @@ deploy:
   script:
     - ls
     - pwd
-    - scp ./afc-monitor-api/target/afc-monitor-api-1.0.jar afc@192.168.140.100:/home/afc/xz-monitor/afc-monitor-dev/
-    - ssh afc@192.168.140.100 "cd /home/afc/xz-monitor/afc-monitor-dev/;kill \`cat application.pid\`;nohup java -jar afc-monitor-api-1.0.jar >/dev/null 2>&1 &"
+    - scp ./afc-monitor-api/target/afc-monitor-api-0.0.1-SNAPSHOT.jar afc@192.168.140.100:/home/afc/xz-monitor/afc-monitor-dev/
+    - ssh afc@192.168.140.100 "cd /home/afc/xz-monitor/afc-monitor-dev/;kill \`cat application.pid\`;nohup java -jar afc-monitor-api-0.0.1-SNAPSHOT.jar >/dev/null 2>&1 &"
   tags:
     - deploy
   only:

@@ -13,7 +13,7 @@
 
     <groupId>com.insigma.product</groupId>
     <artifactId>afc-monitor</artifactId>
-    <version>1.0</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -49,27 +49,22 @@
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-service</artifactId>
-                <version>1.0</version>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-api</artifactId>
-                <version>1.0</version>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-rmi</artifactId>
-                <version>1.0</version>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>com.insigma.commons</groupId>
-            <artifactId>commons-core</artifactId>
-            <version>1.0</version>
-        </dependency>
         <!--spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

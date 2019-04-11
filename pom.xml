@@ -65,6 +65,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.insigma.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>1.0</version>
+        </dependency>
         <!--spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

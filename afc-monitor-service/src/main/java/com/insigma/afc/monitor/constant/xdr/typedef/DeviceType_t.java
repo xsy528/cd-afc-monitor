@@ -1,29 +1,27 @@
 package com.insigma.afc.monitor.constant.xdr.typedef;
 
-/*
- *;
- */
 public interface DeviceType_t {
-	//E/S（编码分拣机）;
-	public final static int DT_ES = 0x00;
-	//TVM自动售票机;
-	public final static int DT_TVM = 0x01;
-	//BOM（半自动售票机）;
-	public final static int DT_BOM = 0x02;
-	//CUS，个性化票卡机;
-	public final static int DT_CUS = 0x03;
-	//PCA（手持式验票机）;
-	public final static int DT_PCA = 0x05;
-	//AGM（自动检票机）;
-	public final static int DT_AGM = 0x06;
-	//ITVM（互联网取票机）;
-	public final static int DT_ITVM = 0x07;
-	//服务器;
-	public final static int DT_Server = 0x11;
-	//工作站;
-	public final static int DT_Workstation = 0x12;
-	//网络设备;
-	public final static int DT_Network = 0x13;
-	//UPS;
-	public final static int DT_UPS = 0x14;
+	public final static int DT_System = 1;
+	public final static int DT_ES = 10;
+	public final static int DT_BOM = 20;
+	public final static int DT_TVM = 22;
+	public final static int DT_TCM = 23;
+	public final static int DT_PCA = 24;
+	public final static int DT_ENG = 40;
+	public final static int DT_EXG = 41;
+	public final static int DT_TWG = 42;
+	public final static int DT_SEXG = 43;
+	public final static int DT_MAGM = 44;
+	public final static int DT_SMAGM = 45;
+	public final static int DT_MNG = 46;
+	public final static int DT_MXG = 47;
+	public final static int DT_MBOM = 50;
+	public final static int DT_STVM = 52;
+	public final static int DT_STM = 55;
+	public final static int DT_TFM = 56;
+	public final static int DT_POS = 57;
+	public final static int DT_TPCA = 58;
+	public final static int DT_Key = 96;
+	public final static int DT_Management = 97;
+	public final static int DT_CBOM = 21;
 }

@@ -25,37 +25,79 @@ public class AFCDeviceType extends Definition {
 		return instance;
 	}
 
-	@DicItem(name = "自动检票机", group = "SLE")
-	public static Short GATE = DeviceType_t.DT_AGM;
+	@DicItem(name = "清分中心设备", key = "CCHS")
+	public static Short CCHS = DeviceType_t.DT_System;
 
-	@DicItem(name = "自动售票机", group = "SLE")
-	public static Short TVM = DeviceType_t.DT_TVM;
+	@DicItem(name = "线路中心设备", key = "LC")
+	public static Short LC = DeviceType_t.DT_System;
 
-	@DicItem(name = "半自动售票机", group = "SLE")
+	@DicItem(name = "车站中心设备", key = "SC")
+	public static Short SC = DeviceType_t.DT_System;
+
+	@DicItem(name = "编码分拣机", key = "ES")
+	public static Short ES = DeviceType_t.DT_ES;
+
+	@DicItem(name = "半自动售票机", key = "BOM", group = "SLE", index = 1)
 	public static Short POST = DeviceType_t.DT_BOM;
 
-	@DicItem(name = "个性化发卡机",group = "SLE")
-	public static Short CUS = DeviceType_t.DT_CUS;
+	@DicItem(name = "自动售票机", key = "TVM", group = "SLE", index = 2)
+	public static Short TVM = DeviceType_t.DT_TVM;
 
-	@DicItem(name = "手持式验票机", group = "SLE")
+	@DicItem(name = "自动查询机", key = "TCM", group = "SLE", index = 3)
+	public static Short TCM = DeviceType_t.DT_TCM;
+
+	@DicItem(name = "手持式验票机", key = "PCA", group = "SLE", index = 8)
 	public static Short PCA = DeviceType_t.DT_PCA;
 
-	@DicItem(name = "互联网取票机",group = "SLE")
-	public static Short ITVM = DeviceType_t.DT_ITVM;
+	@DicItem(name = "进站闸机", key = "ENG", group = "SLE", index = 4)
+	public static Short ENG = DeviceType_t.DT_ENG;
 
-	@DicItem(name = "编码分拣机", group = "E/S")
-	public static Short E_S = DeviceType_t.DT_ES;
+	@DicItem(name = "出站闸机", key = "EXG", group = "SLE", index = 5)
+	public static Short EXG = DeviceType_t.DT_EXG;
 
-	@DicItem(name = "服务器")
-	public static Short SERVER = DeviceType_t.DT_Server;
+	@DicItem(name = "双向闸机", key = "TWG", group = "SLE", index = 6)
+	public static Short RG = DeviceType_t.DT_TWG;
 
-	@DicItem(name = "工作站")
-	public static Short WORKSTATION = DeviceType_t.DT_Workstation;
+	@DicItem(name = "出站闸机，无票卡回收机构", key = "SEXG", group = "SLE", index = 6)
+	public static Short SEXG = DeviceType_t.DT_SEXG;
 
-	@DicItem(name = "网络设备")
-	public static Short NETWORK = DeviceType_t.DT_Network;
+	@DicItem(name = "双向闸机", key = "MAGM", group = "SLE", index = 7)
+	public static Short MAGM = DeviceType_t.DT_MAGM;
 
-	@DicItem(name = "UPS")
-	public static Short UPS = DeviceType_t.DT_UPS;
+	@DicItem(name = "移动闸机，无票卡回收机构", key = "SMAGM", group = "SLE", index = 8)
+	public static Short SMAGM = DeviceType_t.DT_SMAGM;
+
+	@DicItem(name = "移动进站闸机", key = "MNG", group = "SLE", index = 9)
+	public static Short MNG = DeviceType_t.DT_MNG;
+
+	@DicItem(name = "移动出站闸机", key = "MXG", group = "SLE", index = 10)
+	public static Short MXG = DeviceType_t.DT_MXG;
+
+	@DicItem(name = "移动BOM", key = "MBOM", group = "SLE", index = 11)
+	public static Short MBOM = DeviceType_t.DT_MBOM;
+
+	@DicItem(name = "TVM（无现金模块）", key = "STVM", group = "SLE", index = 12)
+	public static Short STVM = DeviceType_t.DT_STVM;
+
+	@DicItem(name = "自助票务处理终端", key = "STM", group = "SLE", index = 12)
+	public static Short STM = DeviceType_t.DT_STM;
+
+	@DicItem(name = "天府通/日次票机", key = "TFM", group = "SLE", index = 13)
+	public static Short TFM = DeviceType_t.DT_TFM;
+
+	@DicItem(name = "有轨POS机", key = "POS", group = "SLE", index = 14)
+	public static Short POS = DeviceType_t.DT_POS;
+
+	@DicItem(name = "有轨PCA机", key = "TPCA", group = "SLE", index = 15)
+	public static Short TPCA = DeviceType_t.DT_TPCA;
+
+	@DicItem(name = "柜台式半自动售票机", key = "CBOM", group = "SLE", index = 16)
+	public static Short CBOM = DeviceType_t.DT_CBOM;
+
+	@DicItem(name = "密钥终端", key = "KEY")
+	public static Short KEY = DeviceType_t.DT_Key;
+
+	@DicItem(name = "管理终端", key = "MANAGEMENT")
+	public static Short MANAGEMENT = DeviceType_t.DT_Management;
 
 }

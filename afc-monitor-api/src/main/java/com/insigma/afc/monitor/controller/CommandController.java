@@ -20,7 +20,7 @@ import java.util.List;
  * 2019-01-04:10:49
  */
 @Api(tags="命令接口")
-@RestController
+//@RestController
 @RequestMapping("/monitor/command")
 public class CommandController{
 

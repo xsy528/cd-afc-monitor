@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:oracle:thin:@192.168.178.214:1521:afclc
-    username: acc_xuzhou_v1
+    url: jdbc:oracle:thin:@192.168.178.212:1521:afclc
+    username: mlc_cd_v1
     password: afcapp
 
 #节点服务地址

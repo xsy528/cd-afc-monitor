@@ -100,7 +100,7 @@ public class CommandServiceImpl implements CommandService {
             modeUpdateForm.setModeCode(sendMode);
             modeUpdateForms.put(metroNode.id(), modeUpdateForm);
         }
-        return Result.success(send(CommandType.CMD_MODE_UPDATE, name, modeUpdateForms, targetIds,
+        return Result.success(send(CommandType.CMD_CHANGE_MODE, name, modeUpdateForms, targetIds,
                 AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
@@ -114,8 +114,8 @@ public class CommandServiceImpl implements CommandService {
         for (MetroNode metroNode : targetIds) {
             args.put(metroNode.id(), metroNode.id());
         }
-        return Result.success(send(CommandType.CMD_MODE_QUERY,
-                CommandType.getInstance().getNameByValue(CommandType.CMD_MODE_QUERY), args, targetIds,
+        return Result.success(send(CommandType.CMD_QUERY_MODE,
+                CommandType.getInstance().getNameByValue(CommandType.CMD_QUERY_MODE), args, targetIds,
                 AFCCmdLogType.LOG_MODE.shortValue()));
     }
 
@@ -174,7 +174,7 @@ public class CommandServiceImpl implements CommandService {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
 
-        return Result.success(send(CommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
+        return Result.success(send(CommandType.CMD_EQU_CTRL, "设备控制命令",
                 null, deviceIds, command));
     }
 
@@ -184,16 +184,16 @@ public class CommandServiceImpl implements CommandService {
         List<MetroNode> ids = new ArrayList<>();
         ids.add(device);
         List<CommandResultDTO> commandResults = new ArrayList<>();
-        Short deviceType = device.getDeviceType();
-        if (AFCDeviceType.TVM.equals(deviceType)) {
-            commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
-                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
-        }
-        if (AFCDeviceType.TVM.equals(deviceType) || AFCDeviceType.POST.equals(deviceType)
-                || AFCDeviceType.GATE.equals(deviceType)) {
-            commandResults.addAll(send(CommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
-                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
-        }
+//        Short deviceType = device.getDeviceType();
+//        if (AFCDeviceType.TVM.equals(deviceType)) {
+//            commandResults.addAll(send(CommandType.CMD_QUERY_TVM_MONEY_TICKET_BOX, "设备钱箱查询命令",
+//                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+//        }
+//        if (AFCDeviceType.TVM.equals(deviceType) || AFCDeviceType.POST.equals(deviceType)
+//                || AFCDeviceType.GATE.equals(deviceType)) {
+//            commandResults.addAll(send(CommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
+//                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+//        }
         return Result.success(commandResults);
     }
 

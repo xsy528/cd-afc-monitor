@@ -201,8 +201,8 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         int period1 = DateTimeUtil.convertTimeToIndex(startTime, timePeriod);
         int period2 = DateTimeUtil.convertTimeToIndex(endTime, timePeriod);
 
-        Date date1 = DateTimeUtil.getDate(startTime.getTime());
-        Date date2 = DateTimeUtil.getDate(endTime.getTime());
+        Date date1 = getDate(startTime);
+        Date date2 = getDate(endTime);
 
         long days = (date2.getTime()-date1.getTime())/(24*60*60*1000);
 
@@ -265,9 +265,9 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         Map<Long,TccSectionValues> sectionMap = new HashMap<>();
         sectionList.forEach((s) -> sectionMap.put(s.getSectionId(), s));
 
+        String select = "select t.sectionId,sum(t.upCount),sum(t.downCount),sum(t.totalCount) ";
         //查询需要的时间段和路段
-        StringBuilder qlBuilder = new StringBuilder("select t.sectionId,sum(t.upCount),sum(t.downCount)," +
-                "sum(t.totalCount) from TmoSectionOdFlowStats t where 1=1 and ( ");
+        StringBuilder qlBuilder = new StringBuilder(" from TmoSectionOdFlowStats t where 1=1 and ( ");
         Map<String,Object> parameters = new HashMap<>();
         intervals.forEach((date,list)->{
             qlBuilder.append(" (t.timeIntervalId in :timeIntervalId and t.gatheringDate=:gatheringDate) or ");
@@ -283,13 +283,16 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         }
         qlBuilder.append(" group by t.sectionId order by t.sectionId asc ");
 
-        String ql = qlBuilder.toString();
+        String ql = select+qlBuilder.toString();
         Query query = entityManager.createQuery(ql);
         parameters.forEach((k,v)-> {
             LOGGER.debug("k="+k+",v="+v);
             query.setParameter(k,v);
         });
-        Query countQuery = entityManager.createQuery("count(1) from ("+qlBuilder.toString()+")");
+        Query countQuery = entityManager.createQuery("select count(distinct t.sectionId) "+qlBuilder.toString());
+        parameters.forEach((k,v)-> {
+            countQuery.setParameter(k,v);
+        });
         long total = (long)countQuery.getSingleResult();
         query.setFirstResult(pageNumber*pageSize);
         query.setMaxResults(pageSize);
@@ -361,9 +364,19 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
                 predicates.add(root.get("lineId").in(lines));
             }
             // 不包括换乘段
-            predicates.add(builder.equal(root.get("transferFlag"), 0));
+            predicates.add(builder.equal(root.get("transferFlag"), (short)0));
             return builder.and(predicates.toArray(new Predicate[0]));
         });
+    }
+
+    private Date getDate(Date datetime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        return calendar.getTime();
     }
 
     @Autowired

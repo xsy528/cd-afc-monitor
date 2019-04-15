@@ -11,6 +11,7 @@ package com.insigma.afc.monitor.controller;
 import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SectionMonitorDTO;
 import com.insigma.afc.monitor.model.dto.SectionValuesDTO;
+import com.insigma.afc.monitor.model.dto.TmoSectionOdFlowStatsDTO;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowMonitorCondition;
 import com.insigma.afc.monitor.model.vo.SectionOdFlowStatsView;
@@ -50,6 +51,12 @@ public class SectionFlowController {
     @PostMapping("/monitor")
     public Result<SectionMonitorDTO> monitor(@Valid @RequestBody SectionFlowMonitorCondition condition){
         return Result.success(sectionODFlowService.getSectionODFlowDensity(condition));
+    }
+
+    @ApiOperation("断面客流统计图")
+    @PostMapping("/statistics")
+    public Result<List<TmoSectionOdFlowStatsDTO>> statistics(@Valid @RequestBody SectionFlowMonitorCondition condition){
+        return Result.success(sectionODFlowService.getSectionODFlowStatistics(condition));
     }
 
     @ApiOperation("断面信息")

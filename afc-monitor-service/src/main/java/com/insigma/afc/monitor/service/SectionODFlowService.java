@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.SectionMonitorDTO;
 import com.insigma.afc.monitor.model.dto.SectionValuesDTO;
+import com.insigma.afc.monitor.model.dto.TmoSectionOdFlowStatsDTO;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowMonitorCondition;
 import com.insigma.afc.monitor.model.entity.TmoSectionOdFlowStats;
@@ -32,6 +33,13 @@ public interface SectionODFlowService {
      * @return 查询数据
      */
     Page<SectionOdFlowStatsView> getSectionODFlowStatsViewList(SectionFlowCondition condition);
+
+    /**
+     * 获取断面客流统计信息
+     * @param condition 查询统计条件
+     * @return 断面数据
+     */
+    List<TmoSectionOdFlowStatsDTO> getSectionODFlowStatistics(SectionFlowMonitorCondition condition);
 
     /**
      * 获取断面信息

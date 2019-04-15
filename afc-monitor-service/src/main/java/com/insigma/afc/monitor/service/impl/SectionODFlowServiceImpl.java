@@ -56,6 +56,8 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
      */
     private int maxPeriods = 3;
 
+    private int maxPeriod = 288;
+
     private TccSectionValuesDao sectionValuesDao;
     private MonitorConfigService configService;
     private TopologyService topologyService;
@@ -82,8 +84,8 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         }
 
         Map<Date,List<Long>> intervals = getTimeIntervals(startTime,endTime);
-        List<TmoSectionOdFlowStats> secOdFlowStatslist = getSectionOdFlowStatsList(condition.getLineIds(),intervals);
-        if (secOdFlowStatslist==null||secOdFlowStatslist.isEmpty()) {
+        List<TmoSectionOdFlowStats> secOdFlowStatsList = getSectionOdFlowStatsList(condition.getLineIds(),intervals);
+        if (secOdFlowStatsList==null||secOdFlowStatsList.isEmpty()) {
             return data;
         }
 
@@ -92,7 +94,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             throw new IllegalArgumentException();
         }
         int minutes = intervalSize * timePeriod;
-        for (TmoSectionOdFlowStats flowStats : secOdFlowStatslist) {
+        for (TmoSectionOdFlowStats flowStats : secOdFlowStatsList) {
             SectionMonitorDataDTO dataDTO = new SectionMonitorDataDTO();
             dataDTO.setSectionId(flowStats.getSectionId());
             // 上行客流密度
@@ -117,7 +119,6 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
                 condition.getPageNumber(),condition.getPageSize(),intervals).map(flowStats->{
             SectionOdFlowStatsView flowStatsView = new SectionOdFlowStatsView();
             flowStatsView.setSectionId(flowStats.getSectionId());
-            //flowStatsView.setBusinessday(DateTimeUtil.formatDate(flowStats.getGatheringDate(), "yyyy-MM-dd"));
             // 客流
             double flowcount;
             // 统计客流
@@ -178,7 +179,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             if (intervals!=null){
                 List<Predicate> orPredicates = new ArrayList<>();
                 intervals.forEach((d,intervalList)-> {
-                    if (intervalList.size()==288){
+                    if (intervalList.size()==maxPeriod){
                         orPredicates.add(build.equal(root.get("gatheringDate"), d));
                     }else {
                         Predicate predicate = build.equal(root.get("gatheringDate"), d);
@@ -246,7 +247,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
      * @return 日期和时间段
      */
     private Map<Date,List<Long>> getTimeIntervals(Date startTime,Date endTime){
-        Map<Date,List<Long>> intervals = new HashMap<>();
+        Map<Date,List<Long>> intervals = new HashMap<>(16);
 
         if (startTime==null||endTime==null){
             throw new IllegalArgumentException("参数不符合要求");
@@ -317,13 +318,13 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         if (sectionList.isEmpty()) {
             return Page.empty();
         }
-        Map<Long,TccSectionValues> sectionMap = new HashMap<>();
+        Map<Long,TccSectionValues> sectionMap = new HashMap<>(16);
         sectionList.forEach((s) -> sectionMap.put(s.getSectionId(), s));
 
         String select = "select t.sectionId,sum(t.upCount),sum(t.downCount),sum(t.totalCount) ";
         //查询需要的时间段和路段
         StringBuilder qlBuilder = new StringBuilder(" from TmoSectionOdFlowStats t where 1=1 and ( ");
-        Map<String,Object> parameters = new HashMap<>();
+        Map<String,Object> parameters = new HashMap<>(16);
         intervals.forEach((date,list)->{
             qlBuilder.append(" (t.timeIntervalId in :timeIntervalId and t.gatheringDate=:gatheringDate) or ");
             parameters.put("timeIntervalId",list);
@@ -350,6 +351,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         query.setFirstResult(pageNumber*pageSize);
         query.setMaxResults(pageSize);
         List list = query.getResultList();
+        List<TmoSectionOdFlowStats> secOdFlowStatslist = getTmoSectionOdFlowStats(list);
+        return new PageImpl<>(secOdFlowStatslist,PageRequest.of(pageNumber,pageSize),total);
+    }
+
+    private List<TmoSectionOdFlowStats> getTmoSectionOdFlowStats(List list){
         List<TmoSectionOdFlowStats> secOdFlowStatslist = new ArrayList<>();
         for (Object o : list) {
             TmoSectionOdFlowStats value = new TmoSectionOdFlowStats();
@@ -360,7 +366,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             value.setTotalCount((Long) objs[3]);
             secOdFlowStatslist.add(value);
         }
-        return new PageImpl<>(secOdFlowStatslist,PageRequest.of(pageNumber,pageSize),total);
+        return secOdFlowStatslist;
     }
 
     private void setParameter(Query query,String key,Object value){
@@ -373,13 +379,13 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         if (sectionList.isEmpty()) {
             return null;
         }
-        Map<Long,TccSectionValues> sectionMap = new HashMap<>();
+        Map<Long,TccSectionValues> sectionMap = new HashMap<>(16);
         sectionList.forEach((s) -> sectionMap.put(s.getSectionId(), s));
 
         //查询需要的时间段和路段
         StringBuilder qlBuilder = new StringBuilder("select t.sectionId,sum(t.upCount),sum(t.downCount)," +
                 "sum(t.totalCount) from TmoSectionOdFlowStats t where 1=1 and ( ");
-        Map<String,Object> parameters = new HashMap<>();
+        Map<String,Object> parameters = new HashMap<>(16);
         intervals.forEach((date,list)->{
             qlBuilder.append(" (t.timeIntervalId in :timeIntervalId and t.gatheringDate=:gatheringDate) or ");
             parameters.put("timeIntervalId",list);
@@ -401,17 +407,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             query.setParameter(k,v);
         });
         List list = query.getResultList();
-        List<TmoSectionOdFlowStats> secOdFlowStatslist = new ArrayList<>();
-        for (Object o : list) {
-            TmoSectionOdFlowStats value = new TmoSectionOdFlowStats();
-            Object[] objs = (Object[]) o;
-            value.setSectionId((Long) objs[0]);
-            value.setUpCount((Long) objs[1]);
-            value.setDownCount((Long) objs[2]);
-            value.setTotalCount((Long) objs[3]);
-            secOdFlowStatslist.add(value);
-        }
-        return secOdFlowStatslist;
+        return getTmoSectionOdFlowStats(list);
     }
 
     private List<TccSectionValues> getSectionValuesList(List<Short> lines) {

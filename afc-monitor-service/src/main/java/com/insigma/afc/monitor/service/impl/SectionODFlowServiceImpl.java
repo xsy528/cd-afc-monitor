@@ -30,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
@@ -347,7 +348,12 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         });
         Query countQuery = entityManager.createQuery("select count(distinct t.sectionId) "+qlBuilder.toString());
         parameters.forEach((k,v)-> setParameter(countQuery,k,v));
-        long total = (long)countQuery.getSingleResult();
+        long total = 0;
+        try{
+            total = (long)countQuery.getSingleResult();
+        }catch (NoResultException e){
+
+        }
         query.setFirstResult(pageNumber*pageSize);
         query.setMaxResults(pageSize);
         List list = query.getResultList();

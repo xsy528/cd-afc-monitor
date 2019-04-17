@@ -1,5 +1,6 @@
 package com.insigma.afc.monitor.thread;
 
+import com.insigma.afc.log.service.ILogService;
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
 import com.insigma.afc.monitor.model.entity.*;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
@@ -28,15 +29,17 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
     private final Short cmdType;
     private final MetroNode node;
     private ICommandService rmiCommandService;
+    private ILogService logService;
 
     public CommandSendTask(int cmdId, String cmdName, Object cmdArg, Short cmdType, MetroNode node,
-                           ICommandService rmiCommandService) {
+                           ICommandService rmiCommandService,ILogService logService) {
         this.cmdId = cmdId;
         this.cmdName = cmdName;
         this.cmdArg = cmdArg;
         this.cmdType = cmdType;
         this.node = node;
         this.rmiCommandService = rmiCommandService;
+        this.logService = logService;
     }
 
     @Override
@@ -86,18 +89,10 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
         String resultMessageShow = "发送结果：\n";
         if (result == 0) {
             resultMessageShow += "向节点" + node.name() + "发送 " + command + " 命令发送成功。\n";
-//            if (this.logService != null) {
-//                logService.doBizLog(resultMessageShow);
-//            }
+            logService.doBizLog(resultMessageShow);
         } else {
             resultMessageShow += "向节点" + node.name() + "发送 " + command + " 命令失败。错误码：" + result + "。";
-//            if (this.logService != null) {
-//                try {
-//                    logService.doBizErrorLog(resultMessageShow);
-//                } catch (Exception e) {
-//                    logger.error("发送命令保存日志失败", e);
-//                }
-//            }
+            logService.doBizErrorLog(resultMessageShow);
         }
         LOGGER.info(resultMessageShow);
 

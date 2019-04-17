@@ -1,5 +1,7 @@
 package com.insigma.afc.monitor.service.impl;
 
+import com.insigma.afc.log.service.ILogService;
+import com.insigma.afc.monitor.constant.LogModuleCode;
 import com.insigma.afc.monitor.constant.SystemConfigKey;
 import com.insigma.afc.monitor.dao.TsyConfigDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
@@ -29,10 +31,12 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitorConfigServiceImpl.class);
 
     private TsyConfigDao tsyConfigDao;
+    private ILogService logService;
 
     @Autowired
-    public MonitorConfigServiceImpl(TsyConfigDao tsyConfigDao){
+    public MonitorConfigServiceImpl(TsyConfigDao tsyConfigDao,ILogService logService){
         this.tsyConfigDao = tsyConfigDao;
+        this.logService = logService;
     }
 
     @Override
@@ -83,7 +87,8 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
         tsyConfigList.add(new TsyConfig(SystemConfigKey.WARNING_THRESHHOLD,String.valueOf(warning)));
         tsyConfigList.add(new TsyConfig(SystemConfigKey.VIEW_REFRESH_INTERVAL,String.valueOf(interval)));
         tsyConfigDao.saveAll(tsyConfigList);
-
+        logService.setModule(LogModuleCode.MODULE_MONITOR);
+        logService.doBizLog("修改监控配置");
         return Result.success(monitorConfigInfo);
     }
 
@@ -123,6 +128,8 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
         tsyConfigList.add(new TsyConfig(SystemConfigKey.SECTION_PASSENGERFLOW_HIGH,String.valueOf(alarm)));
         tsyConfigList.add(new TsyConfig(SystemConfigKey.SECTION_PASSENGERFLOW_LOW,String.valueOf(warning)));
         tsyConfigDao.saveAll(tsyConfigList);
+        logService.setModule(LogModuleCode.MODULE_MONITOR_MANAGE_SECTION_PASSAGER);
+        logService.doBizLog("修改断面客流监控配置");
         return Result.success(monitorConfigDTO);
     }
 

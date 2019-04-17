@@ -1,5 +1,7 @@
 package com.insigma.afc.monitor.service.impl;
 
+import com.insigma.afc.log.service.ILogService;
+import com.insigma.afc.monitor.constant.LogModuleCode;
 import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
@@ -44,13 +46,16 @@ public class CommandServiceImpl implements CommandService {
     private TmoCmdResultDao tmoCmdResultDao;
     private TopologyService topologyService;
     private ICommandService rmiCommandService;
+    private ILogService logService;
 
     @Autowired
     public CommandServiceImpl(TmoCmdResultDao tmoCmdResultDao, TopologyService topologyService,
-                              ICommandService rmiCommandService) {
+                              ICommandService rmiCommandService,ILogService logService) {
         this.tmoCmdResultDao = tmoCmdResultDao;
         this.topologyService = topologyService;
         this.rmiCommandService = rmiCommandService;
+        logService.setModule(LogModuleCode.MODULE_MONITOR);
+        this.logService = logService;
     }
 
     @Override
@@ -88,12 +93,10 @@ public class CommandServiceImpl implements CommandService {
         try {
             rmiCommandService.alive();
         } catch (Exception e) {
-//            if (logService != null) {
-//                logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
-//            }
+            logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
             return Result.error(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
-        Map<Long, Object> modeUpdateForms = new HashMap<>();
+        Map<Long, Object> modeUpdateForms = new HashMap<>(16);
         for (MetroNode metroNode : targetIds) {
             ModeUpdateForm modeUpdateForm = new ModeUpdateForm();
             modeUpdateForm.setDeviceId(metroNode.id());
@@ -110,7 +113,7 @@ public class CommandServiceImpl implements CommandService {
         if (targetIds == null) {
             return Result.error(ErrorCode.NO_NODE_SELECT);
         }
-        Map<Long, Object> args = new HashMap<>();
+        Map<Long, Object> args = new HashMap<>(16);
         for (MetroNode metroNode : targetIds) {
             args.put(metroNode.id(), metroNode.id());
         }
@@ -257,12 +260,12 @@ public class CommandServiceImpl implements CommandService {
             return null;
         }
         // 只留下目标节点
-        Set<Short> targetdIds = new HashSet<>();
+        Set<Short> targetIds = new HashSet<>();
         for (MetroStation station : metroStations) {
-            targetdIds.add(station.getLineId());
+            targetIds.add(station.getLineId());
         }
         List<MetroLine> metroLines = new ArrayList<>();
-        for (Short lineId : targetdIds) {
+        for (Short lineId : targetIds) {
             MetroLine metroNode = topologyService.getLineNode(lineId).getData();
             if (metroNode != null) {
                 metroLines.add(metroNode);
@@ -320,7 +323,7 @@ public class CommandServiceImpl implements CommandService {
                 arg = args.get(node.id());
             }
             futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg,
-                    cmdType, node, rmiCommandService)));
+                    cmdType, node, rmiCommandService,logService)));
         }
         List<CommandResultDTO> results = new ArrayList<>();
         List<TmoCmdResult> tmoCmdResults = new ArrayList<>();
@@ -347,5 +350,6 @@ public class CommandServiceImpl implements CommandService {
         tmoCmdResultDao.saveAll(tmoCmdResults);
         return results;
     }
+
 
 }

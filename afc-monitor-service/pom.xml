@@ -12,10 +12,20 @@
     <artifactId>afc-monitor-service</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>com.insigma.product</groupId>
             <artifactId>afc-monitor-rmi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.insigma.product</groupId>
+            <artifactId>afc-log-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

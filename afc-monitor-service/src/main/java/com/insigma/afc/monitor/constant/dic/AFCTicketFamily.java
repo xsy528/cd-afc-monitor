@@ -5,6 +5,7 @@
  */
 package com.insigma.afc.monitor.constant.dic;
 
+import com.insigma.afc.monitor.constant.xdr.typedef.TicketFamily_t;
 import com.insigma.commons.dic.Definition;
 import com.insigma.commons.dic.annotation.Dic;
 import com.insigma.commons.dic.annotation.DicItem;
@@ -18,25 +19,33 @@ public class AFCTicketFamily extends Definition {
 		return instance;
 	}
 
-	@DicItem(name = "单程票", group = "Spinner")
-	public static Integer SINGLE_JOURNEY_T = 1;
+	@DicItem(name = "单程类票", index = 0)
+	public static Integer SJ_TICKET = TicketFamily_t.TicketFamily_SJTUL;
 
-	@DicItem(name = "出站票", group = "Spinner")
-	public static Integer EXIT_TOKEN_T = 2;
+	@DicItem(name = "出站类票", index = 1)
+	public static Integer OUT_TICKET = TicketFamily_t.TicketFamily_SJTULOUT;
 
-	@DicItem(name = "计程票", group = "Spinner")
-	public static Integer METERED_FARE_T = 3;
+	@DicItem(name = "计程票", index = 2)
+	public static Integer JCHENGP_TICKET = TicketFamily_t.TicketFamily_JCPCHENGCPU;
 
-	@DicItem(name = "计次票", group = "Spinner")
-	public static Integer MUTIL_RIDE_T = 4;
+	@DicItem(name = "计次票", index = 3)
+	public static Integer JCIP_TICKET = TicketFamily_t.TicketFamily_JCPCHICPU;
 
-	@DicItem(name = "月票", group = "Spinner")
-	public static Integer MONTHLY_T = 5;
+	@DicItem(name = "计时票", index = 4)
+	public static Integer JSHIP_TICKET = TicketFamily_t.TicketFamily_JSPCPU;
 
-	@DicItem(name = "员工票", group = "Spinner")
-	public static Integer STAFF_PASS_T = 6;
+	@DicItem(name = "公交卡", index = 5)
+	public static Integer GJIC_TICKET = TicketFamily_t.TicketFamily_GJIC;
 
-	@DicItem(name = "一卡通", group = "Spinner")
-	public static Integer CITY_CARD_T = 7;
+	@DicItem(name = "市民卡", index = 6)
+	public static Integer SMIC_TICKET = TicketFamily_t.TicketFamily_SMIC;
 
+	@DicItem(name = "城市交通卡", index = 7)
+	public static Integer CSTIC_TICKET = TicketFamily_t.TicketFamily_CSTIC;
+
+	@DicItem(name = "二维码电子票", index = 8)
+	public static Integer QTIC_TICKET = TicketFamily_t.TicketFamily_QTIC;
+
+	@DicItem(name = "银联卡")
+	public static Integer BCIC_TICKET = TicketFamily_t.TicketFamily_BCIC;
 }

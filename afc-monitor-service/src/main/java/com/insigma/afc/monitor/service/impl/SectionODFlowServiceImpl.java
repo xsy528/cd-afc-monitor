@@ -172,7 +172,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         }
         Map<Date,List<Long>> intervals = getTimeIntervals(startTime,endTime);
         List<Short> lineIds = condition.getLineIds();
-        return sectionOdFlowStatsDao.findAll((root,query,build)->{
+        List<TmoSectionOdFlowStats> tmoSectionOdFlowStats = sectionOdFlowStatsDao.findAll((root,query,build)->{
             List<Predicate> predicates = new ArrayList<>();
             if (lineIds!=null&&!lineIds.isEmpty()){
                 predicates.add(root.get("lineId").in(lineIds));
@@ -191,11 +191,16 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
                 predicates.add(build.or(orPredicates.toArray(new Predicate[0])));
             }
             return build.and(predicates.toArray(new Predicate[0]));
-        }).stream().map(t->{
+        });
+        List<TmoSectionOdFlowStatsDTO> tmoSectionOdFlowStatsDTOS = new ArrayList<>();
+        for (TmoSectionOdFlowStats t:tmoSectionOdFlowStats){
             TmoSectionOdFlowStatsDTO dto = new TmoSectionOdFlowStatsDTO();
-            BeanUtils.copyProperties(t,dto);
-            return dto;
-        }).collect(Collectors.toList());
+            BeanUtils.copyProperties(t, dto);
+            dto.setUpCount(dto.getUpCount() / 100);
+            dto.setDownCount(dto.getDownCount() / 100);
+            tmoSectionOdFlowStatsDTOS.add(dto);
+        }
+        return tmoSectionOdFlowStatsDTOS;
     }
 
     @Override
@@ -250,7 +255,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     private Map<Date,List<Long>> getTimeIntervals(Date startTime,Date endTime){
         Map<Date,List<Long>> intervals = new HashMap<>(16);
 
-        if (startTime==null||endTime==null){
+        if (startTime==null||endTime==null||startTime.after(endTime)){
             throw new IllegalArgumentException("参数不符合要求");
         }
 

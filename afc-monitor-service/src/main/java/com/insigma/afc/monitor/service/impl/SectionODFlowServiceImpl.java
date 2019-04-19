@@ -35,6 +35,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -116,6 +117,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
 
         Map<Date,List<Long>> intervals = getTimeIntervals(startTime,endTime);
 
+        int intervalSize = getIntervalSize(intervals);
+        if (intervalSize>maxPeriods){
+            throw new IllegalArgumentException();
+        }
+
         return getSectionOdFlowStatsPage(condition.getLineIds(),
                 condition.getPageNumber(),condition.getPageSize(),intervals).map(flowStats->{
             SectionOdFlowStatsView flowStatsView = new SectionOdFlowStatsView();
@@ -160,7 +166,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     }
 
     @Override
-    public List<TmoSectionOdFlowStatsDTO> getSectionODFlowStatistics(SectionFlowMonitorCondition condition) {
+    public List<List<Object>> getSectionODFlowStatistics(SectionFlowMonitorCondition condition) {
         Date startTime = condition.getStartTime();
         Date endTime = condition.getEndTime();
         String lastTime = condition.getLastTime();
@@ -192,13 +198,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             }
             return build.and(predicates.toArray(new Predicate[0]));
         });
-        List<TmoSectionOdFlowStatsDTO> tmoSectionOdFlowStatsDTOS = new ArrayList<>();
+        List<List<Object>> tmoSectionOdFlowStatsDTOS = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (TmoSectionOdFlowStats t:tmoSectionOdFlowStats){
-            TmoSectionOdFlowStatsDTO dto = new TmoSectionOdFlowStatsDTO();
-            BeanUtils.copyProperties(t, dto);
-            dto.setUpCount(dto.getUpCount() / 100);
-            dto.setDownCount(dto.getDownCount() / 100);
-            tmoSectionOdFlowStatsDTOS.add(dto);
+            tmoSectionOdFlowStatsDTOS.add(Arrays.asList(t.getSectionId(),sdf.format(t.getGatheringDate()),t.getTimeIntervalId(),
+                    t.getUpCount()/100,t.getDownCount()/100));
         }
         return tmoSectionOdFlowStatsDTOS;
     }
@@ -255,8 +259,14 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     private Map<Date,List<Long>> getTimeIntervals(Date startTime,Date endTime){
         Map<Date,List<Long>> intervals = new HashMap<>(16);
 
-        if (startTime==null||endTime==null||startTime.after(endTime)){
-            throw new IllegalArgumentException("参数不符合要求");
+        if (startTime==null||endTime==null){
+            throw new IllegalArgumentException("时间不能为空");
+        }
+
+        //结束时间需要减去一分钟，修正时间段的位置
+        endTime = new Date(endTime.getTime()-1000*60);
+        if (!startTime.before(endTime)){
+            throw new IllegalArgumentException("开始时间要小于结束时间");
         }
 
         // 时间段 5分钟为一个时间段，第一个时段为1

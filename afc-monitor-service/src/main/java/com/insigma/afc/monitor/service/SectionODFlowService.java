@@ -39,7 +39,7 @@ public interface SectionODFlowService {
      * @param condition 查询统计条件
      * @return 断面数据
      */
-    List<TmoSectionOdFlowStatsDTO> getSectionODFlowStatistics(SectionFlowMonitorCondition condition);
+    List<List<Object>> getSectionODFlowStatistics(SectionFlowMonitorCondition condition);
 
     /**
      * 获取断面信息

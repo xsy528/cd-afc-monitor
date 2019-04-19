@@ -30,10 +30,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -115,6 +117,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
 
         Map<Date,List<Long>> intervals = getTimeIntervals(startTime,endTime);
 
+        int intervalSize = getIntervalSize(intervals);
+        if (intervalSize>maxPeriods){
+            throw new IllegalArgumentException();
+        }
+
         return getSectionOdFlowStatsPage(condition.getLineIds(),
                 condition.getPageNumber(),condition.getPageSize(),intervals).map(flowStats->{
             SectionOdFlowStatsView flowStatsView = new SectionOdFlowStatsView();
@@ -159,7 +166,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     }
 
     @Override
-    public List<TmoSectionOdFlowStatsDTO> getSectionODFlowStatistics(SectionFlowMonitorCondition condition) {
+    public List<List<Object>> getSectionODFlowStatistics(SectionFlowMonitorCondition condition) {
         Date startTime = condition.getStartTime();
         Date endTime = condition.getEndTime();
         String lastTime = condition.getLastTime();
@@ -171,7 +178,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         }
         Map<Date,List<Long>> intervals = getTimeIntervals(startTime,endTime);
         List<Short> lineIds = condition.getLineIds();
-        return sectionOdFlowStatsDao.findAll((root,query,build)->{
+        List<TmoSectionOdFlowStats> tmoSectionOdFlowStats = sectionOdFlowStatsDao.findAll((root,query,build)->{
             List<Predicate> predicates = new ArrayList<>();
             if (lineIds!=null&&!lineIds.isEmpty()){
                 predicates.add(root.get("lineId").in(lineIds));
@@ -190,11 +197,14 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
                 predicates.add(build.or(orPredicates.toArray(new Predicate[0])));
             }
             return build.and(predicates.toArray(new Predicate[0]));
-        }).stream().map(t->{
-            TmoSectionOdFlowStatsDTO dto = new TmoSectionOdFlowStatsDTO();
-            BeanUtils.copyProperties(t,dto);
-            return dto;
-        }).collect(Collectors.toList());
+        });
+        List<List<Object>> tmoSectionOdFlowStatsDTOS = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (TmoSectionOdFlowStats t:tmoSectionOdFlowStats){
+            tmoSectionOdFlowStatsDTOS.add(Arrays.asList(t.getSectionId(),sdf.format(t.getGatheringDate()),t.getTimeIntervalId(),
+                    t.getUpCount()/100,t.getDownCount()/100));
+        }
+        return tmoSectionOdFlowStatsDTOS;
     }
 
     @Override
@@ -250,7 +260,13 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         Map<Date,List<Long>> intervals = new HashMap<>(16);
 
         if (startTime==null||endTime==null){
-            throw new IllegalArgumentException("参数不符合要求");
+            throw new IllegalArgumentException("时间不能为空");
+        }
+
+        //结束时间需要减去一分钟，修正时间段的位置
+        endTime = new Date(endTime.getTime()-1000*60);
+        if (!startTime.before(endTime)){
+            throw new IllegalArgumentException("开始时间要小于结束时间");
         }
 
         // 时间段 5分钟为一个时间段，第一个时段为1
@@ -347,7 +363,12 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         });
         Query countQuery = entityManager.createQuery("select count(distinct t.sectionId) "+qlBuilder.toString());
         parameters.forEach((k,v)-> setParameter(countQuery,k,v));
-        long total = (long)countQuery.getSingleResult();
+        long total = 0;
+        try{
+            total = (long)countQuery.getSingleResult();
+        }catch (NoResultException e){
+
+        }
         query.setFirstResult(pageNumber*pageSize);
         query.setMaxResults(pageSize);
         List list = query.getResultList();

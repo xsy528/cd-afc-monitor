@@ -55,7 +55,7 @@ public class SectionFlowController {
 
     @ApiOperation("断面客流统计图")
     @PostMapping("/statistics")
-    public Result<List<TmoSectionOdFlowStatsDTO>> statistics(@Valid @RequestBody SectionFlowMonitorCondition condition){
+    public Result<List<List<Object>>> statistics(@Valid @RequestBody SectionFlowMonitorCondition condition){
         return Result.success(sectionODFlowService.getSectionODFlowStatistics(condition));
     }
 

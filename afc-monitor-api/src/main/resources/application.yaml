@@ -37,7 +37,7 @@ spring:
       max-file-size: 1MB
   jpa:
     open-in-view: false
-    show-sql: true
+    show-sql: false
   application:
     name: monitor-service
   jackson:

@@ -1,5 +1,6 @@
 package com.insigma.afc.monitor.service.impl;
 
+import com.insigma.afc.log.constant.LogDefines;
 import com.insigma.afc.log.service.ILogService;
 import com.insigma.afc.monitor.constant.LogModuleCode;
 import com.insigma.afc.monitor.constant.dic.*;
@@ -12,6 +13,7 @@ import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.afc.monitor.thread.CommandSendTask;
 import com.insigma.afc.monitor.thread.CommandThreadPoolExecutor;
+import com.insigma.afc.monitor.util.SecurityUtils;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.xz.rmi.ModeUpdateForm;
 import com.insigma.commons.dic.PairValue;
@@ -54,7 +56,6 @@ public class CommandServiceImpl implements CommandService {
         this.tmoCmdResultDao = tmoCmdResultDao;
         this.topologyService = topologyService;
         this.rmiCommandService = rmiCommandService;
-        logService.setModule(LogModuleCode.MODULE_MONITOR);
         this.logService = logService;
     }
 
@@ -93,7 +94,8 @@ public class CommandServiceImpl implements CommandService {
         try {
             rmiCommandService.alive();
         } catch (Exception e) {
-            logService.doBizErrorLog("发送命令失败：工作台与通信服务器离线。", e);
+            logService.log(LogDefines.ERROR_LOG,"发送命令失败：工作台与通信服务器离线。",
+                    SecurityUtils.getUserId(),SecurityUtils.getIp(),LogModuleCode.MODULE_MONITOR);
             return Result.error(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
         Map<Long, Object> modeUpdateForms = new HashMap<>(16);
@@ -164,9 +166,8 @@ public class CommandServiceImpl implements CommandService {
             command.isOK = false;
             return command;
         }
-        //TODO 需要获取当前用户id
-        String userId = "0";
-        command = rmiCommandService.command(CommandType.CMD_EXPORT_MAP, userId, 1L);
+        Long userId = SecurityUtils.getUserId();
+        command = rmiCommandService.command(CommandType.CMD_EXPORT_MAP, String.valueOf(userId), 1L);
         return command;
     }
 
@@ -323,7 +324,7 @@ public class CommandServiceImpl implements CommandService {
                 arg = args.get(node.id());
             }
             futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg,
-                    cmdType, node, rmiCommandService,logService)));
+                    cmdType, node, rmiCommandService,logService,SecurityUtils.getAuthentication())));
         }
         List<CommandResultDTO> results = new ArrayList<>();
         List<TmoCmdResult> tmoCmdResults = new ArrayList<>();

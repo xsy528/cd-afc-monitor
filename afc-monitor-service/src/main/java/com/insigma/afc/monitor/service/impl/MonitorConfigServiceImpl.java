@@ -1,5 +1,6 @@
 package com.insigma.afc.monitor.service.impl;
 
+import com.insigma.afc.log.constant.LogDefines;
 import com.insigma.afc.log.service.ILogService;
 import com.insigma.afc.monitor.constant.LogModuleCode;
 import com.insigma.afc.monitor.constant.SystemConfigKey;
@@ -10,6 +11,7 @@ import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.afc.monitor.model.entity.TsyConfig;
 import com.insigma.afc.monitor.service.MonitorConfigService;
+import com.insigma.afc.monitor.util.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +89,8 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
         tsyConfigList.add(new TsyConfig(SystemConfigKey.WARNING_THRESHHOLD,String.valueOf(warning)));
         tsyConfigList.add(new TsyConfig(SystemConfigKey.VIEW_REFRESH_INTERVAL,String.valueOf(interval)));
         tsyConfigDao.saveAll(tsyConfigList);
-        logService.setModule(LogModuleCode.MODULE_MONITOR);
-        logService.doBizLog("修改监控配置");
+        logService.log(LogDefines.NORMAL_LOG,"修改监控配置",SecurityUtils.getUserId(),
+                SecurityUtils.getIp(),LogModuleCode.MODULE_MONITOR);
         return Result.success(monitorConfigInfo);
     }
 
@@ -128,8 +130,8 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
         tsyConfigList.add(new TsyConfig(SystemConfigKey.SECTION_PASSENGERFLOW_HIGH,String.valueOf(alarm)));
         tsyConfigList.add(new TsyConfig(SystemConfigKey.SECTION_PASSENGERFLOW_LOW,String.valueOf(warning)));
         tsyConfigDao.saveAll(tsyConfigList);
-        logService.setModule(LogModuleCode.MODULE_MONITOR_MANAGE_SECTION_PASSAGER);
-        logService.doBizLog("修改断面客流监控配置");
+        logService.log(LogDefines.NORMAL_LOG,"修改断面客流监控配置",SecurityUtils.getUserId(),
+                SecurityUtils.getIp(),LogModuleCode.MODULE_MONITOR_MANAGE_SECTION_PASSAGER);
         return Result.success(monitorConfigDTO);
     }
 

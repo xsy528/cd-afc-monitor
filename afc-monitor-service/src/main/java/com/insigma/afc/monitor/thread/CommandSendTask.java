@@ -1,14 +1,19 @@
 package com.insigma.afc.monitor.thread;
 
+import com.insigma.afc.log.constant.LogDefines;
 import com.insigma.afc.log.service.ILogService;
+import com.insigma.afc.monitor.constant.LogModuleCode;
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
 import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.security.AfcAuthentication;
+import com.insigma.afc.monitor.util.SecurityUtils;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.workbench.rmi.ICommandService;
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.util.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.plugin.liveconnect.SecureInvocation;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;
@@ -30,9 +35,11 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
     private final MetroNode node;
     private ICommandService rmiCommandService;
     private ILogService logService;
+    private AfcAuthentication afcAuthentication;
 
     public CommandSendTask(int cmdId, String cmdName, Object cmdArg, Short cmdType, MetroNode node,
-                           ICommandService rmiCommandService,ILogService logService) {
+                           ICommandService rmiCommandService, ILogService logService,
+                           AfcAuthentication afcAuthentication) {
         this.cmdId = cmdId;
         this.cmdName = cmdName;
         this.cmdArg = cmdArg;
@@ -40,6 +47,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
         this.node = node;
         this.rmiCommandService = rmiCommandService;
         this.logService = logService;
+        this.afcAuthentication = afcAuthentication;
     }
 
     @Override
@@ -89,10 +97,12 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
         String resultMessageShow = "发送结果：\n";
         if (result == 0) {
             resultMessageShow += "向节点" + node.name() + "发送 " + command + " 命令发送成功。\n";
-            logService.doBizLog(resultMessageShow);
+            logService.log(LogDefines.NORMAL_LOG,resultMessageShow,(Long)afcAuthentication.getPrincipal(),
+                    afcAuthentication.getIp(), LogModuleCode.MODULE_MONITOR);
         } else {
             resultMessageShow += "向节点" + node.name() + "发送 " + command + " 命令失败。错误码：" + result + "。";
-            logService.doBizErrorLog(resultMessageShow);
+            logService.log(LogDefines.ERROR_LOG,resultMessageShow,(Long)afcAuthentication.getPrincipal(),
+                    afcAuthentication.getIp(), LogModuleCode.MODULE_MONITOR);
         }
         LOGGER.info(resultMessageShow);
 

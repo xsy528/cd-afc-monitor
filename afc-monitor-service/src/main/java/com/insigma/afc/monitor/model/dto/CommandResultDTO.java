@@ -9,8 +9,6 @@ import java.util.Date;
 @ApiModel("命令执行结果")
 public class CommandResultDTO {
 
-	private String logId;
-
 	@ApiModelProperty("目标节点")
 	private String id;
 
@@ -44,14 +42,6 @@ public class CommandResultDTO {
 
 	public void setSuccess(boolean success) {
 		this.success = success;
-	}
-
-	public String getLogId() {
-		return logId;
-	}
-
-	public void setLogId(String logId) {
-		this.logId = logId;
 	}
 
 	public String getId() {

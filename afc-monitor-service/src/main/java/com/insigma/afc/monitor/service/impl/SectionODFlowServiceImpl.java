@@ -264,12 +264,14 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         if (startTime==null||endTime==null){
             throw new IllegalArgumentException("时间不能为空");
         }
-        if (endTime.after(startTime)) {
+
+        //时间不相等时需要偏移
+        if (startTime.before(endTime)) {
             //结束时间需要减去一分钟，修正时间段的位置
             endTime = new Date(endTime.getTime() - 1000 * 60);
         }
-        if (!startTime.before(endTime)){
-            throw new IllegalArgumentException("开始时间要小于结束时间");
+        if (startTime.after(endTime)){
+            throw new IllegalArgumentException("开始时间要不能大于结束时间");
         }
 
         // 时间段 5分钟为一个时间段，第一个时段为1

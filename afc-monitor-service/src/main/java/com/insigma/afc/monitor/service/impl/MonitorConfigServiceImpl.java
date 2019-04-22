@@ -11,7 +11,7 @@ import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.afc.monitor.model.entity.TsyConfig;
 import com.insigma.afc.monitor.service.MonitorConfigService;
-import com.insigma.afc.monitor.util.SecurityUtils;
+import com.insigma.afc.security.util.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

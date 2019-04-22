@@ -13,7 +13,7 @@ import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.afc.monitor.thread.CommandSendTask;
 import com.insigma.afc.monitor.thread.CommandThreadPoolExecutor;
-import com.insigma.afc.monitor.util.SecurityUtils;
+import com.insigma.afc.security.util.SecurityUtils;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.xz.rmi.ModeUpdateForm;
 import com.insigma.commons.dic.PairValue;
@@ -324,7 +324,7 @@ public class CommandServiceImpl implements CommandService {
                 arg = args.get(node.id());
             }
             futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg,
-                    cmdType, node, rmiCommandService,logService,SecurityUtils.getAuthentication())));
+                    cmdType, node, rmiCommandService,logService,SecurityUtils.getUserId(),SecurityUtils.getIp())));
         }
         List<CommandResultDTO> results = new ArrayList<>();
         List<TmoCmdResult> tmoCmdResults = new ArrayList<>();

@@ -19,10 +19,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  *
  */
 
-@SpringBootApplication(scanBasePackages = "com.insigma")
+@SpringBootApplication
 @DicScan("com.insigma")
-@EnableJpaRepositories(basePackages = "com.insigma")
-@EntityScan(basePackages = "com.insigma")
+@EnableJpaRepositories(basePackages = "com.insigma.afc.monitor.dao")
+@EntityScan(basePackages = "com.insigma.afc.monitor.model.entity")
 public class ACCMonitorApp {
 
 	public static void main(String[] args) {

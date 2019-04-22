@@ -10,7 +10,10 @@ package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.dao.TccSectionValuesDao;
 import com.insigma.afc.monitor.dao.TmoSectionOdFlowStatsDao;
-import com.insigma.afc.monitor.model.dto.*;
+import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
+import com.insigma.afc.monitor.model.dto.SectionMonitorDTO;
+import com.insigma.afc.monitor.model.dto.SectionMonitorDataDTO;
+import com.insigma.afc.monitor.model.dto.SectionValuesDTO;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowMonitorCondition;
 import com.insigma.afc.monitor.model.entity.TccSectionValues;
@@ -22,7 +25,6 @@ import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.util.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,7 +39,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Ticket:
@@ -178,10 +179,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         }
         Map<Date,List<Long>> intervals = getTimeIntervals(startTime,endTime);
         List<Short> lineIds = condition.getLineIds();
+        List<Long> sectionIds = getSectionIdsByLineIds(lineIds);
         List<TmoSectionOdFlowStats> tmoSectionOdFlowStats = sectionOdFlowStatsDao.findAll((root,query,build)->{
             List<Predicate> predicates = new ArrayList<>();
-            if (lineIds!=null&&!lineIds.isEmpty()){
-                predicates.add(root.get("lineId").in(lineIds));
+            if (!sectionIds.isEmpty()){
+                predicates.add(root.get("sectionId").in(sectionIds));
             }
             if (intervals!=null){
                 List<Predicate> orPredicates = new ArrayList<>();
@@ -263,10 +265,13 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             throw new IllegalArgumentException("时间不能为空");
         }
 
-        //结束时间需要减去一分钟，修正时间段的位置
-        endTime = new Date(endTime.getTime()-1000*60);
-        if (!startTime.before(endTime)){
-            throw new IllegalArgumentException("开始时间要小于结束时间");
+        //时间不相等时需要偏移
+        if (startTime.before(endTime)) {
+            //结束时间需要减去一分钟，修正时间段的位置
+            endTime = new Date(endTime.getTime() - 1000 * 60);
+        }
+        if (startTime.after(endTime)){
+            throw new IllegalArgumentException("开始时间要不能大于结束时间");
         }
 
         // 时间段 5分钟为一个时间段，第一个时段为1
@@ -330,12 +335,10 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     private Page<TmoSectionOdFlowStats> getSectionOdFlowStatsPage(List<Short> lineIds,int pageNumber,int pageSize,
                                                                   Map<Date,List<Long>> intervals) {
         //获取路段信息
-        List<TccSectionValues> sectionList = getSectionValuesList(lineIds);
+        List<Long> sectionList = getSectionIdsByLineIds(lineIds);
         if (sectionList.isEmpty()) {
             return Page.empty();
         }
-        Map<Long,TccSectionValues> sectionMap = new HashMap<>(16);
-        sectionList.forEach((s) -> sectionMap.put(s.getSectionId(), s));
 
         String select = "select t.sectionId,sum(t.upCount),sum(t.downCount),sum(t.totalCount) ";
         //查询需要的时间段和路段
@@ -349,9 +352,9 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         qlBuilder.delete(qlBuilder.length()-4,qlBuilder.length());
         qlBuilder.append(" )");
 
-        if (!sectionMap.isEmpty()){
+        if (!sectionList.isEmpty()){
             qlBuilder.append(" and t.sectionId in :sectionIds ");
-            parameters.put("sectionIds",sectionMap.keySet());
+            parameters.put("sectionIds",sectionList);
         }
         qlBuilder.append(" group by t.sectionId order by t.sectionId asc ");
 
@@ -367,7 +370,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         try{
             total = (long)countQuery.getSingleResult();
         }catch (NoResultException e){
-
+            // 没有数据
         }
         query.setFirstResult(pageNumber*pageSize);
         query.setMaxResults(pageSize);
@@ -376,6 +379,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         return new PageImpl<>(secOdFlowStatslist,PageRequest.of(pageNumber,pageSize),total);
     }
 
+    /**
+     * 从数据库查询结果中获取断面数据
+     * @param list 数据库查询结果
+     * @return 断面数据
+     */
     private List<TmoSectionOdFlowStats> getTmoSectionOdFlowStats(List list){
         List<TmoSectionOdFlowStats> secOdFlowStatslist = new ArrayList<>();
         for (Object o : list) {
@@ -390,18 +398,28 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         return secOdFlowStatslist;
     }
 
+    /**
+     * 设置查询参数
+     * @param query 查询器
+     * @param key 参数名称
+     * @param value 参数值
+     */
     private void setParameter(Query query,String key,Object value){
         query.setParameter(key,value);
     }
 
+    /**
+     * 获取断面客流数据
+     * @param lineIds 线路id
+     * @param intervals 时间段id
+     * @return 断面客流数据
+     */
     private List<TmoSectionOdFlowStats> getSectionOdFlowStatsList(List<Short> lineIds, Map<Date,List<Long>> intervals){
         //获取路段信息
-        List<TccSectionValues> sectionList = getSectionValuesList(lineIds);
-        if (sectionList.isEmpty()) {
+        List<Long> sectionIds = getSectionIdsByLineIds(lineIds);
+        if (sectionIds.isEmpty()) {
             return null;
         }
-        Map<Long,TccSectionValues> sectionMap = new HashMap<>(16);
-        sectionList.forEach((s) -> sectionMap.put(s.getSectionId(), s));
 
         //查询需要的时间段和路段
         StringBuilder qlBuilder = new StringBuilder("select t.sectionId,sum(t.upCount),sum(t.downCount)," +
@@ -415,9 +433,9 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         qlBuilder.delete(qlBuilder.length()-4,qlBuilder.length());
         qlBuilder.append(" )");
 
-        if (!sectionMap.isEmpty()){
+        if (!sectionIds.isEmpty()){
             qlBuilder.append(" and t.sectionId in :sectionIds ");
-            parameters.put("sectionIds",sectionMap.keySet());
+            parameters.put("sectionIds",sectionIds);
         }
         qlBuilder.append(" group by t.sectionId order by t.sectionId asc ");
 
@@ -431,8 +449,13 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         return getTmoSectionOdFlowStats(list);
     }
 
-    private List<TccSectionValues> getSectionValuesList(List<Short> lines) {
-        return sectionValuesDao.findAll((root, query, builder) -> {
+    /**
+     * 根据线路获取断面
+     * @param lines 线路id
+     * @return 断面id
+     */
+    private List<Long> getSectionIdsByLineIds(List<Short> lines) {
+        List<TccSectionValues> tccSectionValuesList = sectionValuesDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (lines != null && !lines.isEmpty()) {
                 predicates.add(root.get("lineId").in(lines));
@@ -441,8 +464,18 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             predicates.add(builder.equal(root.get("transferFlag"), (short)0));
             return builder.and(predicates.toArray(new Predicate[0]));
         });
+        List<Long> sectionIds = new ArrayList<>();
+        for (TccSectionValues tccSectionValues:tccSectionValuesList){
+            sectionIds.add(tccSectionValues.getSectionId());
+        }
+        return sectionIds;
     }
 
+    /**
+     * 获取日期
+     * @param datetime 时间
+     * @return 日期
+     */
     private Date getDate(Date datetime){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(datetime);

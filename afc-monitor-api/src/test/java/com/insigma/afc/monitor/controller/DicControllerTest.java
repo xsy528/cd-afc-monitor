@@ -36,24 +36,16 @@ public class DicControllerTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
-    public void before(){
+    public void before() {
 
     }
 
     @Test
     public void getModeTypeListTest() throws Exception {
-        mockMvc.perform(post("/monitor/dic/modeTypeList")).andExpect((mvcResult)->
-                Assert.assertEquals(0,objectMapper
-                        .readValue(mvcResult.getResponse().getContentAsByteArray(),Result.class).getCode())
-        );
+        mockMvc.perform(post("/monitor/dic/modeTypeList").header("Afc-User-id", 1))
+                .andExpect((mvcResult) ->
+                        Assert.assertEquals(0, objectMapper
+                                .readValue(mvcResult.getResponse().getContentAsByteArray(), Result.class).getCode())
+                );
     }
-
-    @Test
-    public void getDeviceStatusListTest() throws Exception{
-        mockMvc.perform(post("/monitor/dic/deviceStatusList")).andExpect((mvcResult)->
-                Assert.assertEquals(0,objectMapper
-                        .readValue(mvcResult.getResponse().getContentAsByteArray(),Result.class).getCode())
-        );
-    }
-
 }

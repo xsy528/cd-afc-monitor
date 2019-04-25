@@ -27,7 +27,7 @@ import java.util.List;
  * @author xuzhemin
  * 2018-12-28 18:06
  */
-@Api(tags = "节点监控查询接口")
+@Api(tags = "节点监控接口")
 @RestController
 @RequestMapping("/monitor/query/")
 public class NodeStatusController {

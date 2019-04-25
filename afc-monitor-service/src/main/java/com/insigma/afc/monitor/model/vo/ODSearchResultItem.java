@@ -18,7 +18,7 @@ public class ODSearchResultItem implements Serializable {
 
     @ApiModelProperty("车站ID")
     @JsonProperty("station_id")
-    private String stationId;
+    private Integer stationId;
 
     @ApiModelProperty("车站名称")
     @JsonProperty("station_name")
@@ -30,25 +30,25 @@ public class ODSearchResultItem implements Serializable {
 
     @ApiModelProperty("进站客流")
     @JsonProperty("od_in")
-    private String odIn;
+    private Long odIn;
 
     @ApiModelProperty("出站客流")
     @JsonProperty("od_out")
-    private String odOut;
+    private Long odOut;
 
     @ApiModelProperty("购票客流")
     @JsonProperty("od_buy")
-    private String odBuy;
+    private Long odBuy;
 
     @ApiModelProperty("充值客流")
     @JsonProperty("od_add")
-    private String odAdd;
+    private Long odAdd;
 
-    public String getStationId() {
+    public Integer getStationId() {
         return stationId;
     }
 
-    public void setStationId(String stationId) {
+    public void setStationId(Integer stationId) {
         this.stationId = stationId;
     }
 
@@ -68,35 +68,35 @@ public class ODSearchResultItem implements Serializable {
         this.ticketFamily = ticketFamily;
     }
 
-    public String getOdIn() {
+    public Long getOdIn() {
         return odIn;
     }
 
-    public void setOdIn(String odIn) {
+    public void setOdIn(Long odIn) {
         this.odIn = odIn;
     }
 
-    public String getOdOut() {
+    public Long getOdOut() {
         return odOut;
     }
 
-    public void setOdOut(String odOut) {
+    public void setOdOut(Long odOut) {
         this.odOut = odOut;
     }
 
-    public String getOdBuy() {
+    public Long getOdBuy() {
         return odBuy;
     }
 
-    public void setOdBuy(String odBuy) {
+    public void setOdBuy(Long odBuy) {
         this.odBuy = odBuy;
     }
 
-    public String getOdAdd() {
+    public Long getOdAdd() {
         return odAdd;
     }
 
-    public void setOdAdd(String odAdd) {
+    public void setOdAdd(Long odAdd) {
         this.odAdd = odAdd;
     }
 }

@@ -1,45 +1,43 @@
 package com.insigma.afc.monitor.service;
 
-import com.insigma.afc.monitor.model.dto.condition.BarAndSeriesCondition;
+import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
+import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
+import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
 import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
 import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
-import com.insigma.afc.monitor.model.entity.PassengerData;
-import com.insigma.afc.monitor.model.vo.BarChartData;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
-import com.insigma.afc.monitor.model.vo.PieChartData;
-import com.insigma.afc.monitor.model.vo.SeriesChartData;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 
 /**
- * Ticket:
+ * Ticket:客流监控服务
  *
- * @author: xingshaoya
+ * @author xingshaoya
  * create time: 2019-03-22 10:19
  */
 public interface PassengerFlowService {
 
     /**
-     * 获得柱状图
-     * @param condition
-     * @return
+     * 获得柱状图、饼图数据
+     * @param condition 查询条件
+     * @return 数据
      */
-    BarChartData getBarChart(BarAndSeriesCondition condition);
+    List<BarPieChartDTO> getBarPieChart(BarAndPieCondition condition);
 
     /**
-     * 获得饼图
-     * @param condition 查询实体类
-     * @return 饼图数据
+     * 获取曲线图数据
+     * @param condition 查询条件
+     * @return 数据
      */
-    PieChartData getPieChat(BarAndSeriesCondition condition);
-    /**
-     * 获取曲线数据
-     * @return 曲线数据
-     */
-    SeriesChartData getSeriesChart(SeriesCondition condition);
+    List<SeriesChartDTO> getSeriesChart(SeriesCondition condition);
 
-    List<ODSearchResultItem> getODSerchResult(PassengerCondition condition);
+    /**
+     * 客流查询
+     * @param condition 查询条件
+     * @return 分页数据
+     */
+    Page<ODSearchResultItem> getODSerchResult(PassengerCondition condition);
 
 }

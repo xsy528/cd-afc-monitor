@@ -7,12 +7,12 @@ import java.util.Date;
 /**
  * Ticket:
  *
- * @author: xingshaoya
+ * @author xingshaoya
  * create time: 2019-03-27 17:54
  */
 @Entity
 @Table(name = "TMO_OD_FLOW_STATS")
-@IdClass(TmoOdFlowStats.class)
+@IdClass(TmoOdFlowStatsId.class)
 public class TmoOdFlowStats implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +23,7 @@ public class TmoOdFlowStats implements java.io.Serializable {
 
     @Id
     @Column(name = "STATION_ID", length = 11, nullable = false)
-    private Long stationId;
+    private Integer stationId;
 
     @Id
     @Temporal(TemporalType.DATE)
@@ -32,7 +32,7 @@ public class TmoOdFlowStats implements java.io.Serializable {
 
     @Id
     @Column(name = "TIME_INTERVAL_ID", length = 19, nullable = false)
-    private Long timeIntervalId;
+    private Integer timeIntervalId;
 
     @Id
     @Column(name = "TICKET_FAMILY", length = 5, nullable = false)
@@ -104,15 +104,38 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.refDateTime = refDateTime;
     }
 
-    // Property access
+    public TmoOdFlowStats(Integer totalIn, Integer totalOut,Integer saleCount,Integer addCount, Integer stationId) {
+        this.addCount = addCount;
+        this.saleCount = saleCount;
+        this.totalIn = totalIn;
+        this.totalOut = totalOut;
+        this.stationId = stationId;
+    }
 
+    public TmoOdFlowStats(Integer totalIn, Integer totalOut,Integer saleCount,Integer addCount, Integer stationId,
+                          Integer timeIntervalId) {
+        this.addCount = addCount;
+        this.saleCount = saleCount;
+        this.totalIn = totalIn;
+        this.totalOut = totalOut;
+        this.stationId = stationId;
+        this.timeIntervalId = timeIntervalId;
+    }
 
-    public Long getStationId() {
+    public Integer getStationId() {
         return stationId;
     }
 
-    public void setStationId(Long sectionId) {
-        this.stationId = sectionId;
+    public void setStationId(Integer stationId) {
+        this.stationId = stationId;
+    }
+
+    public Integer getTimeIntervalId() {
+        return timeIntervalId;
+    }
+
+    public void setTimeIntervalId(Integer timeIntervalId) {
+        this.timeIntervalId = timeIntervalId;
     }
 
     public Date getGatheringDate() {
@@ -123,13 +146,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
         this.gatheringDate = gatheringDate;
     }
 
-    public Long getTimeIntervalId() {
-        return timeIntervalId;
-    }
-
-    public void setTimeIntervalId(Long timeIntervalId) {
-        this.timeIntervalId = timeIntervalId;
-    }
 
     public Short getTicketFamily() {
         return ticketFamily;
@@ -146,7 +162,6 @@ public class TmoOdFlowStats implements java.io.Serializable {
     public void setUpInHeadCount(Integer upInHeadCount) {
         this.upInHeadCount = upInHeadCount;
     }
-
 
     public Integer getDownInHeadCount() {
         return this.downInHeadCount;

@@ -3,6 +3,7 @@ package com.insigma.afc.monitor.model.dto.condition;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.model.dto.PageBean;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.*;
@@ -10,10 +11,11 @@ import java.util.*;
 /**
  * Ticket:客流查询基础条件
  * 包括日期时间和票种，站点
- * @author: xingshaoya
+ * @author xingshaoya
  * create time: 2019-03-22 10:40
  */
-public class BarAndSeriesCondition extends PageBean {
+@ApiModel("柱状图、饼图查询条件")
+public class BarAndPieCondition {
 
     public static String[] LEGEND = new String[] { "进站", "出站", "购票", "充值", "合计" };
 
@@ -25,31 +27,18 @@ public class BarAndSeriesCondition extends PageBean {
     @ApiModelProperty("选择时间")
     @JsonProperty("time")
     protected String time;
-    //
 
     @ApiModelProperty("票种")
     @JsonProperty("ticket_family")
-    protected Short ticketFamily;
+    private Short ticketFamily;
 
     @ApiModelProperty("交易类型")
     @JsonProperty("trans_type")
-    protected List<Integer> transType;
+    private List<Integer> transType;
 
-   /// @JsonProperty("station_name_map")
-    //private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
-
+    @ApiModelProperty("车站id")
     @JsonProperty("station_id")
-    private List<Long> stationId;
-
-    @JsonProperty("part_names")
-    private String[] partNames;
-
-//    @JsonProperty("time_interval")
-//    private int timeInterval = 5;
-
-    public BarAndSeriesCondition() {
-
-    }
+    private List<Integer> stationIds;
 
     public Date getDate() {
         return date;
@@ -67,20 +56,12 @@ public class BarAndSeriesCondition extends PageBean {
         this.time = time;
     }
 
-    public List<Long> getStationId() {
-        return stationId;
+    public List<Integer> getStationIds() {
+        return stationIds;
     }
 
-    public void setStationId(List<Long> stationId) {
-        this.stationId = stationId;
-    }
-
-    public String[] getPartNames() {
-        return partNames;
-    }
-
-    public void setPartNames(String[] partNames) {
-        this.partNames = partNames;
+    public void setStationIds(List<Integer> stationIds) {
+        this.stationIds = stationIds;
     }
 
     public Short getTicketFamily() {
@@ -99,7 +80,4 @@ public class BarAndSeriesCondition extends PageBean {
         this.transType = transType;
     }
 
-    public static String[] getLEGEND() {
-        return LEGEND;
-    }
 }

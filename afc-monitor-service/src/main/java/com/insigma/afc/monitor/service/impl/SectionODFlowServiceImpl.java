@@ -87,14 +87,14 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         }
 
         Map<Date,List<Long>> intervals = getTimeIntervals(startTime,endTime);
-        List<TmoSectionOdFlowStats> secOdFlowStatsList = getSectionOdFlowStatsList(condition.getLineIds(),intervals);
-        if (secOdFlowStatsList==null||secOdFlowStatsList.isEmpty()) {
-            return data;
-        }
-
         int intervalSize = getIntervalSize(intervals);
         if (intervalSize>maxPeriods){
             throw new IllegalArgumentException();
+        }
+
+        List<TmoSectionOdFlowStats> secOdFlowStatsList = getSectionOdFlowStatsList(condition.getLineIds(),intervals);
+        if (secOdFlowStatsList==null||secOdFlowStatsList.isEmpty()) {
+            return data;
         }
         int minutes = intervalSize * timePeriod;
         for (TmoSectionOdFlowStats flowStats : secOdFlowStatsList) {

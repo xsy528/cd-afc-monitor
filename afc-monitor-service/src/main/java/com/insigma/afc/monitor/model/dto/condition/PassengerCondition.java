@@ -11,34 +11,25 @@ import java.util.List;
 /**
  * Ticket:客流查询接口
  *
- * @author: xingshaoya
+ * @author xingshaoya
  * create time: 2019-03-22 14:33
  */
 public class PassengerCondition extends PageBean {
     @ApiModelProperty("选择日期")
     @JsonProperty("date")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    protected Date date;
+    private Date date;
 
     @ApiModelProperty("选择时间")
     @JsonProperty("time")
-    protected String time;
+    private String time;
 
     @ApiModelProperty("统计类型")
     @JsonProperty("stat_type")
-    protected Short statType;
+    private Short statType;
 
-    //@JsonProperty("station_name_map")
-    //private Map<Integer, String> stationNameMap = new HashMap<Integer, String>();
-
-    @JsonProperty("station_id")
-    private List<Long> stationId;
-
-//    @JsonProperty("part_names")
-//    private String[] partNames;
-
-//    @JsonProperty("time_interval")
-//    private int timeInterval = 5;
+    @JsonProperty("station_ids")
+    private List<Integer> stationIds;
 
     public Date getDate() {
         return date;
@@ -64,12 +55,11 @@ public class PassengerCondition extends PageBean {
         this.statType = statType;
     }
 
-    public List<Long> getStationId() {
-        return stationId;
+    public List<Integer> getStationIds() {
+        return stationIds;
     }
 
-    public void setStationId(List<Long> stationId) {
-        this.stationId = stationId;
+    public void setStationIds(List<Integer> stationIds) {
+        this.stationIds = stationIds;
     }
-
 }

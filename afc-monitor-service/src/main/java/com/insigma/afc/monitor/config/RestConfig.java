@@ -18,6 +18,7 @@ import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import feign.slf4j.Slf4jLogger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestAttributes;
@@ -33,30 +34,36 @@ import javax.servlet.http.HttpServletRequest;
  * 2019/3/21 15:29
  */
 @Configuration
+@ConfigurationProperties
 public class RestConfig {
 
+    private String topologyServerUrl;
+
     @Bean
-    public TopologyService topologyService(@Value("${topology-server-url}")String url){
+    public TopologyService topologyService(){
         return Feign.builder()
                 .requestInterceptor(new RequestIntercepotor())
                 .client(new OkHttpClient())
                 .logger(new Slf4jLogger())
                 .encoder(new JacksonEncoder())
                 .decoder(new JacksonDecoder())
-                .target(TopologyService.class, url);
+                .target(TopologyService.class, topologyServerUrl);
     }
 
     @Bean
-    public NodeTreeRestService nodeTreeRestService(@Value("${topology-server-url}")String url){
+    public NodeTreeRestService nodeTreeRestService(){
         return Feign.builder()
                 .requestInterceptor(new RequestIntercepotor())
                 .client(new OkHttpClient())
                 .logger(new Slf4jLogger())
                 .encoder(new JacksonEncoder())
                 .decoder(new JacksonDecoder())
-                .target(NodeTreeRestService.class, url);
+                .target(NodeTreeRestService.class, topologyServerUrl);
     }
 
+    /**
+     * 请求拦截器，增加header信息
+     */
     class RequestIntercepotor implements RequestInterceptor{
 
         @Override
@@ -68,4 +75,11 @@ public class RestConfig {
         }
     }
 
+    public String getTopologyServerUrl() {
+        return topologyServerUrl;
+    }
+
+    public void setTopologyServerUrl(String topologyServerUrl) {
+        this.topologyServerUrl = topologyServerUrl;
+    }
 }

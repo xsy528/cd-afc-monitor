@@ -5,5 +5,5 @@ spring:
     password: afcapp
 
 #节点服务地址
-topology-server-url: http://localhost:8080
+topologyServerUrl: http://192.168.140.100:9080
 rmiHostIpAddr: 192.168.178.176

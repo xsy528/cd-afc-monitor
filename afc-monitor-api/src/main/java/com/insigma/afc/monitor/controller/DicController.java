@@ -2,7 +2,7 @@ package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.monitor.model.dto.condition.BarAndSeriesCondition;
+import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Ticket: 字典接口，获取程序中各类字典参数
@@ -51,73 +53,55 @@ public class DicController {
     @ApiOperation("获取设备状态列表")
     @PostMapping("/deviceStatusList")
     public Result getDeviceStatusList(){
-        return Result.success(DeviceStatus.getInstance().getByGroup("1"));
+        return Result.success(DeviceStatus.getInstance().getByGroup(""));
     }
 
     @ApiOperation("获取日志类型列表")
     @PostMapping("/CmdTypeList")
     public Result getCmdTypeList(){
-
-        return Result.success(AFCCmdLogType.getInstance().getByGroup("1"));
+        return Result.success(AFCCmdLogType.getInstance().getByGroup(""));
     }
 
     @ApiOperation("获取命令结果列表")
     @PostMapping("/modeCmdResultList")
     public Result getCmdResultList(){
-
-        return Result.success(AFCMackCode.getInstance().getByGroup("1"));
+        return Result.success(AFCMackCode.getInstance().getByGroup(""));
     }
 
     @ApiOperation("获取票种类型列表")
-    @PostMapping("/ticketTypeResultList")
+    @PostMapping("/ticketTypeList")
     public Result getTicketTypeList(){
-
-        return Result.success(AFCTicketFamily.getInstance().getByGroup("1"));
+        return Result.success(AFCTicketFamily.getInstance().getByGroup(""));
     }
 
     @ApiOperation("获取交易类型列表")
-    @PostMapping("/transTypeResultList")
+    @PostMapping("/transTypeList")
     public Result getTransTypeList(){
-
-        String[] legend = BarAndSeriesCondition.getLEGEND();
+        String[] legend = BarAndPieCondition.LEGEND;
         List<Map> data = new ArrayList<>(legend.length);
-
         for (int i=0;i<legend.length;i++) {
-            Map<String,Object> groupMode = new HashMap<>();
-            groupMode.put("key",i);
-            groupMode.put("value",legend[i]);
+            Map<String, Object> groupMode = new HashMap<>(2);
+            groupMode.put("key", i);
+            groupMode.put("value", legend[i]);
             data.add(groupMode);
         }
-
         return Result.success(data);
     }
 
     @ApiOperation("获取曲线图时间间隔类型列表")
-    @PostMapping("/timeIntervalResultList")
+    @PostMapping("/timeIntervalList")
     public Result getTimeInterval(){
         //时间间隔的选择个数
-        int len = 10;
-        List<Map> data = new ArrayList<>(len);
-
-        data.add(getModel("1","1"));
-        data.add(getModel("2","2"));
-        data.add(getModel("5","5"));
-        data.add(getModel("6","6"));
-        data.add(getModel("8","8"));
-        data.add(getModel("10","10"));
-        data.add(getModel("15","15"));
-        data.add(getModel("20","20"));
-        data.add(getModel("25","25"));
-        data.add(getModel("30","30"));
-
-        return Result.success(data);
-
+        return Result.success(Stream.of(1,2,5,6,8,10,15,20,25,30)
+                .map(DicController::getMap)
+                .collect(Collectors.toList()));
     }
-    private Map<String,Object> getModel(String key,String value){
-        Map<String,Object> groupMode1 = new HashMap<>();
-        groupMode1.put("key",key);
-        groupMode1.put("value",value);
 
-        return  groupMode1;
+    private static Map<String, Object> getMap(Integer k) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("key", k);
+        map.put("value", k.toString());
+        return map;
     }
+
 }

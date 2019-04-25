@@ -3,7 +3,7 @@
  *
  * 版权所有：浙江浙大网新众合轨道交通工程有限公司
  */
-/**
+/*
  *
  */
 package com.insigma.afc.monitor.config;
@@ -63,7 +63,8 @@ public class RestConfig {
         public void apply(RequestTemplate template) {
             RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
             HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-            template.header("Authorization",request.getHeader("Authorization"));
+            String afcUserId = "Afc-User-Id";
+            template.header(afcUserId,request.getHeader(afcUserId));
         }
     }
 

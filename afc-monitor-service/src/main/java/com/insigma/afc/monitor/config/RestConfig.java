@@ -37,7 +37,10 @@ import javax.servlet.http.HttpServletRequest;
 @ConfigurationProperties
 public class RestConfig {
 
-    private String topologyServerUrl;
+    /**
+     * 节点拓扑服务接口
+     */
+    private String topologyServerUrl = "http://localhost:8080";
 
     @Bean
     public TopologyService topologyService(){

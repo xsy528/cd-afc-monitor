@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * ticket: app配置
  * @author xuzhemin
  */
-@ConfigurationProperties(prefix = "app")
+@ConfigurationProperties(prefix = "info.app")
 public class NetworkProperties {
 
 	private Integer lineNo = 0;

@@ -160,11 +160,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
         List<Integer> stationIds = condition.getStationIds();
         Short statType = condition.getStatType();
-        Long totalSize = passengerDao.count(new PassengerDao.CountSpecification(date,timeIntervals,stationIds,statType));
-
-        if (totalSize==0){
-            return null;
-        }
 
         Integer page = condition.getPageNumber();
         Integer pageSize = condition.getPageSize();

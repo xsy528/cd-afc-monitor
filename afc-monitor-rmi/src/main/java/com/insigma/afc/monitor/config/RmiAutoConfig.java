@@ -1,13 +1,11 @@
 package com.insigma.afc.monitor.config;
 
 import com.insigma.afc.monitor.healthIndicator.RegisterHealthIndicator;
+import com.insigma.afc.monitor.properties.HealthProperties;
 import com.insigma.afc.monitor.properties.RmiProperties;
 import com.insigma.afc.workbench.rmi.IBaseCommandService;
 import com.insigma.afc.workbench.rmi.ICommandService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +18,7 @@ import org.springframework.remoting.rmi.RmiProxyFactoryBean;
  * 2019-02-28 10:49
  */
 @Configuration
-@EnableConfigurationProperties(RmiProperties.class)
+@EnableConfigurationProperties({RmiProperties.class,HealthProperties.class})
 public class RmiAutoConfig {
 
     private RmiProperties rmiProperties;
@@ -53,8 +51,9 @@ public class RmiAutoConfig {
         return bean;
     }
 
-    @Bean
-    public RegisterHealthIndicator registerHealthIndicator(IBaseCommandService baseCommandService){
-        return new RegisterHealthIndicator(baseCommandService);
+    @Bean(initMethod = "init",destroyMethod = "destroy")
+    public RegisterHealthIndicator registerHealthIndicator(IBaseCommandService baseCommandService,
+                                                           HealthProperties healthProperties){
+        return new RegisterHealthIndicator(baseCommandService,healthProperties);
     }
 }

@@ -136,11 +136,13 @@ public class PassengerRepositoryImpl implements PassengerRepository {
             predicates.add(root.get("stationId").in(stationIds));
         }
         if (statType==0){
+            //按票种分组
             selections.add(root.get("ticketFamily").alias("ticketFamily"));
-            query.groupBy(root.get("stationId"),root.get("timeIntervalId"),root.get("ticketFamily"));
+            query.groupBy(root.get("stationId"),root.get("ticketFamily"));
             query.orderBy(builder.asc(root.get("stationId")),builder.asc(root.get("ticketFamily")));
         }else if (statType==1){
-            query.groupBy(root.get("stationId"),root.get("timeIntervalId"));
+            //按车站分组
+            query.groupBy(root.get("stationId"));
             query.orderBy(builder.asc(root.get("stationId")));
         }
         query.multiselect(selections.toArray(new Selection[0]));

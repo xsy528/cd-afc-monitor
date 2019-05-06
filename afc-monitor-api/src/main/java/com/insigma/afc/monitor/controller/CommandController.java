@@ -2,10 +2,10 @@ package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.constant.dic.DeviceCmdControlType;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SendCommandDTO;
 import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.commons.dic.PairValue;
+import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,11 +7,12 @@ import com.insigma.afc.monitor.constant.SystemConfigKey;
 import com.insigma.afc.monitor.dao.TsyConfigDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.afc.monitor.model.entity.TsyConfig;
 import com.insigma.afc.monitor.service.MonitorConfigService;
+import com.insigma.afc.monitor.util.ResultUtils;
 import com.insigma.afc.security.util.SecurityUtils;
+import com.insigma.commons.model.dto.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,10 +78,10 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
 
         //警告阈值要小于报警阈值
         if (alarm <= warning) {
-            return Result.error(ErrorCode.THRESHOLD_INVALID);
+            return ResultUtils.getResult(ErrorCode.THRESHOLD_INVALID);
         } else if (interval < 5) {
             //时间间隔不能小于5秒
-            return Result.error(ErrorCode.REFRESH_INTERVAL_INVALID);
+            return ResultUtils.getResult(ErrorCode.REFRESH_INTERVAL_INVALID);
         }
 
         //保存配置
@@ -123,7 +124,7 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
         int warning = monitorConfigDTO.getWarning();
         int alarm = monitorConfigDTO.getAlarm();
         if (warning>=alarm){
-            return Result.error(ErrorCode.THRESHOLD_INVALID);
+            return ResultUtils.getResult(ErrorCode.THRESHOLD_INVALID);
         }
         //保存配置
         List<TsyConfig> tsyConfigList = new ArrayList<>();

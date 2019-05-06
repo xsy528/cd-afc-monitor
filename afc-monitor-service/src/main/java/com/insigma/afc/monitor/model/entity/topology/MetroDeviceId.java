@@ -1,4 +1,4 @@
-package com.insigma.afc.monitor.model.entity;
+package com.insigma.afc.monitor.model.entity.topology;
 
 import javax.persistence.Column;
 
@@ -26,7 +26,7 @@ public class MetroDeviceId implements java.io.Serializable {
 
 	private Long deviceId;
 
-	@Column(name = "LINE_ID", nullable = false, precision = 5, scale = 0)
+	@Column(name = "LINE_ID", nullable = false, precision = 5)
 	public Short getLineId() {
 		return this.lineId;
 	}
@@ -35,7 +35,7 @@ public class MetroDeviceId implements java.io.Serializable {
 		this.lineId = lineId;
 	}
 
-	@Column(name = "STATION_ID", nullable = false, precision = 11, scale = 0)
+	@Column(name = "STATION_ID", nullable = false, precision = 11)
 	public Integer getStationId() {
 		return this.stationId;
 	}
@@ -44,7 +44,7 @@ public class MetroDeviceId implements java.io.Serializable {
 		this.stationId = stationId;
 	}
 
-	@Column(name = "DEVICE_ID", nullable = false, scale = 0)
+	@Column(name = "DEVICE_ID", nullable = false)
 	public Long getDeviceId() {
 		return this.deviceId;
 	}

@@ -1,8 +1,8 @@
 package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.constant.dic.*;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
+import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;

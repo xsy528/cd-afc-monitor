@@ -1,4 +1,4 @@
-package com.insigma.afc.monitor.model.entity;
+package com.insigma.afc.monitor.model.entity.topology;
 
 
 import com.insigma.commons.constant.AFCNodeLevel;
@@ -7,28 +7,31 @@ import com.insigma.commons.util.NodeIdUtils;
 import javax.persistence.*;
 
 /**
- * MetroLine entity.
+ * MetroACC entity.
  * 
  * @author 廖红自
  */
 @Entity
-@Table(name = "TMETRO_LINE")
-public class MetroLine implements MetroNode {
+@Table(name = "TMETRO_ACC")
+public class MetroACC implements MetroNode {
 
 	private static final long serialVersionUID = 1L;
 
-	public MetroLine() {
+	public MetroACC() {
 	}
 
 	@Id
-	@Column(name = "LINE_ID", length = 5)
-	private Short lineID;
+	@Column(name = "ACC_ID", length = 5)
+	private Short accID;
 
-	@Column(name = "LINE_NAME", length = 30)
-	private String lineName;
+	@Column(name = "ACC_NAME", length = 30)
+	private String accName;
 
 	@Column(name = "IP_ADDRESS", length = 32)
 	private String ipAddress;
+
+	@Column(name = "STATUS", length = 5)
+	private Short status;
 
 	@Column(name = "PIC_NAME")
 	private String picName;
@@ -36,19 +39,16 @@ public class MetroLine implements MetroNode {
 	@Column(name = "REMARK", length = 500)
 	private String remark;
 
-	@Column(name = "STATUS", length = 5)
-	private Short status;
-
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "IMAGE_X", nullable = false)),
-			@AttributeOverride(name = "y", column = @Column(name = "IMAGE_Y", nullable = false)),
-			@AttributeOverride(name = "angle", column = @Column(name = "IMAGE_ANGLE", nullable = false)) })
+	@AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "IMAGE_X", nullable = false) ),
+			@AttributeOverride(name = "y", column = @Column(name = "IMAGE_Y", nullable = false) ),
+			@AttributeOverride(name = "angle", column = @Column(name = "IMAGE_ANGLE", nullable = false) ) })
 	private AFCNodeLocation imageLocation;
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "TEXT_X", nullable = false)),
-			@AttributeOverride(name = "y", column = @Column(name = "TEXT_Y", nullable = false)),
-			@AttributeOverride(name = "angle", column = @Column(name = "TEXT_ANGLE", nullable = false)) })
+	@AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "TEXT_X", nullable = false) ),
+			@AttributeOverride(name = "y", column = @Column(name = "TEXT_Y", nullable = false) ),
+			@AttributeOverride(name = "angle", column = @Column(name = "TEXT_ANGLE", nullable = false) ) })
 	private AFCNodeLocation textLocation;
 
 	@Column(name = "EXT_JSON_VALUE", length = 2000)
@@ -56,36 +56,36 @@ public class MetroLine implements MetroNode {
 
 	@Override
 	public Long id() {
-		if (lineID==null){
+		if (accID==null){
 			return null;
 		}
-		return NodeIdUtils.nodeIdStrategy.getNodeNo(lineID.longValue());
+		return NodeIdUtils.nodeIdStrategy.getNodeNo(accID.longValue());
 	}
 
 	@Override
 	public AFCNodeLevel level() {
-		return AFCNodeLevel.LC;
+		return AFCNodeLevel.ACC;
 	}
 
 	@Override
 	public String name(){
-		return lineName;
+		return accName;
 	}
 
-	public Short getLineID() {
-		return lineID;
+	public Short getAccID() {
+		return accID;
 	}
 
-	public void setLineID(Short lineID) {
-		this.lineID = lineID;
+	public void setAccID(Short accID) {
+		this.accID = accID;
 	}
 
-	public String getLineName() {
-		return lineName;
+	public String getAccName() {
+		return accName;
 	}
 
-	public void setLineName(String lineName) {
-		this.lineName = lineName;
+	public void setAccName(String accName) {
+		this.accName = accName;
 	}
 
 	public String getIpAddress() {
@@ -94,6 +94,14 @@ public class MetroLine implements MetroNode {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+
+	public Short getStatus() {
+		return status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
 	}
 
 	public String getPicName() {
@@ -110,14 +118,6 @@ public class MetroLine implements MetroNode {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
-	}
-
-	public Short getStatus() {
-		return status;
-	}
-
-	public void setStatus(Short status) {
-		this.status = status;
 	}
 
 	public AFCNodeLocation getImageLocation() {

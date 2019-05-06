@@ -1,4 +1,4 @@
-package com.insigma.afc.monitor.model.entity;
+package com.insigma.afc.monitor.model.entity.topology;
 
 
 import com.insigma.commons.constant.AFCNodeLevel;

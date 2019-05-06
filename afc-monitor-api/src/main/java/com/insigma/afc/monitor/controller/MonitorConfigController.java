@@ -1,9 +1,9 @@
 package com.insigma.afc.monitor.controller;
 
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.afc.monitor.service.MonitorConfigService;
+import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

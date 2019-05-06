@@ -3,14 +3,14 @@
  *  
  * 版权所有：浙江浙大网新众合轨道交通工程有限公司
  */
-/**
+/*
  * 
  */
 package com.insigma.afc.monitor.service;
 
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.entity.TstNodeStocks;
 import com.insigma.afc.monitor.model.entity.TstTvmBoxStocks;
+import com.insigma.commons.model.dto.Result;
 
 /**
  * Ticket: 监视钱箱票箱服务
@@ -31,22 +31,22 @@ public interface MonitorService {
 	/**
 	 * 获取非TVM设备钱箱票箱信息
 	 * 
-	 * @param deviceId
-	 * @return
+	 * @param deviceId 设备id
+	 * @return 钱箱票箱信息
 	 */
 	TstNodeStocks getTicketBoxStocks(long deviceId);
 
 	/**
 	 * 查看钱箱票箱
 	 * @param id 设备id
-	 * @return
+	 * @return 结果
 	 */
 	Result getBoxDetail(long id);
 
 	/**
 	 * 监视设备信息
 	 * @param id 设备id
-	 * @return
+	 * @return 结果
 	 */
 	Result getDeviceDetail(long id);
 

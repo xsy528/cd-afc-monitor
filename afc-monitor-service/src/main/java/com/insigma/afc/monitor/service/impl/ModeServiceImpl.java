@@ -9,7 +9,6 @@ import com.insigma.afc.monitor.constant.OrderDirection;
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
 import com.insigma.afc.monitor.dao.*;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeBroadcastCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
@@ -18,6 +17,7 @@ import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.ModeService;
 import com.insigma.commons.constant.AFCNodeLevel;
+import com.insigma.commons.model.dto.Result;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.commons.util.NodeIdUtils;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class ModeServiceImpl implements ModeService {
         Date endTime = condition.getEndTime();
         int page = condition.getPageNumber();
         int pageSize = condition.getPageSize();
-        String operatorId = "";
+        String operatorId = condition.getOperatorId();
 
         return tmoModeBroadcastDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -153,8 +153,8 @@ public class ModeServiceImpl implements ModeService {
         }
         List<TmoModeBroadcast> tmoModeBroadcasts = tmoModeBroadcastDao.findAllById(resultIds);
         for (TmoModeBroadcast tmoModeBroadcast : tmoModeBroadcasts) {
-            Result<List<CommandResultDTO>> result = commandService.sendChangeModeCommand(Arrays.asList(tmoModeBroadcast
-                    .getTargetId()), tmoModeBroadcast.getModeCode().intValue());
+            Result<List<CommandResultDTO>> result = commandService.sendChangeModeCommand(Collections
+                    .singletonList(tmoModeBroadcast.getTargetId()), tmoModeBroadcast.getModeCode().intValue());
             if (result.isSuccess()) {
                 CommandResultDTO commandResultDTO = result.getData().get(0);
                 commandResultDTOs.add(commandResultDTO);

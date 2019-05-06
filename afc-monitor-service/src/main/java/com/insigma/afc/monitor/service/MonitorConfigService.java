@@ -1,8 +1,8 @@
 package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
+import com.insigma.commons.model.dto.Result;
 
 /**
  * Ticket: 监控配置信息服务

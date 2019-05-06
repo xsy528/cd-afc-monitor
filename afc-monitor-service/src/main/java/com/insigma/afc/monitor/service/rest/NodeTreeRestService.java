@@ -1,7 +1,7 @@
 package com.insigma.afc.monitor.service.rest;
 
 import com.insigma.afc.monitor.model.dto.NodeItem;
-import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.commons.model.dto.Result;
 import feign.RequestLine;
 
 /**

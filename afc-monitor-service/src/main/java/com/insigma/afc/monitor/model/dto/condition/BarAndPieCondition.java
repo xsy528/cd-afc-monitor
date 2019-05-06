@@ -2,7 +2,6 @@ package com.insigma.afc.monitor.model.dto.condition;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.insigma.afc.monitor.model.dto.PageBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

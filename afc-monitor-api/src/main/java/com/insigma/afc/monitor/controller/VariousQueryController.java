@@ -10,7 +10,6 @@ package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.constant.dic.AFCModeCode;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.condition.*;
 import com.insigma.afc.monitor.model.entity.TmoCmdResult;
 import com.insigma.afc.monitor.model.entity.TmoEquStatus;
@@ -21,6 +20,7 @@ import com.insigma.afc.monitor.service.CommandLogService;
 import com.insigma.afc.monitor.service.DeviceEventService;
 import com.insigma.afc.monitor.service.ModeService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
+import com.insigma.commons.model.dto.Result;
 import com.insigma.commons.util.DateTimeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

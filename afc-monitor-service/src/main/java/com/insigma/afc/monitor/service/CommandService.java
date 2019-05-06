@@ -1,7 +1,7 @@
 package com.insigma.afc.monitor.service;
 
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
+import com.insigma.commons.model.dto.Result;
 
 import java.util.List;
 

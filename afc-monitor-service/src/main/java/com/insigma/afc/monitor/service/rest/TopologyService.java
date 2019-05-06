@@ -1,7 +1,10 @@
 package com.insigma.afc.monitor.service.rest;
 
-import com.insigma.afc.monitor.model.dto.Result;
-import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.model.entity.topology.MetroACC;
+import com.insigma.afc.monitor.model.entity.topology.MetroDevice;
+import com.insigma.afc.monitor.model.entity.topology.MetroLine;
+import com.insigma.afc.monitor.model.entity.topology.MetroStation;
+import com.insigma.commons.model.dto.Result;
 import feign.Param;
 import feign.RequestLine;
 

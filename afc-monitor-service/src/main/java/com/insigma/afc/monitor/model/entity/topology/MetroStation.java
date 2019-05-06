@@ -1,4 +1,4 @@
-package com.insigma.afc.monitor.model.entity;
+package com.insigma.afc.monitor.model.entity.topology;
 
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.util.NodeIdUtils;
@@ -37,7 +37,7 @@ public class MetroStation implements MetroNode {
 	@Column(name = "IP_ADDRESS", length = 32)
 	private String ipAddress;
 
-	@Column(name = "PIC_NAME", length = 255)
+	@Column(name = "PIC_NAME")
 	private String picName;
 
 	@Column(name = "BACK_PIC_NAME")

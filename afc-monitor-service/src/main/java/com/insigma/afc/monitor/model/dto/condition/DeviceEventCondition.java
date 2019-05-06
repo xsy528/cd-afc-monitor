@@ -2,11 +2,10 @@ package com.insigma.afc.monitor.model.dto.condition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.constant.OrderDirection;
-import com.insigma.afc.monitor.model.dto.PageBean;
+import com.insigma.commons.model.dto.PageBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 

@@ -8,14 +8,13 @@
  */
 package com.insigma.afc.monitor.controller;
 
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SectionMonitorDTO;
 import com.insigma.afc.monitor.model.dto.SectionValuesDTO;
-import com.insigma.afc.monitor.model.dto.TmoSectionOdFlowStatsDTO;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowCondition;
 import com.insigma.afc.monitor.model.dto.condition.SectionFlowMonitorCondition;
 import com.insigma.afc.monitor.model.vo.SectionOdFlowStatsView;
 import com.insigma.afc.monitor.service.SectionODFlowService;
+import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

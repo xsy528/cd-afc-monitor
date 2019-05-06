@@ -6,7 +6,7 @@
 package com.insigma.afc.monitor.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.insigma.afc.monitor.model.dto.Result;
+import com.insigma.commons.model.dto.Result;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

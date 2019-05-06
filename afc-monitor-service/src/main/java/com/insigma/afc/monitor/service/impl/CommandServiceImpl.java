@@ -7,17 +7,22 @@ import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.model.entity.topology.MetroDevice;
+import com.insigma.afc.monitor.model.entity.topology.MetroLine;
+import com.insigma.afc.monitor.model.entity.topology.MetroNode;
+import com.insigma.afc.monitor.model.entity.topology.MetroStation;
 import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.afc.monitor.thread.CommandSendTask;
 import com.insigma.afc.monitor.thread.CommandThreadPoolExecutor;
+import com.insigma.afc.monitor.util.ResultUtils;
 import com.insigma.afc.security.util.SecurityUtils;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.xz.rmi.ModeUpdateForm;
 import com.insigma.commons.dic.PairValue;
 import com.insigma.afc.workbench.rmi.ICommandService;
+import com.insigma.commons.model.dto.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +69,7 @@ public class CommandServiceImpl implements CommandService {
 
         List<MetroStation> targetIds = getStationNodeFromIds(nodeIds);
         if (targetIds == null) {
-            return Result.error(ErrorCode.NO_NODE_SELECT);
+            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
         }
 
         Integer sendMode = null;
@@ -85,7 +90,7 @@ public class CommandServiceImpl implements CommandService {
         }
 
         if (sendMode == null) {
-            return Result.error(ErrorCode.NO_MODE_SELECT);
+            return ResultUtils.getResult(ErrorCode.NO_MODE_SELECT);
         }
 
         name = StringUtils.defaultIfEmpty(name, "模式") + "切换命令";
@@ -96,7 +101,7 @@ public class CommandServiceImpl implements CommandService {
         } catch (Exception e) {
             logService.log(LogDefines.ERROR_LOG,"发送命令失败：工作台与通信服务器离线。",
                     SecurityUtils.getUserId(),SecurityUtils.getIp(),LogModuleCode.MODULE_MONITOR);
-            return Result.error(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
+            return ResultUtils.getResult(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
         Map<Long, Object> modeUpdateForms = new HashMap<>(16);
         for (MetroNode metroNode : targetIds) {
@@ -113,7 +118,7 @@ public class CommandServiceImpl implements CommandService {
     public Result<List<CommandResultDTO>> sendModeQueryCommand(List<Long> nodeIds) {
         List<MetroStation> targetIds = getStationNodeFromIds(nodeIds);
         if (targetIds == null) {
-            return Result.error(ErrorCode.NO_NODE_SELECT);
+            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
         }
         Map<Long, Object> args = new HashMap<>(16);
         for (MetroNode metroNode : targetIds) {
@@ -128,7 +133,7 @@ public class CommandServiceImpl implements CommandService {
     public Result<List<CommandResultDTO>> sendTimeSyncCommand(List<Long> nodeIds) {
         List<MetroLine> targetIds = getLineNodeFromIds(nodeIds);
         if (targetIds == null) {
-            return Result.error(ErrorCode.NO_NODE_SELECT);
+            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
         }
         return Result.success(send(CommandType.CMD_TIME_SYNC,
                 CommandType.getInstance().getNameByValue(CommandType.CMD_TIME_SYNC), null, targetIds,
@@ -146,14 +151,14 @@ public class CommandServiceImpl implements CommandService {
             }
         }
         if (ids.isEmpty()) {
-            return Result.error(ErrorCode.NO_NODE_SELECT);
+            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
         }
         CmdHandlerResult command = rmiGenerateFiles();
         if (command.isOK) {
             return Result.success(send(CommandType.CMD_SYNC_MAP, "地图同步命令", null, ids,
                     AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
-        return Result.error(ErrorCode.UNKNOW_ERROR);
+        return ResultUtils.getResult(ErrorCode.UNKNOW_ERROR);
     }
 
     private CmdHandlerResult rmiGenerateFiles() {
@@ -175,7 +180,7 @@ public class CommandServiceImpl implements CommandService {
     public Result<List<CommandResultDTO>> sendNodeControlCommand(List<Long> nodeIds, Short command) {
         List<MetroNode> deviceIds = getDeviceNodeFromIds(nodeIds);
         if (deviceIds == null) {
-            return Result.error(ErrorCode.NO_NODE_SELECT);
+            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
         }
 
         return Result.success(send(CommandType.COM_SLE_CONTROL_CMD, "设备控制命令",

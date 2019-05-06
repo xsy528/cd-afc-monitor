@@ -1,7 +1,7 @@
-/**
+/*
  * 
  */
-package com.insigma.afc.monitor.model.entity;
+package com.insigma.afc.monitor.model.entity.topology;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -9,7 +9,6 @@ import java.io.Serializable;
 /**
  * @author changjin_qiu
  *
-
  */
 @Embeddable
 public class AFCNodeLocation implements Serializable {

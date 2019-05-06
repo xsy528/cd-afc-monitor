@@ -2,13 +2,13 @@ package com.insigma.afc.monitor.controller;
 
 
 import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
-import com.insigma.afc.monitor.model.dto.Result;
 import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
 import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
 import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
 import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.service.PassengerFlowService;
+import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

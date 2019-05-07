@@ -24,6 +24,8 @@ public interface TmoItemStatusDao extends JpaRepository<TmoItemStatus, Long>, Jp
 
     List<TmoItemStatus> findByStationIdAndNodeType(Integer stationId, Short nodeType);
 
+    List<TmoItemStatus> findByNodeType(Short nodeType);
+
     TmoItemStatus findTopByLineIdAndStationIdAndNodeId(Short lineId, Integer stationId, Long nodeId);
 
     List<TmoItemStatus> findByLineIdAndStationIdAndNodeId(Short lineId, Integer stationId, Long nodeId);

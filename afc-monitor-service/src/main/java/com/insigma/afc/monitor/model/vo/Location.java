@@ -1,5 +1,7 @@
 package com.insigma.afc.monitor.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.insigma.afc.monitor.model.dto.NodeItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -8,12 +10,16 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel("位置信息")
 public class Location {
+
+    @JsonView(NodeItem.monitor.class)
     @ApiModelProperty("x坐标")
     protected int x;
 
+    @JsonView(NodeItem.monitor.class)
     @ApiModelProperty("y坐标")
     protected int y;
 
+    @JsonView(NodeItem.monitor.class)
     @ApiModelProperty("旋转角度")
     protected int angle;
 

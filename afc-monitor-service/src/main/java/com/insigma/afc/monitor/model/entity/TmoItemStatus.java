@@ -1,5 +1,7 @@
 package com.insigma.afc.monitor.model.entity;
 
+import com.insigma.commons.constant.AFCNodeLevel;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,39 +20,58 @@ public class TmoItemStatus implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "DEVICE_ID", nullable = false, scale = 0)
+	@Column(name = "DEVICE_ID", nullable = false)
 	private Long nodeId;
 
-	@Column(name = "LINE_ID", nullable = false, precision = 5, scale = 0)
+	@Column(name = "LINE_ID", nullable = false, precision = 5)
 	private Short lineId;
 
-	@Column(name = "STATION_ID", nullable = false, precision = 11, scale = 0)
+	@Column(name = "STATION_ID", nullable = false, precision = 11)
 	private Integer stationId;
 
-	@Column(name = "ITEM_STATUS", precision = 5, scale = 0)
-	private Short itemStatus;// 状态：正常，警告，报警
+	/**
+	 *  状态：正常，警告，报警
+	 */
+	@Column(name = "ITEM_STATUS", precision = 5)
+	private Short itemStatus;
 
-	@Column(name = "ITEM_ACTIVITY", precision = 5, scale = 0)
-	private Boolean itemActivity;// 在线状态
+	/**
+	 * 在线状态
+	 */
+	@Column(name = "ITEM_ACTIVITY", precision = 5)
+	private Boolean itemActivity;
 
+	/**
+	 * 当前模式
+	 */
 	@Column(name = "CURRENT_MODE_CODE")
-	private Short currentModeCode;// 当前模式
+	private Short currentModeCode;
 
+	/**
+	 * 上一次模式
+	 */
 	@Column(name = "LAST_MODE_CODE")
-	private Short lastModeCode;// 上一次模式
+	private Short lastModeCode;
 
+	/**
+	 * 模式切换时间
+	 */
 	@Column(name = "MODE_CHANGE_TIME")
-	private Date modeChangeTime;// 模式切换时间
+	private Date modeChangeTime;
 
-	@Column(name = "ITEM_TYPE", nullable = false, precision = 11, scale = 0)
+	/**
+	 * 节点类型
+	 * {@link AFCNodeLevel#getStatusCode()}
+	 */
+	@Column(name = "ITEM_TYPE", nullable = false, precision = 11)
 	private Short nodeType;
 
+	/**
+	 * 状态更新时间
+	 */
 	@Column(name = "UPDATE_TIME")
-	private Date updateTime;// 状态更新时间
+	private Date updateTime;
 
-	// Constructors
-
-	/** default constructor */
 	public TmoItemStatus() {
 	}
 

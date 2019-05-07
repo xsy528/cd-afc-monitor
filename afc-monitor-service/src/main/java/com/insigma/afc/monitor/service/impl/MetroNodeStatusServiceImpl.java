@@ -9,7 +9,7 @@ import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
 import com.insigma.afc.monitor.model.dto.StationStatustViewItem;
 import com.insigma.afc.monitor.model.dto.condition.DeviceStatusCondition;
 import com.insigma.afc.monitor.model.dto.condition.StationStatusCondition;
-import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.model.entity.TmoItemStatus;
 import com.insigma.afc.monitor.model.entity.topology.MetroDevice;
 import com.insigma.afc.monitor.model.entity.topology.MetroLine;
 import com.insigma.afc.monitor.model.entity.topology.MetroStation;
@@ -20,8 +20,8 @@ import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.exception.ServiceException;
 import com.insigma.commons.model.dto.Result;
-import com.insigma.commons.util.NodeIdUtils;
 import com.insigma.commons.util.DateTimeUtil;
+import com.insigma.commons.util.NodeIdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +72,11 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             tmoItemStatus = tmoItemStatusDao.findById(nodeId).orElse(null);
         }
         return tmoItemStatus;
+    }
+
+    @Override
+    public List<TmoItemStatus> getLineTmoItemStatus(){
+        return tmoItemStatusDao.findByNodeType(AFCNodeLevel.LC.getStatusCode().shortValue());
     }
 
     @Override

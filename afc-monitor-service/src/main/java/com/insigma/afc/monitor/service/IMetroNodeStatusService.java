@@ -25,6 +25,12 @@ public interface IMetroNodeStatusService {
 	List<StationStatustViewItem> getStationStatusView(StationStatusCondition condition);
 
 	/**
+	 * 获取所有线路状态
+	 * @return 线路状态
+	 */
+	List<TmoItemStatus> getLineTmoItemStatus();
+
+	/**
 	 * 根据查询条件获取设备状态显示列表
 	 * 
 	 * @param conditon
@@ -40,15 +46,15 @@ public interface IMetroNodeStatusService {
 	 *            节点号
 	 * @param isDay
 	 *            是否取当前运营日数据
-	 * @return
+	 * @return 节点状态
 	 */
 	TmoItemStatus getTmoItemStatus(Boolean isDay, long nodeId);
 
 	/**
-	 * @param lineId
-	 * @param stationId
-	 * @param deviceId
-	 * @return
+	 * @param lineId 线路id
+	 * @param stationId 车站id
+	 * @param deviceId 设备id
+	 * @return 节点状态
 	 */
 	TmoItemStatus getTmoItemStatus(Short lineId, Integer stationId, Long deviceId);
 }

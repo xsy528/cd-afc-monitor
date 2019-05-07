@@ -1,12 +1,23 @@
 package com.insigma.afc.monitor.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.insigma.afc.monitor.constant.dic.AFCModeCode;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
-import com.insigma.afc.monitor.model.dto.*;
-import com.insigma.afc.monitor.model.dto.condition.*;
-import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
+import com.insigma.afc.monitor.model.dto.NodeItem;
+import com.insigma.afc.monitor.model.dto.StationStatustViewItem;
+import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
+import com.insigma.afc.monitor.model.dto.condition.DeviceStatusCondition;
+import com.insigma.afc.monitor.model.dto.condition.MonitorTreeCondition;
+import com.insigma.afc.monitor.model.dto.condition.StationStatusCondition;
+import com.insigma.afc.monitor.model.entity.TmoEquStatusCur;
+import com.insigma.afc.monitor.model.entity.TmoModeBroadcast;
+import com.insigma.afc.monitor.model.entity.TmoModeUploadInfo;
 import com.insigma.afc.monitor.model.vo.*;
-import com.insigma.afc.monitor.service.*;
+import com.insigma.afc.monitor.service.IMetroNodeStatusService;
+import com.insigma.afc.monitor.service.ModeService;
+import com.insigma.afc.monitor.service.MonitorService;
+import com.insigma.afc.monitor.service.NodeTreeService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.model.dto.Result;
 import com.insigma.commons.util.DateTimeUtil;
@@ -15,7 +26,6 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -156,8 +166,9 @@ public class NodeStatusController {
 
     @ApiOperation("获取监控树")
     @PostMapping("tree")
-    public Result<NodeItem> getMonitorTree() {
-        return nodeTreeService.getMonitorTree();
+    @JsonView(NodeItem.monitor.class)
+    public Result<NodeItem> getMonitorTree(@RequestBody MonitorTreeCondition condition) {
+        return nodeTreeService.getMonitorTree(condition);
     }
 
     @Autowired

@@ -66,7 +66,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             //进站
             long odin = t.get("totalIn",Long.class);
             //出站
-            long odout = t.get("saleCount",Long.class);
+            long odout = t.get("totalOut",Long.class);
             //购票
             long odbuy = t.get("saleCount",Long.class);
             //充值

@@ -8,4 +8,4 @@ spring:
 topologyServerUrl: http://192.168.140.100:9080
 rmiHostIpAddr: 192.168.178.176
 security:
-  server: http://192.168.140.100:8080
+  server: http://192.168.140.100:18080

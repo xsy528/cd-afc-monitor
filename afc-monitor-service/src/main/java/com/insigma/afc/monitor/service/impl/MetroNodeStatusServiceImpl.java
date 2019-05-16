@@ -13,13 +13,13 @@ import com.insigma.afc.monitor.model.entity.TmoItemStatus;
 import com.insigma.afc.monitor.model.entity.topology.MetroDevice;
 import com.insigma.afc.monitor.model.entity.topology.MetroLine;
 import com.insigma.afc.monitor.model.entity.topology.MetroStation;
-import com.insigma.afc.monitor.model.properties.NetworkProperties;
 import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.MonitorConfigService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.exception.ServiceException;
 import com.insigma.commons.model.dto.Result;
+import com.insigma.commons.properties.AppProperties;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.commons.util.NodeIdUtils;
 import org.slf4j.Logger;
@@ -40,20 +40,20 @@ import java.util.*;
  */
 @Service
 @Configuration
-@EnableConfigurationProperties(NetworkProperties.class)
+@EnableConfigurationProperties(AppProperties.class)
 public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
     private static final Logger logger = LoggerFactory.getLogger(MetroNodeStatusServiceImpl.class);
 
     private TopologyService topologyService;
     private TmoItemStatusDao tmoItemStatusDao;
-    private NetworkProperties networkConfig;
+    private AppProperties networkConfig;
     private MonitorConfigService monitorConfigService;
     private RegisterHealthIndicator registerHealthIndicator;
 
     @Autowired
     public MetroNodeStatusServiceImpl(TopologyService topologyService, TmoItemStatusDao tmoItemStatusDao,
-                                      MonitorConfigService monitorConfigService, NetworkProperties networkConfig,
+                                      MonitorConfigService monitorConfigService, AppProperties networkConfig,
                                       RegisterHealthIndicator registerHealthIndicator) {
         this.topologyService = topologyService;
         this.tmoItemStatusDao = tmoItemStatusDao;
@@ -377,13 +377,13 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         //查询设备状态
         List<TmoItemStatus> deviceStatus = tmoItemStatusDao
                 .findByNodeTypeGreaterThanOrderByNodeIdAsc(AFCNodeLevel.SC.getStatusCode().shortValue());
-        Map<Integer, TmoItemStatus> stationMaps = new HashMap<>();
+        Map<Integer, TmoItemStatus> stationStatusMaps = new HashMap<>();
         for (TmoItemStatus tmoItemStatus : stationStatus) {
-            stationMaps.put(tmoItemStatus.getStationId(), tmoItemStatus);
+            stationStatusMaps.put(tmoItemStatus.getStationId(), tmoItemStatus);
         }
-        Map<Long, TmoItemStatus> deviceMaps = new HashMap<>();
+        Map<Long, TmoItemStatus> deviceStatusMaps = new HashMap<>();
         for (TmoItemStatus tmoItemStatus : deviceStatus) {
-            deviceMaps.put(tmoItemStatus.getNodeId(), tmoItemStatus);
+            deviceStatusMaps.put(tmoItemStatus.getNodeId(), tmoItemStatus);
         }
 
         AFCNodeLevel localNodeLevel = NodeIdUtils.nodeIdStrategy.getNodeLevel(networkConfig.getNodeNo());
@@ -392,32 +392,41 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         }
         if (localNodeLevel.equals(AFCNodeLevel.ACC)) {
             List<MetroLine> subNodes = topologyService.getAllMetroLine().getData();
+            Map<Short,List<MetroStation>> stationsMap = topologyService.getMetroStationsGroupByLineId().getData();
+            Map<Integer,List<MetroDevice>> devicesMap = topologyService.getMetroDevicesGroupByStationId().getData();
             for (MetroLine metroLine : subNodes) {
-                List<MetroStation> subStationNodes = topologyService
-                        .getMetroStationsByLineId(metroLine.getLineID()).getData();
+                List<MetroStation> subStationNodes = stationsMap.get(metroLine.getLineID());
+                if (subStationNodes==null){
+                    continue;
+                }
                 for (MetroStation metroStation : subStationNodes) {
-                    getStationStatusView(metroStation, stationMaps, deviceMaps, onLine, alarmNum, warningNum, result,
-                            stationIds);
+                    getStationStatusView(metroStation, stationStatusMaps, deviceStatusMaps, devicesMap, onLine,
+                            alarmNum, warningNum, result, stationIds);
                 }
             }
         } else if (localNodeLevel.equals(AFCNodeLevel.LC)) {
-            MetroLine line = topologyService.getLineNode(networkConfig.getLineNo().shortValue()).getData();
+            MetroLine line = topologyService.getLineNode(networkConfig.getLineNo()).getData();
             List<MetroStation> subNodes = topologyService.getMetroStationsByLineId(line.getLineID()).getData();
+            Map<Integer,List<MetroDevice>> devicesMap = topologyService.getMetroDevicesGroupByStationId().getData();
             for (MetroStation metroStation : subNodes) {
-                getStationStatusView(metroStation, stationMaps, deviceMaps, onLine, alarmNum, warningNum, result,
-                        stationIds);
+                getStationStatusView(metroStation, stationStatusMaps, deviceStatusMaps,devicesMap, onLine, alarmNum,
+                        warningNum, result, stationIds);
             }
         } else if (localNodeLevel.equals(AFCNodeLevel.SC)) {
             MetroStation station = topologyService.getStationNode(networkConfig.getStationNo()).getData();
-            getStationStatusView(station, stationMaps, deviceMaps, onLine, alarmNum, warningNum, result, stationIds);
+            List<MetroDevice> devices = topologyService.getMetroDeviceByStationId(station.getStationId()).getData();
+            Map<Integer,List<MetroDevice>> devicesMap = new HashMap<>();
+            devicesMap.put(station.getStationId(),devices);
+            getStationStatusView(station, stationStatusMaps, deviceStatusMaps,devicesMap, onLine, alarmNum, warningNum,
+                    result, stationIds);
         }
         return result;
     }
 
-    public void getStationStatusView(MetroStation station, Map<Integer, TmoItemStatus> stationMaps,
-                                     Map<Long, TmoItemStatus> deviceMaps, boolean onLine, Integer alarmNum,
-                                     Integer warningNum, List<StationStatustViewItem> result, List<Integer>
-                                             stationIDs) {
+    public void getStationStatusView(MetroStation station, Map<Integer, TmoItemStatus> stationStatusMaps,
+                                     Map<Long, TmoItemStatus> deviceStatusMaps,Map<Integer,List<MetroDevice>> deviceMap,
+                                     boolean onLine, Integer alarmNum, Integer warningNum,
+                                     List<StationStatustViewItem> result, List<Integer> stationIDs) {
 
         Integer stationId = station.getStationId();
         boolean isNeed = true;
@@ -442,7 +451,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         viewItem.setStationId(stationId);
         viewItem.setNodeId(station.id());
         viewItem.setNodeType(AFCNodeLevel.SC.getStatusCode().shortValue());
-        TmoItemStatus tmoItemStatus = stationMaps.get(station.getStationId());
+        TmoItemStatus tmoItemStatus = stationStatusMaps.get(station.getStationId());
         if (tmoItemStatus != null) {
             viewItem.setMode(getCurrentmode(tmoItemStatus));
             viewItem.setUpdateTime(tmoItemStatus.getModeChangeTime());
@@ -462,36 +471,39 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             viewItem.setOnline(false);
             viewItem.setStatus(DeviceStatus.OFF_LINE);
         }
-        for (MetroDevice metroDevice : topologyService.getMetroDeviceByStationId(stationId).getData()) {
-            EquStatusViewItem equViewItem = new EquStatusViewItem();
-            equViewItem.setLineId(lineId);
-            equViewItem.setStationId(stationId);
-            equViewItem.setNodeId(metroDevice.getDeviceId());
-            if (deviceMaps.containsKey(metroDevice.id()) && onLine) {
-                TmoItemStatus deviceStatus = deviceMaps.get(metroDevice.id());
-                equViewItem.setOnline(deviceStatus.getItemActivity());
-                //启用设备才纳入报警，警告的设备数的计算
-                if (null != deviceStatus.getItemActivity() && deviceStatus.getItemActivity()
-                        && null != deviceStatus.getItemStatus()) {
-                    equViewItem.setStatus(deviceStatus.getItemStatus());
-                    if (deviceStatus.getItemStatus().equals(DeviceStatus.NORMAL)
-                            && metroDevice.getStatus() == 0) {
-                        ++normalEvent;
-                    } else if (deviceStatus.getItemStatus().equals(DeviceStatus.WARNING)
-                            && metroDevice.getStatus() == 0) {
-                        ++warnEvent;
-                    } else if (deviceStatus.getItemStatus().equals(DeviceStatus.ALARM)
-                            && metroDevice.getStatus() == 0) {
-                        ++alarmEvent;
-                    } else if (deviceStatus.getItemStatus().equals(DeviceStatus.STOP_SERVICE)
-                            && metroDevice.getStatus() == 0) {
+        List<MetroDevice> metroDevices = deviceMap.get(stationId);
+        if (metroDevices!=null) {
+            for (MetroDevice metroDevice : deviceMap.get(stationId)) {
+                EquStatusViewItem equViewItem = new EquStatusViewItem();
+                equViewItem.setLineId(lineId);
+                equViewItem.setStationId(stationId);
+                equViewItem.setNodeId(metroDevice.getDeviceId());
+                if (deviceStatusMaps.containsKey(metroDevice.id()) && onLine) {
+                    TmoItemStatus deviceStatus = deviceStatusMaps.get(metroDevice.id());
+                    equViewItem.setOnline(deviceStatus.getItemActivity());
+                    //启用设备才纳入报警，警告的设备数的计算
+                    if (null != deviceStatus.getItemActivity() && deviceStatus.getItemActivity()
+                            && null != deviceStatus.getItemStatus()) {
+                        equViewItem.setStatus(deviceStatus.getItemStatus());
+                        if (deviceStatus.getItemStatus().equals(DeviceStatus.NORMAL)
+                                && metroDevice.getStatus() == 0) {
+                            ++normalEvent;
+                        } else if (deviceStatus.getItemStatus().equals(DeviceStatus.WARNING)
+                                && metroDevice.getStatus() == 0) {
+                            ++warnEvent;
+                        } else if (deviceStatus.getItemStatus().equals(DeviceStatus.ALARM)
+                                && metroDevice.getStatus() == 0) {
+                            ++alarmEvent;
+                        } else if (deviceStatus.getItemStatus().equals(DeviceStatus.STOP_SERVICE)
+                                && metroDevice.getStatus() == 0) {
+                            ++alarmEvent;
+                        }
+                    } else if (metroDevice.getStatus() == 0) {
                         ++alarmEvent;
                     }
                 } else if (metroDevice.getStatus() == 0) {
                     ++alarmEvent;
                 }
-            } else if (metroDevice.getStatus() == 0) {
-                ++alarmEvent;
             }
         }
         viewItem.setNormalEvent(normalEvent);

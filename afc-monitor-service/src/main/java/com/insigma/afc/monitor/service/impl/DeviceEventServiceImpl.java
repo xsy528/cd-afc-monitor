@@ -3,16 +3,18 @@ package com.insigma.afc.monitor.service.impl;
 import com.insigma.afc.monitor.dao.TmoEquEventDao;
 import com.insigma.afc.monitor.model.dto.condition.EquEventCondition;
 import com.insigma.afc.monitor.model.entity.TmoEquStatus;
+import com.insigma.afc.monitor.model.vo.DeviceEvent;
 import com.insigma.afc.monitor.service.DeviceEventService;
+import com.insigma.afc.monitor.service.rest.TopologyService;
+import com.insigma.commons.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * Ticket:设备事件查询接口
@@ -22,9 +24,10 @@ import java.util.List;
 public class DeviceEventServiceImpl implements DeviceEventService {
 
     private TmoEquEventDao tmoEquEventDao;
+    private TopologyService topologyService;
 
     @Override
-    public Page<TmoEquStatus> getDeviceEventSearch(EquEventCondition condition) {
+    public Page<DeviceEvent> getDeviceEventSearch(EquEventCondition condition) {
         //根据总线路、分支线路、站点并在开始时间和结束时间内，并且事件等级（非用户限制）in(1,2,3)内
         //节点id
         List<Long> nodeIds = condition.getNodeIds();
@@ -32,14 +35,11 @@ public class DeviceEventServiceImpl implements DeviceEventService {
         Date startTime = condition.getStartTime();
         //结束时间
         Date endTime = condition.getEndTime();
-        //事件等级
-
-       // Short eventLevel = condition.getEventLevel();
 
         Integer pageSize = condition.getPageSize();
         Integer page = condition.getPageNumber();
 
-        return tmoEquEventDao.findAll((root,query,builder)->{
+        Page<TmoEquStatus> tmoEquStatusPage = tmoEquEventDao.findAll((root,query,builder)->{
             List<Predicate> predicates = new ArrayList<>();
             if (nodeIds!=null&&!nodeIds.isEmpty()){
                 predicates.add(root.get("nodeId").in(nodeIds));
@@ -57,6 +57,45 @@ public class DeviceEventServiceImpl implements DeviceEventService {
             //以occurTime降序
             return builder.and(predicates.toArray(new Predicate[0]));
         }, PageRequest.of(page,pageSize));
+
+        Set<Long> ids = new HashSet<>();
+        Map<Long,String> textMap = null;
+        if (!tmoEquStatusPage.isEmpty()){
+            for (TmoEquStatus tmoEquStatus:tmoEquStatusPage.getContent()){
+                nodeIds.add(tmoEquStatus.getNodeId());
+            }
+            textMap = topologyService.getNodeTexts(ids).getData();
+        }
+
+        return tmoEquStatusPage.map(new TmoEquStatusToDeviceEvent(textMap));
+    }
+
+    private class TmoEquStatusToDeviceEvent implements Function<TmoEquStatus,DeviceEvent> {
+        private Map<Long,String> textMap;
+
+        TmoEquStatusToDeviceEvent(Map<Long,String> textMap){
+            this.textMap = textMap;
+        }
+
+        @Override
+        public DeviceEvent apply(TmoEquStatus tmoEquStatus) {
+            //返回结果集合显示，显示实体类
+            //节点名称/节点编码,事件名称/编号，事件描述,发生时间
+            DeviceEvent deviceEventInfo = new DeviceEvent();
+
+            deviceEventInfo.setNodeName(textMap.get(tmoEquStatus.getNodeId()));
+            deviceEventInfo.setNodeId(tmoEquStatus.getNodeId().toString());
+            deviceEventInfo.setEventName(tmoEquStatus.getStatusName());
+            deviceEventInfo.setEventDesc(tmoEquStatus.getStatusDesc());
+            deviceEventInfo.setOccurTime(DateTimeUtil.formatDate(tmoEquStatus.getOccurTime()));
+
+            return deviceEventInfo;
+        }
+    }
+
+    @Autowired
+    public void setTopologyService(TopologyService topologyService) {
+        this.topologyService = topologyService;
     }
 
     @Autowired

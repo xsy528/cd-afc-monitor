@@ -4,36 +4,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 /**
  * Tiket:各类查询-设备事件
- * @author  xingshaoya
+ *
+ * @author xingshaoya
  */
 @ApiModel("设备事件")
-public class DeviceEvent implements Serializable{
+public class DeviceEvent {
 
-        private static final long serialVersionUID = 1L;
-        //节点名称/节点编码,事件名称/编号，事件描述,发生时间
+    @ApiModelProperty("节点名称")
+    @JsonProperty("node_name")
+    private String nodeName;
 
-        @ApiModelProperty("节点名称")
-        @JsonProperty("node_name")
-        private String nodeName;
+    @ApiModelProperty("节点ID")
+    @JsonProperty("node_id")
+    private String nodeId;
 
-        @ApiModelProperty("节点ID")
-        @JsonProperty("node_id")
-        private String nodeId;
+    @ApiModelProperty("事件名称")
+    @JsonProperty("event_name")
+    private String eventName;
 
-        @ApiModelProperty("事件名称")
-        @JsonProperty("event_name")
-        private String eventName;
+    @ApiModelProperty("事件描述")
+    @JsonProperty("event_desc")
+    private String eventDesc;
 
-        @ApiModelProperty("事件描述")
-        @JsonProperty("event_desc")
-        private String eventDesc;
-
-        @ApiModelProperty("发生时间")
-        @JsonProperty("occur_time")
-        private String occurTime;
+    @ApiModelProperty("发生时间")
+    @JsonProperty("occur_time")
+    private String occurTime;
 
     public String getNodeName() {
         return nodeName;

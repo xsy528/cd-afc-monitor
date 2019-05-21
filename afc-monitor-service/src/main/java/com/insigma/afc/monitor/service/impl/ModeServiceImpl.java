@@ -7,16 +7,26 @@ package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
-import com.insigma.afc.monitor.dao.*;
+import com.insigma.afc.monitor.constant.dic.AFCModeCode;
+import com.insigma.afc.monitor.dao.TmoCmdResultDao;
+import com.insigma.afc.monitor.dao.TmoEquStatusCurDao;
+import com.insigma.afc.monitor.dao.TmoModeBroadcastDao;
+import com.insigma.afc.monitor.dao.TmoModeUploadInfoDao;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeBroadcastCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
-import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.model.dto.condition.ModeUploadCondition;
+import com.insigma.afc.monitor.model.entity.TmoCmdResult;
+import com.insigma.afc.monitor.model.entity.TmoEquStatusCur;
+import com.insigma.afc.monitor.model.entity.TmoModeBroadcast;
+import com.insigma.afc.monitor.model.entity.TmoModeUploadInfo;
+import com.insigma.afc.monitor.model.vo.ModeBroadcastInfo;
+import com.insigma.afc.monitor.model.vo.ModeCmdInfo;
+import com.insigma.afc.monitor.model.vo.ModeUploadInfo;
 import com.insigma.afc.monitor.service.CommandService;
-import com.insigma.afc.monitor.service.IMetroNodeStatusService;
 import com.insigma.afc.monitor.service.ModeService;
-import com.insigma.commons.constant.AFCNodeLevel;
+import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.model.dto.Result;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.commons.util.NodeIdUtils;
@@ -29,6 +39,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Ticket: 模式服务实现类
@@ -38,33 +49,32 @@ import java.util.*;
 @Service
 public class ModeServiceImpl implements ModeService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ModeServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModeServiceImpl.class);
 
     private final short SEND_SUCCESS = 1;
     private final short SEND_FAILURE = 2;
 
     private CommandService commandService;
-    private IMetroNodeStatusService modeNodeStatusService;
     private TmoModeUploadInfoDao tmoModeUploadInfoDao;
     private TmoModeBroadcastDao tmoModeBroadcastDao;
-    private TmoItemStatusDao tmoItemStatusDao;
     private TmoEquStatusCurDao tmoEquStatusCurDao;
     private TmoCmdResultDao tmoCmdResultDao;
 
+    private TopologyService topologyService;
+
     @Override
-    public Page<TmoModeUploadInfo> getModeUploadInfo(List<Integer> stationIds, Short modeCode,
-                                                     Short broadCastStatus, Date startTime,
-                                                     Date endTime, int page, int pageSize) {
-        return tmoModeUploadInfoDao.findAll((root, query, builder) -> {
+    public Page<ModeUploadInfo> getModeUploadInfo(ModeUploadCondition condition) {
+        List<Integer> stationIds = condition.getStationIds();
+        Short modeCode = condition.getEntryMode();
+        Date startTime = condition.getStartTime();
+        Date endTime = condition.getEndTime();
+        Page<TmoModeUploadInfo> tmoModeUploadInfoPage = tmoModeUploadInfoDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (stationIds != null && !stationIds.isEmpty()) {
                 predicates.add(root.get("stationId").in(stationIds));
             }
             if (modeCode != null) {
                 predicates.add(builder.equal(root.get("modeCode"), modeCode));
-            }
-            if (broadCastStatus != null) {
-                predicates.add(builder.equal(root.get("broadcastStatus"), broadCastStatus));
             }
             if (startTime != null) {
                 predicates.add(builder.greaterThanOrEqualTo(root.get("modeUploadTime"), startTime));
@@ -74,11 +84,22 @@ public class ModeServiceImpl implements ModeService {
             }
             query.orderBy(builder.desc(root.get("modeUploadTime")), builder.asc(root.get("modeCode")));
             return builder.and(predicates.toArray(new Predicate[0]));
-        }, PageRequest.of(page, pageSize));
+        }, PageRequest.of(condition.getPageNumber(), condition.getPageSize()));
+
+        Set<Long> nodeIds = new HashSet<>();
+        Map<Long, String> textMap = null;
+        if (!tmoModeUploadInfoPage.isEmpty()) {
+            for (TmoModeUploadInfo uploadInfo : tmoModeUploadInfoPage.getContent()) {
+                nodeIds.add(uploadInfo.getLineId().longValue());
+                nodeIds.add(uploadInfo.getStationId().longValue());
+            }
+            textMap = topologyService.getNodeTexts(nodeIds).getData();
+        }
+        return tmoModeUploadInfoPage.map(new TmoModeUploadInfoToModeUploadInfo(textMap));
     }
 
     @Override
-    public Page<TmoModeBroadcast> getModeBroadcastInfo(ModeBroadcastCondition condition) {
+    public Page<ModeBroadcastInfo> getModeBroadcastInfo(ModeBroadcastCondition condition) {
         List<Integer> stationIds = condition.getStationIds();
         Short modeCode = condition.getEntryMode();
         Integer desStationId = condition.getDestStationId();
@@ -90,7 +111,7 @@ public class ModeServiceImpl implements ModeService {
         int pageSize = condition.getPageSize();
         String operatorId = condition.getOperatorId();
 
-        return tmoModeBroadcastDao.findAll((root, query, builder) -> {
+        Page<TmoModeBroadcast> tmoModeBroadcastPage = tmoModeBroadcastDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (stationIds != null && !stationIds.isEmpty()) {
                 predicates.add(root.get("stationId").in(stationIds));
@@ -120,6 +141,19 @@ public class ModeServiceImpl implements ModeService {
                     builder.asc(root.get("targetId")));
             return builder.and(predicates.toArray(new Predicate[0]));
         }, PageRequest.of(page, pageSize));
+
+        Set<Long> nodeIds = new HashSet<>();
+        Map<Long, String> textMap = null;
+        if (!tmoModeBroadcastPage.isEmpty()) {
+            for (TmoModeBroadcast broadcast : tmoModeBroadcastPage.getContent()) {
+                nodeIds.add(broadcast.getNodeId());
+                nodeIds.add(broadcast.getTargetId());
+                nodeIds.add(broadcast.getStationId().longValue());
+            }
+            textMap = topologyService.getNodeTexts(nodeIds).getData();
+        }
+
+        return tmoModeBroadcastPage.map(new TmoModeBroadcastToModeBroadcastInfo(textMap));
     }
 
     @Override
@@ -171,11 +205,6 @@ public class ModeServiceImpl implements ModeService {
     }
 
     @Override
-    public List<TmoModeBroadcast> getModeBroadcastByIds(List<Long> recordIds) {
-        return tmoModeBroadcastDao.findAllById(recordIds);
-    }
-
-    @Override
     public List<TmoModeBroadcast> getModeBroadcast() {
         return tmoModeBroadcastDao.findAll((root, query, builder) -> {
             //排序
@@ -186,7 +215,7 @@ public class ModeServiceImpl implements ModeService {
     }
 
     @Override
-    public Page<TmoCmdResult> getModeCmdSearch(ModeCmdCondition condition) {
+    public Page<ModeCmdInfo> getModeCmdSearch(ModeCmdCondition condition) {
 
         String operatorId = condition.getOperatorId();
         Integer cmdResult = condition.getCmdResult();
@@ -196,7 +225,7 @@ public class ModeServiceImpl implements ModeService {
         Short cmdType = condition.getCmdType();
 
         //站点，操作员ID，指令结果，开始时间，结束时间，null，指令类型，页数，页数大小
-        return tmoCmdResultDao.findAll((root, query, builder) -> {
+        Page<TmoCmdResult> tmoCmdResultPage = tmoCmdResultDao.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (stationIds != null && !stationIds.isEmpty()) {
                 predicates.add(root.get("stationId").in(stationIds));
@@ -224,63 +253,16 @@ public class ModeServiceImpl implements ModeService {
             //以occurTime降序
             return builder.and(predicates.toArray(new Predicate[0]));
         }, PageRequest.of(condition.getPageNumber(), condition.getPageSize()));
-    }
 
-    @Override
-    public long handleModeCommand(final long senderId, long stationId, short newModeId, long operationId) {
-        if (saveOrUpdateCurrentModeId(senderId, newModeId, new Date())) {
-            // 保存成功
-            return 0L;
-        } else {
-            // 保存不成功
-            return 1L;
+        Set<Long> nodeIds = new HashSet<>();
+        Map<Long, String> textMap = null;
+        if (!tmoCmdResultPage.isEmpty()) {
+            for (TmoCmdResult tmoCmdResult : tmoCmdResultPage.getContent()) {
+                nodeIds.add(tmoCmdResult.getStationId().longValue());
+            }
+            textMap = topologyService.getNodeTexts(nodeIds).getData();
         }
-    }
-
-    @Override
-    public boolean saveOrUpdateCurrentModeId(long nodeId, short newModeId, Date changeTime) {
-        short lineId = NodeIdUtils.nodeIdStrategy.getLineId(nodeId);
-        int stationId = NodeIdUtils.nodeIdStrategy.getStationId(nodeId);
-        AFCNodeLevel nodeType = NodeIdUtils.nodeIdStrategy.getNodeLevel(nodeId);
-
-        if (nodeType == null) {
-            return false;
-        }
-
-        TmoItemStatus tmoItemStatus = modeNodeStatusService.getTmoItemStatus(lineId, stationId, nodeId);
-        if (tmoItemStatus == null) {
-            logger.warn("接收到上传车站模式更新信息，新增该节点。对应的节点：0x" + Long.toHexString(nodeId) + "状态信息为空。");
-            tmoItemStatus = new TmoItemStatus();
-            tmoItemStatus.setLineId(lineId);
-            tmoItemStatus.setStationId(stationId);
-            tmoItemStatus.setNodeId(nodeId);
-            tmoItemStatus.setNodeType(nodeType.getStatusCode().shortValue());
-            tmoItemStatus.setCurrentModeCode(newModeId);
-            tmoItemStatus.setModeChangeTime(changeTime);
-            tmoItemStatus.setUpdateTime(new Date());
-            tmoItemStatusDao.save(tmoItemStatus);
-            return true;
-        }
-
-        short lastModeCode = tmoItemStatus.getCurrentModeCode();
-
-        if (newModeId == tmoItemStatus.getCurrentModeCode()) {
-            return true;
-        }
-
-        //		if (newModeId == AFCModeCode.END_URGENCY_MODE_CODE) {
-        //			// 解除紧急模式更新回上次的模式
-        //			newModeId = tmoItemStatus.getLastModeCode();
-        //			if (lastModeCode != AFCModeCode.START_URGENCY_MODE_CODE) {
-        //				// 如果当前非紧急模式，收到解除紧急模式，直接返回
-        //				return true;
-        //			}
-        //		}
-        tmoItemStatus.setLastModeCode(lastModeCode);
-        tmoItemStatus.setCurrentModeCode(newModeId);
-        tmoItemStatus.setModeChangeTime(changeTime);
-        tmoItemStatusDao.save(tmoItemStatus);
-        return true;
+        return tmoCmdResultPage.map(new TmoCmdResultToModeCmdInfo(textMap));
     }
 
     @Override
@@ -326,43 +308,82 @@ public class ModeServiceImpl implements ModeService {
                 .getContent();
     }
 
-    @Override
-    public TmoItemStatus getCurrentTmoItemMode(long nodeId) {
-        return tmoItemStatusDao.findTopByLineIdAndStationIdAndNodeId(NodeIdUtils.nodeIdStrategy.getLineId(nodeId),
-                NodeIdUtils.nodeIdStrategy.getStationId(nodeId), nodeId);
+    private class TmoModeUploadInfoToModeUploadInfo implements Function<TmoModeUploadInfo, ModeUploadInfo> {
+        private Map<Long, String> textMap;
+
+        TmoModeUploadInfoToModeUploadInfo(Map<Long, String> textMap) {
+            this.textMap = textMap;
+        }
+
+        @Override
+        public ModeUploadInfo apply(TmoModeUploadInfo tmoModeUploadInfo) {
+            ModeUploadInfo modeUploadInfo = new ModeUploadInfo();
+            modeUploadInfo.setLineName(textMap.get(tmoModeUploadInfo.getLineId().longValue()));
+            modeUploadInfo.setStationName(textMap.get(tmoModeUploadInfo.getStationId().longValue()));
+            modeUploadInfo.setUploadTime(DateTimeUtil.formatDate(tmoModeUploadInfo.getModeUploadTime()));
+            modeUploadInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeUploadInfo
+                    .getModeCode())));
+            return modeUploadInfo;
+        }
     }
 
-    @Override
-    public List<TmoItemStatus> getAllTmoItemModeList(long stationID) {
-        return tmoItemStatusDao.findByLineIdAndStationIdAndNodeId(NodeIdUtils.nodeIdStrategy.getLineId(stationID),
-                NodeIdUtils.nodeIdStrategy.getStationId(stationID), NodeIdUtils.nodeIdStrategy.getNodeNo(stationID));
+    private class TmoModeBroadcastToModeBroadcastInfo implements Function<TmoModeBroadcast, ModeBroadcastInfo> {
+        private Map<Long, String> textMap;
+
+        TmoModeBroadcastToModeBroadcastInfo(Map<Long, String> textMap) {
+            this.textMap = textMap;
+        }
+
+        @Override
+        public ModeBroadcastInfo apply(TmoModeBroadcast tmoModeBroadcast) {
+            ModeBroadcastInfo modeBroadcastInfo = new ModeBroadcastInfo();
+            modeBroadcastInfo.setRecordId(tmoModeBroadcast.getRecordId());
+            modeBroadcastInfo.setName(textMap.get(tmoModeBroadcast.getNodeId()));
+            modeBroadcastInfo.setSourceName(textMap.get(tmoModeBroadcast.getStationId().longValue()));
+            modeBroadcastInfo.setTargetName(textMap.get(tmoModeBroadcast.getTargetId()));
+            modeBroadcastInfo.setModeBroadcastTime(DateTimeUtil.formatDate(tmoModeBroadcast
+                    .getModeBroadcastTime()));
+            modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast
+                    .getModeCode())));
+            modeBroadcastInfo.setModeBroadcastType(tmoModeBroadcast.getBroadcastType() == 0 ? "手动" : "自动");
+            modeBroadcastInfo.setModeEffectTime(DateTimeUtil.formatDate(tmoModeBroadcast.getModeEffectTime()));
+            if (tmoModeBroadcast.getBroadcastStatus() == 0) {
+                modeBroadcastInfo.setModeBroadcastStatus("未确认");
+            } else if (tmoModeBroadcast.getBroadcastStatus() == 1) {
+                modeBroadcastInfo.setModeBroadcastStatus("成功");
+            } else if (tmoModeBroadcast.getBroadcastStatus() == 2) {
+                modeBroadcastInfo.setModeBroadcastStatus("失败");
+            }
+            modeBroadcastInfo.setOperatorId(tmoModeBroadcast.getOperatorId());
+            return modeBroadcastInfo;
+        }
     }
 
-    @Override
-    public void saveModeUploadInfo(TmoModeUploadInfo tmoModeUploadInfo) {
-        tmoModeUploadInfoDao.save(tmoModeUploadInfo);
-    }
+    private class TmoCmdResultToModeCmdInfo implements Function<TmoCmdResult, ModeCmdInfo> {
+        private Map<Long, String> textMap;
 
-    @Override
-    public void saveModeBroadcastInfo(TmoModeBroadcast modeBroadcast) {
-        tmoModeBroadcastDao.save(modeBroadcast);
-    }
+        TmoCmdResultToModeCmdInfo(Map<Long, String> textMap) {
+            this.textMap = textMap;
+        }
 
-    @Override
-    public void saveModeBroadcastInfos(List<TmoModeBroadcast> modeBroadcast) {
-        tmoModeBroadcastDao.saveAll(modeBroadcast);
-    }
-
-    @Override
-    public void deleteModeBroadcasts(Long... ids) {
-        if (ids != null && ids.length > 0) {
-            tmoModeBroadcastDao.deleteAll(tmoModeBroadcastDao.findAllById(Arrays.asList(ids)));
+        @Override
+        public ModeCmdInfo apply(TmoCmdResult tmoCmdResult) {
+            //返回结果集合显示，显示实体类,一个代表一行
+            ModeCmdInfo modeCmdInfo = new ModeCmdInfo();
+            //序号，发送时间，操作员姓名/编号,车站/编号，模式名称,发送结果
+            modeCmdInfo.setUploadTime(DateTimeUtil.formatDate(tmoCmdResult.getOccurTime()));
+            modeCmdInfo.setOperatorId(tmoCmdResult.getOperatorId());
+            modeCmdInfo.setStationName(textMap.get(tmoCmdResult.getStationId().longValue()));
+            modeCmdInfo.setStationId(tmoCmdResult.getStationId());
+            modeCmdInfo.setCmdName(tmoCmdResult.getCmdName());
+            modeCmdInfo.setCmdResult(tmoCmdResult.getCmdResult().toString());
+            return modeCmdInfo;
         }
     }
 
     @Autowired
-    public void setModeNodeStatusService(IMetroNodeStatusService modeNodeStatusService) {
-        this.modeNodeStatusService = modeNodeStatusService;
+    public void setTopologyService(TopologyService topologyService) {
+        this.topologyService = topologyService;
     }
 
     @Autowired
@@ -373,11 +394,6 @@ public class ModeServiceImpl implements ModeService {
     @Autowired
     public void setTmoModeBroadcastDao(TmoModeBroadcastDao tmoModeBroadcastDao) {
         this.tmoModeBroadcastDao = tmoModeBroadcastDao;
-    }
-
-    @Autowired
-    public void setTmoItemStatusDao(TmoItemStatusDao tmoItemStatusDao) {
-        this.tmoItemStatusDao = tmoItemStatusDao;
     }
 
     @Autowired

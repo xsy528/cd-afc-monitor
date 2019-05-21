@@ -13,21 +13,9 @@ import java.util.List;
  */
 public class EquEventCondition extends PageBean {
 
-    private static final long serialVersionUID = 1L;
-    //根据总线路、分支线路、站点并在开始时间和结束时间内，并且事件等级（非用户限制）in(1,2,3)内
-
     @ApiModelProperty("节点ID")
     @JsonProperty("node_ids")
     private List<Long> nodeIds;
-
-//    @ApiModelProperty("站点ID")
-//    @JsonProperty("station_ids")
-//    private List<Integer> stationIds;
-
-//    @ApiModelProperty("路线ID")
-//    @JsonProperty("line_ids")
-//    private List<Short> lineIds;
-
 
     @ApiModelProperty("开始时间")
     @JsonProperty("start_time")
@@ -36,10 +24,6 @@ public class EquEventCondition extends PageBean {
     @ApiModelProperty("结束时间")
     @JsonProperty("end_time")
     private Date endTime;
-
-//    @ApiModelProperty("事件等级")
-//    @JsonProperty("event_level")
-//    private Short eventLevel;
 
     public List<Long> getNodeIds() {
         return nodeIds;

@@ -1,7 +1,7 @@
 package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.condition.EquEventCondition;
-import com.insigma.afc.monitor.model.entity.TmoEquStatus;
+import com.insigma.afc.monitor.model.vo.DeviceEvent;
 import org.springframework.data.domain.Page;
 
 /**
@@ -15,5 +15,5 @@ public interface DeviceEventService {
      * @param condition 设备事件查询条件实体类
      * @return 分页数据
      */
-    Page<TmoEquStatus> getDeviceEventSearch(EquEventCondition condition);
+    Page<DeviceEvent> getDeviceEventSearch(EquEventCondition condition);
 }

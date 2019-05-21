@@ -1,7 +1,7 @@
 package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
-import com.insigma.afc.monitor.model.entity.TmoCmdResult;
+import com.insigma.afc.monitor.model.vo.CommandLogInfo;
 import org.springframework.data.domain.Page;
 
 /**
@@ -16,5 +16,5 @@ public interface CommandLogService {
      * @param  condition 命令日志查询条件实体类
      * @return 分页数据
      */
-    Page<TmoCmdResult> getCommandLogSearch(CommandLogCondition condition);
+    Page<CommandLogInfo> getCommandLogSearch(CommandLogCondition condition);
 }

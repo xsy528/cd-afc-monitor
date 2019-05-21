@@ -3,16 +3,18 @@ package com.insigma.afc.monitor.service.impl;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
 import com.insigma.afc.monitor.model.entity.TmoCmdResult;
+import com.insigma.afc.monitor.model.vo.CommandLogInfo;
 import com.insigma.afc.monitor.service.CommandLogService;
+import com.insigma.afc.monitor.service.rest.TopologyService;
+import com.insigma.commons.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * 命令日志查询接口
@@ -22,11 +24,10 @@ import java.util.List;
 public class CommandLogServiceImpl implements CommandLogService {
 
     private TmoCmdResultDao tmoCmdResultDao;
+    private TopologyService topologyService;
 
     @Override
-    public Page<TmoCmdResult> getCommandLogSearch(CommandLogCondition condition) {
-        //路线、站点，节点并在开始时间和结束时间内，如果有操作员编号，要包含操作员编号，如果有日志类型要包含日志类型,如果有命令结果要包含命令结果。
-
+    public Page<CommandLogInfo> getCommandLogSearch(CommandLogCondition condition) {
         //节点ID
         List<Long> nodeIds = condition.getNodeIds();
         //开始时间
@@ -39,12 +40,8 @@ public class CommandLogServiceImpl implements CommandLogService {
         String logType = condition.getLogType();
         //命令结果
         String commandResult = condition.getCommandResult();
-        //
-        Integer page = condition.getPageNumber();
-        //
-        Integer pageSize = condition.getPageSize();
 
-        return tmoCmdResultDao.findAll((root,query,builder)->{
+        Page<TmoCmdResult> tmoCmdResultPage = tmoCmdResultDao.findAll((root,query,builder)->{
             List<Predicate> predicates = new ArrayList<>();
             if (nodeIds!=null&&!nodeIds.isEmpty()){
                 predicates.add(root.get("nodeId").in(nodeIds));
@@ -73,7 +70,47 @@ public class CommandLogServiceImpl implements CommandLogService {
             query.orderBy(builder.desc(root.get("occurTime")));
             //以occurTime降序
             return builder.and(predicates.toArray(new Predicate[0]));
-        }, PageRequest.of(page,pageSize));
+        }, PageRequest.of(condition.getPageNumber(),condition.getPageSize()));
+
+        Set<Long> ids = new HashSet<>();
+        Map<Long,String> textMap = null;
+        if (!tmoCmdResultPage.isEmpty()){
+            for (TmoCmdResult tmoCmdResult:tmoCmdResultPage.getContent()){
+                ids.add(tmoCmdResult.getNodeId());
+            }
+            textMap = topologyService.getNodeTexts(ids).getData();
+        }
+
+        return tmoCmdResultPage.map(new TmoCmdResultToCommandLogInfo(textMap));
+    }
+
+    private class TmoCmdResultToCommandLogInfo implements Function<TmoCmdResult,CommandLogInfo> {
+        private Map<Long,String> textMap;
+
+        TmoCmdResultToCommandLogInfo(Map<Long,String> textMap){
+            this.textMap = textMap;
+        }
+
+        @Override
+        public CommandLogInfo apply(TmoCmdResult tmoCmdResult) {
+            //返回结果集合显示，显示实体类
+            //节点名称/编码，命令名称,操作员名称/编号，发送时间，命令结果/应答码
+            CommandLogInfo commandLogInfo = new CommandLogInfo();
+
+            commandLogInfo.setNodeName(textMap.get(tmoCmdResult.getNodeId()));
+            commandLogInfo.setNodeId(tmoCmdResult.getNodeId());
+            commandLogInfo.setCmdName(tmoCmdResult.getCmdName());
+            commandLogInfo.setOperatorId(tmoCmdResult.getOperatorId());
+            commandLogInfo.setUploadTime(DateTimeUtil.formatDate(tmoCmdResult.getOccurTime()));
+            commandLogInfo.setCmdResult(tmoCmdResult.getCmdResult().toString());
+
+            return commandLogInfo;
+        }
+    }
+
+    @Autowired
+    public void setTopologyService(TopologyService topologyService) {
+        this.topologyService = topologyService;
     }
 
     @Autowired

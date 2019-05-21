@@ -5,11 +5,13 @@ import com.insigma.afc.monitor.model.entity.topology.MetroDevice;
 import com.insigma.afc.monitor.model.entity.topology.MetroLine;
 import com.insigma.afc.monitor.model.entity.topology.MetroStation;
 import com.insigma.commons.model.dto.Result;
+import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Ticket:
@@ -33,6 +35,10 @@ public interface TopologyService {
 
     @RequestLine("GET /topology/query/getNodeText?nodeId={nodeId}")
     Result<String> getNodeText(@Param("nodeId") Long nodeId);
+
+    @RequestLine("POST /topology/query/getNodeTexts")
+    @Headers("Content-Type: application/json")
+    Result<Map<Long,String>> getNodeTexts(Set<Long> nodeIds);
 
     @RequestLine("GET /topology/query/getAllMetroLine")
     Result<List<MetroLine>> getAllMetroLine();

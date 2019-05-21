@@ -96,73 +96,73 @@ public class NodeStatusController {
         return Result.success(equStatusList);
     }
 
-    @ApiOperation("模式上传信息")
-    @PostMapping("modeUpload")
-    public Result<List<ModeUploadInfo>> getModeUpload(@RequestParam Long nodeId) {
-        List<TmoModeUploadInfo> tmoModeUploadInfos = modeService.getModeUpload(nodeId);
-        List<ModeUploadInfo> modeUploadInfos = new ArrayList<>();
-        for (TmoModeUploadInfo tmoModeUploadInfo : tmoModeUploadInfos) {
-            ModeUploadInfo modeUploadInfo = new ModeUploadInfo();
-            modeUploadInfo.setLineName(topologyService.getNodeText(tmoModeUploadInfo.getLineId().longValue())
-                    .getData());
-            modeUploadInfo.setStationName(topologyService.getNodeText(tmoModeUploadInfo.getStationId().longValue())
-                    .getData());
-            modeUploadInfo.setUploadTime(DateTimeUtil.formatDate(tmoModeUploadInfo.getModeUploadTime()));
-            modeUploadInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeUploadInfo
-                    .getModeCode())));
-            modeUploadInfos.add(modeUploadInfo);
-        }
-        return Result.success(modeUploadInfos);
-    }
+//    @ApiOperation("模式上传信息")
+//    @PostMapping("modeUpload")
+//    public Result<List<ModeUploadInfo>> getModeUpload(@RequestParam Long nodeId) {
+//        List<TmoModeUploadInfo> tmoModeUploadInfos = modeService.getModeUpload(nodeId);
+//        List<ModeUploadInfo> modeUploadInfos = new ArrayList<>();
+//        for (TmoModeUploadInfo tmoModeUploadInfo : tmoModeUploadInfos) {
+//            ModeUploadInfo modeUploadInfo = new ModeUploadInfo();
+//            modeUploadInfo.setLineName(topologyService.getNodeText(tmoModeUploadInfo.getLineId().longValue())
+//                    .getData());
+//            modeUploadInfo.setStationName(topologyService.getNodeText(tmoModeUploadInfo.getStationId().longValue())
+//                    .getData());
+//            modeUploadInfo.setUploadTime(DateTimeUtil.formatDate(tmoModeUploadInfo.getModeUploadTime()));
+//            modeUploadInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeUploadInfo
+//                    .getModeCode())));
+//            modeUploadInfos.add(modeUploadInfo);
+//        }
+//        return Result.success(modeUploadInfos);
+//    }
 
-    @ApiOperation("模式广播信息")
-    @PostMapping("modeBroadcast")
-    public Result<List<ModeBroadcastInfo>> getModeBroadcast() {
-        List<TmoModeBroadcast> tmoModeBroadcasts = modeService.getModeBroadcast();
-        List<ModeBroadcastInfo> modeBroadcastInfos = new ArrayList<>();
-        for (TmoModeBroadcast tmoModeBroadcast : tmoModeBroadcasts) {
-            ModeBroadcastInfo modeBroadcastInfo = new ModeBroadcastInfo();
-            modeBroadcastInfo.setName(topologyService.getNodeText(tmoModeBroadcast.getNodeId()).getData());
-            modeBroadcastInfo.setSourceName(topologyService.getNodeText(tmoModeBroadcast.getStationId().longValue())
-                    .getData());
-            modeBroadcastInfo.setTargetName(topologyService.getNodeText(tmoModeBroadcast.getTargetId()).getData());
-            modeBroadcastInfo.setModeBroadcastTime(DateTimeUtil.formatDate(tmoModeBroadcast.getModeBroadcastTime()));
-            modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast
-                    .getModeCode())));
-            modeBroadcastInfos.add(modeBroadcastInfo);
-        }
-        return Result.success(modeBroadcastInfos);
-    }
+//    @ApiOperation("模式广播信息")
+//    @PostMapping("modeBroadcast")
+//    public Result<List<ModeBroadcastInfo>> getModeBroadcast() {
+//        List<TmoModeBroadcast> tmoModeBroadcasts = modeService.getModeBroadcast();
+//        List<ModeBroadcastInfo> modeBroadcastInfos = new ArrayList<>();
+//        for (TmoModeBroadcast tmoModeBroadcast : tmoModeBroadcasts) {
+//            ModeBroadcastInfo modeBroadcastInfo = new ModeBroadcastInfo();
+//            modeBroadcastInfo.setName(topologyService.getNodeText(tmoModeBroadcast.getNodeId()).getData());
+//            modeBroadcastInfo.setSourceName(topologyService.getNodeText(tmoModeBroadcast.getStationId().longValue())
+//                    .getData());
+//            modeBroadcastInfo.setTargetName(topologyService.getNodeText(tmoModeBroadcast.getTargetId()).getData());
+//            modeBroadcastInfo.setModeBroadcastTime(DateTimeUtil.formatDate(tmoModeBroadcast.getModeBroadcastTime()));
+//            modeBroadcastInfo.setMode(AFCModeCode.getInstance().getModeText(Integer.valueOf(tmoModeBroadcast
+//                    .getModeCode())));
+//            modeBroadcastInfos.add(modeBroadcastInfo);
+//        }
+//        return Result.success(modeBroadcastInfos);
+//    }
 
-    @ApiOperation("设备事件列表")
-    @PostMapping("deviceEvent")
-    public Result<List<EquEvent>> getDeviceEvent(@RequestBody DeviceEventCondition condition) {
-        List<TmoEquStatusCur> tmoEquStatusCurs = modeService.getEquStatusList(condition);
-        List<EquEvent> equEvents = new ArrayList<>();
-        for (TmoEquStatusCur tmoEquStatusCur : tmoEquStatusCurs) {
-            EquEvent equEvent = new EquEvent();
-            equEvent.setApplyDevice(tmoEquStatusCur.getApplyDevice());
-            equEvent.setItem(tmoEquStatusCur.getItem1());
-            equEvent.setNodeName(topologyService.getNodeText(tmoEquStatusCur.getNodeId()).getData());
-            equEvent.setOccurTime(DateTimeUtil.formatDate(tmoEquStatusCur.getOccurTime()));
-            equEvent.setStatusName(tmoEquStatusCur.getStatusName() + "/" + tmoEquStatusCur.getStatusId());
-            equEvent.setStatusDesc(tmoEquStatusCur.getStatusDesc() + "/" + tmoEquStatusCur.getStatusValue());
-            equEvents.add(equEvent);
-        }
-        return Result.success(equEvents);
-    }
+//    @ApiOperation("设备事件列表")
+//    @PostMapping("deviceEvent")
+//    public Result<List<EquEvent>> getDeviceEvent(@RequestBody DeviceEventCondition condition) {
+//        List<TmoEquStatusCur> tmoEquStatusCurs = modeService.getEquStatusList(condition);
+//        List<EquEvent> equEvents = new ArrayList<>();
+//        for (TmoEquStatusCur tmoEquStatusCur : tmoEquStatusCurs) {
+//            EquEvent equEvent = new EquEvent();
+//            equEvent.setApplyDevice(tmoEquStatusCur.getApplyDevice());
+//            equEvent.setItem(tmoEquStatusCur.getItem1());
+//            equEvent.setNodeName(topologyService.getNodeText(tmoEquStatusCur.getNodeId()).getData());
+//            equEvent.setOccurTime(DateTimeUtil.formatDate(tmoEquStatusCur.getOccurTime()));
+//            equEvent.setStatusName(tmoEquStatusCur.getStatusName() + "/" + tmoEquStatusCur.getStatusId());
+//            equEvent.setStatusDesc(tmoEquStatusCur.getStatusDesc() + "/" + tmoEquStatusCur.getStatusValue());
+//            equEvents.add(equEvent);
+//        }
+//        return Result.success(equEvents);
+//    }
 
-    @ApiOperation("监视设备")
-    @PostMapping("deviceDetail")
-    public Result getDeviceDetail(@RequestParam Long nodeId) {
-        return monitorService.getDeviceDetail(nodeId);
-    }
+//    @ApiOperation("监视设备")
+//    @PostMapping("deviceDetail")
+//    public Result getDeviceDetail(@RequestParam Long nodeId) {
+//        return monitorService.getDeviceDetail(nodeId);
+//    }
 
-    @ApiOperation("钱箱票箱")
-    @PostMapping("boxDetail")
-    public Result getBoxDetail(@RequestParam Long nodeId) {
-        return monitorService.getBoxDetail(nodeId);
-    }
+//    @ApiOperation("钱箱票箱")
+//    @PostMapping("boxDetail")
+//    public Result getBoxDetail(@RequestParam Long nodeId) {
+//        return monitorService.getBoxDetail(nodeId);
+//    }
 
     @ApiOperation("获取监控树")
     @PostMapping("tree")

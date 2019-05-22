@@ -24,7 +24,7 @@ deploy:
   script:
     - ls
     - pwd
-    - APP_HOME=/home/afc/xz-monitor/topology
+    - APP_HOME=/home/afc/xz-monitor/monitor
     - mkdir -p ${APP_HOME}/config
     - cp ./afc-monitor-api/src/main/resources/application*.yaml ${APP_HOME}/config/
     - cp ./afc-monitor-api/src/main/resources/log4j2-spring.xml ${APP_HOME}/config/

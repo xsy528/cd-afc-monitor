@@ -6,6 +6,7 @@
 package com.insigma.afc.monitor.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.insigma.afc.security.test.WithMockAfcUser;
 import com.insigma.commons.model.dto.Result;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,9 +15,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
 
+import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 /**
@@ -25,24 +31,27 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  * @author xuzhemin
  * 2019/3/20 15:26
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@RunWith(SpringRunner.class)
-@AutoConfigureMockMvc
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+//@RunWith(SpringRunner.class)
+//@AutoConfigureMockMvc
 public class DicControllerTest {
 
-    @Autowired
+//    @Autowired
     private MockMvc mockMvc;
+
+//    @MockBean
+    RestTemplate restTemplate;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    @Before
+//    @Before
     public void before() {
 
     }
 
-    @Test
+//    @Test
     public void getModeTypeListTest() throws Exception {
-        mockMvc.perform(post("/monitor/dic/modeTypeList").header("Afc-User-id", 1))
+        mockMvc.perform(post("/monitor/dic/modeTypeList").header("Afc-User-Id", 1))
                 .andExpect((mvcResult) ->
                         Assert.assertEquals(0, objectMapper
                                 .readValue(mvcResult.getResponse().getContentAsByteArray(), Result.class).getCode())

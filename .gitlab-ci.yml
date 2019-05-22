@@ -24,8 +24,13 @@ deploy:
   script:
     - ls
     - pwd
-    - scp ./afc-monitor-api/target/*.jar afc@192.168.140.100:/home/afc/xz-monitor/afc-monitor-dev/
-    - ssh afc@192.168.140.100 "cd /home/afc/xz-monitor/afc-monitor-dev/;kill \`cat application.pid\`;sh start.sh"
+    - APP_HOME=/home/afc/xz-monitor/topology
+    - mkdir -p ${APP_HOME}/config
+    - cp ./afc-monitor-api/src/main/resources/application*.yaml ${APP_HOME}/config/
+    - cp ./afc-monitor-api/src/main/resources/log4j2-spring.xml ${APP_HOME}/config/
+    - cp ./afc-monitor-api/target/*.jar ${APP_HOME}
+    - cd ${APP_HOME}
+    - sh run.sh restart
   tags:
     - deploy
   only:

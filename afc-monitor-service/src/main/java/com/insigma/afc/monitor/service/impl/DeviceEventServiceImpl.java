@@ -62,7 +62,7 @@ public class DeviceEventServiceImpl implements DeviceEventService {
         Map<Long,String> textMap = null;
         if (!tmoEquStatusPage.isEmpty()){
             for (TmoEquStatus tmoEquStatus:tmoEquStatusPage.getContent()){
-                nodeIds.add(tmoEquStatus.getNodeId());
+                ids.add(tmoEquStatus.getNodeId());
             }
             textMap = topologyService.getNodeTexts(ids).getData();
         }

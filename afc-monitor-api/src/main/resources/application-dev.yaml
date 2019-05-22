@@ -5,7 +5,14 @@ spring:
     password: afcapp
 
 #节点服务地址
-topologyServerUrl: http://192.168.140.100:9080
+topologyServerUrl: http://192.168.178.185:8080
+#ms地址
 rmiHostIpAddr: 192.168.178.176
+#权限服务地址
 security:
-  server: http://192.168.140.100:18080
+  server: http://192.168.178.185:18080
+#本机地址
+server:
+  address: 192.168.178.185
+#端口号
+  port: 8081

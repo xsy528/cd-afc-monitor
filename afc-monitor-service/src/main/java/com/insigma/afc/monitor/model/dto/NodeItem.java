@@ -9,6 +9,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author xuzhemin
+ */
 @ApiModel
 public class NodeItem implements Serializable {
 
@@ -21,6 +24,10 @@ public class NodeItem implements Serializable {
     @JsonView(editor.class)
     @ApiModelProperty("父节点id")
     private Long pid;
+
+    @JsonView(required.class)
+    @ApiModelProperty("是否需要在车站底图展示")
+    private boolean hide;
 
     @JsonView(required.class)
     @ApiModelProperty("节点名称")
@@ -57,6 +64,14 @@ public class NodeItem implements Serializable {
     @ApiModelProperty("字节点")
     @JsonProperty("sub_items")
     private List<NodeItem> subItems;
+
+    public boolean isHide() {
+        return hide;
+    }
+
+    public void setHide(boolean hide) {
+        this.hide = hide;
+    }
 
     public Long getPid() {
         return pid;

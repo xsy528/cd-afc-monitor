@@ -13,6 +13,7 @@ build:
   artifacts:
     paths:
       - ./afc-monitor-api/target/*.jar
+      - ./afc-monitor-api/src/main/resources/*
   tags:
     - build
   only:

@@ -26,10 +26,6 @@ public class NodeItem implements Serializable {
     private Long pid;
 
     @JsonView(required.class)
-    @ApiModelProperty("是否需要在车站底图展示")
-    private boolean hide;
-
-    @JsonView(required.class)
     @ApiModelProperty("节点名称")
     private String name;
 
@@ -64,14 +60,6 @@ public class NodeItem implements Serializable {
     @ApiModelProperty("字节点")
     @JsonProperty("sub_items")
     private List<NodeItem> subItems;
-
-    public boolean isHide() {
-        return hide;
-    }
-
-    public void setHide(boolean hide) {
-        this.hide = hide;
-    }
 
     public Long getPid() {
         return pid;

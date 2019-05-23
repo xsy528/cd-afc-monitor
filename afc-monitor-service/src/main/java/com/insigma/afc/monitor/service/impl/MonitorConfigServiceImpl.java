@@ -132,7 +132,7 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
         tsyConfigList.add(new TsyConfig(SystemConfigKey.SECTION_PASSENGERFLOW_LOW,String.valueOf(warning)));
         tsyConfigDao.saveAll(tsyConfigList);
         logService.log(LogDefines.NORMAL_LOG,"修改断面客流监控配置",SecurityUtils.getUserId(),
-                SecurityUtils.getIp(),LogModuleCode.MODULE_MONITOR_MANAGE_SECTION_PASSAGER);
+                SecurityUtils.getIp(),LogModuleCode.MONITOR_SECTION_CONFIG);
         return Result.success(monitorConfigDTO);
     }
 

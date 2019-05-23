@@ -16,9 +16,13 @@ package com.insigma.afc.monitor.constant;
  */
 public class LogModuleCode {
 
-    //路网监控
+    /**
+     * 路网监控
+     */
     public static final int MODULE_MONITOR = 1101;
 
-    //断面客流
-    public static final int MODULE_MONITOR_MANAGE_SECTION_PASSAGER = 1105;
+    /**
+     * 修改断面客流配置
+     */
+    public static final int MONITOR_SECTION_CONFIG = 110403;
 }

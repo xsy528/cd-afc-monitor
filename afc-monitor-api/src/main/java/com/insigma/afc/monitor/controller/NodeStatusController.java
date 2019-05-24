@@ -29,8 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Ticket: 节点状态查询
@@ -55,6 +54,16 @@ public class NodeStatusController {
     @PostMapping("stationStatus")
     public Result<List<StationStatus>> getStationStatus(@Valid @RequestBody StationStatusCondition condition) {
         List<StationStatustViewItem> data = metroNodeStatusService.getStationStatusView(condition);
+
+        Set<Long> ids = new HashSet<>();
+        Map<Long,String> textMap = null;
+        if (!data.isEmpty()){
+            for (StationStatustViewItem s:data){
+                ids.add(s.getStationId().longValue());
+            }
+            textMap = topologyService.getNodeTexts(ids).getData();
+        }
+
         List<StationStatus> stationStatusList = new ArrayList<>();
         for (StationStatustViewItem stationStatustViewItem : data) {
             StationStatus stationStatus = new StationStatus();
@@ -67,8 +76,7 @@ public class NodeStatusController {
             //设置车站状态
             Short status = stationStatustViewItem.getStatus();
             stationStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
-            stationStatus.setName(topologyService.getNodeText(stationStatustViewItem.getStationId().longValue())
-                    .getData());
+            stationStatus.setName(textMap.get(stationStatustViewItem.getStationId().longValue()));
             //设置车站模式/编号
             Integer mode = stationStatustViewItem.getMode().intValue();
             stationStatus.setMode(AFCModeCode.getInstance().getModeText(mode));
@@ -82,6 +90,15 @@ public class NodeStatusController {
     @PostMapping("deviceStatus")
     public Result<List<EquStatus>> getDeviceStatus(@Valid @RequestBody DeviceStatusCondition deviceStatusSearch) {
         List<EquStatusViewItem> data = metroNodeStatusService.getEquStatusView(deviceStatusSearch);
+
+        Set<Long> ids = new HashSet<>();
+        Map<Long,String> textMap = null;
+        if (!data.isEmpty()){
+            for (EquStatusViewItem s:data){
+                ids.add(s.getNodeId());
+            }
+            textMap = topologyService.getNodeTexts(ids).getData();
+        }
         List<EquStatus> equStatusList = new ArrayList<>();
         for (EquStatusViewItem equStatusViewItem : data) {
             EquStatus equStatus = new EquStatus();
@@ -90,7 +107,7 @@ public class NodeStatusController {
             equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
             equStatus.setOnline(equStatusViewItem.getOnline());
             equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
-            equStatus.setName(topologyService.getNodeText(equStatusViewItem.getNodeId()).getData());
+            equStatus.setName(textMap.get(equStatusViewItem.getNodeId()));
             equStatusList.add(equStatus);
         }
         return Result.success(equStatusList);

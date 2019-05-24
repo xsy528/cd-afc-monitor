@@ -112,13 +112,13 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         });
 
         Map<Long, TmoItemStatus> deviceMaps = new HashMap<>();
-        Map<Long, TmoItemStatus> stationMaps = new HashMap<>();
+        Map<Integer, TmoItemStatus> stationMaps = new HashMap<>();
         for (TmoItemStatus tmoItemStatus : deviceStatus) {
             if (NodeIdUtils.nodeIdStrategy.getNodeLevel(tmoItemStatus.getNodeId()).getStatusCode() > AFCNodeLevel.SC
                     .getStatusCode()) {
                 deviceMaps.put(tmoItemStatus.getNodeId(), tmoItemStatus);
             } else if (NodeIdUtils.nodeIdStrategy.getNodeLevel(tmoItemStatus.getNodeId()) == AFCNodeLevel.SC) {
-                stationMaps.put(tmoItemStatus.getNodeId(), tmoItemStatus);
+                stationMaps.put(tmoItemStatus.getStationId(), tmoItemStatus);
             }
         }
 
@@ -140,21 +140,20 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                     for (MetroStation metroStation : metroStationList) {
                         Integer stationId = metroStation.getStationId();
                         addDevicesToViewItemList(viewItemList, deviceList, startTime, endTime, statusLevel,
-                                metroDevices.get(stationId), deviceMaps,
-                                stationMaps.get(NodeIdUtils.nodeIdStrategy.getNodeNo(stationId.longValue())));
+                                metroDevices.get(stationId), deviceMaps, stationMaps.get(stationId));
                     }
                 }
                 break;
             }
             case LC: {
                 List<MetroStation> stations = topologyService
-                        .getMetroStationsByLineId(networkConfig.getLineNo().shortValue()).getData();
+                        .getMetroStationsByLineId(networkConfig.getLineNo()).getData();
                 Map<Integer, List<MetroDevice>> metroDevices = topologyService.getMetroDevicesGroupByStationId()
                         .getData();
                 for (MetroStation metroStation : stations) {
+                    Integer stationId = metroStation.getStationId();
                     addDevicesToViewItemList(viewItemList, deviceList, startTime, endTime, statusLevel,
-                            metroDevices.get(metroStation.getStationId()), deviceMaps,
-                            stationMaps.get(metroStation.getStationId().longValue() << 16));
+                            metroDevices.get(stationId), deviceMaps, stationMaps.get(stationId));
                 }
                 break;
             }
@@ -162,7 +161,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 Integer stationId = networkConfig.getStationNo();
                 List<MetroDevice> metroDevices = topologyService.getMetroDeviceByStationId(stationId).getData();
                 addDevicesToViewItemList(viewItemList, deviceList, startTime, endTime, statusLevel,
-                        metroDevices, deviceMaps, stationMaps.get(stationId.longValue() << 16));
+                        metroDevices, deviceMaps, stationMaps.get(stationId));
                 break;
             }
             default:
@@ -373,10 +372,10 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
         //查询车站状态
         List<TmoItemStatus> stationStatus = tmoItemStatusDao
-                .findByNodeTypeAndStationIdNotOrderByNodeIdAsc(AFCNodeLevel.SC.getStatusCode().shortValue(), 0);
+                .findByNodeTypeOrderByNodeIdAsc(AFCNodeLevel.SC.getStatusCode().shortValue());
         //查询设备状态
         List<TmoItemStatus> deviceStatus = tmoItemStatusDao
-                .findByNodeTypeGreaterThanOrderByNodeIdAsc(AFCNodeLevel.SC.getStatusCode().shortValue());
+                .findByNodeTypeOrderByNodeIdAsc(AFCNodeLevel.SLE.getStatusCode().shortValue());
         Map<Integer, TmoItemStatus> stationStatusMaps = new HashMap<>();
         for (TmoItemStatus tmoItemStatus : stationStatus) {
             stationStatusMaps.put(tmoItemStatus.getStationId(), tmoItemStatus);

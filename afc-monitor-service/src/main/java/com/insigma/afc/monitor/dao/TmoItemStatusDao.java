@@ -22,19 +22,9 @@ public interface TmoItemStatusDao extends JpaRepository<TmoItemStatus, Long>, Jp
 
     TmoItemStatus findByNodeIdAndModeChangeTimeAfter(Long nodeId,Date modeChangeTime);
 
-    List<TmoItemStatus> findByStationIdAndNodeType(Integer stationId, Short nodeType);
-
     List<TmoItemStatus> findByNodeType(Short nodeType);
 
-    TmoItemStatus findTopByLineIdAndStationIdAndNodeId(Short lineId, Integer stationId, Long nodeId);
-
-    List<TmoItemStatus> findByLineIdAndStationIdAndNodeId(Short lineId, Integer stationId, Long nodeId);
-
-    List<TmoItemStatus> findByLineIdAndStationIdAndNodeType(Short lineId, Integer stationId, Short nodeType);
-
-    List<TmoItemStatus> findByNodeTypeGreaterThanOrderByNodeIdAsc(Short nodeType);
-
-    List<TmoItemStatus> findByNodeTypeAndStationIdNotOrderByNodeIdAsc(Short nodeType,Integer stationId);
+    List<TmoItemStatus> findByNodeTypeOrderByNodeIdAsc(Short nodeType);
 
     @Modifying
     @Query("UPDATE TmoItemStatus SET itemActivity=:itemActivity,updateTime=:updateTime WHERE nodeType>:nodeType")

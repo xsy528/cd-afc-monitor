@@ -15,21 +15,9 @@ import java.util.List;
 @ApiModel(description = "命令日志查询条件")
 public class CommandLogCondition extends PageBean {
 
-    private static final long serialVersionUID = 1L;
-    //路线、站点，节点并在开始时间和结束时间内，如果有操作员编号，要包含操作员编号，如果有日志类型要包含日志类型,如果有命令结果要包含命令结果。
-
     @ApiModelProperty("节点ID")
     @JsonProperty("node_ids")
     private List<Long> nodeIds;
-
-//    @ApiModelProperty("站点ID")
-//    @JsonProperty("station_ids")
-//    private List<Integer> stationIds;
-
-//    @ApiModelProperty("路线ID")
-//    @JsonProperty("line_ids")
-//    private List<Short> lineIds;
-    //默认为null
 
     @ApiModelProperty("操作员ID")
     @JsonProperty("operator_id")

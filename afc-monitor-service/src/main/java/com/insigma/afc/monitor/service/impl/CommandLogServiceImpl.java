@@ -7,6 +7,7 @@ import com.insigma.afc.monitor.model.vo.CommandLogInfo;
 import com.insigma.afc.monitor.service.CommandLogService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
 import com.insigma.commons.util.DateTimeUtil;
+import com.insigma.commons.util.NodeIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +45,11 @@ public class CommandLogServiceImpl implements CommandLogService {
         Page<TmoCmdResult> tmoCmdResultPage = tmoCmdResultDao.findAll((root,query,builder)->{
             List<Predicate> predicates = new ArrayList<>();
             if (nodeIds!=null&&!nodeIds.isEmpty()){
-                predicates.add(root.get("nodeId").in(nodeIds));
+                List<Long> ids = new ArrayList<>();
+                for (Long nodeId:nodeIds){
+                    ids.add(NodeIdUtils.nodeIdStrategy.getNodeNo(nodeId));
+                }
+                predicates.add(root.get("nodeId").in(ids));
                 //将站点ID存入root中
             }
             if (startTime!=null){

@@ -7,7 +7,7 @@ spring:
 #节点服务地址
 topologyServerUrl: http://192.168.178.185:9080
 #ms地址
-rmiHostIpAddr: 192.168.178.176
+rmiHostIpAddr: 192.168.178.185
 #权限服务地址
 security:
   server: http://192.168.178.185:18080

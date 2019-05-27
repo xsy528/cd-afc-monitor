@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "TMO_EQU_EVENT")
-@SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_EQU_EVENT")
+@SequenceGenerator(name = "S_TMO_EQU_EVENT", sequenceName = "S_TMO_EQU_EVENT")
 public class TmoEquEvent implements Serializable {
 
 	/**
@@ -125,7 +125,7 @@ public class TmoEquEvent implements Serializable {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TMO_EQU_EVENT")
 	@Column(name = "EVENT_ID", length = 20)
 	public Long getEventId() {
 		return this.eventId;

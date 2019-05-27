@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "TMO_EQU_STATUS")
-@SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_EQU_STATUS", allocationSize = 1, initialValue = 1)
+@SequenceGenerator(name = "S_TMO_EQU_STATUS", sequenceName = "S_TMO_EQU_STATUS", allocationSize = 1, initialValue = 1)
 public class TmoEquStatus implements java.io.Serializable {
 
 	// Fields
@@ -99,7 +99,7 @@ public class TmoEquStatus implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TMO_EQU_STATUS")
 	@Column(name = "RECORD_ID", unique = true, nullable = false)
 	public Long getRecordId() {
 		return this.recordId;

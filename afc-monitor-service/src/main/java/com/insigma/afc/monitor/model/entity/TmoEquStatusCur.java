@@ -9,12 +9,12 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "TMO_EQU_STATUS_CUR")
-@SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_EQU_STATUS_CUR", allocationSize = 1, initialValue = 1)
+@SequenceGenerator(name = "S_TMO_EQU_STATUS_CUR", sequenceName = "S_TMO_EQU_STATUS_CUR", allocationSize = 1)
 public class TmoEquStatusCur implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TMO_EQU_STATUS_CUR")
 	@Column(name = "RECORD_ID", unique = true, nullable = false)
 	private Long recordId;
 

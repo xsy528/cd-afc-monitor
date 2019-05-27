@@ -10,13 +10,13 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "TMO_MODE_BROADCAST")
-@SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_MODE_BROADCAST", allocationSize = 1, initialValue = 1)
+@SequenceGenerator(name = "S_TMO_MODE_BROADCAST", sequenceName = "S_TMO_MODE_BROADCAST", allocationSize = 1)
 public class TmoModeBroadcast implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TMO_MODE_BROADCAST")
 	@Column(name = "RECORD_ID", unique = true, nullable = false, scale = 0)
 	private Long recordId;
 

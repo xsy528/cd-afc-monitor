@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "TMO_MODE_UPLOAD_INFO")
-@SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_MODE_UPLOAD_INFO")
+@SequenceGenerator(name = "S_TMO_MODE_UPLOAD_INFO", sequenceName = "S_TMO_MODE_UPLOAD_INFO")
 @SuppressWarnings("serial")
 public class TmoModeUploadInfo implements java.io.Serializable {
 
@@ -42,7 +42,7 @@ public class TmoModeUploadInfo implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TMO_MODE_UPLOAD_INFO")
 	@Column(name = "RECORD_ID", unique = true, nullable = false, scale = 0)
 	public Long getRecordId() {
 		return this.recordId;

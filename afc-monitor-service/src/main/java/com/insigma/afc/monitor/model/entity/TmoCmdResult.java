@@ -13,13 +13,13 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "TMO_CMD_RESULT")
-@SequenceGenerator(name = "SEQ_GEN", sequenceName = "S_TMO_CMD_RESULT", allocationSize = 1, initialValue = 1)
+@SequenceGenerator(name = "S_TMO_CMD_RESULT", sequenceName = "S_TMO_CMD_RESULT", allocationSize = 1, initialValue = 1)
 public class TmoCmdResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TMO_CMD_RESULT")
 	@Column(name = "LOG_ID", nullable = false, precision = 20, scale = 0)
 	private Long logId;
 

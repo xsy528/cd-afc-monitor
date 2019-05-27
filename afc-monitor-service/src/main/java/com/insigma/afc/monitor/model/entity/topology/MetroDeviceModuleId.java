@@ -2,6 +2,7 @@ package com.insigma.afc.monitor.model.entity.topology;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * metroDeviceModuleId entity.
@@ -56,4 +57,22 @@ public class MetroDeviceModuleId implements java.io.Serializable {
 		this.moduleId = moduleId;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		MetroDeviceModuleId that = (MetroDeviceModuleId) o;
+		return Objects.equals(stationId, that.stationId) &&
+				Objects.equals(deviceId, that.deviceId) &&
+				Objects.equals(moduleId, that.moduleId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(stationId, deviceId, moduleId);
+	}
 }

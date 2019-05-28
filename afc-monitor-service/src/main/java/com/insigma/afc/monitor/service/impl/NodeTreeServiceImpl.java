@@ -51,6 +51,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
     private static final int OFFLINE = 1;
     private static final int STATION_OFF = 3;
     private static final int STATION_USELESS = 9;
+    private static final int DEVICE_OFFLINE = 3;
 
     @Autowired
     public NodeTreeServiceImpl(IMetroNodeStatusService nodeStatusService, MonitorConfigService monitorConfigService,
@@ -105,7 +106,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                 //获取设备id
                 List<Long> deviceIds = new ArrayList<>();
                 for (NodeItem line : lines) {
-                    setStatonIdAndDeviceId(line.getSubItems(), stationIds, deviceIds, stationId);
+                    setStationIdAndDeviceId(line.getSubItems(), stationIds, deviceIds, stationId);
                 }
 
                 //从数据库获取车站状态
@@ -130,8 +131,8 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                     if (stations == null) {
                         continue;
                     }
-                    setStationStatus(stations, stationId, msOnline, line.getNodeId(), stationStatusViewItemMap,
-                            equStatusViewItemMap);
+                    setStationStatus(stations, stationId, msOnline, line.getStatus()==ONLINE,
+                            stationStatusViewItemMap, equStatusViewItemMap);
                 }
                 return Result.success(acc);
             }
@@ -141,7 +142,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
 
                 //从数据库获取线路状态
                 List<TmoItemStatus> lineTmoItemStatuses = nodeStatusService.getLineTmoItemStatus();
-                Map<Short, TmoItemStatus> lineTmoItemStatusMap = new HashMap<>();
+                Map<Short, TmoItemStatus> lineTmoItemStatusMap = new HashMap<>(lineTmoItemStatuses.size());
                 for (TmoItemStatus tmoItemStatus : lineTmoItemStatuses) {
                     lineTmoItemStatusMap.put(tmoItemStatus.getLineId(), tmoItemStatus);
                 }
@@ -151,7 +152,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                 //获取设备id
                 List<Long> deviceIds = new ArrayList<>();
                 List<NodeItem> stations = line.getSubItems();
-                setStatonIdAndDeviceId(stations, stationIds, deviceIds, stationId);
+                setStationIdAndDeviceId(stations, stationIds, deviceIds, stationId);
 
                 //从数据库获取车站状态
                 Map<Integer, StationStatustViewItem> stationStatusViewItemMap = getStationStatusViewItemMap(level,
@@ -173,8 +174,8 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                 if (stations == null) {
                     return Result.success(line);
                 }
-                setStationStatus(stations, stationId, msOnline, line.getNodeId(), stationStatusViewItemMap,
-                        equStatusViewItemMap);
+                setStationStatus(stations, stationId, msOnline, line.getStatus()==ONLINE,
+                        stationStatusViewItemMap, equStatusViewItemMap);
                 return Result.success(line);
             }
             case SC: {
@@ -221,7 +222,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                 if (devices == null) {
                     return Result.success(station);
                 }
-                setDeviceStatus(devices, msOnline, equStatusViewItemMap, status);
+                setDeviceStatus(devices, msOnline,true,status!=STATION_OFF,equStatusViewItemMap);
 
                 return Result.success(station);
             }
@@ -264,7 +265,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
         return equStatusViewItemMap;
     }
 
-    private void setStatonIdAndDeviceId(List<NodeItem> stations, List<Integer> stationIds, List<Long> deviceIds,
+    private void setStationIdAndDeviceId(List<NodeItem> stations, List<Integer> stationIds, List<Long> deviceIds,
                                         Integer stationId) {
         if (stations == null) {
             return;
@@ -284,19 +285,14 @@ public class NodeTreeServiceImpl implements NodeTreeService {
         }
     }
 
-    private void setDeviceStatus(List<NodeItem> devices, boolean msOnline,
-                                 Map<Long, EquStatusViewItem> equStatusViewItemMap, int status) {
+    private void setDeviceStatus(List<NodeItem> devices, boolean msOnline,boolean lineOnline,boolean stationOnline,
+                                 Map<Long, EquStatusViewItem> equStatusViewItemMap) {
         for (NodeItem device : devices) {
-            Short deviceStatus = DeviceStatus.OFF_LINE;
-            // 1.如果通信前置机不在线，则节点不在线
-            if (!msOnline) {
-                deviceStatus = getStatus(false, deviceStatus);
-            } else {
+            Short deviceStatus = DEVICE_OFFLINE;
+            if (msOnline&&lineOnline&&stationOnline){
                 EquStatusViewItem equStatus = equStatusViewItemMap.get(device.getNodeId());
                 // 2.若数据库不存在数据，则节点不在线
-                if (equStatus == null) {
-                    deviceStatus = getStatus(false, status);
-                } else {
+                if (equStatus != null) {
                     deviceStatus = getStatus(equStatus.getOnline(), equStatus.getStatus());
                 }
             }
@@ -304,7 +300,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
         }
     }
 
-    private void setStationStatus(List<NodeItem> stations, Integer stationId, boolean msOnline, Long pid,
+    private void setStationStatus(List<NodeItem> stations, Integer stationId, boolean msOnline, boolean lineOnline,
                                   Map<Integer, StationStatustViewItem> stationStatusViewItemMap,
                                   Map<Long, EquStatusViewItem> equStatusViewItemMap) {
         for (NodeItem station : stations) {
@@ -314,22 +310,22 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                 continue;
             }
             int status = STATION_OFF;
-            if (msOnline) {
+            if (msOnline&&lineOnline) {
                 StationStatustViewItem statusItem = stationStatusViewItemMap.get(station.getNodeId().intValue());
                 if (statusItem != null) {
-                    status = getStationStatus(statusItem);
                     if (statusItem.getStatus().equals(DeviceStatus.NO_USE)) {
                         status = STATION_USELESS;
+                    }else{
+                        status = getStationStatus(statusItem);
                     }
                 }
             }
             station.setStatus(status);
-            station.setPid(pid);
             List<NodeItem> devices = station.getSubItems();
             if (devices == null) {
                 continue;
             }
-            setDeviceStatus(devices, msOnline, equStatusViewItemMap, status);
+            setDeviceStatus(devices, msOnline,lineOnline,status!=STATION_OFF,equStatusViewItemMap);
         }
     }
 
@@ -353,13 +349,13 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                 return 2;
             } else if (status == DeviceStatus.OFF_LINE) {
                 // 离线
-                return 3;
+                return DEVICE_OFFLINE;
             } else if (status == DeviceStatus.STOP_SERVICE) {
                 // 停止服务
                 return 4;
             }
         }
-        return 3;
+        return DEVICE_OFFLINE;
     }
 
     /**

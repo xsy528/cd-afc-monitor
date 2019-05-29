@@ -108,7 +108,8 @@ public class CommandLogServiceImpl implements CommandLogService {
             commandLogInfo.setCmdName(tmoCmdResult.getCmdName());
             commandLogInfo.setOperatorId(tmoCmdResult.getOperatorId());
             commandLogInfo.setUploadTime(DateTimeUtil.formatDate(tmoCmdResult.getOccurTime()));
-            commandLogInfo.setCmdResult(AFCMackCode.getInstance().getNameByValue(tmoCmdResult.getCmdResult().intValue()));
+            commandLogInfo.setCmdResult(AFCMackCode.getInstance()
+                    .getNameByValue(tmoCmdResult.getCmdResult().intValue())+"/"+tmoCmdResult.getCmdResult());
 
             return commandLogInfo;
         }

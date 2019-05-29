@@ -6,6 +6,7 @@
 package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
+import com.insigma.afc.monitor.constant.dic.AFCMackCode;
 import com.insigma.afc.monitor.constant.dic.AFCModeCode;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.dao.TmoEquStatusCurDao;
@@ -343,7 +344,8 @@ public class ModeServiceImpl implements ModeService {
             modeCmdInfo.setStationName(textMap.get(tmoCmdResult.getStationId().longValue()));
             modeCmdInfo.setStationId(tmoCmdResult.getStationId());
             modeCmdInfo.setCmdName(tmoCmdResult.getCmdName());
-            modeCmdInfo.setCmdResult(tmoCmdResult.getCmdResult().toString());
+            modeCmdInfo.setCmdResult(AFCMackCode.getInstance()
+                    .getNameByValue(tmoCmdResult.getCmdResult().intValue())+"/"+tmoCmdResult.getCmdResult());
             return modeCmdInfo;
         }
     }

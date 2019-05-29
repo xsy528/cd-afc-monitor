@@ -1,5 +1,6 @@
 package com.insigma.afc.monitor.service.impl;
 
+import com.insigma.afc.monitor.constant.dic.AFCMackCode;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.model.dto.condition.CommandLogCondition;
 import com.insigma.afc.monitor.model.entity.TmoCmdResult;
@@ -107,7 +108,7 @@ public class CommandLogServiceImpl implements CommandLogService {
             commandLogInfo.setCmdName(tmoCmdResult.getCmdName());
             commandLogInfo.setOperatorId(tmoCmdResult.getOperatorId());
             commandLogInfo.setUploadTime(DateTimeUtil.formatDate(tmoCmdResult.getOccurTime()));
-            commandLogInfo.setCmdResult(tmoCmdResult.getCmdResult().toString());
+            commandLogInfo.setCmdResult(AFCMackCode.getInstance().getNameByValue(tmoCmdResult.getCmdResult().intValue()));
 
             return commandLogInfo;
         }

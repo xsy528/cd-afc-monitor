@@ -16,31 +16,31 @@ public class DeviceStatus extends Definition {
 	/**
 	 * 设备处于正常工作模式
  	 */
-	@DicItem(name = "正常")
+	@DicItem(name = "正常",group = "monitor")
 	public static Short NORMAL = 0x00;
 
 	/**
 	 * 需要引起注意的状态
  	 */
-	@DicItem(name = "警告")
+	@DicItem(name = "警告",group = "monitor")
 	public static Short WARNING = 0x01;
 
 	/**
 	 * 需要人工响应解决的状态
 	 */
-	@DicItem(name = "报警")
+	@DicItem(name = "报警",group = "monitor")
 	public static Short ALARM = 0x02;
 
 	/**
 	 * 检查不到设备的存在，一般是设备没有启动或设备离线
 	 */
-	@DicItem(name = "离线")
+	@DicItem(name = "离线",group = "monitor")
 	public static Short OFF_LINE = 0x03;
 
 	/**
 	 * 停止服务时通讯是正常的
 	 */
-	@DicItem(name = "暂停服务")
+	@DicItem(name = "暂停服务",group = "monitor")
 	public static Short STOP_SERVICE = 0xff;
 
 	/**

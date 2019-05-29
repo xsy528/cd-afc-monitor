@@ -53,7 +53,7 @@ public class DicController {
     @ApiOperation("获取设备状态列表")
     @PostMapping("/deviceStatusList")
     public Result getDeviceStatusList(){
-        return Result.success(DeviceStatus.getInstance().getByGroup(""));
+        return Result.success(DeviceStatus.getInstance().getByGroup("monitor"));
     }
 
     @ApiOperation("获取日志类型列表")

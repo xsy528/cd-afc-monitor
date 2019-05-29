@@ -337,7 +337,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         //获取路段信息
         List<Long> sectionList = getSectionIdsByLineIds(lineIds);
         if (sectionList.isEmpty()) {
-            return Page.empty();
+            return new PageImpl<>(new ArrayList<>(),PageRequest.of(pageNumber,pageSize),0);
         }
 
         String select = "select t.sectionId,sum(t.upCount),sum(t.downCount),sum(t.totalCount) ";

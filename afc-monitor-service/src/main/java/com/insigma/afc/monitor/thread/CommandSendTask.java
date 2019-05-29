@@ -4,7 +4,7 @@ import com.insigma.afc.log.constant.LogDefines;
 import com.insigma.afc.log.service.ILogService;
 import com.insigma.afc.monitor.constant.LogModuleCode;
 import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
-import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.model.entity.TmoCmdResult;
 import com.insigma.afc.monitor.model.entity.topology.MetroDevice;
 import com.insigma.afc.monitor.model.entity.topology.MetroLine;
 import com.insigma.afc.monitor.model.entity.topology.MetroNode;
@@ -13,6 +13,7 @@ import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.workbench.rmi.ICommandService;
 import com.insigma.commons.constant.AFCNodeLevel;
 import com.insigma.commons.util.DateTimeUtil;
+import com.insigma.commons.util.NodeIdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,9 +39,11 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
     private ILogService logService;
     private Long userId;
     private String ip;
+    private Long sourceId;
 
     public CommandSendTask(int cmdId, String cmdName, Object cmdArg, Short cmdType, MetroNode node,
-                           ICommandService rmiCommandService, ILogService logService,Long userId,String ip) {
+                           ICommandService rmiCommandService, ILogService logService,Long userId,String ip,
+                           Long sourceId) {
         this.cmdId = cmdId;
         this.cmdName = cmdName;
         this.cmdArg = cmdArg;
@@ -50,6 +53,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
         this.logService = logService;
         this.userId = userId;
         this.ip = ip;
+        this.sourceId = sourceId;
     }
 
     @Override
@@ -58,27 +62,30 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
         int result = AFCCmdResultType.SEND_FAILED;
         String resultDesc = null;
         try {
-            String userId = "0";
+            //将目标节点转化为发送命令节点
             com.insigma.afc.topology.MetroLine target = new com.insigma.afc.topology.MetroLine();
             switch (node.level()) {
                 case LC: {
                     MetroLine metroLine = (MetroLine) node;
                     target.setLineID(metroLine.getLineID());
+                    target.setNodeId(NodeIdUtils.nodeIdStrategy.getNodeNo(metroLine.getLineID().longValue()));
                     break;
                 }
                 case SC: {
                     MetroStation metroStation = (MetroStation) node;
                     target.setLineID(metroStation.getLineId());
+                    target.setNodeId(NodeIdUtils.nodeIdStrategy.getNodeNo(metroStation.getLineId().longValue()));
                     break;
                 }
                 case SLE: {
                     MetroDevice metroDevice = (MetroDevice) node;
                     target.setLineID(metroDevice.getLineId());
+                    target.setNodeId(NodeIdUtils.nodeIdStrategy.getNodeNo(metroDevice.getLineId().longValue()));
                     break;
                 }
                 default:
             }
-            CmdHandlerResult command = rmiCommandService.command(cmdId, userId, 0L, cmdArg, target);
+            CmdHandlerResult command = rmiCommandService.command(cmdId, String.valueOf(userId), sourceId, cmdArg, target);
             Serializable returnValue = command.returnValue;
             if (returnValue instanceof Integer) {
                 result = (Integer) returnValue;
@@ -91,10 +98,11 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
             LOGGER.error("发送" + cmdName + "错误", e);
         }
         LOGGER.info("向节点" + node.name() + "发送" + cmdName + "  返回：" + result);
-        return getResult(node, cmdName, result, cmdType, resultDesc);
+        return getResult(node, cmdName, result, cmdType, resultDesc,cmdArg);
     }
 
-    private TmoCmdResult getResult(MetroNode node, String command, int result, Short cmdType, String resultDesc) {
+    private TmoCmdResult getResult(MetroNode node, String command, int result, Short cmdType, String resultDesc,
+                                   Object cmdArg) {
 
         String resultMessageShow = "发送结果：\n";
         if (result == 0) {
@@ -136,10 +144,11 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
 
         tmoCmdResult.setUploadStatus((short) 0);
         //操作员id
-        tmoCmdResult.setOperatorId("1");
+        tmoCmdResult.setOperatorId(String.valueOf(userId));
         tmoCmdResult.setCmdResult((short) result);
         tmoCmdResult.setRemark(resultDesc);
         tmoCmdResult.setCmdType(cmdType);
+        tmoCmdResult.setArg(cmdArg);
         return tmoCmdResult;
     }
 

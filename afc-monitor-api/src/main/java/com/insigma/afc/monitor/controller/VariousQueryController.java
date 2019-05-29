@@ -12,6 +12,7 @@ import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 import com.insigma.afc.monitor.model.dto.condition.*;
 import com.insigma.afc.monitor.model.vo.*;
 import com.insigma.afc.monitor.service.CommandLogService;
+import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.DeviceEventService;
 import com.insigma.afc.monitor.service.ModeService;
 import com.insigma.commons.model.dto.Result;
@@ -40,6 +41,7 @@ public class VariousQueryController {
     private CommandLogService cmdLogService;
     private DeviceEventService deviceEventService;
     private ModeService modeService;
+    private CommandService commandService;
 
     @ApiOperation("各类查询-模式上传")
     @PostMapping("modeUploadInfo")
@@ -74,7 +76,7 @@ public class VariousQueryController {
     @ApiOperation("重发广播命令")
     @PostMapping("/resendModeBroadcast")
     public Result<List<CommandResultDTO>> resendModeBroadcast(@RequestBody List<Long> recordIds){
-        return Result.success(modeService.resendModeBroadcast(recordIds));
+        return commandService.sendModeBroadcastCommand(recordIds);
     }
 
     @Autowired
@@ -92,4 +94,8 @@ public class VariousQueryController {
         this.modeService = modeService;
     }
 
+    @Autowired
+    public void setCommandService(CommandService commandService) {
+        this.commandService = commandService;
+    }
 }

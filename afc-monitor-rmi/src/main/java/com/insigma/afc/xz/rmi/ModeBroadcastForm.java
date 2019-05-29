@@ -31,7 +31,9 @@ public class ModeBroadcastForm implements Serializable {
 		this.modeStationList = modeStationList;
 	}
 
-	public static class ModeStation {
+	public static class ModeStation implements Serializable {
+
+		private static final long serialVersionUID = -6799586590919615670L;
 
 		private Integer stationId;
 
@@ -53,6 +55,19 @@ public class ModeBroadcastForm implements Serializable {
 			this.modeCode = modeCode;
 		}
 
+		@Override
+		public String toString() {
+			return "ModeStation{" +
+					"stationId=" + stationId +
+					", modeCode=" + modeCode +
+					'}';
+		}
 	}
 
+	@Override
+	public String toString() {
+		return "ModeBroadcastForm{" +
+				"modeStationList=" + modeStationList +
+				'}';
+	}
 }

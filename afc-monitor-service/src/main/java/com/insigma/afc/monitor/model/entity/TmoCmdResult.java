@@ -62,6 +62,17 @@ public class TmoCmdResult implements Serializable {
 	@Column(name = "UPLOAD_STATUS", nullable = false, precision = 5, scale = 0)
 	private Short uploadStatus;
 
+	@Transient
+	private Object arg;
+
+	public Object getArg() {
+		return arg;
+	}
+
+	public void setArg(Object arg) {
+		this.arg = arg;
+	}
+
 	public void setLineId(Short lineId) {
 		this.lineId = lineId;
 	}

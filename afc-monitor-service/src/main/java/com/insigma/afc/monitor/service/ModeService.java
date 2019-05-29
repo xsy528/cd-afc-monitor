@@ -68,11 +68,4 @@ public interface ModeService {
 	 */
 	List<TmoModeBroadcast> getModeBroadcast();
 
-	/**
-	 * 重新发送模式广播
-	 * @param resultIds 广播信息id
-	 * @return 结果
-	 */
-	List<CommandResultDTO> resendModeBroadcast(List<Long> resultIds);
-
 }

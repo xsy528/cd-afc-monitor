@@ -6,13 +6,11 @@
 package com.insigma.afc.monitor.service.impl;
 
 import com.insigma.afc.monitor.constant.OrderDirection;
-import com.insigma.afc.monitor.constant.dic.AFCCmdResultType;
 import com.insigma.afc.monitor.constant.dic.AFCModeCode;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
 import com.insigma.afc.monitor.dao.TmoEquStatusCurDao;
 import com.insigma.afc.monitor.dao.TmoModeBroadcastDao;
 import com.insigma.afc.monitor.dao.TmoModeUploadInfoDao;
-import com.insigma.afc.monitor.model.dto.CommandResultDTO;
 import com.insigma.afc.monitor.model.dto.condition.DeviceEventCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeBroadcastCondition;
 import com.insigma.afc.monitor.model.dto.condition.ModeCmdCondition;
@@ -24,10 +22,8 @@ import com.insigma.afc.monitor.model.entity.TmoModeUploadInfo;
 import com.insigma.afc.monitor.model.vo.ModeBroadcastInfo;
 import com.insigma.afc.monitor.model.vo.ModeCmdInfo;
 import com.insigma.afc.monitor.model.vo.ModeUploadInfo;
-import com.insigma.afc.monitor.service.CommandService;
 import com.insigma.afc.monitor.service.ModeService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
-import com.insigma.commons.model.dto.Result;
 import com.insigma.commons.util.DateTimeUtil;
 import com.insigma.commons.util.NodeIdUtils;
 import org.slf4j.Logger;
@@ -51,10 +47,6 @@ public class ModeServiceImpl implements ModeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModeServiceImpl.class);
 
-    private final short SEND_SUCCESS = 1;
-    private final short SEND_FAILURE = 2;
-
-    private CommandService commandService;
     private TmoModeUploadInfoDao tmoModeUploadInfoDao;
     private TmoModeBroadcastDao tmoModeBroadcastDao;
     private TmoEquStatusCurDao tmoEquStatusCurDao;
@@ -177,31 +169,6 @@ public class ModeServiceImpl implements ModeService {
             query.orderBy(builder.desc(root.get("modeUploadTime")));
             return builder.and(predicates.toArray(new Predicate[0]));
         });
-    }
-
-    @Override
-    public List<CommandResultDTO> resendModeBroadcast(List<Long> resultIds) {
-        List<CommandResultDTO> commandResultDTOs = new ArrayList<>();
-        if (resultIds == null || resultIds.isEmpty()) {
-            return commandResultDTOs;
-        }
-        List<TmoModeBroadcast> tmoModeBroadcasts = tmoModeBroadcastDao.findAllById(resultIds);
-        for (TmoModeBroadcast tmoModeBroadcast : tmoModeBroadcasts) {
-            Result<List<CommandResultDTO>> result = commandService.sendChangeModeCommand(Collections
-                    .singletonList(tmoModeBroadcast.getTargetId()), tmoModeBroadcast.getModeCode().intValue());
-            if (result.isSuccess()) {
-                CommandResultDTO commandResultDTO = result.getData().get(0);
-                commandResultDTOs.add(commandResultDTO);
-                if (commandResultDTO.getResult() == AFCCmdResultType.SEND_SUCCESSFUL) {
-                    tmoModeBroadcast.setBroadcastStatus(SEND_SUCCESS);
-                } else {
-                    tmoModeBroadcast.setBroadcastStatus(SEND_FAILURE);
-                }
-                tmoModeBroadcast.setModeBroadcastTime(new Date());
-            }
-        }
-        tmoModeBroadcastDao.saveAll(tmoModeBroadcasts);
-        return commandResultDTOs;
     }
 
     @Override
@@ -399,11 +366,6 @@ public class ModeServiceImpl implements ModeService {
     @Autowired
     public void setTmoEquStatusCurDao(TmoEquStatusCurDao tmoEquStatusCurDao) {
         this.tmoEquStatusCurDao = tmoEquStatusCurDao;
-    }
-
-    @Autowired
-    public void setCommandService(CommandService commandService) {
-        this.commandService = commandService;
     }
 
     @Autowired

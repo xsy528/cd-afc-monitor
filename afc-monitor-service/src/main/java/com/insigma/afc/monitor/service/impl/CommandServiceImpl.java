@@ -5,9 +5,11 @@ import com.insigma.afc.log.service.ILogService;
 import com.insigma.afc.monitor.constant.LogModuleCode;
 import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.dao.TmoCmdResultDao;
+import com.insigma.afc.monitor.dao.TmoModeBroadcastDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.CommandResultDTO;
-import com.insigma.afc.monitor.model.entity.*;
+import com.insigma.afc.monitor.model.entity.TmoCmdResult;
+import com.insigma.afc.monitor.model.entity.TmoModeBroadcast;
 import com.insigma.afc.monitor.model.entity.topology.MetroDevice;
 import com.insigma.afc.monitor.model.entity.topology.MetroLine;
 import com.insigma.afc.monitor.model.entity.topology.MetroNode;
@@ -19,19 +21,25 @@ import com.insigma.afc.monitor.thread.CommandThreadPoolExecutor;
 import com.insigma.afc.monitor.util.ResultUtils;
 import com.insigma.afc.security.util.SecurityUtils;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
+import com.insigma.afc.workbench.rmi.ICommandService;
+import com.insigma.afc.xz.rmi.ModeBroadcastForm;
 import com.insigma.afc.xz.rmi.ModeUpdateForm;
 import com.insigma.commons.dic.PairValue;
-import com.insigma.afc.workbench.rmi.ICommandService;
 import com.insigma.commons.model.dto.Result;
+import com.insigma.commons.properties.AppProperties;
+import com.insigma.commons.util.NodeIdUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PreDestroy;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Ticket: 命令服务实现类
@@ -40,6 +48,7 @@ import java.util.concurrent.Future;
  * 2019-01-04:13:59
  */
 @Service
+@EnableConfigurationProperties(AppProperties.class)
 public class CommandServiceImpl implements CommandService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandServiceImpl.class);
@@ -55,13 +64,19 @@ public class CommandServiceImpl implements CommandService {
     private ICommandService rmiCommandService;
     private ILogService logService;
 
+    private TmoModeBroadcastDao tmoModeBroadcastDao;
+    private AppProperties appProperties;
+
     @Autowired
     public CommandServiceImpl(TmoCmdResultDao tmoCmdResultDao, TopologyService topologyService,
-                              ICommandService rmiCommandService,ILogService logService) {
+                              ICommandService rmiCommandService,ILogService logService,
+                              TmoModeBroadcastDao tmoModeBroadcastDao, AppProperties appProperties) {
         this.tmoCmdResultDao = tmoCmdResultDao;
         this.topologyService = topologyService;
         this.rmiCommandService = rmiCommandService;
         this.logService = logService;
+        this.appProperties = appProperties;
+        this.tmoModeBroadcastDao = tmoModeBroadcastDao;
     }
 
     @Override
@@ -103,15 +118,86 @@ public class CommandServiceImpl implements CommandService {
                     SecurityUtils.getUserId(),SecurityUtils.getIp(),LogModuleCode.MODULE_MONITOR);
             return ResultUtils.getResult(ErrorCode.COMMAND_SERVICE_NOT_CONNECTED);
         }
-        Map<Long, Object> modeUpdateForms = new HashMap<>(16);
+        List<Future<TmoCmdResult>> results = new ArrayList<>();
         for (MetroNode metroNode : targetIds) {
             ModeUpdateForm modeUpdateForm = new ModeUpdateForm();
             modeUpdateForm.setDeviceId(metroNode.id());
             modeUpdateForm.setModeCode(sendMode);
-            modeUpdateForms.put(metroNode.id(), modeUpdateForm);
+            results.add(send(CommandType.CMD_MODE_UPDATE, name, modeUpdateForm, metroNode,
+                    AFCCmdLogType.LOG_MODE.shortValue()));
         }
-        return Result.success(send(CommandType.CMD_MODE_UPDATE, name, modeUpdateForms, targetIds,
-                AFCCmdLogType.LOG_MODE.shortValue()));
+        return Result.success(saveResults(results));
+    }
+
+    @Override
+    public Result<List<CommandResultDTO>> sendModeBroadcastCommand(List<Long> recordIds) {
+        final short sendSuccess = 1;
+        final short sendFailure = 2;
+        if (recordIds==null||recordIds.isEmpty()){
+            return Result.success(new ArrayList<>());
+        }
+        //查找模式广播记录
+        List<TmoModeBroadcast> tmoModeBroadcasts = tmoModeBroadcastDao.findAllById(recordIds);
+        //命令执行结果
+        List<CommandResultDTO> results = new ArrayList<>();
+
+        Map<Long,Future<TmoCmdResult>> modeBroadcastResultMap = new HashMap<>();
+        for (TmoModeBroadcast modeBroadcast : tmoModeBroadcasts) {
+            Long lineId = modeBroadcast.getTargetId();
+            //构造命令参数
+            ModeBroadcastForm modeBroadcastForm = new ModeBroadcastForm();
+            List<ModeBroadcastForm.ModeStation> modeStations = new ArrayList<>();
+            modeBroadcastForm.setModeStationList(modeStations);
+            ModeBroadcastForm.ModeStation modeStation = new ModeBroadcastForm.ModeStation();
+            modeStation.setStationId(modeBroadcast.getStationId());
+            modeStation.setModeCode(modeBroadcast.getModeCode().intValue());
+            modeStations.add(modeStation);
+            //目标节点
+            MetroLine target = topologyService.getLineNode(NodeIdUtils.nodeIdStrategy.getLineId(lineId)).getData();
+            String name = "模式广播["+AFCModeCode.getInstance().getModeText(modeBroadcast.getModeCode().intValue())+"]";
+            //发送命令
+            Future<TmoCmdResult> resultFuture = send(CommandType.CMD_MODE_BROADCAST, name, modeBroadcastForm, target,
+                    AFCCmdLogType.LOG_OTHER.shortValue());
+            modeBroadcastResultMap.put(modeBroadcast.getRecordId(),resultFuture);
+        }
+        List<TmoCmdResult> tmoCmdResults = new ArrayList<>();
+        //更新补发广播结果
+        for(TmoModeBroadcast modeBroadcast : tmoModeBroadcasts){
+            Future<TmoCmdResult> future = modeBroadcastResultMap.get(modeBroadcast.getRecordId());
+            if (future!=null){
+                try {
+                    TmoCmdResult tmoCmdResult = future.get();
+                    if (tmoCmdResult != null) {
+                        CommandResultDTO commandResult = new CommandResultDTO();
+                        commandResult.setId(topologyService.getNodeText(tmoCmdResult.getNodeId()).getData());
+                        commandResult.setCmdName(tmoCmdResult.getCmdName());
+                        commandResult.setResult(tmoCmdResult.getCmdResult());
+                        commandResult.setCmdResult(tmoCmdResult.getRemark());
+                        commandResult.setOccurTime(new Date());
+                        commandResult.setOperatorId(tmoCmdResult.getOperatorId());
+                        commandResult.setArg(tmoCmdResult.getArg()==null?"无":tmoCmdResult.getArg().toString());
+                        tmoCmdResults.add(tmoCmdResult);
+                        results.add(commandResult);
+
+                        if (commandResult.getResult() == AFCCmdResultType.SEND_SUCCESSFUL) {
+                            modeBroadcast.setBroadcastStatus(sendSuccess);
+                        } else {
+                            modeBroadcast.setBroadcastStatus(sendFailure);
+                        }
+                        modeBroadcast.setModeBroadcastTime(new Date());
+                    }
+                } catch (ExecutionException e) {
+                    logger.error("发送命令异常", e);
+                } catch (InterruptedException e) {
+                    logger.error("发送命令被中断", e);
+                }
+            }
+        }
+        //保存命令执行结果
+        tmoCmdResultDao.saveAll(tmoCmdResults);
+        //更新补发广播结果
+        tmoModeBroadcastDao.saveAll(tmoModeBroadcasts);
+        return Result.success(results);
     }
 
     @Override
@@ -120,13 +206,13 @@ public class CommandServiceImpl implements CommandService {
         if (targetIds == null) {
             return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
         }
-        Map<Long, Object> args = new HashMap<>(16);
-        for (MetroNode metroNode : targetIds) {
-            args.put(metroNode.id(), metroNode.id());
+        List<Future<TmoCmdResult>> results = new ArrayList<>();
+        for (MetroStation target : targetIds) {
+            results.add(send(CommandType.CMD_MODE_QUERY,
+                    CommandType.getInstance().getNameByValue(CommandType.CMD_MODE_QUERY), target.id(), target,
+                    AFCCmdLogType.LOG_MODE.shortValue()));
         }
-        return Result.success(send(CommandType.CMD_MODE_QUERY,
-                CommandType.getInstance().getNameByValue(CommandType.CMD_MODE_QUERY), args, targetIds,
-                AFCCmdLogType.LOG_MODE.shortValue()));
+        return Result.success(saveResults(results));
     }
 
     @Override
@@ -172,7 +258,8 @@ public class CommandServiceImpl implements CommandService {
             return command;
         }
         Long userId = SecurityUtils.getUserId();
-        command = rmiCommandService.command(CommandType.CMD_EXPORT_MAP, String.valueOf(userId), 1L);
+        command = rmiCommandService.command(CommandType.CMD_EXPORT_MAP, String.valueOf(userId),
+                appProperties.getNodeNo());
         return command;
     }
 
@@ -254,35 +341,6 @@ public class CommandServiceImpl implements CommandService {
         return targetdIds;
     }
 
-
-    /**
-     * 从车站节点中获取线路节点
-     *
-     * @param metroStations 车站节点
-     * @return 线路节点
-     */
-    private List<MetroLine> getLineNodeFromStations(List<MetroStation> metroStations) {
-        if (metroStations == null || metroStations.isEmpty()) {
-            return null;
-        }
-        // 只留下目标节点
-        Set<Short> targetIds = new HashSet<>();
-        for (MetroStation station : metroStations) {
-            targetIds.add(station.getLineId());
-        }
-        List<MetroLine> metroLines = new ArrayList<>();
-        for (Short lineId : targetIds) {
-            MetroLine metroNode = topologyService.getLineNode(lineId).getData();
-            if (metroNode != null) {
-                metroLines.add(metroNode);
-            }
-        }
-        if (metroLines.isEmpty()) {
-            return null;
-        }
-        return metroLines;
-    }
-
     /**
      * 从id中获取设备id
      *
@@ -308,29 +366,58 @@ public class CommandServiceImpl implements CommandService {
     }
 
     /**
-     * 发送命令
+     * 发送相同命令给多个节点
      *
      * @param id      命令id
      * @param name    命令名称
-     * @param args    命令参数
-     * @param nodes   目标节点
+     * @param arg    命令参数
+     * @param targets   目标节点数组
      * @param cmdType 命令类型
      * @return 命令执行结果
      */
-    private List<CommandResultDTO> send(int id, String name, Map<Long, Object> args, List<? extends MetroNode> nodes,
+    private List<CommandResultDTO> send(int id, String name, Object arg, List<? extends MetroNode> targets,
                                         Short cmdType) {
-        if (nodes == null) {
+        if (targets == null) {
             return null;
         }
         List<Future<TmoCmdResult>> futures = new ArrayList<>();
-        for (MetroNode node : nodes) {
-            Object arg = null;
-            if (args != null) {
-                arg = args.get(node.id());
-            }
-            futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg,
-                    cmdType, node, rmiCommandService,logService,SecurityUtils.getUserId(),SecurityUtils.getIp())));
+        Long userId = SecurityUtils.getUserId();
+        String ip = SecurityUtils.getIp();
+        Long sourceId = appProperties.getNodeNo();
+        for (MetroNode target : targets) {
+            futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg, cmdType, target,
+                    rmiCommandService,logService,userId,ip,sourceId)));
         }
+        return saveResults(futures);
+    }
+
+    /**
+     * 发送相同命令给单个节点
+     *
+     * @param id      命令id
+     * @param name    命令名称
+     * @param arg    命令参数
+     * @param target   目标节点
+     * @param cmdType 命令类型
+     * @return 命令执行结果
+     */
+    private Future<TmoCmdResult> send(int id, String name, Object arg, MetroNode target, Short cmdType) {
+        if (target==null){
+            return null;
+        }
+        Long userId = SecurityUtils.getUserId();
+        String ip = SecurityUtils.getIp();
+        Long sourceId = appProperties.getNodeNo();
+        return threadPoolExecutor.submit(new CommandSendTask(id, name, arg, cmdType, target,
+                    rmiCommandService,logService,userId,ip,sourceId));
+    }
+
+    /**
+     * 保存命令执行结果
+     * @param futures 结果
+     * @return 命令执行结果数据
+     */
+    private List<CommandResultDTO> saveResults(List<Future<TmoCmdResult>> futures){
         List<CommandResultDTO> results = new ArrayList<>();
         List<TmoCmdResult> tmoCmdResults = new ArrayList<>();
         for (Future<TmoCmdResult> future : futures) {
@@ -344,6 +431,7 @@ public class CommandServiceImpl implements CommandService {
                     commandResult.setCmdResult(tmoCmdResult.getRemark());
                     commandResult.setOccurTime(new Date());
                     commandResult.setOperatorId(tmoCmdResult.getOperatorId());
+                    commandResult.setArg(tmoCmdResult.getArg()==null?"无":tmoCmdResult.getArg().toString());
                     tmoCmdResults.add(tmoCmdResult);
                     results.add(commandResult);
                 }
@@ -357,5 +445,20 @@ public class CommandServiceImpl implements CommandService {
         return results;
     }
 
+    @PreDestroy
+    public void destroy(){
+        if (threadPoolExecutor != null) {
+            threadPoolExecutor.shutdown();
+            try {
+                if (!threadPoolExecutor.awaitTermination(2, TimeUnit.SECONDS)) {
+                    threadPoolExecutor.shutdownNow();
+                }
+            } catch (InterruptedException e1) {
+                threadPoolExecutor.shutdownNow();
+            } finally {
+                threadPoolExecutor = null;
+            }
+        }
+    }
 
 }

@@ -27,10 +27,13 @@ public class AFCModeCode extends Definition {
 		return instance;
 	}
 
-	@DicItem(name = "正常模式", group = AFCModeCode.MODE_SIGN_NORMAL)
+	@DicItem(name = "正常服务模式", group = AFCModeCode.MODE_SIGN_NORMAL)
 	public final static Integer NORMAL = 0x00;
 
-	@DicItem(name = "列车故障模式", group = AFCModeCode.MODE_SIGN_BREAKDOWN)
+	@DicItem(name = "关闭服务模式", group = AFCModeCode.MODE_SIGN_NORMAL)
+	public final static Integer TRAIN_SHUTDOWN = 0x100;
+
+	@DicItem(name = "列车故障模式", group = AFCModeCode.MODE_SIGN_DESCEND)
 	public final static Integer TRAIN_BREAK_DOWN = 0x01;
 
 	@DicItem(name = "时间免检模式", group = AFCModeCode.MODE_SIGN_DESCEND)
@@ -48,14 +51,11 @@ public class AFCModeCode extends Definition {
 	@DicItem(name = "进站免检模式", group = AFCModeCode.MODE_SIGN_DESCEND)
 	public final static Integer ENTER_NO_CHECK = 0x20;
 
-	@DicItem(name = "24小时运营模式", group = AFCModeCode.MODE_SIGN_NORMAL)
+	@DicItem(name = "24小时运营模式", group = AFCModeCode.MODE_SIGN_DESCEND)
 	public final static Integer ALL_DAY = 0x40;
 
 	@DicItem(name = "紧急放行模式", group = AFCModeCode.MODE_SIGN_URGENCY)
 	public final static Integer START_URGENCY = 0x80;
-
-	@DicItem(name = "关闭服务模式", group = AFCModeCode.MODE_SIGN_DESCEND)
-	public final static Integer TRAIN_SHUTDOWN = 0x100;
 
 	public String getModeText(Object value){
 		String name = this.getNameByValue(value);

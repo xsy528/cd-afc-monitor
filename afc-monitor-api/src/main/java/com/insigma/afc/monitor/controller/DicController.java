@@ -38,11 +38,9 @@ public class DicController {
         groupMode2.put("groupName","降级运行模式");
         groupMode2.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_DESCEND));
         Map<String,Object> groupMode3 = new HashMap<>();
-        groupMode3.put("groupName","紧急运营模式");
+        groupMode3.put("groupName","紧急模式");
         groupMode3.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_URGENCY));
         Map<String,Object> groupMode4 = new HashMap<>();
-        groupMode4.put("groupName","列车故障模式");
-        groupMode4.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_BREAKDOWN));
         data.add(groupMode1);
         data.add(groupMode2);
         data.add(groupMode3);

@@ -85,8 +85,8 @@ public class DeviceEventServiceImpl implements DeviceEventService {
 
             deviceEventInfo.setNodeName(textMap.get(tmoEquStatus.getNodeId()));
             deviceEventInfo.setNodeId(tmoEquStatus.getNodeId().toString());
-            deviceEventInfo.setEventName(tmoEquStatus.getStatusName());
-            deviceEventInfo.setEventDesc(tmoEquStatus.getStatusDesc());
+            deviceEventInfo.setEventName(tmoEquStatus.getStatusName()+"/"+tmoEquStatus.getStatusId());
+            deviceEventInfo.setEventDesc(tmoEquStatus.getStatusDesc()+"/"+tmoEquStatus.getStatusValue());
             deviceEventInfo.setOccurTime(DateTimeUtil.formatDate(tmoEquStatus.getOccurTime()));
 
             return deviceEventInfo;

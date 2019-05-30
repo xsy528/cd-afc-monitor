@@ -17,7 +17,7 @@ import java.util.List;
 @ApiModel(description = "模式广播查询条件")
 public class ModeBroadcastCondition extends PageBean {
 
-    @ApiModelProperty("车站id数组")
+    @ApiModelProperty("源车站id数组")
     @JsonProperty("station_ids")
     private List<Integer> stationIds;
 
@@ -37,9 +37,9 @@ public class ModeBroadcastCondition extends PageBean {
     @JsonProperty("operator_id")
     private String operatorId;
 
-    @ApiModelProperty("目标车站id")
-    @JsonProperty("dest_station_id")
-    private Integer destStationId;
+    @ApiModelProperty("目标id")
+    @JsonProperty("target_id")
+    private Long targetId;
 
     @ApiModelProperty("模式广播状态")
     @JsonProperty("broadcast_status")
@@ -89,12 +89,12 @@ public class ModeBroadcastCondition extends PageBean {
         this.operatorId = operatorId;
     }
 
-    public Integer getDestStationId() {
-        return destStationId;
+    public Long getTargetId() {
+        return targetId;
     }
 
-    public void setDestStationId(Integer destStationId) {
-        this.destStationId = destStationId;
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
     }
 
     public Short getBroadcastStatus() {

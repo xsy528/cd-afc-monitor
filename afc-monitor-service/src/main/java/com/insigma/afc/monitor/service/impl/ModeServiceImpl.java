@@ -95,7 +95,7 @@ public class ModeServiceImpl implements ModeService {
     public Page<ModeBroadcastInfo> getModeBroadcastInfo(ModeBroadcastCondition condition) {
         List<Integer> stationIds = condition.getStationIds();
         Short modeCode = condition.getEntryMode();
-        Integer desStationId = condition.getDestStationId();
+        Long targetId = condition.getTargetId();
         Short broadCastStatus = condition.getBroadcastStatus();
         Short broadCastType = condition.getBroadcastType();
         Date startTime = condition.getStartTime();
@@ -121,8 +121,8 @@ public class ModeServiceImpl implements ModeService {
             if (operatorId != null) {
                 predicates.add(builder.equal(root.get("operatorId"), operatorId));
             }
-            if (desStationId != null) {
-                predicates.add(builder.equal(root.get("targetId"), desStationId));
+            if (targetId != null) {
+                predicates.add(builder.equal(root.get("targetId"), NodeIdUtils.nodeIdStrategy.getNodeNo(targetId)));
             }
             if (startTime != null) {
                 predicates.add(builder.greaterThanOrEqualTo(root.get("modeEffectTime"), startTime));

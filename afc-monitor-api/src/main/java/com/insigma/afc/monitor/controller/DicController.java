@@ -40,11 +40,9 @@ public class DicController {
         Map<String,Object> groupMode3 = new HashMap<>();
         groupMode3.put("groupName","紧急模式");
         groupMode3.put("modes",AFCModeCode.getInstance().getByGroup(AFCModeCode.MODE_SIGN_URGENCY));
-        Map<String,Object> groupMode4 = new HashMap<>();
         data.add(groupMode1);
         data.add(groupMode2);
         data.add(groupMode3);
-        data.add(groupMode4);
         return Result.success(data);
     }
 

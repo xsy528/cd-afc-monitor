@@ -28,7 +28,7 @@ server:
 #数据源配置
 spring:
   profiles:
-    active: dev
+    active: pro
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
   servlet:

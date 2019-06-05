@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2019-03-22 09:44:30
  */
 @Api(tags = "客流监控接口")
-@RestController
+//@RestController
 @RequestMapping("/monitor/passenger/")
 public class MonitorPassengerController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitorPassengerController.class);

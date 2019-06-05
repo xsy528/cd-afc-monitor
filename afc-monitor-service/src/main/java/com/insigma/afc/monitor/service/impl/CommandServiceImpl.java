@@ -285,11 +285,11 @@ public class CommandServiceImpl implements CommandService {
             commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
                     null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
         }
-        if (AFCDeviceType.TVM.equals(deviceType) || AFCDeviceType.POST.equals(deviceType)
-                || AFCDeviceType.GATE.equals(deviceType)) {
-            commandResults.addAll(send(CommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
-                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
-        }
+//        if (AFCDeviceType.TVM.equals(deviceType) || AFCDeviceType.POST.equals(deviceType)
+//                || AFCDeviceType.GATE.equals(deviceType)) {
+//            commandResults.addAll(send(CommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
+//                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+//        }
         return Result.success(commandResults);
     }
 

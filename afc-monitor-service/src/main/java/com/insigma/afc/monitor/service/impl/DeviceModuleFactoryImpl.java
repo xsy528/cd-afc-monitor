@@ -38,7 +38,7 @@ public class DeviceModuleFactoryImpl implements IDeviceModuleFactory {
 		List<MetroDeviceModule> result = new ArrayList<>();
 		Short deviceType = equipment.getDeviceType();
 		Short deviceSubType = equipment.getDeviceSubType();
-		if (AFCDeviceType.GATE.equals(deviceType)) {
+		if (AFCDeviceType.ENG.equals(deviceType)) {
 			List<Object[]> gateList = new ArrayList<>();
 			gateList.add(new Object[] { 1L, "RDR", "维修门状态", 0, 110, 1, 1101 });
 

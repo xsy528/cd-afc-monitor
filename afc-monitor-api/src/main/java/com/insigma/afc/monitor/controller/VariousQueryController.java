@@ -34,7 +34,7 @@ import java.util.List;
  * 2019/4/10 11:08
  */
 @Api(tags = "各类查询接口")
-@RestController
+//@RestController
 @RequestMapping("/monitor/query/")
 public class VariousQueryController {
 

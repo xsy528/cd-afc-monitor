@@ -34,13 +34,13 @@ public class MonitorConfigController {
     }
 
     @ApiOperation("获取节点监控配置信息")
-    @PostMapping("/get")
+    //@PostMapping("/get")
     public Result<NodeStatusMonitorConfigDTO> getMonitorConfig() {
         return monitorConfigService.getMonitorConfig();
     }
 
     @ApiOperation("保存节点监控配置信息")
-    @PostMapping("/save")
+    //@PostMapping("/save")
     public Result<NodeStatusMonitorConfigDTO> saveMonitorConfig(@Valid @RequestBody NodeStatusMonitorConfigDTO
                                                                             monitorConfigInfo) {
         return monitorConfigService.save(monitorConfigInfo);

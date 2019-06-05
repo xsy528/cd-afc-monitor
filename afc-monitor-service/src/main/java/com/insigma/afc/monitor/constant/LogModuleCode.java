@@ -24,5 +24,5 @@ public class LogModuleCode {
     /**
      * 修改断面客流配置
      */
-    public static final int MONITOR_SECTION_CONFIG = 110504;
+    public static final int MONITOR_SECTION_CONFIG = 110604;
 }

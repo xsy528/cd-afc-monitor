@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.insigma.product</groupId>
             <artifactId>afc-security-starter</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.4</version>
         </dependency>
         <dependency>
             <groupId>com.insigma.product</groupId>

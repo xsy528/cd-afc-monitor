@@ -18,7 +18,7 @@ build:
     - build
   only:
     refs:
-      - master
+      - cd
 
 deploy:
   stage: deploy
@@ -36,4 +36,4 @@ deploy:
     - deploy
   only:
     refs:
-      - master
+      - cd

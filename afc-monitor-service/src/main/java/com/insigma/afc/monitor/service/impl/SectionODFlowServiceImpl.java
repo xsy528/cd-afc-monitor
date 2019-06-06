@@ -213,11 +213,24 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
     public List<SectionValuesDTO> getSectionValues() {
         List<TccSectionValues> tccSectionValues = sectionValuesDao.findAllByTransferFlag((short)0);
         List<SectionValuesDTO> sectionValuesDTOS = new ArrayList<>();
+        Set<Long> nodeIds = new HashSet<>();
+        for (TccSectionValues t:tccSectionValues){
+            //四河虚拟站特殊处理
+            if (t.getPreStationId()==1141){
+                t.setPreStationId(141);
+            }
+            if (t.getDownStationId()==1141){
+                t.setDownStationId(141);
+            }
+            nodeIds.add(t.getPreStationId().longValue());
+            nodeIds.add(t.getDownStationId().longValue());
+        }
+        Map<Long,String> nodeTextMap = topologyService.getNodeTexts(nodeIds).getData();
         tccSectionValues.forEach(t->{
             SectionValuesDTO sectionValuesDTO = new SectionValuesDTO();
             sectionValuesDTO.setSectionId(t.getSectionId());
-            sectionValuesDTO.setPreStation(topologyService.getNodeText(t.getPreStationId().longValue()).getData());
-            sectionValuesDTO.setDownStation(topologyService.getNodeText(t.getDownStationId().longValue()).getData());
+            sectionValuesDTO.setPreStation(nodeTextMap.get(t.getPreStationId().longValue()));
+            sectionValuesDTO.setDownStation(nodeTextMap.get(t.getDownStationId().longValue()));
             sectionValuesDTOS.add(sectionValuesDTO);
         });
         return sectionValuesDTOS;

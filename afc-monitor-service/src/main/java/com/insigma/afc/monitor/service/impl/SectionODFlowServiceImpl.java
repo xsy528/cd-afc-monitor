@@ -221,10 +221,10 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         Set<Long> nodeIds = new HashSet<>();
         for (TccSectionValues t:tccSectionValues){
             //四河虚拟站特殊处理
-            if (t.getPreStationId()==1141){
+            if (t.getPreStationId()==5141){
                 t.setPreStationId(141);
             }
-            if (t.getDownStationId()==1141){
+            if (t.getDownStationId()==5141){
                 t.setDownStationId(141);
             }
             nodeIds.add(t.getPreStationId().longValue());

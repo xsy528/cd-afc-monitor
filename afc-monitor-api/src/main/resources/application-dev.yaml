@@ -3,11 +3,9 @@ spring:
     url: jdbc:oracle:thin:@192.168.178.212:1521:afclc
     username: mlc_cd_v1
     password: afcapp
-topologyServerUrl: http://localhost:8060
+topology-server-url: http://192.168.178.184:8060
 rmiHostIpAddr: 192.168.178.185
 security:
   server: http://192.168.178.184:18080
-  ignore-paths:
-    - /monitor/sectionflow/monitor
 server:
-  port: 9081
+  port: 8070

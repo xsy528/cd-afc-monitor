@@ -13,7 +13,7 @@ api:
 #车站基本配置
 info:
   app:
-    applicationName: 徐州ACC监控
+    applicationName: 成都MLC监控
     lineNo: 0
     stationNo: 0
     nodeNo: 0x00000000

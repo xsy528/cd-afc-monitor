@@ -35,7 +35,7 @@ start(){
     print_pid
   else
     echo "开始启动${APP_NAME}"
-    nohup java -Xms50M -Xmx200M \
+    nohup java -Xms500M -Xmx1000M \
     -XX:+UseConcMarkSweepGC \
     -XX:+UseParNewGC \
     -XX:+HeapDumpOnOutOfMemoryError \

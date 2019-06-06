@@ -22,6 +22,7 @@ import com.insigma.afc.monitor.model.vo.SectionOdFlowStatsView;
 import com.insigma.afc.monitor.service.MonitorConfigService;
 import com.insigma.afc.monitor.service.SectionODFlowService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
+import com.insigma.afc.monitor.util.DeployUtils;
 import com.insigma.commons.util.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +30,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -377,11 +382,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             LOGGER.debug("k="+k+",v="+v);
             setParameter(query,k,v);
         });
-        Query countQuery = entityManager.createQuery("select count(distinct t.sectionId) "+qlBuilder.toString());
+        Query countQuery = entityManager.createQuery("select count(t.sectionId) "+qlBuilder.toString());
         parameters.forEach((k,v)-> setParameter(countQuery,k,v));
         long total = 0;
         try{
-            total = (long)countQuery.getSingleResult();
+            total = countQuery.getResultList().size();
         }catch (NoResultException e){
             // 没有数据
         }
@@ -468,7 +473,33 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
      * @return 断面id
      */
     private List<Long> getSectionIdsByLineIds(List<Short> lines) {
-        List<TccSectionValues> tccSectionValuesList = sectionValuesDao.findAll((root, query, builder) -> {
+        //部署点权限控制
+        if (DeployUtils.haveAcc()){
+            //如果有acc权限，那就不过滤线路
+        }else{
+            //过滤部署点线路
+            if (lines==null){
+                lines = DeployUtils.getDeployLineIds();
+            }else {
+                lines.removeIf(aShort -> !DeployUtils.haveLine(aShort));
+            }
+        }
+        List<TccSectionValues> tccSectionValuesList = sectionValuesDao.findAll(new FindByLinesSpecification(lines));
+        List<Long> sectionIds = new ArrayList<>();
+        for (TccSectionValues tccSectionValues:tccSectionValuesList){
+            sectionIds.add(tccSectionValues.getSectionId());
+        }
+        return sectionIds;
+    }
+
+    private class FindByLinesSpecification implements Specification<TccSectionValues> {
+
+        private List<Short> lines;
+        FindByLinesSpecification(List<Short> lines){
+            this.lines = lines;
+        }
+        @Override
+        public Predicate toPredicate(Root<TccSectionValues> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
             List<Predicate> predicates = new ArrayList<>();
             if (lines != null && !lines.isEmpty()) {
                 predicates.add(root.get("lineId").in(lines));
@@ -476,12 +507,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             // 不包括换乘段
             predicates.add(builder.equal(root.get("transferFlag"), (short)0));
             return builder.and(predicates.toArray(new Predicate[0]));
-        });
-        List<Long> sectionIds = new ArrayList<>();
-        for (TccSectionValues tccSectionValues:tccSectionValuesList){
-            sectionIds.add(tccSectionValues.getSectionId());
         }
-        return sectionIds;
     }
 
     /**

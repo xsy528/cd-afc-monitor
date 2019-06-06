@@ -125,7 +125,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         selections.add(builder.sum(root.get("addCount")).alias("addCount"));
         selections.add(root.get("stationId").alias("stationId"));
         //count
-        Selection countSelection = builder.count(countRoot.get("stationId")).alias("total");
+        Selection countSelection = builder.count(countRoot.get("stationId"));
 
         //where
         List<Predicate> predicates = new ArrayList<>();
@@ -140,10 +140,12 @@ public class PassengerRepositoryImpl implements PassengerRepository {
             selections.add(root.get("ticketFamily").alias("ticketFamily"));
             query.groupBy(root.get("stationId"),root.get("ticketFamily"));
             query.orderBy(builder.asc(root.get("stationId")),builder.asc(root.get("ticketFamily")));
+            countQuery.groupBy(root.get("stationId"),root.get("ticketFamily"));
         }else if (statType==1){
             //按车站分组
             query.groupBy(root.get("stationId"));
             query.orderBy(builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("stationId"));
         }
         query.multiselect(selections.toArray(new Selection[0]));
         Predicate[] predicates1 = predicates.toArray(new Predicate[0]);
@@ -155,7 +157,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
 
         countQuery.multiselect(countSelection);
         countQuery.where(predicates1);
-        Long total = entityManager.createQuery(countQuery).getSingleResult().get("total",Long.class);
+        long total = entityManager.createQuery(countQuery).getResultList().size();
 
         return new PageImpl<>(typedQuery.getResultList(),pageable,total);
     }

@@ -364,11 +364,11 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
             LOGGER.debug("k="+k+",v="+v);
             setParameter(query,k,v);
         });
-        Query countQuery = entityManager.createQuery("select count(distinct t.sectionId) "+qlBuilder.toString());
+        Query countQuery = entityManager.createQuery("select count(t.sectionId) "+qlBuilder.toString());
         parameters.forEach((k,v)-> setParameter(countQuery,k,v));
         long total = 0;
         try{
-            total = (long)countQuery.getSingleResult();
+            total = (long)countQuery.getResultList().size();
         }catch (NoResultException e){
             // 没有数据
         }

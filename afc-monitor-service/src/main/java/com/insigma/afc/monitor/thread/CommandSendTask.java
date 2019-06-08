@@ -37,12 +37,12 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
     private final MetroNode node;
     private ICommandService rmiCommandService;
     private ILogService logService;
-    private Long userId;
+    private String userId;
     private String ip;
     private Long sourceId;
 
     public CommandSendTask(int cmdId, String cmdName, Object cmdArg, Short cmdType, MetroNode node,
-                           ICommandService rmiCommandService, ILogService logService,Long userId,String ip,
+                           ICommandService rmiCommandService, ILogService logService,String userId,String ip,
                            Long sourceId) {
         this.cmdId = cmdId;
         this.cmdName = cmdName;
@@ -85,7 +85,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
                 }
                 default:
             }
-            CmdHandlerResult command = rmiCommandService.command(cmdId, String.valueOf(userId), sourceId, cmdArg, target);
+            CmdHandlerResult command = rmiCommandService.command(cmdId, userId, sourceId, cmdArg, target);
             Serializable returnValue = command.returnValue;
             if (returnValue instanceof Integer) {
                 result = (Integer) returnValue;

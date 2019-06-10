@@ -257,8 +257,7 @@ public class CommandServiceImpl implements CommandService {
             command.isOK = false;
             return command;
         }
-        Long userId = SecurityUtils.getUserId();
-        command = rmiCommandService.command(CommandType.CMD_EXPORT_MAP, String.valueOf(userId),
+        command = rmiCommandService.command(CommandType.CMD_EXPORT_MAP, SecurityUtils.getUserId(),
                 appProperties.getNodeNo());
         return command;
     }
@@ -381,7 +380,7 @@ public class CommandServiceImpl implements CommandService {
             return null;
         }
         List<Future<TmoCmdResult>> futures = new ArrayList<>();
-        Long userId = SecurityUtils.getUserId();
+        String userId = SecurityUtils.getUserId();
         String ip = SecurityUtils.getIp();
         Long sourceId = appProperties.getNodeNo();
         for (MetroNode target : targets) {
@@ -405,7 +404,7 @@ public class CommandServiceImpl implements CommandService {
         if (target==null){
             return null;
         }
-        Long userId = SecurityUtils.getUserId();
+        String userId = SecurityUtils.getUserId();
         String ip = SecurityUtils.getIp();
         Long sourceId = appProperties.getNodeNo();
         return threadPoolExecutor.submit(new CommandSendTask(id, name, arg, cmdType, target,

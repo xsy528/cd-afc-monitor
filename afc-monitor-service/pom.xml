@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.insigma.product</groupId>
             <artifactId>afc-log-starter</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </dependency>
         <dependency>
             <groupId>com.insigma.product</groupId>

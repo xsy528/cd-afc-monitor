@@ -35,7 +35,6 @@
     "name": "monitor_monitor_Config",
     "id": "110109",
     "urls": [
-      "/monitor/config/get",
       "/monitor/config/save"
     ]
   },

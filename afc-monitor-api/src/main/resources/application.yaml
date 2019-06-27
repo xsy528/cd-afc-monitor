@@ -12,6 +12,7 @@ api:
 
 #车站基本配置
 info:
+  version: @project.version@
   app:
     applicationName: 徐州ACC监控
     lineNo: 0
@@ -63,3 +64,7 @@ management:
 #与MessageServer通讯RMI配置
 communicationRegistRmiPort: 8527
 commandServiceRmiPort: 8528
+security:
+  ignore-paths:
+    - /actuator
+    - /actuator/**

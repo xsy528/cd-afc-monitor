@@ -65,4 +65,10 @@ public interface CommandService {
      */
     Result<List<CommandResultDTO>> sendQueryBoxCommand(Long deviceId);
 
+    /**
+     * 查询设备状态
+     * @param deviceIds 设备id数组
+     * @return 设备状态
+     */
+    Result<List<CommandResultDTO>>  sendQueryDeviceCommand(List<Long> deviceIds);
 }

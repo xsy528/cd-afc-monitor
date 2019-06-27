@@ -292,6 +292,13 @@ public class CommandServiceImpl implements CommandService {
         return Result.success(commandResults);
     }
 
+    @Override
+    public Result<List<CommandResultDTO>> sendQueryDeviceCommand(List<Long> deviceIds){
+        List<MetroNode> targets = getDeviceNodeFromIds(deviceIds);
+        return Result.success(send(CommandType.CMD_DEVICE_STATUS_QUERY,"设备状态查询命令",null,
+                targets,AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+    }
+
     /**
      * 从传过来的节点id中获取目标节点
      *

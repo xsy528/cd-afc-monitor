@@ -32,6 +32,13 @@
     ]
   },
   {
+    "name": "monitor_monitor_QueryDeviceStatus",
+    "id": "110104",
+    "urls": [
+      "/monitor/command/queryDeviceStatus"
+    ]
+  },
+  {
     "name": "monitor_monitor_Config",
     "id": "110109",
     "urls": [

@@ -3,6 +3,10 @@ spring:
     url: jdbc:oracle:thin:@192.168.178.212:1521:afclc
     username: mlc_cd_v1
     password: afcapp
+#本机地址和端口
+server:
+  address: 192.168.178.184
+  port: 8070
 #节点服务地址
 topology-server-url: http://192.168.178.184:8060
 #权限服务地址
@@ -13,7 +17,3 @@ rmiHostIpAddr: 192.168.178.185
 #与MessageServer通讯RMI配置
 communicationRegistRmiPort: 8527
 commandServiceRmiPort: 8528
-#本机地址和端口
-server:
-  address: 192.168.178.184
-  port: 8070

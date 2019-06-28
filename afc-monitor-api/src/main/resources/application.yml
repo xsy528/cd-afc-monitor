@@ -22,7 +22,7 @@ spring:
   #数据源配置
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    type: org.apache.commons.dbcp2.BasicDataSource
+    type: com.insigma.commons.datasource.EncryptedDataSource
     dbcp2:
       initial-size: 5
       min-idle: 3

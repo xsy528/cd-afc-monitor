@@ -12,7 +12,7 @@ api:
 
 #车站基本配置
 info:
-  version: @project.version@
+  version: '@project.version@'
   app:
     applicationName: 徐州ACC监控
     lineNo: 0

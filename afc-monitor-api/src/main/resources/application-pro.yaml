@@ -2,12 +2,11 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@192.168.178.214:1521:afclc
     username: acc_xuzhou_v1
-    password: afcapp
-  boot:
-    admin:
-      client:
-        url: http://192.168.178.185:10000
-
+    password: 9*%BC%B4-4%AD%EA
+#本机地址和端口
+server:
+  address: 192.168.178.185
+  port: 9081
 #节点服务地址
 topologyServerUrl: http://192.168.178.185:9080
 #ms地址
@@ -15,10 +14,3 @@ rmiHostIpAddr: 192.168.178.185
 #权限服务地址
 security:
   server: http://192.168.178.185:18080
-#本机监听地址
-server:
-  address: 192.168.178.185
-#端口号
-  port: 9081
-
-#应用管理平台

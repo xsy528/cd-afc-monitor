@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@192.168.178.214:1521:afclc
     username: acc_xuzhou_v1
-    password: afcapp
+    password: 9*%BC%B4-4%AD%EA
 
 #节点服务地址
 topologyServerUrl: http://192.168.178.185:9080

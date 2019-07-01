@@ -1,3 +1,67 @@
+#tomcat配置
+server:
+  tomcat:
+    #文件上传临时目录
+    basedir: ./tmp
+    uri-encoding: UTF-8
+    accesslog:
+      enabled: false
+
+#spring配置
+spring:
+  application:
+    name: topology
+  profiles:
+    active: pro
+  #http编码配置
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  #数据源配置
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    type: com.insigma.commons.datasource.EncryptedDataSource
+    dbcp2:
+      initial-size: 5
+      min-idle: 3
+      max-idle: 20
+      max-total: 50
+      max-wait-millis: 600000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+
+  #servlet配置
+  servlet:
+    multipart:
+      #上传文件最大1MB
+      max-file-size: 1MB
+  #jpa配置
+  jpa:
+    open-in-view: false
+    show-sql: false
+  #json序列化配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  pid:
+    fail-on-write-error: true
+
+#监控配置
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: /actuator
+
 #api信息
 api:
   title: 监控服务接口
@@ -19,51 +83,10 @@ info:
     stationNo: 0
     nodeNo: 0x00000000
 
-#tomcat配置
-server:
-  port: 8081
-  tomcat:
-    #文件上传临时目录
-    basedir: ./tmp
-
-spring:
-  profiles:
-    active: pro
-  #数据源配置
-  datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    type: org.apache.commons.dbcp2.BasicDataSource
-  #servlet配置
-  servlet:
-    multipart:
-      #上传文件最大1MB
-      max-file-size: 1MB
-  #jpa配置
-  jpa:
-    open-in-view: false
-    show-sql: false
-  application:
-    name: monitor-service
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-  pid:
-    fail-on-write-error: true
-
-#监控配置
-management:
-  endpoint:
-    health:
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-      base-path: /actuator
-
 #与MessageServer通讯RMI配置
 communicationRegistRmiPort: 8527
 commandServiceRmiPort: 8528
+
 security:
   ignore-paths:
     - /actuator

@@ -27,7 +27,7 @@ deploy:
     - pwd
     - APP_HOME=/home/afc/APP/xz-afc-monitor
     - mkdir -p ${APP_HOME}/config
-    - cp ./afc-monitor-api/src/main/resources/application*.yaml ${APP_HOME}/config/
+    - cp ./afc-monitor-api/src/main/resources/application*.yml ${APP_HOME}/config/
     - cp ./afc-monitor-api/src/main/resources/log4j2-spring.xml ${APP_HOME}/config/
     - cp ./afc-monitor-api/target/*.jar ${APP_HOME}
     - cd ${APP_HOME}

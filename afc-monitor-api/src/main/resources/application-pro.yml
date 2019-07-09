@@ -6,12 +6,12 @@ spring:
 #本机地址和端口
 server:
   address: 192.168.178.184
-  port: 8070
+  port: 8083
 #节点服务地址
-topology-server-url: http://192.168.178.184:8060
+topology-server-url: http://192.168.178.184:8082
 #权限服务地址
 security:
-  server: http://192.168.178.184:18080
+  server: http://192.168.178.184:8081
 #MS地址
 rmiHostIpAddr: 192.168.178.185
 #与MessageServer通讯RMI配置

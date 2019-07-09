@@ -3,9 +3,9 @@ spring:
     url: jdbc:oracle:thin:@192.168.178.212:1521:afclc
     username: mlc_cd_v1
     password: 9*%BC%B4-4%AD%EA
-topology-server-url: http://192.168.178.184:8060
+topology-server-url: http://192.168.178.184:8082
 rmiHostIpAddr: 192.168.178.185
 security:
-  server: http://192.168.178.184:18080
+  server: http://192.168.178.184:8081
 server:
-  port: 8070
+  port: 8083

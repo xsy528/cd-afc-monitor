@@ -5,11 +5,11 @@ spring:
     password: 9*%BC%B4-4%AD%EA
 
 #节点服务地址
-topologyServerUrl: http://192.168.178.185:9080
+topologyServerUrl: http://192.168.178.185:8082
 #ms地址
 rmiHostIpAddr: 192.168.178.185
 #权限服务地址
 security:
-  server: http://192.168.178.185:18080
+  server: http://192.168.178.185:8081
 server:
-  port: 9081
+  port: 8083

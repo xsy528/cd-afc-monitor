@@ -22,8 +22,8 @@ public class AFCTicketFamily extends Definition {
 	@DicItem(name = "单程类票", index = 0)
 	public static Integer SJ_TICKET = TicketFamily_t.TicketFamily_SJTUL;
 
-	@DicItem(name = "出站类票", index = 1)
-	public static Integer OUT_TICKET = TicketFamily_t.TicketFamily_SJTULOUT;
+	@DicItem(name = "日期类票", index = 1)
+	public static Integer RQ_TICKET = TicketFamily_t.TicketFamily_SJTULRQ;
 
 	@DicItem(name = "计程票", index = 2)
 	public static Integer JCHENGP_TICKET = TicketFamily_t.TicketFamily_JCPCHENGCPU;

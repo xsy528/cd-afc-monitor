@@ -10,7 +10,6 @@ import com.insigma.afc.monitor.model.dto.SeriesData;
 import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
 import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
 import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
-import com.insigma.afc.monitor.model.entity.TmoOdFlowStats;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.service.PassengerFlowService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
@@ -23,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
-import javax.persistence.criteria.Predicate;
 import java.util.*;
 
 
@@ -75,8 +73,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             long total = odin+odout+odbuy+odadd;
             List<Long> valueOfRows = Arrays.asList(odin,odout,odbuy,odadd,total);
             //车站名称
-            String culumnName = topologyService.getStationNode(stationId).getData().getStationName();
-            barPieChartDTOS.add(new BarPieChartDTO(culumnName, valueOfRows));
+            try {
+                String columnName = topologyService.getStationNode(stationId).getData().getStationName();
+                barPieChartDTOS.add(new BarPieChartDTO(columnName, valueOfRows));
+            }catch (Exception e){
+                LOGGER.error("获取车站节点失败:{}",e.getMessage());
+            }
         }
         return barPieChartDTOS;
     }
@@ -146,9 +148,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
                 points.add(new SeriesData(cal.getTime(), Arrays.asList(pointodin, pointodout, pointodbuy, pointodadd)));
             }
-
-            String seriesName = topologyService.getStationNode(entry.getKey()).getData().getStationName();
-            seriersItems.add(new SeriesChartDTO(seriesName, points));
+            try {
+                String seriesName = topologyService.getStationNode(entry.getKey()).getData().getStationName();
+                seriersItems.add(new SeriesChartDTO(seriesName, points));
+            }catch (Exception e){
+                LOGGER.error("获取车站节点失败:{}",e.getMessage());
+            }
         }
         return seriersItems;
     }
@@ -178,9 +183,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             }else if(statType==0){
                 Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
                 if (ticketFamily == null || ticketFamily.get(ticketFamilyType) == null){
-                    t.setTicketFamily("票种未知/" + ticketFamilyType);
+                    t.setTicketFamily("票种未知/" + String.format("%02x",ticketFamilyType));
                 }else {
-                    t.setTicketFamily(ticketFamily.get(ticketFamilyType) + "/" + ticketFamilyType);
+                    t.setTicketFamily(ticketFamily.get(ticketFamilyType) + "/" + String.format("%02x",ticketFamilyType));
                 }
             }
             return t;

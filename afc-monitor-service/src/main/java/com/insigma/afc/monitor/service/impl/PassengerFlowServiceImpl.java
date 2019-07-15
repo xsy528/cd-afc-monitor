@@ -168,7 +168,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         Integer page = condition.getPageNumber();
         Integer pageSize = condition.getPageSize();
-        Map<Object, String> ticketFamily = AFCTicketFamily.getInstance().getCodeMap();
+        Map<Object, String> ticketFamilyMap = AFCTicketFamily.getInstance().getCodeMap();
         return passengerDao.findAll(date, timeIntervals.get(0),timeIntervals.get(1),
                 stationIds,statType,PageRequest.of(page,pageSize)).map(tuple -> {
             ODSearchResultItem t = new ODSearchResultItem();
@@ -182,14 +182,24 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 t.setTicketFamily("全部票种/无");
             }else if(statType==0){
                 Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
-                if (ticketFamily == null || ticketFamily.get(ticketFamilyType) == null){
-                    t.setTicketFamily("票种未知/" + String.format("%02x",ticketFamilyType));
+                String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
+                if (ticketFamilyName == null){
+                    t.setTicketFamily("票种未知/" + formatTicketFamilyType(ticketFamilyType));
                 }else {
-                    t.setTicketFamily(ticketFamily.get(ticketFamilyType) + "/" + String.format("%02x",ticketFamilyType));
+                    t.setTicketFamily(ticketFamilyName + "/" + formatTicketFamilyType(ticketFamilyType));
                 }
             }
             return t;
         });
+    }
+
+    /**
+     * 格式化票种编号
+     * @param ticketFamilyType 票种编号
+     * @return 名称
+     */
+    private String formatTicketFamilyType(Integer ticketFamilyType){
+        return String.format("%02x",ticketFamilyType).toUpperCase();
     }
 
     /**

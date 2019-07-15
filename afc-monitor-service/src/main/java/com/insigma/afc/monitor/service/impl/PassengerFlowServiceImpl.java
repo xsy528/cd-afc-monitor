@@ -184,9 +184,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
                 String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
                 if (ticketFamilyName == null){
-                    t.setTicketFamily("票种未知/" + formatTicketFamilyType(ticketFamilyType));
+                    t.setTicketFamily("票种未知/0x" + formatTicketFamilyType(ticketFamilyType));
                 }else {
-                    t.setTicketFamily(ticketFamilyName + "/" + formatTicketFamilyType(ticketFamilyType));
+                    t.setTicketFamily(ticketFamilyName + "/0x" + formatTicketFamilyType(ticketFamilyType));
                 }
             }
             return t;

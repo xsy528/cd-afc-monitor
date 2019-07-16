@@ -15,7 +15,7 @@ import java.util.List;
 public interface CommandService {
 
     /**
-     * 修改运营模式
+     * 修改运营模式 1005
      * @param stationIds 车站节点id数组
      * @param mode 运营模式
      * @return 执行结果
@@ -23,21 +23,21 @@ public interface CommandService {
     Result<List<CommandResultDTO>> sendChangeModeCommand(List<Long> stationIds, Integer mode);
 
     /**
-     * 重发模式广播
+     * 重发模式广播 1007
      * @param recordIds 广播结果id数组
      * @return 广播结果
      */
     Result<List<CommandResultDTO>> sendModeBroadcastCommand(List<Long> recordIds);
 
     /**
-     * 模式查询
+     * 模式查询 1008
      * @param stationIds 车站节点id数组
      * @return 执行结果
      */
     Result<List<CommandResultDTO>> sendModeQueryCommand(List<Long> stationIds);
 
     /**
-     * 时钟同步
+     * 时钟同步 100E
      * @param nodeIds 车站或者设备id数组
      * @return 执行结果
      */
@@ -66,7 +66,7 @@ public interface CommandService {
     Result<List<CommandResultDTO>> sendQueryBoxCommand(Long deviceId);
 
     /**
-     * 查询设备状态
+     * 查询设备状态 100B
      * @param deviceIds 设备id数组
      * @return 设备状态
      */

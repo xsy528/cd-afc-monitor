@@ -13,7 +13,7 @@
 
     <groupId>com.insigma.product</groupId>
     <artifactId>afc-monitor</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -49,17 +49,17 @@
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-service</artifactId>
-                <version>0.0.3</version>
+                <version>0.0.4</version>
             </dependency>
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-api</artifactId>
-                <version>0.0.3</version>
+                <version>0.0.4</version>
             </dependency>
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-rmi</artifactId>
-                <version>0.0.3</version>
+                <version>0.0.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

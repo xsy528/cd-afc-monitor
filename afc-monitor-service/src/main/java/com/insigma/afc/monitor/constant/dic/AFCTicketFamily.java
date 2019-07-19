@@ -22,7 +22,7 @@ public class AFCTicketFamily extends Definition {
 	@DicItem(name = "单程类票", index = 0)
 	public static Integer SJ_TICKET = TicketFamily_t.TicketFamily_SJTUL;
 
-	@DicItem(name = "日期类票", index = 1)
+	@DicItem(name = "日期票", index = 1)
 	public static Integer RQ_TICKET = TicketFamily_t.TicketFamily_SJTULRQ;
 
 	@DicItem(name = "计程票", index = 2)
@@ -46,6 +46,6 @@ public class AFCTicketFamily extends Definition {
 	@DicItem(name = "二维码电子票", index = 8)
 	public static Integer QTIC_TICKET = TicketFamily_t.TicketFamily_QTIC;
 
-	@DicItem(name = "银联卡")
+	@DicItem(name = "银联卡",index = 9)
 	public static Integer BCIC_TICKET = TicketFamily_t.TicketFamily_BCIC;
 }

@@ -11,31 +11,44 @@ usage() {
 
 #检查程序是否在运行
 is_exist(){
-  if [ ! -f "application.pid" ]; then
+  if [[ ! -f "application.pid" ]]; then
    return 1
   else
    return 0
   fi
 }
 
+#获取pid
 get_pid(){
   pid=`cat application.pid`
 }
 
+#打印pid
 print_pid(){
   get_pid
   echo "pid:${pid}"
 }
 
+#获取profile
+get_profile(){
+  if [[ "$2" = "dev" ]]; then
+    echo "dev"
+  elif [[ "$2" = "test" ]]; then
+    echo "test"
+  else
+    echo "pro"
+  fi
+}
+
 #启动
 start(){
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
     echo "${APP_NAME}已经启动，请勿重复启动！"
     print_pid
   else
     echo "开始启动${APP_NAME}"
-    nohup java -Xms50M -Xmx200M \
+    nohup java -Xms50M -Xmx1000M \
     -XX:+UseConcMarkSweepGC \
     -XX:+UseParNewGC \
     -XX:+HeapDumpOnOutOfMemoryError \
@@ -47,9 +60,10 @@ start(){
     -Xloggc:logs/gc.log \
     -verbose:gc \
     -Dlogging.config=config/log4j2-spring.xml \
+    -Dspring.profiles.active=$(get_profile) \
     -jar *.jar >/dev/null 2>&1&
     is_exist
-    while [ $? -eq "1" ];do
+    while [[ $? -eq "1" ]];do
       is_exist
     done
     get_pid
@@ -60,12 +74,12 @@ start(){
 #停止方法
 stop(){
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
     get_pid
     echo "开始停止${APP_NAME}，pid=${pid}."
-    kill ${pid}   
+    kill ${pid}
     is_exist
-    while [ $? -eq "0" ];do
+    while [[ $? -eq "0" ]];do
       is_exist
     done
     echo "${APP_NAME}已经停止"
@@ -77,7 +91,7 @@ stop(){
 #运行状态
 status(){
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
     echo "${APP_NAME}运行中."
     print_pid
   else
@@ -89,7 +103,7 @@ status(){
 restart(){
   echo "重启${APP_NAME}......"
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
      stop
   fi
   start

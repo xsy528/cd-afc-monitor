@@ -31,7 +31,7 @@ deploy:
     - cp ./afc-monitor-api/src/main/resources/log4j2-spring.xml ${APP_HOME}/config/
     - cp ./afc-monitor-api/target/*.jar ${APP_HOME}
     - cd ${APP_HOME}
-    - sh run.sh restart
+    - sh run.sh restart dev
   tags:
     - deploy
   only:

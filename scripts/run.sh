@@ -11,7 +11,7 @@ usage() {
 
 #检查程序是否在运行
 is_exist(){
-  if [[ ! -f "application.pid" ]]; then
+  if [ ! -f "application.pid" ]; then
    return 1
   else
    return 0
@@ -31,19 +31,23 @@ print_pid(){
 
 #获取profile
 get_profile(){
-  if [[ "$2" = "dev" ]]; then
-    echo "dev"
-  elif [[ "$2" = "test" ]]; then
-    echo "test"
-  else
-    echo "pro"
-  fi
+  case "${profile}" in
+    "dev" )
+      profile="dev"
+      ;;
+    "test" )
+      profile="test"
+      ;;
+    *)
+      profile="pro"
+      ;;
+  esac
 }
 
 #启动
 start(){
   is_exist
-  if [[ $? -eq "0" ]]; then
+  if [ $? -eq "0" ]; then
     echo "${APP_NAME}已经启动，请勿重复启动！"
     print_pid
   else
@@ -60,10 +64,10 @@ start(){
     -Xloggc:logs/gc.log \
     -verbose:gc \
     -Dlogging.config=config/log4j2-spring.xml \
-    -Dspring.profiles.active=$(get_profile) \
+    -Dspring.profiles.active=${profile} \
     -jar *.jar >/dev/null 2>&1&
     is_exist
-    while [[ $? -eq "1" ]];do
+    while [ $? -eq "1" ];do
       is_exist
     done
     get_pid
@@ -74,12 +78,12 @@ start(){
 #停止方法
 stop(){
   is_exist
-  if [[ $? -eq "0" ]]; then
+  if [ $? -eq "0" ]; then
     get_pid
     echo "开始停止${APP_NAME}，pid=${pid}."
     kill ${pid}
     is_exist
-    while [[ $? -eq "0" ]];do
+    while [ $? -eq "0" ];do
       is_exist
     done
     echo "${APP_NAME}已经停止"
@@ -91,7 +95,7 @@ stop(){
 #运行状态
 status(){
   is_exist
-  if [[ $? -eq "0" ]]; then
+  if [ $? -eq "0" ]; then
     echo "${APP_NAME}运行中."
     print_pid
   else
@@ -103,13 +107,16 @@ status(){
 restart(){
   echo "重启${APP_NAME}......"
   is_exist
-  if [[ $? -eq "0" ]]; then
+  if [ $? -eq "0" ]; then
      stop
   fi
   start
 }
 
 #根据输入参数，选择执行对应方法，不输入则执行使用说明
+profile="$2"
+get_profile
+echo "profile=${profile}"
 case "$1" in
   "start")
     start

@@ -293,7 +293,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                 EquStatusViewItem equStatus = equStatusViewItemMap.get(device.getNodeId());
                 // 2.若数据库不存在数据，则节点不在线
                 if (equStatus != null) {
-                    deviceStatus = getDeviceStatus(equStatus.getOnline(), equStatus.getStatus(),equStatus.getOnline());
+                    deviceStatus = getDeviceStatus(equStatus.getStatus(),equStatus.getOnline());
                 }
             }
             device.setStatus(deviceStatus);
@@ -332,28 +332,25 @@ public class NodeTreeServiceImpl implements NodeTreeService {
     /**
      * 获取设备状态
      *
-     * @param isOnline 前置机在线状态
      * @param status   状态
      * @return 状态
      */
-    private int getDeviceStatus(boolean isOnline, int status,boolean notActive) {
-        if (isOnline) {
-            if (notActive){
-                //暂停服务
-                return 4;
-            }else if (status == DeviceStatus.NORMAL) {
-                // 正常
-                return 0;
-            } else if (status == DeviceStatus.WARNING) {
-                // 警告
-                return 1;
-            } else if (status == DeviceStatus.ALARM) {
-                // 报警
-                return 2;
-            } else if (status == DeviceStatus.OFF_LINE) {
-                // 离线
-                return 3;
-            }
+    private int getDeviceStatus(int status,boolean notActive) {
+        if (notActive){
+            //暂停服务
+            return 4;
+        }else if (status == DeviceStatus.NORMAL) {
+            // 正常
+            return 0;
+        } else if (status == DeviceStatus.WARNING) {
+            // 警告
+            return 1;
+        } else if (status == DeviceStatus.ALARM) {
+            // 报警
+            return 2;
+        } else if (status == DeviceStatus.OFF_LINE) {
+            // 离线
+            return 3;
         }
         return DEVICE_OFFLINE;
     }

@@ -319,8 +319,8 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             if (notActive){
                 if (statusLevel.contains(DeviceStatus.STOP_SERVICE)) {
                     hasStatus = true;
-                    temp.setStatus(DeviceStatus.STOP_SERVICE);
                 }
+                temp.setStatus(DeviceStatus.STOP_SERVICE);
             }else if (tmoItemStatus.getItemStatus() != null) {
                 for (Short status : statusLevel) {
                     if (tmoItemStatus.getItemStatus().equals(status)) {
@@ -338,10 +338,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
         temp.setNodeId(tmoItemStatus.getNodeId());
         temp.setUpdateTime(tmoItemStatus.getUpdateTime());
-        temp.setOnline(false);
-        if (!temp.getStatus().equals(DeviceStatus.OFF_LINE)) {
-            temp.setOnline(tmoItemStatus.getItemActivity());
-        }
+        temp.setOnline(tmoItemStatus.getItemActivity());
         long total = 1;
         normalRate = (int) (normal * 100.0 / total + 0.5);
         warningRate = (int) (warning * 100.0 / total + 0.5);

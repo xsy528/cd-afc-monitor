@@ -105,7 +105,7 @@ public class NodeStatusController {
             Short status = Integer.valueOf(equStatusViewItem.getStatus()).shortValue();
             equStatus.setNodeId(equStatusViewItem.getNodeId());
             equStatus.setStatus(DeviceStatus.getInstance().getNameByValue(status) + "/" + status);
-            equStatus.setOnline(equStatusViewItem.getOnline());
+            equStatus.setOnline(!DeviceStatus.OFF_LINE.equals(equStatusViewItem.getStatus()));
             equStatus.setUpdateTime(DateTimeUtil.formatDate(equStatusViewItem.getUpdateTime()));
             equStatus.setName(textMap.get(equStatusViewItem.getNodeId()));
             equStatusList.add(equStatus);

@@ -269,14 +269,32 @@ public class CommandServiceImpl implements CommandService {
 
     @Override
     public Result<List<CommandResultDTO>> sendQueryDeviceCommand(List<Long> deviceIds){
+        //获取设备节点
         List<MetroNode> targets = getDeviceNodeFromIds(deviceIds);
         if (targets == null) {
             return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
         }
 
+        Set<Integer> stationIds = new HashSet<>();
+        List<MetroStation> metroStations = new ArrayList<>();
+        for (MetroNode device:targets){
+            int stationId=NodeIdUtils.nodeIdStrategy.getStationId(device.id());
+            if(stationIds.add(stationId)){
+                metroStations.add(topologyService.getStationNode(stationId).getData());
+            }
+        }
+
         List<Future<TmoCmdResult>> results = new ArrayList<>();
+        String commandName = CommandType.getInstance().getNameByValue(CommandType.CMD_DEVICE_STATUS_QUERY);
+        //查询设备状态
         for (MetroNode target : targets) {
-            String commandName = CommandType.getInstance().getNameByValue(CommandType.CMD_DEVICE_STATUS_QUERY);
+            Map<String,Object> args = new HashMap<>();
+            args.put("deviceId",target.id());
+            results.add(send(CommandType.CMD_DEVICE_STATUS_QUERY,commandName,args, target,
+                    AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+        }
+        //查询所属车站状态
+        for (MetroNode target : metroStations) {
             Map<String,Object> args = new HashMap<>();
             args.put("deviceId",target.id());
             results.add(send(CommandType.CMD_DEVICE_STATUS_QUERY,commandName,args, target,

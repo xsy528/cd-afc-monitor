@@ -1,8 +1,13 @@
 spring:
   datasource:
-    url: jdbc:oracle:thin:@192.168.178.214:1521:afcdb100
+    url: jdbc:oracle:thin:@192.168.178.214:1521:afclc
     username: mlc_cd_st1
-    password: afcapp
-
+    password: 9*%BC%B4-4%AD%EA
+security:
+  server: http://192.168.178.180:8081
+server:
+  port: 8083
+  address: 192.168.178.180
 #节点服务地址
-topology-server-url: http://localhost:8080
+topology-server-url: http://192.168.178.180:8082
+rmi-host-ip-addr: 192.168.178.180

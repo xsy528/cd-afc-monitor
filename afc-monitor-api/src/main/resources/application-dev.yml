@@ -4,7 +4,7 @@ spring:
     username: mlc_cd_v1
     password: 9*%BC%B4-4%AD%EA
 topology-server-url: http://192.168.178.184:8082
-rmiHostIpAddr: 192.168.178.185
+rmiHostIpAddr: 192.168.178.184
 security:
   server: http://192.168.178.184:8081
 server:

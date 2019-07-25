@@ -10,7 +10,7 @@ server:
 #spring配置
 spring:
   application:
-    name: topology
+    name: monitor
   profiles:
     active: pro
   #http编码配置

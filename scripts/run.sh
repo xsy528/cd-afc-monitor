@@ -64,7 +64,6 @@ start(){
     -Xloggc:logs/gc.log \
     -verbose:gc \
     -Dlogging.config=config/log4j2-spring.xml \
-    -Dspring.profiles.active=${profile} \
     -jar *.jar >/dev/null 2>&1&
     is_exist
     while [ $? -eq "1" ];do
@@ -114,9 +113,9 @@ restart(){
 }
 
 #根据输入参数，选择执行对应方法，不输入则执行使用说明
-profile="$2"
-get_profile
-echo "profile=${profile}"
+#profile="$2"
+#get_profile
+#echo "profile=${profile}"
 case "$1" in
   "start")
     start

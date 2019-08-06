@@ -30,8 +30,8 @@ public class AFCModeCode extends Definition {
 	@DicItem(name = "正常服务模式", group = AFCModeCode.MODE_SIGN_NORMAL,index = 0)
 	public final static Integer NORMAL = 0x00;
 
-	@DicItem(name = "关闭服务模式", group = AFCModeCode.MODE_SIGN_NORMAL,index = 256)
-	public final static Integer TRAIN_SHUTDOWN = 0x100;
+//	@DicItem(name = "关闭服务模式", group = AFCModeCode.MODE_SIGN_NORMAL,index = 256)
+//	public final static Integer TRAIN_SHUTDOWN = 0x100;
 
 	@DicItem(name = "列车故障模式", group = AFCModeCode.MODE_SIGN_DESCEND,index = 1)
 	public final static Integer TRAIN_BREAK_DOWN = 0x01;
@@ -45,14 +45,14 @@ public class AFCModeCode extends Definition {
 	@DicItem(name = "车费免检模式", group = AFCModeCode.MODE_SIGN_DESCEND,index = 8)
 	public final static Integer FEE_FREE_NO_CHECK = 0x08;
 
-	@DicItem(name = "进出站次序免检模式", group = AFCModeCode.MODE_SIGN_DESCEND,index = 16)
+	@DicItem(name = "出站免检模式", group = AFCModeCode.MODE_SIGN_DESCEND,index = 16)
 	public static Integer ENTER_RODER_NO_CHECK = 0x10;
 
 	@DicItem(name = "进站免检模式", group = AFCModeCode.MODE_SIGN_DESCEND,index = 32)
 	public final static Integer ENTER_NO_CHECK = 0x20;
 
-	@DicItem(name = "24小时运营模式", group = AFCModeCode.MODE_SIGN_DESCEND,index = 64)
-	public final static Integer ALL_DAY = 0x40;
+//	@DicItem(name = "24小时运营模式", group = AFCModeCode.MODE_SIGN_DESCEND,index = 64)
+//	public final static Integer ALL_DAY = 0x40;
 
 	@DicItem(name = "紧急放行模式", group = AFCModeCode.MODE_SIGN_URGENCY,index = 128)
 	public final static Integer START_URGENCY = 0x80;

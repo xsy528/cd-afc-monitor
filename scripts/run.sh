@@ -11,7 +11,7 @@ usage() {
 
 #检查程序是否在运行
 is_exist(){
-  if [ ! -f "application.pid" ]; then
+  if [[ ! -f "application.pid" ]]; then
    return 1
   else
    return 0
@@ -38,8 +38,11 @@ get_profile(){
     "test" )
       profile="test"
       ;;
-    *)
+    "pro" )
       profile="pro"
+      ;;
+    *)
+      profile=
       ;;
   esac
 }
@@ -47,26 +50,31 @@ get_profile(){
 #启动
 start(){
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
     echo "${APP_NAME}已经启动，请勿重复启动！"
     print_pid
   else
     echo "开始启动${APP_NAME}"
-    nohup java -Xms50M -Xmx1000M \
-    -XX:+UseConcMarkSweepGC \
-    -XX:+UseParNewGC \
-    -XX:+HeapDumpOnOutOfMemoryError \
-    -XX:+PrintGCDateStamps \
-    -XX:+PrintGCDetails \
-    -XX:+UseGCLogFileRotation \
-    -XX:NumberOfGCLogFiles=10 \
-    -XX:GCLogFileSize=10M \
-    -Xloggc:logs/gc.log \
-    -verbose:gc \
-    -Dlogging.config=config/log4j2-spring.xml \
-    -jar *.jar >/dev/null 2>&1&
+    command="nohup java -Xms50M -Xmx1000M 
+    -XX:+UseConcMarkSweepGC 
+    -XX:+UseParNewGC 
+    -XX:+HeapDumpOnOutOfMemoryError 
+    -XX:+PrintGCDateStamps 
+    -XX:+PrintGCDetails 
+    -XX:+UseGCLogFileRotation 
+    -XX:NumberOfGCLogFiles=10 
+    -XX:GCLogFileSize=10M 
+    -Xloggc:logs/gc.log 
+    -verbose:gc 
+    -Dlogging.config=config/log4j2-spring.xml "
+    if [[ -n "${profile}" ]];then
+      command="${command} -Dspring.profiles.active=${profile}"
+    fi
+    command="${command} -jar *.jar >/dev/null 2>&1&"
+    echo ${command}
+    eval ${command}
     is_exist
-    while [ $? -eq "1" ];do
+    while [[ $? -eq "1" ]];do
       is_exist
     done
     get_pid
@@ -77,12 +85,12 @@ start(){
 #停止方法
 stop(){
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
     get_pid
     echo "开始停止${APP_NAME}，pid=${pid}."
     kill ${pid}
     is_exist
-    while [ $? -eq "0" ];do
+    while [[ $? -eq "0" ]];do
       is_exist
     done
     echo "${APP_NAME}已经停止"
@@ -94,7 +102,7 @@ stop(){
 #运行状态
 status(){
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
     echo "${APP_NAME}运行中."
     print_pid
   else
@@ -106,16 +114,15 @@ status(){
 restart(){
   echo "重启${APP_NAME}......"
   is_exist
-  if [ $? -eq "0" ]; then
+  if [[ $? -eq "0" ]]; then
      stop
   fi
   start
 }
 
 #根据输入参数，选择执行对应方法，不输入则执行使用说明
-#profile="$2"
-#get_profile
-#echo "profile=${profile}"
+profile="$2"
+get_profile
 case "$1" in
   "start")
     start

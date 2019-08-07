@@ -174,6 +174,7 @@ public class CommandServiceImpl implements CommandService {
                             modeBroadcast.setBroadcastStatus(sendFailure);
                         }
                         modeBroadcast.setModeBroadcastTime(new Date());
+                        modeBroadcast.setOperatorId(tmoCmdResult.getOperatorId());
                     }
                 } catch (ExecutionException e) {
                     logger.error("发送命令异常", e);

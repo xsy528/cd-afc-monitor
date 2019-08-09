@@ -379,29 +379,38 @@ public class NodeTreeServiceImpl implements NodeTreeService {
             if (currentMode == 0) {
                 if (statusItem.getAlarmEvent() < alarmNum
                         && statusItem.getAlarmEvent() < warningNum) {
+                    // 绿色
                     return 0;
                 } else if (statusItem.getAlarmEvent() < alarmNum
                         && statusItem.getAlarmEvent() >= warningNum) {
+                    // 黄色
                     return 1;
                 } else if (statusItem.getAlarmEvent() >= alarmNum) {
+                    // 红色
                     return 2;
                 } else {
+                    // 灰色
                     return 3;
                 }
             } else {
                 if (statusItem.getAlarmEvent() < alarmNum
                         && statusItem.getAlarmEvent() < warningNum) {
+                    // 正常模式
                     return 4;
                 } else if (statusItem.getAlarmEvent() < alarmNum
                         && statusItem.getAlarmEvent() >= warningNum) {
+                    // 降级模式
                     return 5;
                 } else if (statusItem.getAlarmEvent() >= alarmNum) {
+                    // 紧急模式
                     return 6;
                 } else {
+                    // 灰色
                     return 3;
                 }
             }
         } else {
+            //灰色
             return 3;
         }
     }

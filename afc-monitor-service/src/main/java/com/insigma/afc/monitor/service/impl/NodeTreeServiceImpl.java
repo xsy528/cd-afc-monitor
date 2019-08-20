@@ -1,5 +1,6 @@
 package com.insigma.afc.monitor.service.impl;
 
+import com.insigma.afc.monitor.constant.dic.AFCModeCode;
 import com.insigma.afc.monitor.constant.dic.DeviceStatus;
 import com.insigma.afc.monitor.healthIndicator.RegisterHealthIndicator;
 import com.insigma.afc.monitor.model.dto.EquStatusViewItem;
@@ -15,6 +16,7 @@ import com.insigma.afc.monitor.service.MonitorConfigService;
 import com.insigma.afc.monitor.service.NodeTreeService;
 import com.insigma.afc.monitor.service.rest.NodeTreeRestService;
 import com.insigma.commons.constant.AFCNodeLevel;
+import com.insigma.commons.dic.DicitemEntry;
 import com.insigma.commons.model.dto.Result;
 import com.insigma.commons.properties.AppProperties;
 import com.insigma.commons.util.NodeIdUtils;
@@ -363,7 +365,7 @@ public class NodeTreeServiceImpl implements NodeTreeService {
      */
     private int getStationStatus(StationStatustViewItem statusItem) {
         NodeStatusMonitorConfigDTO monitorConfigInfo = monitorConfigService.getMonitorConfig().getData();
-        long currentMode = statusItem.getMode();
+        int currentMode = statusItem.getMode().intValue();
         // 报警阀值
         Integer alarmNum = monitorConfigInfo.getAlarm();
         if (alarmNum == null) {
@@ -374,6 +376,9 @@ public class NodeTreeServiceImpl implements NodeTreeService {
         if (warningNum == null) {
             warningNum = 0;
         }
+
+        String group = getModeGroupNameByValue(currentMode);
+
         if (statusItem.getOnline()) {
             // 如果车站不属于任何一个降级模式，则车站属于正常模式，即currentmode==0
             if (currentMode == 0) {
@@ -393,25 +398,42 @@ public class NodeTreeServiceImpl implements NodeTreeService {
                     return 3;
                 }
             } else {
-                if (statusItem.getAlarmEvent() < alarmNum
-                        && statusItem.getAlarmEvent() < warningNum) {
-                    // 正常模式
-                    return 4;
-                } else if (statusItem.getAlarmEvent() < alarmNum
-                        && statusItem.getAlarmEvent() >= warningNum) {
-                    // 降级模式
+                if(AFCModeCode.MODE_SIGN_DESCEND.equals(group)){
                     return 5;
-                } else if (statusItem.getAlarmEvent() >= alarmNum) {
-                    // 紧急模式
+                }
+                if (AFCModeCode.MODE_SIGN_URGENCY.equals(group)){
                     return 6;
                 } else {
-                    // 灰色
                     return 3;
                 }
+//                if (statusItem.getAlarmEvent() < alarmNum
+//                        && statusItem.getAlarmEvent() < warningNum) {
+//                    // 正常模式
+//                    return 4;
+//                } else if (statusItem.getAlarmEvent() < alarmNum
+//                        && statusItem.getAlarmEvent() >= warningNum) {
+//                    // 降级模式
+//                    return 5;
+//                } else if (statusItem.getAlarmEvent() >= alarmNum) {
+//                    // 紧急模式
+//                    return 6;
+//                } else {
+//                    // 灰色
+//                    return 3;
+//                }
             }
         } else {
             //灰色
             return 3;
         }
+    }
+
+    public String getModeGroupNameByValue(Integer key) {
+        for (DicitemEntry v : AFCModeCode.getInstance().dicItecEntryMap.values()) {
+            if (v.value.equals(key)) {
+                return v.dicitem.group();
+            }
+        }
+        return "未知";
     }
 }

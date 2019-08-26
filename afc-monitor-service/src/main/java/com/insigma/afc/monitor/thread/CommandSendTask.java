@@ -85,7 +85,7 @@ public class CommandSendTask implements Callable<TmoCmdResult> {
                 }
                 default:
             }
-            CmdHandlerResult command = rmiCommandService.command(cmdId, String.valueOf(userId), sourceId, cmdArg, target);
+            CmdHandlerResult command = rmiCommandService.command(cmdId, userId, sourceId, cmdArg, target);
             Serializable returnValue = command.returnValue;
             if (returnValue instanceof Integer) {
                 result = (Integer) returnValue;

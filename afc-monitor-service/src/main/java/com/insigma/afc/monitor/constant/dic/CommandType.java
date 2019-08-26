@@ -14,31 +14,31 @@ public class CommandType extends Definition {
 		return commandType;
 	}
 
-	@DicItem(name="同步信息")
+	@DicItem
 	public static Integer CMD_SYNC_INFO = 0x01;
 
-	@DicItem(name="上传文件")
+	@DicItem
 	public static Integer CMD_UPLOAD_FILE = 0x02;
 
-	@DicItem(name="改变模式")
+	@DicItem
 	public static Integer CMD_CHANGE_MODE = 0x03;
 
-	@DicItem(name = "时钟强制同步")
-	public static Integer CMD_TIME_SYNC = MessageType_t.MT_CommandTimeSynch;
+	@DicItem
+	public static Integer CMD_TIME_SYNC = 0x04;
 
-	@DicItem(name = "模式查询")
+	@DicItem
 	public static Integer CMD_QUERY_MODE = 0x05;
 
-	@DicItem(name = "模式广播")
+	@DicItem
 	public static Integer CMD_BROADCAST_MODE = 0x06;
 
-	@DicItem(name = "地图同步")
+	@DicItem
 	public static Integer CMD_SYNC_MAP = 0x9999;
 
-	@DicItem(name = "地图导出")
+	@DicItem
 	public static Integer CMD_EXPORT_MAP = 0x1111;
 
-	@DicItem(name = "地图上传")
+	@DicItem
 	public static Integer CMD_UPLOAD_MAP = 0x2222;
 
 	@DicItem
@@ -47,23 +47,17 @@ public class CommandType extends Definition {
 	@DicItem
 	public static Integer CMD_EQU_CTRL = 0x3000;
 
-	@DicItem(name = "设备控制")
-	public static Integer COM_SLE_CONTROL_CMD;
-
 	@DicItem
 	public static Integer CMD_TCM_MESSAGE = 0x3006;
 
 	@DicItem
-	public static Integer CMD_FILE_REQUEST = 0x3307;
+	public static Integer CMD_UD_ASK = 0x3011;
 
 	@DicItem
-	public static Integer CMD_UD_REQUEST = 0x3314;
+	public static Integer CMD_QUERY_TVM_MONEY_TICKET_BOX = 0x4003;
 
-	@DicItem(name = "钱箱查询")
-	public static Integer CMD_QUERY_MONEY_BOX = 0x4003;
-
-	@DicItem(name = "票箱查询")
-	public static Integer CMD_QUERY_TICKET_BOX;
+	@DicItem
+	public static Integer CMD_QUERY_BOM_AGM_TICKET_BOX = 0x4004;
 
 	@DicItem
 	public static Integer CMD_BOTHWAY_GATE_ONLY = 0x5000;
@@ -87,8 +81,8 @@ public class CommandType extends Definition {
 	@DicItem(name = "参数同步")
 	public static final Integer CMD_EOD_VERSION_SYNC = 0x0103;
 
-	@DicItem(name = "参数版本查询")
-	public static Integer CMD_EOD_VERSION_QUERY = MessageType_t.MT_QueryEODVersion;
+	@DicItem(name = "参数实时查询")
+	public static final Integer CMD_EOD_VERSION_QUERY = 0x0104;
 
 	@DicItem(name = "EOD参数发布")
 	public static final Integer CMD_EOD_PUBLISH = 0x0105;
@@ -112,7 +106,13 @@ public class CommandType extends Definition {
 	public static final Integer CMD_SOFT_PUBLISH = 0x0124;
 
 	@DicItem(name = "软件实时查询")
-	public static final Integer CMD_SOFT_VERSION_QUERY = 0x0125;
+	public static final Integer CMD_SOFT_VERSION_QUERY = 0x8020;
+
+	@DicItem(name = "过闸设置")
+	public static final Integer QR_LOCK_SET = 0x8031;
+
+	@DicItem(name = "过闸查询")
+	public static final Integer QR_LOCK_QUERY = 0x8032;
 
 	/** ========== 审计和结算文件导入(字典不需要被覆盖，所以定义成final) ======================== **/
 	@DicItem(name = "审计文件导入")
@@ -134,22 +134,6 @@ public class CommandType extends Definition {
 	@DicItem(name = "库存盘点")
 	public static final Integer TICKET_STOCK_INVENTORY = 0x0204;
 
-	@DicItem(name = "数据同步")
-	public static Integer CMD_File_Sync = MessageType_t.MT_DataSynch;
-
-	@DicItem(name = "运行配置文件版本查询")
-	public static Integer CMD_RUNFILE_VERSION_QUERY = MessageType_t.MT_QueryRunfileVersion;
-
-	@DicItem(name = "模式更新")
-	public static Integer CMD_MODE_UPDATE = MessageType_t.MT_CommandMode;
-
-	@DicItem(name = "模式广播")
-	public static Integer CMD_MODE_BROADCAST = MessageType_t.MT_BroadCastMode;
-
-	@DicItem(name = "模式查询")
-	public static Integer CMD_MODE_QUERY = MessageType_t.MT_QueryMode;
-
-	@DicItem(name = "设备状态查询")
-	public static Integer CMD_DEVICE_STATUS_QUERY = MessageType_t.MT_QueryDeviceStatus;
-
+	@DicItem(name = "生成参数文件")
+	public static final Integer CMD_OPT_CREATE_PARAMFILE = 0x0111;
 }

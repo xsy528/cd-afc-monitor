@@ -15,12 +15,12 @@ import java.util.List;
  * create time: 2019-03-22 14:33
  */
 public class PassengerCondition extends PageBean {
-    @ApiModelProperty("选择日期")
+    @ApiModelProperty("日期")
     @JsonProperty("date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    @ApiModelProperty("选择时间")
+    @ApiModelProperty("时间段")
     @JsonProperty("time")
     private String time;
 
@@ -28,8 +28,9 @@ public class PassengerCondition extends PageBean {
     @JsonProperty("stat_type")
     private Short statType;
 
-    @JsonProperty("station_ids")
-    private List<Integer> stationIds;
+    @ApiModelProperty("线路编号")
+    @JsonProperty("lines")
+    protected List<Short> lines;
 
     public Date getDate() {
         return date;
@@ -55,11 +56,11 @@ public class PassengerCondition extends PageBean {
         this.statType = statType;
     }
 
-    public List<Integer> getStationIds() {
-        return stationIds;
+    public List<Short> getLines() {
+        return lines;
     }
 
-    public void setStationIds(List<Integer> stationIds) {
-        this.stationIds = stationIds;
+    public void setLines(List<Short> lines) {
+        this.lines = lines;
     }
 }

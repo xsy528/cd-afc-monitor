@@ -22,6 +22,8 @@ import com.insigma.afc.monitor.util.ResultUtils;
 import com.insigma.afc.security.util.SecurityUtils;
 import com.insigma.afc.workbench.rmi.CmdHandlerResult;
 import com.insigma.afc.workbench.rmi.ICommandService;
+import com.insigma.afc.xz.rmi.ModeBroadcastForm;
+import com.insigma.afc.xz.rmi.ModeUpdateForm;
 import com.insigma.commons.dic.PairValue;
 import com.insigma.commons.model.dto.Result;
 import com.insigma.commons.properties.AppProperties;
@@ -118,10 +120,10 @@ public class CommandServiceImpl implements CommandService {
         }
         List<Future<TmoCmdResult>> results = new ArrayList<>();
         for (MetroNode metroNode : targetIds) {
-            Map<String,Object> args = new HashMap<>();
-            args.put("deviceId",metroNode.id());
-            args.put("modeCode",sendMode);
-            results.add(send(CommandType.CMD_MODE_UPDATE, name, args, metroNode,
+            ModeUpdateForm modeUpdateForm = new ModeUpdateForm();
+            modeUpdateForm.setDeviceId(metroNode.id());
+            modeUpdateForm.setModeCode(sendMode);
+            results.add(send(CommandType.CMD_CHANGE_MODE, name, modeUpdateForm, metroNode,
                     AFCCmdLogType.LOG_MODE.shortValue()));
         }
         return Result.success(saveResults(results));
@@ -143,16 +145,18 @@ public class CommandServiceImpl implements CommandService {
         for (TmoModeBroadcast modeBroadcast : tmoModeBroadcasts) {
             Long lineId = modeBroadcast.getTargetId();
             //构造命令参数
-            List<Map<String,Object>> args = new ArrayList<>();
-            Map<String,Object> stationMode = new HashMap<>();
-            stationMode.put("stationId",modeBroadcast.getStationId());
-            stationMode.put("modeCode",modeBroadcast.getModeCode().intValue());
-            args.add(stationMode);
+            ModeBroadcastForm modeBroadcastForm = new ModeBroadcastForm();
+            List<ModeBroadcastForm.ModeStation> modeStations = new ArrayList<>();
+            modeBroadcastForm.setModeStationList(modeStations);
+            ModeBroadcastForm.ModeStation modeStation = new ModeBroadcastForm.ModeStation();
+            modeStation.setStationId(modeBroadcast.getStationId());
+            modeStation.setModeCode(modeBroadcast.getModeCode().intValue());
+            modeStations.add(modeStation);
             //目标节点
             MetroLine target = topologyService.getLineNode(NodeIdUtils.nodeIdStrategy.getLineId(lineId)).getData();
             String name = "模式广播["+AFCModeCode.getInstance().getModeText(modeBroadcast.getModeCode().intValue())+"]";
             //发送命令
-            Future<TmoCmdResult> resultFuture = send(CommandType.CMD_MODE_BROADCAST, name, args, target,
+            Future<TmoCmdResult> resultFuture = send(CommandType.CMD_BROADCAST_MODE, name, modeBroadcastForm, target,
                     AFCCmdLogType.LOG_OTHER.shortValue());
             modeBroadcastResultMap.put(modeBroadcast.getRecordId(),resultFuture);
         }
@@ -164,7 +168,14 @@ public class CommandServiceImpl implements CommandService {
                 try {
                     TmoCmdResult tmoCmdResult = future.get();
                     if (tmoCmdResult != null) {
-                        CommandResultDTO commandResult = tmoCmdResult2CommandResultDTO(tmoCmdResult);
+                        CommandResultDTO commandResult = new CommandResultDTO();
+                        commandResult.setId(topologyService.getNodeText(tmoCmdResult.getNodeId()).getData());
+                        commandResult.setCmdName(tmoCmdResult.getCmdName());
+                        commandResult.setResult(tmoCmdResult.getCmdResult());
+                        commandResult.setCmdResult(tmoCmdResult.getRemark());
+                        commandResult.setOccurTime(new Date());
+                        commandResult.setOperatorId(tmoCmdResult.getOperatorId());
+                        commandResult.setArg(tmoCmdResult.getArg()==null?"无":tmoCmdResult.getArg().toString());
                         tmoCmdResults.add(tmoCmdResult);
                         results.add(commandResult);
 
@@ -174,7 +185,6 @@ public class CommandServiceImpl implements CommandService {
                             modeBroadcast.setBroadcastStatus(sendFailure);
                         }
                         modeBroadcast.setModeBroadcastTime(new Date());
-                        modeBroadcast.setOperatorId(tmoCmdResult.getOperatorId());
                     }
                 } catch (ExecutionException e) {
                     logger.error("发送命令异常", e);
@@ -198,10 +208,9 @@ public class CommandServiceImpl implements CommandService {
         }
         List<Future<TmoCmdResult>> results = new ArrayList<>();
         for (MetroStation target : targetIds) {
-            String commandName = CommandType.getInstance().getNameByValue(CommandType.CMD_MODE_QUERY);
-            Map<String,Object> args = new HashMap<>();
-            args.put("deviceId",target.id());
-            results.add(send(CommandType.CMD_MODE_QUERY,commandName, args, target, AFCCmdLogType.LOG_MODE.shortValue()));
+            results.add(send(CommandType.CMD_QUERY_MODE,
+                    CommandType.getInstance().getNameByValue(CommandType.CMD_QUERY_MODE), target.id(), target,
+                    AFCCmdLogType.LOG_MODE.shortValue()));
         }
         return Result.success(saveResults(results));
     }
@@ -238,72 +247,6 @@ public class CommandServiceImpl implements CommandService {
         return ResultUtils.getResult(ErrorCode.UNKNOW_ERROR);
     }
 
-    @Override
-    public Result<List<CommandResultDTO>> sendNodeControlCommand(List<Long> nodeIds, Short command) {
-        List<MetroNode> deviceIds = getDeviceNodeFromIds(nodeIds);
-        if (deviceIds == null) {
-            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
-        }
-
-        return Result.success(send(CommandType.COM_SLE_CONTROL_CMD, "设备控制命令",
-                null, deviceIds, command));
-    }
-
-    @Override
-    public Result<List<CommandResultDTO>> sendQueryBoxCommand(Long nodeId) {
-        MetroDevice device = topologyService.getDeviceNode(nodeId).getData();
-        List<MetroNode> ids = new ArrayList<>();
-        ids.add(device);
-        List<CommandResultDTO> commandResults = new ArrayList<>();
-        Short deviceType = device.getDeviceType();
-        if (AFCDeviceType.TVM.equals(deviceType)) {
-            commandResults.addAll(send(CommandType.CMD_QUERY_MONEY_BOX, "设备钱箱查询命令",
-                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
-        }
-        if (AFCDeviceType.TVM.equals(deviceType) || AFCDeviceType.POST.equals(deviceType)
-                || AFCDeviceType.GATE.equals(deviceType)) {
-            commandResults.addAll(send(CommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
-                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
-        }
-        return Result.success(commandResults);
-    }
-
-    @Override
-    public Result<List<CommandResultDTO>> sendQueryDeviceCommand(List<Long> deviceIds){
-        //获取设备节点
-        List<MetroNode> targets = getDeviceNodeFromIds(deviceIds);
-        if (targets == null) {
-            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
-        }
-
-        Set<Integer> stationIds = new HashSet<>();
-        List<MetroStation> metroStations = new ArrayList<>();
-        for (MetroNode device:targets){
-            int stationId=NodeIdUtils.nodeIdStrategy.getStationId(device.id());
-            if(stationIds.add(stationId)){
-                metroStations.add(topologyService.getStationNode(stationId).getData());
-            }
-        }
-
-        List<Future<TmoCmdResult>> results = new ArrayList<>();
-        String commandName = CommandType.getInstance().getNameByValue(CommandType.CMD_DEVICE_STATUS_QUERY);
-        //查询设备状态
-        for (MetroNode target : targets) {
-            Map<String,Object> args = new HashMap<>();
-            args.put("deviceId",target.id());
-            results.add(send(CommandType.CMD_DEVICE_STATUS_QUERY,commandName,args, target,
-                    AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
-        }
-        //查询所属车站状态
-        for (MetroNode target : metroStations) {
-            Map<String,Object> args = new HashMap<>();
-            args.put("deviceId",target.id());
-            results.add(send(CommandType.CMD_DEVICE_STATUS_QUERY,commandName,args, target,
-                    AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
-        }
-        return Result.success(saveResults(results));
-    }
-
     private CmdHandlerResult rmiGenerateFiles() {
 
         CmdHandlerResult command = new CmdHandlerResult();
@@ -319,16 +262,39 @@ public class CommandServiceImpl implements CommandService {
         return command;
     }
 
-    private CommandResultDTO tmoCmdResult2CommandResultDTO(TmoCmdResult tmoCmdResult){
-        CommandResultDTO commandResult = new CommandResultDTO();
-        commandResult.setId(topologyService.getNodeText(tmoCmdResult.getNodeId()).getData());
-        commandResult.setCmdName(tmoCmdResult.getCmdName());
-        commandResult.setResult(tmoCmdResult.getCmdResult());
-        commandResult.setCmdResult(tmoCmdResult.getRemark());
-        commandResult.setOccurTime(new Date());
-        commandResult.setOperatorId(tmoCmdResult.getOperatorId());
-        commandResult.setArg(tmoCmdResult.getArg()==null?"无":tmoCmdResult.getArg().toString());
-        return commandResult;
+    @Override
+    public Result<List<CommandResultDTO>> sendNodeControlCommand(List<Long> nodeIds, Short command) {
+        List<MetroNode> deviceIds = getDeviceNodeFromIds(nodeIds);
+        if (deviceIds == null) {
+            return ResultUtils.getResult(ErrorCode.NO_NODE_SELECT);
+        }
+
+        return Result.success(send(CommandType.CMD_EQU_CTRL, "设备控制命令",
+                null, deviceIds, command));
+    }
+
+    @Override
+    public Result<List<CommandResultDTO>> sendQueryBoxCommand(Long nodeId) {
+        MetroDevice device = topologyService.getDeviceNode(nodeId).getData();
+        List<MetroNode> ids = new ArrayList<>();
+        ids.add(device);
+        List<CommandResultDTO> commandResults = new ArrayList<>();
+        Short deviceType = device.getDeviceType();
+        if (AFCDeviceType.TVM.equals(deviceType)) {
+            commandResults.addAll(send(CommandType.CMD_QUERY_TVM_MONEY_TICKET_BOX, "设备钱箱查询命令",
+                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+        }
+//        if (AFCDeviceType.TVM.equals(deviceType) || AFCDeviceType.POST.equals(deviceType)
+//                || AFCDeviceType.GATE.equals(deviceType)) {
+//            commandResults.addAll(send(CommandType.CMD_QUERY_TICKET_BOX, "设备票箱查询命令",
+//                    null, ids, AFCCmdLogType.LOG_DEVICE_CMD.shortValue()));
+//        }
+        return Result.success(commandResults);
+    }
+
+    @Override
+    public Result<List<CommandResultDTO>> sendQueryDeviceCommand(List<Long> deviceIds) {
+        return null;
     }
 
     /**
@@ -419,12 +385,11 @@ public class CommandServiceImpl implements CommandService {
             return null;
         }
         List<Future<TmoCmdResult>> futures = new ArrayList<>();
-        String userId = SecurityUtils.getUserId();
         String ip = SecurityUtils.getIp();
         Long sourceId = appProperties.getNodeNo();
         for (MetroNode target : targets) {
             futures.add(threadPoolExecutor.submit(new CommandSendTask(id, name, arg, cmdType, target,
-                    rmiCommandService,logService,userId,ip,sourceId)));
+                    rmiCommandService,logService,SecurityUtils.getUserId(),ip,sourceId)));
         }
         return saveResults(futures);
     }
@@ -443,11 +408,10 @@ public class CommandServiceImpl implements CommandService {
         if (target==null){
             return null;
         }
-        String userId = SecurityUtils.getUserId();
         String ip = SecurityUtils.getIp();
         Long sourceId = appProperties.getNodeNo();
         return threadPoolExecutor.submit(new CommandSendTask(id, name, arg, cmdType, target,
-                    rmiCommandService,logService,userId,ip,sourceId));
+                    rmiCommandService,logService,SecurityUtils.getUserId(),ip,sourceId));
     }
 
     /**
@@ -462,8 +426,16 @@ public class CommandServiceImpl implements CommandService {
             try {
                 TmoCmdResult tmoCmdResult = future.get();
                 if (tmoCmdResult != null) {
-                    results.add(tmoCmdResult2CommandResultDTO(tmoCmdResult));
+                    CommandResultDTO commandResult = new CommandResultDTO();
+                    commandResult.setId(topologyService.getNodeText(tmoCmdResult.getNodeId()).getData());
+                    commandResult.setCmdName(tmoCmdResult.getCmdName());
+                    commandResult.setResult(tmoCmdResult.getCmdResult());
+                    commandResult.setCmdResult(tmoCmdResult.getRemark());
+                    commandResult.setOccurTime(new Date());
+                    commandResult.setOperatorId(tmoCmdResult.getOperatorId());
+                    commandResult.setArg(tmoCmdResult.getArg()==null?"无":tmoCmdResult.getArg().toString());
                     tmoCmdResults.add(tmoCmdResult);
+                    results.add(commandResult);
                 }
             } catch (ExecutionException e) {
                 logger.error("发送命令异常", e);

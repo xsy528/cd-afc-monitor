@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * 2019-01-14 16:18
  */
 @Api(tags="字典接口")
-@RestController
+//@RestController
 @RequestMapping("/monitor/dic")
 public class DicController {
 

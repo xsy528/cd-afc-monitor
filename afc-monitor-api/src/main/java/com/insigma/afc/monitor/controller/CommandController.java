@@ -73,4 +73,10 @@ public class CommandController{
         return commandService.sendQueryBoxCommand(nodeId);
     }
 
+    @ApiOperation("查询设备状态")
+    @PostMapping("/queryDeviceStatus")
+    public Result<List<CommandResultDTO>> queryDeviceStatus(@RequestBody List<Long> deviceIds){
+        return commandService.sendQueryDeviceCommand(deviceIds);
+    }
+
 }

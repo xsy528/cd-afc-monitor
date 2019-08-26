@@ -11,10 +11,7 @@ import com.insigma.afc.monitor.model.dto.SeriesData;
 import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
 import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
 import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
-<<<<<<< HEAD
 import com.insigma.afc.monitor.model.entity.TmetroLine;
-=======
->>>>>>> remotes/origin/master
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.service.PassengerFlowService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
@@ -80,11 +77,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             List<Long> valueOfRows = Arrays.asList(odin,odout,odbuy,odadd,total);
             //车站名称
             try {
-<<<<<<< HEAD
                 String columnName = getLineNameById(lineId);
-=======
-                String columnName = topologyService.getStationNode(stationId).getData().getStationName();
->>>>>>> remotes/origin/master
                 barPieChartDTOS.add(new BarPieChartDTO(columnName, valueOfRows));
             }catch (Exception e){
                 LOGGER.error("获取车站节点失败:{}",e.getMessage());
@@ -160,7 +153,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             }
             try {
                 String seriesName = getLineNameById(entry.getKey());
-                String seriesName = topologyService.getStationNode(entry.getKey()).getData().getStationName();
                 seriersItems.add(new SeriesChartDTO(seriesName, points));
             }catch (Exception e){
                 LOGGER.error("获取车站节点失败:{}",e.getMessage());

@@ -5,12 +5,7 @@
     <parent>
         <artifactId>afc-monitor</artifactId>
         <groupId>com.insigma.product</groupId>
-<<<<<<< HEAD
         <version>0.0.4</version>
-=======
-        <version>0.0.5</version>
-        <relativePath>../pom.xml</relativePath>
->>>>>>> remotes/origin/master
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

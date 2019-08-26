@@ -76,14 +76,8 @@ api:
 
 #车站基本配置
 info:
-<<<<<<< HEAD:afc-monitor-api/src/main/resources/application.yml
   app:
     applicationName: 成都MLC监控
-=======
-  version: '@project.version@'
-  app:
-    applicationName: 徐州ACC监控
->>>>>>> remotes/origin/master:afc-monitor-api/src/main/resources/application.yaml
     lineNo: 0
     stationNo: 0
     nodeNo: 0x00000000
@@ -91,8 +85,3 @@ info:
 #与MessageServer通讯RMI配置
 communicationRegistRmiPort: 8527
 commandServiceRmiPort: 8528
-
-security:
-  ignore-paths:
-    - /actuator
-    - /actuator/**

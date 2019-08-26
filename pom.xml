@@ -13,11 +13,7 @@
 
     <groupId>com.insigma.product</groupId>
     <artifactId>afc-monitor</artifactId>
-<<<<<<< HEAD
     <version>0.0.4</version>
-=======
-    <version>0.0.5</version>
->>>>>>> remotes/origin/master
 
     <properties>
         <java.version>1.8</java.version>

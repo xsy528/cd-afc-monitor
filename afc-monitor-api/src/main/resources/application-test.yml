@@ -1,18 +1,5 @@
 spring:
   datasource:
-<<<<<<< HEAD
-    url: jdbc:oracle:thin:@192.168.178.214:1521:afclc
-    username: mlc_cd_st1
-    password: 9*%BC%B4-4%AD%EA
-security:
-  server: http://192.168.178.180:8081
-server:
-  port: 8083
-  address: 192.168.178.180
-#节点服务地址
-topology-server-url: http://192.168.178.180:8082
-rmi-host-ip-addr: 192.168.178.180
-=======
     url: jdbc:oracle:thin:@192.168.178.212:1521:afclc
     username: acc_xuzhou_st1
     password: 9*%BC%B4-4%AD%EA
@@ -27,4 +14,3 @@ rmiHostIpAddr: 192.168.178.182
 #权限服务地址
 security:
   server: http://192.168.178.183:8081
->>>>>>> remotes/origin/master

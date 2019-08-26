@@ -28,7 +28,7 @@ import java.util.List;
  * @Email xingshaoya@unittec.com,
  * @Time on 2019/8/26 14:19.
  * @Ticket :
- */
+*/
 @Api(tags = "客流监控接口")
 @RequestMapping("/monitor/passenger/")
 public class MonitorPassengerController {

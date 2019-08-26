@@ -5,12 +5,7 @@
     <parent>
         <artifactId>afc-monitor</artifactId>
         <groupId>com.insigma.product</groupId>
-<<<<<<< HEAD
         <version>0.0.4</version>
-=======
-        <version>0.0.5</version>
-        <relativePath>../pom.xml</relativePath>
->>>>>>> remotes/origin/master
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,11 +24,7 @@
         <dependency>
             <groupId>com.insigma.product</groupId>
             <artifactId>afc-security-starter</artifactId>
-<<<<<<< HEAD
             <version>0.0.5</version>
-=======
-            <version>0.0.6</version>
->>>>>>> remotes/origin/master
         </dependency>
         <dependency>
             <groupId>com.insigma.product</groupId>

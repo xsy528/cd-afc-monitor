@@ -35,9 +35,9 @@ public class BarAndPieCondition {
     @JsonProperty("trans_type")
     private List<Integer> transType;
 
-    @ApiModelProperty("车站id")
-    @JsonProperty("station_id")
-    private List<Integer> stationIds;
+    @ApiModelProperty("线路编号")
+    @JsonProperty("lines")
+    protected List<Short> lines;
 
     public Date getDate() {
         return date;
@@ -55,12 +55,12 @@ public class BarAndPieCondition {
         this.time = time;
     }
 
-    public List<Integer> getStationIds() {
-        return stationIds;
+    public List<Short> getLines() {
+        return lines;
     }
 
-    public void setStationIds(List<Integer> stationIds) {
-        this.stationIds = stationIds;
+    public void setLines(List<Short> lines) {
+        this.lines = lines;
     }
 
     public Short getTicketFamily() {

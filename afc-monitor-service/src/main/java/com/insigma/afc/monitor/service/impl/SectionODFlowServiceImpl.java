@@ -386,11 +386,7 @@ public class SectionODFlowServiceImpl implements SectionODFlowService {
         parameters.forEach((k,v)-> setParameter(countQuery,k,v));
         long total = 0;
         try{
-<<<<<<< HEAD
             total = countQuery.getResultList().size();
-=======
-            total = (long)countQuery.getResultList().size();
->>>>>>> remotes/origin/master
         }catch (NoResultException e){
             // 没有数据
         }

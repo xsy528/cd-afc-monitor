@@ -1,0 +1,40 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: maven:3.6-jdk-8
+  script:
+    - mvn clean
+    - mvn compile
+    - mvn package
+    - pwd
+  artifacts:
+    paths:
+      - ./afc-monitor-api/target/*.jar
+      - ./afc-monitor-api/src/main/resources/*
+  tags:
+    - build
+  only:
+    refs:
+      - master
+
+deploy:
+  stage: deploy
+  script:
+    - ls
+    - pwd
+    - APP_HOME=/home/afc/APP/xz-afc-monitor
+    - mkdir -p ${APP_HOME}/config
+    - cp ./afc-monitor-api/src/main/resources/application*.yml ${APP_HOME}/config/
+    - cp ./afc-monitor-api/src/main/resources/log4j2-spring.xml ${APP_HOME}/config/
+    - cp ./afc-monitor-api/target/*.jar ${APP_HOME}/
+    - cp ./scripts/run.sh ${APP_HOME}/
+    - cd ${APP_HOME}
+    - sh run.sh restart dev
+  tags:
+    - deploy
+  only:
+    refs:
+      - master

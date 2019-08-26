@@ -1,0 +1,33 @@
+spring:
+  datasource:
+<<<<<<< HEAD
+    url: jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.254.4.7)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 10.254.4.8)(PORT = 1521))(LOAD_BALANCE = yes)(FAILOVER = ON)(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = mlcsvc.cdmlc.com)))
+    username: mlc_cd_v1
+    password: u%CFC%F2%99%13%18%07%E3Y%A3z%DD%99%D4%EF
+#本机地址和端口
+server:
+  address: 10.254.7.89
+  port: 8083
+#节点服务地址
+topology-server-url: http://10.254.7.85:8082
+#权限服务地址
+security:
+  server: http://10.254.7.81:8081
+#MS地址
+rmiHostIpAddr: 10.254.5.129
+=======
+    url: jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.5.0.3)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 10.5.0.4)(PORT = 1521))(LOAD_BALANCE = yes)(FAILOVER = ON)(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = afclc)))
+    username: acc_xuzhou_v1
+    password: 9*%BC%B4-4%AD%EA
+#本机地址和端口
+server:
+  address: 10.5.0.17
+  port: 8083
+#节点服务地址
+topologyServerUrl: http://10.5.0.17:8082
+#ms地址
+rmiHostIpAddr: 10.5.0.11
+#权限服务地址
+security:
+  server: http://10.5.0.16:8081
+>>>>>>> remotes/origin/master

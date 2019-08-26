@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>afc-monitor</artifactId>
+        <groupId>com.insigma.product</groupId>
+<<<<<<< HEAD
+        <version>0.0.4</version>
+=======
+        <version>0.0.5</version>
+        <relativePath>../pom.xml</relativePath>
+>>>>>>> remotes/origin/master
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>afc-monitor-service</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.insigma.product</groupId>
+            <artifactId>afc-monitor-rmi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.insigma.product</groupId>
+            <artifactId>afc-log-starter</artifactId>
+            <version>0.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.insigma.product</groupId>
+            <artifactId>afc-security-starter</artifactId>
+<<<<<<< HEAD
+            <version>0.0.5</version>
+=======
+            <version>0.0.6</version>
+>>>>>>> remotes/origin/master
+        </dependency>
+        <dependency>
+            <groupId>com.insigma.product</groupId>
+            <artifactId>afc-metrics-starter</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.insigma.product</groupId>
+            <artifactId>afc-swagger-starter</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--数据源-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>12.2.0.1.0</version>
+        </dependency>
+
+        <!-- feign -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>10.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>10.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+            <version>10.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-slf4j</artifactId>
+            <version>10.2.0</version>
+        </dependency>
+    </dependencies>
+
+</project>

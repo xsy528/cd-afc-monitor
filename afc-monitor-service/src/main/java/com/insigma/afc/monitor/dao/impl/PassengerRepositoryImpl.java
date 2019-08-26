@@ -8,8 +8,10 @@
  */
 package com.insigma.afc.monitor.dao.impl;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.dao.PassengerRepository;
 import com.insigma.afc.monitor.model.entity.TmoOdFlowStats;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -42,7 +44,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
 
     @Override
     public List<Tuple> findAllBarAndPie(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval,
-                                                 List<Integer> stationIds, Short ticketFamily) {
+                                        List<Short> lines, Short ticketFamily) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = builder.createTupleQuery();
         Root<TmoOdFlowStats> root = query.from(TmoOdFlowStats.class);
@@ -60,8 +62,8 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         predicates.add(builder.equal(root.get("gatheringDate"), gatheringDate));
         predicates.add(builder.greaterThanOrEqualTo(root.get("timeIntervalId"), startTimeInterval));
         predicates.add(builder.lessThanOrEqualTo(root.get("timeIntervalId"), endTimeInterval));
-        if (stationIds != null && !stationIds.isEmpty()) {
-            predicates.add(root.get("stationId").in(stationIds));
+        if (lines != null && !lines.isEmpty()) {
+            predicates.add(root.get("lineId").in(lines));
         }
         if (ticketFamily != null) {
             predicates.add(builder.equal(root.get("ticketFamily"), ticketFamily));
@@ -75,12 +77,12 @@ public class PassengerRepositoryImpl implements PassengerRepository {
 
     @Override
     public List<Tuple> findAllSeries(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval,
-                                              List<Integer> stationIds, Short ticketFamily) {
+                                     List<Short> lines, Short ticketFamily) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = builder.createTupleQuery();
         Root<TmoOdFlowStats> root = query.from(TmoOdFlowStats.class);
 
-       //select
+        //select
         Selection sumTotalIn = builder.sum(root.get("totalIn")).alias("totalIn");
         Selection sumTotalOut = builder.sum(root.get("totalOut")).alias("totalOut");
         Selection sumSaleCount = builder.sum(root.get("saleCount")).alias("saleCount");
@@ -94,8 +96,8 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         predicates.add(builder.equal(root.get("gatheringDate"), gatheringDate));
         predicates.add(builder.greaterThanOrEqualTo(root.get("timeIntervalId"), startTimeInterval));
         predicates.add(builder.lessThanOrEqualTo(root.get("timeIntervalId"), endTimeInterval));
-        if (stationIds != null && !stationIds.isEmpty()) {
-            predicates.add(root.get("stationId").in(stationIds));
+        if (lines != null && !lines.isEmpty()) {
+            predicates.add(root.get("lineId").in(lines));
         }
         if (ticketFamily != null) {
             predicates.add(builder.equal(root.get("ticketFamily"), ticketFamily));
@@ -108,8 +110,8 @@ public class PassengerRepositoryImpl implements PassengerRepository {
     }
 
     @Override
-    public Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval, List<Integer>
-            stationIds, Short statType, Pageable pageable) {
+    public Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval, List<Short> lines,
+                               Short statType, Pageable pageable) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = builder.createTupleQuery();
         CriteriaQuery<Tuple> countQuery = builder.createTupleQuery();
@@ -125,25 +127,27 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         selections.add(builder.sum(root.get("addCount")).alias("addCount"));
         selections.add(root.get("stationId").alias("stationId"));
         //count
-        Selection countSelection = builder.count(countRoot.get("stationId")).alias("total");
+        Selection countSelection = builder.count(countRoot.get("stationId"));
 
         //where
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("gatheringDate"), gatheringDate));
         predicates.add(builder.greaterThanOrEqualTo(root.get("timeIntervalId"), startTimeInterval));
         predicates.add(builder.lessThanOrEqualTo(root.get("timeIntervalId"), endTimeInterval));
-        if (stationIds != null && !stationIds.isEmpty()) {
-            predicates.add(root.get("stationId").in(stationIds));
+        if (lines != null && !lines.isEmpty()) {
+            predicates.add(root.get("lineId").in(lines));
         }
         if (statType==0){
             //按票种分组
             selections.add(root.get("ticketFamily").alias("ticketFamily"));
             query.groupBy(root.get("stationId"),root.get("ticketFamily"));
             query.orderBy(builder.asc(root.get("stationId")),builder.asc(root.get("ticketFamily")));
+            countQuery.groupBy(root.get("stationId"),root.get("ticketFamily"));
         }else if (statType==1){
             //按车站分组
             query.groupBy(root.get("stationId"));
             query.orderBy(builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("stationId"));
         }
         query.multiselect(selections.toArray(new Selection[0]));
         Predicate[] predicates1 = predicates.toArray(new Predicate[0]);
@@ -155,7 +159,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
 
         countQuery.multiselect(countSelection);
         countQuery.where(predicates1);
-        Long total = entityManager.createQuery(countQuery).getSingleResult().get("total",Long.class);
+        long total = entityManager.createQuery(countQuery).getResultList().size();
 
         return new PageImpl<>(typedQuery.getResultList(),pageable,total);
     }

@@ -3,6 +3,7 @@ package com.insigma.afc.monitor.service.impl;
 import com.insigma.afc.monitor.constant.SystemConfigKey;
 import com.insigma.afc.monitor.constant.dic.AFCTicketFamily;
 import com.insigma.afc.monitor.dao.PassengerDao;
+import com.insigma.afc.monitor.dao.TmetroLineDao;
 import com.insigma.afc.monitor.dao.TsyConfigDao;
 import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
@@ -10,7 +11,7 @@ import com.insigma.afc.monitor.model.dto.SeriesData;
 import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
 import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
 import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
-import com.insigma.afc.monitor.model.entity.TmoOdFlowStats;
+import com.insigma.afc.monitor.model.entity.TmetroLine;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.service.PassengerFlowService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
@@ -23,7 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
-import javax.persistence.criteria.Predicate;
 import java.util.*;
 
 
@@ -40,6 +40,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
     private PassengerDao passengerDao;
     private TopologyService topologyService;
+    private TmetroLineDao lineDao;
 
     @Autowired
     public PassengerFlowServiceImpl(TsyConfigDao tsyConfigDao){
@@ -56,13 +57,13 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
         List<Tuple> bars = passengerDao.findAllBarAndPie(condition.getDate(), timeIntervals.get(0),
-                timeIntervals.get(1),condition.getStationIds(), condition.getTicketFamily());
+                timeIntervals.get(1),condition.getLines(), condition.getTicketFamily());
 
         //柱状数据
         List<BarPieChartDTO> barPieChartDTOS = new ArrayList<>();
         for (Tuple t : bars) {
             //车站id
-            Integer stationId = t.get("stationId",Integer.class);
+            Short lineId = t.get("lineId",Short.class);
             //进站
             long odin = t.get("totalIn",Long.class);
             //出站
@@ -75,8 +76,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             long total = odin+odout+odbuy+odadd;
             List<Long> valueOfRows = Arrays.asList(odin,odout,odbuy,odadd,total);
             //车站名称
-            String culumnName = topologyService.getStationNode(stationId).getData().getStationName();
-            barPieChartDTOS.add(new BarPieChartDTO(culumnName, valueOfRows));
+            try {
+                String columnName = getLineNameById(lineId);
+                barPieChartDTOS.add(new BarPieChartDTO(columnName, valueOfRows));
+            }catch (Exception e){
+                LOGGER.error("获取车站节点失败:{}",e.getMessage());
+            }
         }
         return barPieChartDTOS;
     }
@@ -84,12 +89,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
     @Override
     public List<SeriesChartDTO> getSeriesChart(SeriesCondition condition) {
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
-        List<Integer> stationIds = condition.getStationIds();
+        List<Short> lines = condition.getLines();
         Date date = condition.getDate();
         List<Tuple> tmoOdFlowStats = passengerDao.findAllSeries(condition.getDate(), timeIntervals.get(0),
-                timeIntervals.get(1),condition.getStationIds(), condition.getTicketFamily());
+                timeIntervals.get(1),lines, condition.getTicketFamily());
 
-        Map<Integer, List<Tuple>> sortData = sortData(tmoOdFlowStats, stationIds);
+        Map<Short, List<Tuple>> sortData = sortData(tmoOdFlowStats, lines);
         // 每个曲线上的点包含timeIntervalId的个数inclueTimeIdCount(默认值为1)
         int inclueTimeIdCount = 1;
         if (condition.getIntervalCount() > 1) {
@@ -98,7 +103,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         Calendar cal = Calendar.getInstance();
         List<SeriesChartDTO> seriersItems = new ArrayList<>();
         // 生成各条曲线数据
-        for(Map.Entry<Integer,List<Tuple>> entry:sortData.entrySet()){
+        for(Map.Entry<Short,List<Tuple>> entry:sortData.entrySet()){
             List<Tuple> dataList = entry.getValue();
             if (dataList.isEmpty()){
                 continue;
@@ -146,9 +151,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
                 points.add(new SeriesData(cal.getTime(), Arrays.asList(pointodin, pointodout, pointodbuy, pointodadd)));
             }
-
-            String seriesName = topologyService.getStationNode(entry.getKey()).getData().getStationName();
-            seriersItems.add(new SeriesChartDTO(seriesName, points));
+            try {
+                String seriesName = getLineNameById(entry.getKey());
+                seriersItems.add(new SeriesChartDTO(seriesName, points));
+            }catch (Exception e){
+                LOGGER.error("获取车站节点失败:{}",e.getMessage());
+            }
         }
         return seriersItems;
     }
@@ -158,14 +166,14 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         Date date = condition.getDate();
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
-        List<Integer> stationIds = condition.getStationIds();
+        List<Short> lines = condition.getLines();
         Short statType = condition.getStatType();
 
         Integer page = condition.getPageNumber();
         Integer pageSize = condition.getPageSize();
-        Map<Object, String> ticketFamily = AFCTicketFamily.getInstance().getCodeMap();
+        Map<Object, String> ticketFamilyMap = AFCTicketFamily.getInstance().getCodeMap();
         return passengerDao.findAll(date, timeIntervals.get(0),timeIntervals.get(1),
-                stationIds,statType,PageRequest.of(page,pageSize)).map(tuple -> {
+                lines,statType,PageRequest.of(page,pageSize)).map(tuple -> {
             ODSearchResultItem t = new ODSearchResultItem();
             t.setOdIn(tuple.get("totalIn",Long.class));
             t.setOdOut(tuple.get("totalOut",Long.class));
@@ -177,10 +185,11 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
                 t.setTicketFamily("全部票种/无");
             }else if(statType==0){
                 Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
-                if (ticketFamily == null || ticketFamily.get(ticketFamilyType) == null){
-                    t.setTicketFamily("票种未知/" + ticketFamilyType);
+                String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
+                if (ticketFamilyName == null){
+                    t.setTicketFamily("票种未知/0x" + formatTicketFamilyType(ticketFamilyType));
                 }else {
-                    t.setTicketFamily(ticketFamily.get(ticketFamilyType) + "/" + ticketFamilyType);
+                    t.setTicketFamily(ticketFamilyName + "/0x" + formatTicketFamilyType(ticketFamilyType));
                 }
             }
             return t;
@@ -188,18 +197,27 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
     }
 
     /**
+     * 格式化票种编号
+     * @param ticketFamilyType 票种编号
+     * @return 名称
+     */
+    private String formatTicketFamilyType(Integer ticketFamilyType){
+        return String.format("%02x",ticketFamilyType).toUpperCase();
+    }
+
+    /**
      * 梳理信息
      *
      * @param data       查找的数据
-     * @param stationIds 站点集合
+     * @param lines 线路集合
      * @return 有序数据
      */
-    private Map<Integer, List<Tuple>> sortData(List<Tuple> data, List<Integer> stationIds) {
-        Map<Integer, List<Tuple>> dataMap = new HashMap<>(stationIds.size());
-        stationIds.forEach(id->dataMap.put(id,new ArrayList<>()));
+    private Map<Short, List<Tuple>> sortData(List<Tuple> data, List<Short> lines) {
+        Map<Short, List<Tuple>> dataMap = new HashMap<>(lines.size());
+        lines.forEach(id->dataMap.put(id,new ArrayList<>()));
         // 将数据按照各自的车站分配到数组中
         for (Tuple odData : data) {
-            Integer stationId = odData.get("stationId",Integer.class);
+            Short stationId = odData.get("lineId",Short.class);
             if (dataMap.containsKey(stationId)){
                 dataMap.get(stationId).add(odData);
             }
@@ -239,6 +257,17 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         return timeIntervalIds;
     }
 
+    private String getLineNameById(Short lineId){
+        if(lineId==null){
+            return "未知线路";
+        }
+        TmetroLine line = lineDao.findByLineId(lineId);
+        if(line == null){
+            return "未知线路";
+        }
+        return line.getLineName();
+    }
+
     @Autowired
     public void setPassengerDao(PassengerDao passengerDao) {
         this.passengerDao = passengerDao;
@@ -247,5 +276,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
     @Autowired
     public void setTopologyService(TopologyService topologyService) {
         this.topologyService = topologyService;
+    }
+    @Autowired
+    public void setLineDao(TmetroLineDao lineDao) {
+        this.lineDao = lineDao;
     }
 }

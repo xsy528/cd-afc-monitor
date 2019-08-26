@@ -3,10 +3,10 @@ package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
-import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
-import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
-import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
+import com.insigma.afc.monitor.model.dto.condition.*;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
+import com.insigma.afc.monitor.model.vo.TicketCompareVO;
+import com.insigma.afc.monitor.model.vo.TimeShareVO;
 import com.insigma.afc.monitor.service.PassengerFlowService;
 import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
@@ -18,17 +18,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 
+
 /**
- * @author xingshaoya
- * @date 2019-03-22 09:44:30
+ * @Author by Xinshao,
+ * @Email xingshaoya@unittec.com,
+ * @Time on 2019/8/26 14:19.
+ * @Ticket :
  */
 @Api(tags = "客流监控接口")
-//@RestController
 @RequestMapping("/monitor/passenger/")
 public class MonitorPassengerController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitorPassengerController.class);
@@ -56,5 +57,19 @@ public class MonitorPassengerController {
     @PostMapping("passengerFlow")
     public Result<Page<ODSearchResultItem>> getPassengerFlow(@Valid @RequestBody PassengerCondition passengerCondition) {
         return Result.success(passengerFlowService.getODSerchResult(passengerCondition));
+    }
+
+    @ApiOperation("客流监控-分时查询")
+    @PostMapping("timeShareQuery")
+    public Result<List<TimeShareVO>> getTimeShareInfo(@RequestBody TimeShareCondition condition){
+
+        return null;
+    }
+
+    @ApiOperation("客流监控-票卡对比")
+    @PostMapping("passengerTicketCompare")
+    public Result<List<TicketCompareVO>> getTicketCompare(@RequestBody TicketCompareCondition condition){
+
+        return null;
     }
 }

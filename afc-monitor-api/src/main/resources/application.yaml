@@ -12,7 +12,7 @@ spring:
   application:
     name: monitor
   profiles:
-    active: pro
+    active: dev
   #http编码配置
   http:
     encoding:
@@ -43,7 +43,7 @@ spring:
   #jpa配置
   jpa:
     open-in-view: false
-    show-sql: false
+    show-sql: true
   #json序列化配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

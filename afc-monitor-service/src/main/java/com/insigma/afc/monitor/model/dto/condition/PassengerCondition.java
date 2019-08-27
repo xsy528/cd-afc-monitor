@@ -28,9 +28,9 @@ public class PassengerCondition extends PageBean {
     @JsonProperty("stat_type")
     private Short statType;
 
-    @ApiModelProperty("线路编号")
-    @JsonProperty("lines")
-    protected List<Short> lines;
+    @ApiModelProperty("车站编号")
+    @JsonProperty("stations")
+    protected List<Integer> stations;
 
     public Date getDate() {
         return date;
@@ -56,11 +56,11 @@ public class PassengerCondition extends PageBean {
         this.statType = statType;
     }
 
-    public List<Short> getLines() {
-        return lines;
+    public List<Integer> getStations() {
+        return stations;
     }
 
-    public void setLines(List<Short> lines) {
-        this.lines = lines;
+    public void setStations(List<Integer> stations) {
+        this.stations = stations;
     }
 }

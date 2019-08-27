@@ -21,6 +21,8 @@ import java.util.List;
  */
 @ApiModel("饼图柱状图")
 public class BarPieChartDTO {
+    public BarPieChartDTO() {
+    }
 
     public BarPieChartDTO(String name, List<Long> values) {
         this.name = name;

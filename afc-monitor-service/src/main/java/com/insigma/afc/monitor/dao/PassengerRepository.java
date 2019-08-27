@@ -44,11 +44,11 @@ public interface PassengerRepository {
      * @param gatheringDate 运营日
      * @param startTimeInterval 开始时间段
      * @param endTimeInterval 结束时间段
-     * @param lines 线路id
+     * @param stations 车站id
      * @param statType 分组类行
      * @param pageable 分页信息
      * @return 数据
      */
     Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval,
-                        List<Short> lines, Short statType, Pageable pageable);
+                        List<Integer> stations, Short statType, Pageable pageable);
 }

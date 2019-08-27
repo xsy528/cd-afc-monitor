@@ -8,10 +8,8 @@
  */
 package com.insigma.afc.monitor.dao.impl;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insigma.afc.monitor.dao.PassengerRepository;
 import com.insigma.afc.monitor.model.entity.TmoOdFlowStats;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -54,8 +52,8 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         Selection sumTotalOut = builder.sum(root.get("totalOut")).alias("totalOut");
         Selection sumSaleCount = builder.sum(root.get("saleCount")).alias("saleCount");
         Selection sumAddCount = builder.sum(root.get("addCount")).alias("addCount");
-        Selection stationId = root.get("stationId").alias("stationId");
-        query.multiselect(sumTotalIn, sumTotalOut, sumSaleCount, sumAddCount, stationId);
+        Selection lineId = root.get("lineId").alias("lineId");
+        query.multiselect(sumTotalIn, sumTotalOut, sumSaleCount, sumAddCount, lineId);
 
         //where
         List<Predicate> predicates = new ArrayList<>();
@@ -68,8 +66,8 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         if (ticketFamily != null) {
             predicates.add(builder.equal(root.get("ticketFamily"), ticketFamily));
         }
-        query.groupBy(root.get("stationId"));
-        query.orderBy(builder.asc(root.get("stationId")));
+        query.groupBy(root.get("lineId"));
+        query.orderBy(builder.asc(root.get("lineId")));
         query.where(predicates.toArray(new Predicate[0]));
 
         return entityManager.createQuery(query).getResultList();
@@ -87,7 +85,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         Selection sumTotalOut = builder.sum(root.get("totalOut")).alias("totalOut");
         Selection sumSaleCount = builder.sum(root.get("saleCount")).alias("saleCount");
         Selection sumAddCount = builder.sum(root.get("addCount")).alias("addCount");
-        Selection stationId = root.get("stationId").alias("stationId");
+        Selection stationId = root.get("lineId").alias("lineId");
         Selection timeIntervalId = root.get("timeIntervalId").alias("timeIntervalId");
         query.multiselect(sumTotalIn, sumTotalOut, sumSaleCount, sumAddCount, stationId, timeIntervalId);
 
@@ -102,15 +100,15 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         if (ticketFamily != null) {
             predicates.add(builder.equal(root.get("ticketFamily"), ticketFamily));
         }
-        query.groupBy(root.get("stationId"), root.get("timeIntervalId"));
-        query.orderBy(builder.asc(root.get("stationId")), builder.asc(root.get("timeIntervalId")));
+        query.groupBy(root.get("lineId"), root.get("timeIntervalId"));
+        query.orderBy(builder.asc(root.get("lineId")), builder.asc(root.get("timeIntervalId")));
         query.where(predicates.toArray(new Predicate[0]));
 
         return entityManager.createQuery(query).getResultList();
     }
 
     @Override
-    public Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval, List<Short> lines,
+    public Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval, List<Integer> stations,
                                Short statType, Pageable pageable) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = builder.createTupleQuery();
@@ -134,8 +132,8 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         predicates.add(builder.equal(root.get("gatheringDate"), gatheringDate));
         predicates.add(builder.greaterThanOrEqualTo(root.get("timeIntervalId"), startTimeInterval));
         predicates.add(builder.lessThanOrEqualTo(root.get("timeIntervalId"), endTimeInterval));
-        if (lines != null && !lines.isEmpty()) {
-            predicates.add(root.get("lineId").in(lines));
+        if (stations != null && !stations.isEmpty()) {
+            predicates.add(root.get("stationId").in(stations));
         }
         if (statType==0){
             //按票种分组

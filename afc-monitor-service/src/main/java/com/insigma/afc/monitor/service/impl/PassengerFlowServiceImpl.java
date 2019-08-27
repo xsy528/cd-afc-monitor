@@ -5,12 +5,12 @@ import com.insigma.afc.monitor.constant.dic.AFCTicketFamily;
 import com.insigma.afc.monitor.dao.PassengerDao;
 import com.insigma.afc.monitor.dao.TmetroLineDao;
 import com.insigma.afc.monitor.dao.TsyConfigDao;
+import com.insigma.afc.monitor.dao.util.JdbcTemplateDao;
+import com.insigma.afc.monitor.dao.util.PageList;
 import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesData;
-import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
-import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
-import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
+import com.insigma.afc.monitor.model.dto.condition.*;
 import com.insigma.afc.monitor.model.entity.TmetroLine;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.service.PassengerFlowService;
@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
+import java.sql.Time;
 import java.util.*;
 
 
@@ -41,6 +42,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
     private PassengerDao passengerDao;
     private TopologyService topologyService;
     private TmetroLineDao lineDao;
+    private JdbcTemplateDao jdbcDao;
 
     @Autowired
     public PassengerFlowServiceImpl(TsyConfigDao tsyConfigDao){
@@ -166,14 +168,14 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         Date date = condition.getDate();
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
-        List<Short> lines = condition.getLines();
+        List<Integer> stations = condition.getStations();
         Short statType = condition.getStatType();
 
         Integer page = condition.getPageNumber();
         Integer pageSize = condition.getPageSize();
         Map<Object, String> ticketFamilyMap = AFCTicketFamily.getInstance().getCodeMap();
         return passengerDao.findAll(date, timeIntervals.get(0),timeIntervals.get(1),
-                lines,statType,PageRequest.of(page,pageSize)).map(tuple -> {
+                stations,statType,PageRequest.of(page,pageSize)).map(tuple -> {
             ODSearchResultItem t = new ODSearchResultItem();
             t.setOdIn(tuple.get("totalIn",Long.class));
             t.setOdOut(tuple.get("totalOut",Long.class));
@@ -194,6 +196,99 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             }
             return t;
         });
+    }
+
+    @Override
+    public PageList getShareODSerchResult(TimeShareCondition condition) {
+        Integer intervalCount = condition.getIntervalCount();
+        Integer nodeId = condition.getNodeId();
+        Short ticketType = condition.getTicketType();
+        Date date = condition.getDate();
+        String time = condition.getTime();
+        List<Integer> timeInterval = getTimeInterval(time);
+        Integer startTimeIndex = timeInterval.get(0);
+        Integer endTimeIndex = timeInterval.get(1);
+
+        StringBuilder sql = new StringBuilder("select ");
+        StringBuilder timeSql = new StringBuilder("TO_CHAR(to_date(TO_CHAR(t.REF_DATE_TIME, 'yyyy-mm-dd hh24') || ':' || (to_number(TO_CHAR(t.REF_DATE_TIME, 'mi')) - mod(to_number(TO_CHAR(t.REF_DATE_TIME, 'mi')), " +
+                + intervalCount + ")) || ':' || '00','yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')");
+
+        sql.append(timeSql);
+        sql.append("  AS TIME, SUM(t.TOTAL_IN) AS TOTAL_IN, SUM(t.TOTAL_OUT) AS TOTAL_OUT, SUM(t.SALE_COUNT) AS SALE_COUNT, SUM(t.ADD_COUNT) AS ADD_COUNT " +
+                " FROM TMO_OD_FLOW_STATS t WHERE 1=1");
+
+        if (nodeId != null && nodeId != 4) {
+            sql.append(" and t.station_id = " + nodeId);
+        }
+        if (ticketType != null) {
+            sql.append(" and t.ticket_family = " + ticketType);
+        }
+        if (date != null) {
+            sql.append(" and t.gathering_date = TO_DATE('"+new java.sql.Date(date.getTime())+" "+new Time(date.getTime())+"','YY-MM-DD HH24:MI:SS')");
+        }
+        if (startTimeIndex != null) {
+            sql.append(" and t.time_interval_id >= " + startTimeIndex);
+        }
+        if (endTimeIndex != null) {
+            sql.append(" and t.time_interval_id <= " + endTimeIndex);
+        }
+
+        sql.append(" group by ");
+        sql.append(timeSql);
+
+        return jdbcDao.queryByPageForOracle(sql.toString(), null, condition.getPageNumber(), condition.getPageSize(), null);
+    }
+
+    @Override
+    public PageList getTicketCompareResult(TicketCompareCondition condition) {
+
+        Date startTime = condition.getStartTime();
+        Date endTime = condition.getEndTime();
+        List<Integer> stations = condition.getStations();
+        List<Integer> transType = condition.getTransType();
+        Integer timeInterval = 5;
+        int beginInterval = DateTimeUtil.convertTimeToIndex(startTime, timeInterval);
+        int endInterval = DateTimeUtil.convertTimeToIndex(endTime, timeInterval);
+        boolean sameDate = sameDate(startTime, endTime);
+
+        StringBuilder sql = new StringBuilder("select t.ticket_family AS TICKETFAMILY ,sum(t.total_in) AS TOTAL_IN ,sum(t.total_out) " +
+                "AS TOTAL_OUT ,sum(t.sale_count) AS SALE_COUNT ,sum(t.add_count) AS ADD_COUNT  from tmo_od_flow_stats t where 1= 1 ");
+
+        String startDate = DateTimeUtil.formatDateToString(startTime, "yyyy-MM-dd");
+        String endDate = DateTimeUtil.formatDateToString(endTime, "yyyy-MM-dd");
+        if (sameDate) {
+            sql.append(" and (t.gathering_date =TO_DATE('"+ startDate +"','YY-MM-DD HH24:MI:SS')" );
+            sql.append( " and t.time_interval_id >=" +beginInterval );
+            sql.append(" and t.time_interval_id< "+endInterval+") ");
+        } else {
+            sql.append(" and ((t.gathering_date = TO_DATE('"+ startDate +"','YY-MM-DD HH24:MI:SS')"+
+                    " and t.time_interval_id >="+beginInterval);
+            sql.append(") or (t.gathering_date>TO_DATE('"+ startDate +"','YY-MM-DD HH24:MI:SS')"+
+                    " and t.gathering_date<TO_DATE('"+ endDate +"','YY-MM-DD HH24:MI:SS')");
+            sql.append(") or (t.gathering_date =TO_DATE('"+ endDate +"','YY-MM-DD HH24:MI:SS')"+
+                    " and t.time_interval_id<"+endInterval+" ))");
+        }
+        sql.append(" and t.station_id in("+listToString(stations.toArray())+") ");
+        sql.append(" group by t.ticket_family ");
+
+        return jdbcDao.queryByPageForOracle(sql.toString(), null, condition.getPageNumber(), condition.getPageSize(), null);
+    }
+
+    private String listToString(Object[] objects){
+        StringBuilder builder = new StringBuilder();
+        for (Object object:objects){
+            builder.append(object+",");
+        }
+        builder.append("-1");
+        return builder.toString();
+    }
+    private boolean sameDate(Date beforeDate, Date endDate) {
+        String beforeDateString = DateTimeUtil.formatDateToString(beforeDate, "yyyy-MM-dd");
+        String endDateString = DateTimeUtil.formatDateToString(endDate, "yyyy-MM-dd");
+        if (beforeDateString.equals(endDateString)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -280,5 +375,9 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
     @Autowired
     public void setLineDao(TmetroLineDao lineDao) {
         this.lineDao = lineDao;
+    }
+    @Autowired
+    public void setJdbcDao(JdbcTemplateDao jdbcDao) {
+        this.jdbcDao = jdbcDao;
     }
 }

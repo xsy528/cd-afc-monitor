@@ -61,13 +61,13 @@ public class MonitorConfigController {
     }
 
     @ApiOperation("获取客流监控配置信息")
-    @PostMapping("/getSectionFlowConfig")
+    @PostMapping("/getPassengerFlowConfig")
     public Result<PassengerFlowConfigDTO> getPassengerFlowConfig() {
         return monitorConfigService.getPassengerFlowMonitorConfig();
     }
 
     @ApiOperation("保存客流监控配置信息")
-    @PostMapping("/saveSectionFlowConfig")
+    @PostMapping("/savePassengerFlowConfig")
     public Result<PassengerFlowConfigDTO> savePassengerFlowConfig(@Valid @RequestBody PassengerFlowConfigDTO
                                                                              configDTO) {
         return monitorConfigService.save(configDTO);

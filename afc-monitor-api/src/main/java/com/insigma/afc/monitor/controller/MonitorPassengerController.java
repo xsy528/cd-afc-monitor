@@ -74,7 +74,6 @@ public class MonitorPassengerController {
         PageList pageList = passengerFlowService.getShareODSerchResult(condition);
 
 
-
         return  Result.success(ResultContent.content(PageRequest.of(condition.getPageNumber(),condition.getPageSize()),pageList.getTotalRows()+0L,
                 getTimeShareInfo(pageList)));
     }

@@ -44,6 +44,18 @@ public class ODSearchResultItem implements Serializable {
     @JsonProperty("od_add")
     private Long odAdd;
 
+    @ApiModelProperty("客流合计")
+    @JsonProperty("total_count")
+    private Long totalCount;
+
+    public Long getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Long totalCount) {
+        this.totalCount = totalCount;
+    }
+
     public Integer getStationId() {
         return stationId;
     }

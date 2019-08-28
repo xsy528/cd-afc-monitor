@@ -31,7 +31,7 @@ public class TimeShareCondition extends PageBean {
     private Integer intervalCount;
 
     @ApiModelProperty("票种")
-    @JsonProperty("ticket_type")
+    @JsonProperty("ticket_family")
     private Short ticketType;
 
     @ApiModelProperty("节点名称")

@@ -160,4 +160,7 @@ public class SystemConfigKey {
 
 	// 任务组QR_CC的最新一次执行日期
 	public final static String QR_CC_LAST_HANDLE_DAY = "QR_CC_LAST_HANDLE_DAY";
+
+	//客流刷新周期
+	public static final String PASSENGER_OD_REFRESH_INTERVAL = "PASSENGER_OD_REFRESH_INTERVAL";
 }

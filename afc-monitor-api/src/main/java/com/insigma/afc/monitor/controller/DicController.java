@@ -32,24 +32,6 @@ import java.util.stream.Stream;
 @RequestMapping("/monitor/dic")
 public class DicController {
 
-    @Value("${refreshcycle}")
-    private String refreshCycle;
-
-    @ApiOperation("获取刷新周期")
-    @PostMapping("/flushTime")
-    public Result getFlushTime(){
-
-        return Result.success(refreshCycle);
-    }
-
-    @ApiOperation("设置刷新周期")
-    @PostMapping("/putFlushTime")
-    public Result putFlushTime(@RequestParam String refresh){
-
-
-        return Result.success(true);
-    }
-
 
     @ApiOperation("获取运营模式列表")
     @PostMapping("/modeTypeList")

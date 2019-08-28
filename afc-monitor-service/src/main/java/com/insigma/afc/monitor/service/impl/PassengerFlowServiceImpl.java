@@ -177,10 +177,16 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         return passengerDao.findAll(date, timeIntervals.get(0),timeIntervals.get(1),
                 stations,statType,PageRequest.of(page,pageSize)).map(tuple -> {
             ODSearchResultItem t = new ODSearchResultItem();
-            t.setOdIn(tuple.get("totalIn",Long.class));
-            t.setOdOut(tuple.get("totalOut",Long.class));
-            t.setOdBuy(tuple.get("saleCount",Long.class));
-            t.setOdAdd(tuple.get("addCount",Long.class));
+            Long totalIn = tuple.get("totalIn", Long.class);
+            t.setOdIn(totalIn);
+            Long totalOut = tuple.get("totalOut", Long.class);
+            t.setOdOut(totalOut);
+            Long saleCount = tuple.get("saleCount", Long.class);
+            t.setOdBuy(saleCount);
+            Long addCount = tuple.get("addCount", Long.class);
+            t.setOdAdd(addCount);
+            Long totalCount = totalIn+totalOut+addCount+saleCount;
+            t.setTotalCount(totalCount);
             t.setStationId(tuple.get("stationId",Integer.class));
             t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
             if (statType==1){
@@ -224,7 +230,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             sql.append(" and t.ticket_family = " + ticketType);
         }
         if (date != null) {
-            sql.append(" and t.gathering_date = TO_DATE('"+new java.sql.Date(date.getTime())+" "+new Time(date.getTime())+"','YY-MM-DD HH24:MI:SS')");
+            sql.append(" and t.gathering_date = TO_DATE('"+new java.sql.Date(date.getTime())+"','YY-MM-DD')");
         }
         if (startTimeIndex != null) {
             sql.append(" and t.time_interval_id >= " + startTimeIndex);
@@ -257,15 +263,15 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         String startDate = DateTimeUtil.formatDateToString(startTime, "yyyy-MM-dd");
         String endDate = DateTimeUtil.formatDateToString(endTime, "yyyy-MM-dd");
         if (sameDate) {
-            sql.append(" and (t.gathering_date =TO_DATE('"+ startDate +"','YY-MM-DD HH24:MI:SS')" );
+            sql.append(" and (t.gathering_date =TO_DATE('"+ startDate +"','YY-MM-DD')" );
             sql.append( " and t.time_interval_id >=" +beginInterval );
             sql.append(" and t.time_interval_id< "+endInterval+") ");
         } else {
-            sql.append(" and ((t.gathering_date = TO_DATE('"+ startDate +"','YY-MM-DD HH24:MI:SS')"+
+            sql.append(" and ((t.gathering_date = TO_DATE('"+ startDate +"','YY-MM-DD')"+
                     " and t.time_interval_id >="+beginInterval);
-            sql.append(") or (t.gathering_date>TO_DATE('"+ startDate +"','YY-MM-DD HH24:MI:SS')"+
-                    " and t.gathering_date<TO_DATE('"+ endDate +"','YY-MM-DD HH24:MI:SS')");
-            sql.append(") or (t.gathering_date =TO_DATE('"+ endDate +"','YY-MM-DD HH24:MI:SS')"+
+            sql.append(") or (t.gathering_date>TO_DATE('"+ startDate +"','YY-MM-DD')"+
+                    " and t.gathering_date<TO_DATE('"+ endDate +"','YY-MM-DD')");
+            sql.append(") or (t.gathering_date =TO_DATE('"+ endDate +"','YY-MM-DD')"+
                     " and t.time_interval_id<"+endInterval+" ))");
         }
         sql.append(" and t.station_id in("+listToString(stations.toArray())+") ");

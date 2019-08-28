@@ -14,6 +14,8 @@ import javax.validation.constraints.NotNull;
  */
 @ApiModel("客流监控配置")
 public class PassengerFlowConfigDTO {
+    public PassengerFlowConfigDTO() {
+    }
 
     public PassengerFlowConfigDTO(@NotNull @Min(1) Integer refresh) {
         this.refresh = refresh;

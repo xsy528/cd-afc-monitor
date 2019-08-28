@@ -3,15 +3,15 @@ package com.insigma.afc.monitor.controller;
 import com.insigma.afc.monitor.constant.dic.*;
 import com.insigma.afc.monitor.constant.dic.cd.CDTicketFamily;
 import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
+import com.insigma.afc.monitor.service.StationService;
 import com.insigma.commons.dic.DicitemEntry;
 import com.insigma.commons.dic.annotation.DicItem;
 import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -32,6 +32,13 @@ import java.util.stream.Stream;
 @RequestMapping("/monitor/dic")
 public class DicController {
 
+    private StationService stationService;
+    @Autowired
+    public void setStationService(StationService stationService) {
+        this.stationService = stationService;
+    }
+
+    @Autowired
 
     @ApiOperation("获取运营模式列表")
     @PostMapping("/modeTypeList")
@@ -117,6 +124,12 @@ public class DicController {
         data.add(getMap(1,"按车站"));
         //时间间隔的选择个数
         return Result.success(data);
+    }
+
+    @ApiOperation("获取分时查询-节点名称列表")
+    @PostMapping("/nodeName")
+    public Result getNodeName(){
+        return Result.success(stationService.getStationNameAndId());
     }
 
     @ApiOperation("获取分时查询-时间间隔列表")

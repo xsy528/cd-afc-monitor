@@ -39,4 +39,17 @@ public class StationServiceImpl implements StationService {
         }
         return data;
     }
+
+    @Override
+    public String getStationNameById(Integer id) {
+        String sql = "SELECT t.STATION_NAME AS NAME FROM TMETRO_STATION t  WHERE 1=1 AND t.STATION_ID="+id;
+
+        String stationName = "未知";
+        List<Map<String, Object>> maps = templateDao.queryForMaps(sql, null);
+
+        for(Map<String, Object> map:maps){
+            stationName = map.get("NAME")+"";
+        }
+        return stationName;
+    }
 }

@@ -9,5 +9,16 @@ import java.util.Map;
  * @Ticket :
  */
 public interface StationService {
+    /**
+     * 获取车站id和名称
+     * @return
+     */
     Map<Integer,String> getStationNameAndId();
+
+    /**
+     * 根据id获取name
+     * @param id
+     * @return
+     */
+    String getStationNameById(Integer id);
 }

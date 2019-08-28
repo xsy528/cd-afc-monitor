@@ -73,6 +73,8 @@ public class MonitorPassengerController {
 
         PageList pageList = passengerFlowService.getShareODSerchResult(condition);
 
+
+
         return  Result.success(ResultContent.content(PageRequest.of(condition.getPageNumber(),condition.getPageSize()),pageList.getTotalRows()+0L,
                 getTimeShareInfo(pageList)));
     }
@@ -136,6 +138,13 @@ public class MonitorPassengerController {
 
     }
 
+    private void printMap(Map<String,Object> line) {
+        for (Map.Entry<String, Object> entry : line.entrySet()) {
+            String key = entry.getKey();
+            LOGGER.debug(key + "=========" + entry.getValue());
+        }
+    }
+
     private List<TimeShareVO> getTimeShareInfo(PageList pageList){
         List list = pageList.getList();
         List<TimeShareVO> data = new ArrayList<>();
@@ -143,6 +152,7 @@ public class MonitorPassengerController {
         for (Object object:list){
             TimeShareVO vo = new TimeShareVO();
             Map<String,Object> map = (Map)object;
+            printMap(map);
 
             vo.setTime(map.get("TIME")+"");
             vo.setTotalIn(map.get("TOTAL_IN")+"");

@@ -156,8 +156,8 @@ public class JdbcTemplateDao {
         StringBuffer paginationSQL = new StringBuffer(" SELECT * FROM ( ");
         paginationSQL.append(" SELECT temp.* ,ROWNUM num FROM ( ");
         paginationSQL.append(sql);
-        paginationSQL.append("　) temp where ROWNUM <= " + page*pageSize);
-        paginationSQL.append(" ) WHERE　num > " + (page-1)*pageSize);
+        paginationSQL.append("　) temp where ROWNUM <= " + (page+1)*pageSize);
+        paginationSQL.append(" ) WHERE　num > " + page*pageSize);
         //查询第page页的数据sql语句
 
         LOGGER.debug(">>>>>>sql:"+paginationSQL.toString());
@@ -173,7 +173,7 @@ public class JdbcTemplateDao {
 
         //返回分页格式数据
         PageList pl =new PageList();
-        pl.setPage(page);
+        pl.setPage(page+1);
         //设置显示的当前页数
         pl.setPageSize(pageSize);
         //设置每页个数

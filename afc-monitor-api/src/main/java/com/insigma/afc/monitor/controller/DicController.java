@@ -8,8 +8,10 @@ import com.insigma.commons.dic.annotation.DicItem;
 import com.insigma.commons.model.dto.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -29,6 +31,25 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/monitor/dic")
 public class DicController {
+
+    @Value("${refreshcycle}")
+    private String refreshCycle;
+
+    @ApiOperation("获取刷新周期")
+    @PostMapping("/flushTime")
+    public Result getFlushTime(){
+
+        return Result.success(refreshCycle);
+    }
+
+    @ApiOperation("设置刷新周期")
+    @PostMapping("/putFlushTime")
+    public Result putFlushTime(@RequestParam String refresh){
+
+
+        return Result.success(true);
+    }
+
 
     @ApiOperation("获取运营模式列表")
     @PostMapping("/modeTypeList")

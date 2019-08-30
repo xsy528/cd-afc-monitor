@@ -173,6 +173,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         Integer page = condition.getPageNumber();
         Integer pageSize = condition.getPageSize();
+        int index = page*pageSize+1;
         Map<Object, String> ticketFamilyMap = AFCTicketFamily.getInstance().getCodeMap();
         return passengerDao.findAll(date, timeIntervals.get(0),timeIntervals.get(1),
                 stations,statType,PageRequest.of(page,pageSize)).map(tuple -> {

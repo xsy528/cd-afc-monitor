@@ -119,36 +119,36 @@ public class RegisterHealthIndicator extends AbstractHealthIndicator {
             } else {
                 try {
                     // RMI调用
-//                    RegisterResult registerResult = cmdService.register();
-//                    if (registerResult != null && registerResult.getResult() == 0) {
-//                        List<FtpInfo> importFtpList = registerResult.getImportFTPList();
-//                        for (FtpInfo ftpInfo : importFtpList) {
-//                            if (!ftpInfo.isEmpty() && !"".equals(ftpInfo.getPass()) && ftpInfo.getPass() != null) {
-//                                String pass = DESUtil.decrypt(ftpInfo.getPass());
-//                                ftpInfo.setPass(pass);
-//                            }
-//                        }
-//                        List<FtpInfo> exportFtpList = registerResult.getExportFTPList();
-//                        for (FtpInfo ftpInfo : exportFtpList) {
-//                            if (!ftpInfo.isEmpty() && !"".equals(ftpInfo.getPass()) && ftpInfo.getPass() != null) {
-//                                String pass = DESUtil.decrypt(ftpInfo.getPass());
-//                                ftpInfo.setPass(pass);
-//                            }
-//                        }
-//                        LOGGER.info("获取服务器ftp信息");
-//                        if (registerResult.getExportFTPList() != null) {
-//                            LOGGER.info("-----------------导出FTP信息------------------");
-//                            logFtpInfo(registerResult.getExportFTPList());
-//                        }
-//                        if (registerResult.getImportFTPList() != null) {
-//                            LOGGER.info("-----------------导入FTP信息------------------");
-//                            logFtpInfo(registerResult.getImportFTPList());
-//                        }
-//                        isOnline = true;
-//                        LOGGER.info("注册服务端成功。");
-//                    } else {
-//                        LOGGER.info("注册服务端失败。");
-//                    }
+                    RegisterResult registerResult = cmdService.register();
+                    if (registerResult != null && registerResult.getResult() == 0) {
+                        List<FtpInfo> importFtpList = registerResult.getImportFTPList();
+                        for (FtpInfo ftpInfo : importFtpList) {
+                            if (!ftpInfo.isEmpty() && !"".equals(ftpInfo.getPass()) && ftpInfo.getPass() != null) {
+                                String pass = DESUtil.decrypt(ftpInfo.getPass());
+                                ftpInfo.setPass(pass);
+                            }
+                        }
+                        List<FtpInfo> exportFtpList = registerResult.getExportFTPList();
+                        for (FtpInfo ftpInfo : exportFtpList) {
+                            if (!ftpInfo.isEmpty() && !"".equals(ftpInfo.getPass()) && ftpInfo.getPass() != null) {
+                                String pass = DESUtil.decrypt(ftpInfo.getPass());
+                                ftpInfo.setPass(pass);
+                            }
+                        }
+                        LOGGER.info("获取服务器ftp信息");
+                        if (registerResult.getExportFTPList() != null) {
+                            LOGGER.info("-----------------导出FTP信息------------------");
+                            logFtpInfo(registerResult.getExportFTPList());
+                        }
+                        if (registerResult.getImportFTPList() != null) {
+                            LOGGER.info("-----------------导入FTP信息------------------");
+                            logFtpInfo(registerResult.getImportFTPList());
+                        }
+                        isOnline = true;
+                        LOGGER.info("注册服务端成功。");
+                    } else {
+                        LOGGER.info("注册服务端失败。");
+                    }
                 } catch (Exception e) {
                     LOGGER.error("无法注册到到服务器。", e);
                     // 修改状态

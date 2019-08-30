@@ -102,16 +102,16 @@ public class MonitorPassengerController {
             Map<String, Object> map = (Map) object;
             dto.setName(getTicketType(map.get("TICKETFAMILY")));
             List<Long> values = new ArrayList<>();
-            if(index == 1){
+            if(index == 0){
                 //进站
                 values.add(Long.valueOf(map.get("TOTAL_IN")+""));
-            }else if(index == 2){
+            }else if(index == 1){
                 //出站
                 values.add(Long.valueOf(map.get("TOTAL_OUT")+""));
-            }else if(index == 3){
+            }else if(index == 2){
                 //购票
                 values.add(Long.valueOf(map.get("SALE_COUNT")+""));
-            }else if(index == 4){
+            }else if(index == 3){
                 //充值
                 values.add(Long.valueOf(map.get("ADD_COUNT")+""));
             }else {

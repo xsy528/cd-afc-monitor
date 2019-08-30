@@ -6,6 +6,7 @@ import com.insigma.afc.monitor.dao.util.PageList;
 import com.insigma.afc.monitor.model.ResultContent;
 import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
+import com.insigma.afc.monitor.model.dto.TicketComparePieDTO;
 import com.insigma.afc.monitor.model.dto.condition.*;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.model.vo.TicketCompareVO;
@@ -80,7 +81,7 @@ public class MonitorPassengerController {
 
     @ApiOperation("客流监控-票卡对比")
     @PostMapping("passengerTicketCompare")
-    public Result<ResultContent<List<TicketCompareVO>>> getTicketCompare(@RequestBody TicketCompareCondition condition){
+    public Result<List<TicketCompareVO>> getTicketCompare(@RequestBody TicketCompareCondition condition){
 
         PageList pageList = passengerFlowService.getTicketCompareResult(condition);
 
@@ -93,36 +94,48 @@ public class MonitorPassengerController {
         }
 
 
-        return Result.success(ResultContent.content(PageRequest.of(condition.getPageNumber(),condition.getPageSize()),pageList.getTotalRows()+0L,
-               data));
+        return Result.success(data);
     }
-    private BarPieChartDTO getPie(List list,int index){
-        BarPieChartDTO dto = new BarPieChartDTO();
+    private TicketComparePieDTO getPie(List list, int index){
+        List<String> names = new ArrayList<>();
+        List<Long> values = new ArrayList<>();
         for (Object object:list) {
             Map<String, Object> map = (Map) object;
-            dto.setName(getTicketType(map.get("TICKETFAMILY")));
-            List<Long> values = new ArrayList<>();
+
             if(index == 0){
                 //进站
-                values.add(Long.valueOf(map.get("TOTAL_IN")+""));
+                Long value = Long.valueOf(map.get("TOTAL_IN") + "");
+                if(value!=0){
+                    values.add(value);
+                    names.add( getTicketType(Integer.valueOf(map.get("TICKETFAMILY") + "")));
+                }
             }else if(index == 1){
                 //出站
-                values.add(Long.valueOf(map.get("TOTAL_OUT")+""));
+                Long value = Long.valueOf(map.get("TOTAL_OUT") + "");
+                if(value!=0){
+                    values.add(value);
+                    names.add( getTicketType(Integer.valueOf(map.get("TICKETFAMILY") + "")));
+                }
             }else if(index == 2){
                 //购票
-                values.add(Long.valueOf(map.get("SALE_COUNT")+""));
+                Long value = Long.valueOf(map.get("TOTAL_OUT") + "");
+                if(value!=0) {
+                    values.add(value);
+                    names.add(getTicketType(Integer.valueOf(map.get("TICKETFAMILY") + "")));
+                }
             }else if(index == 3){
                 //充值
-                values.add(Long.valueOf(map.get("ADD_COUNT")+""));
+                    Long value = Long.valueOf(map.get("ADD_COUNT") + "");
+                    if(value!=0) {
+                        values.add(value);
+                        names.add(getTicketType(Integer.valueOf(map.get("TICKETFAMILY") + "")));
+                    }
             }else {
-                dto.setName("未知");
-                dto.setValues(null);
+
             }
 
-
-            dto.setValues(values);
         }
-        return dto;
+        return new TicketComparePieDTO(names,values);
     }
 
     private String getTicketType(Object key){

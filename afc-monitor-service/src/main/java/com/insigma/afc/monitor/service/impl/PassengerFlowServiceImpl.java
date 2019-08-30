@@ -252,7 +252,6 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         Date startTime = condition.getStartTime();
         Date endTime = condition.getEndTime();
         List<Integer> stations = condition.getStations();
-        List<Integer> transType = condition.getTransType();
         Integer timeInterval = 5;
         int beginInterval = DateTimeUtil.convertTimeToIndex(startTime, timeInterval);
         int endInterval = DateTimeUtil.convertTimeToIndex(endTime, timeInterval);
@@ -278,7 +277,8 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         sql.append(" and t.station_id in("+listToString(stations.toArray())+") ");
         sql.append(" group by t.ticket_family ");
 
-        return jdbcDao.queryByPageForOracle(sql.toString(), null, condition.getPageNumber(), condition.getPageSize(), null);
+        System.out.println(sql.toString());
+        return jdbcDao.queryByPageForOracle(sql.toString(), null, 0, 100, null);
     }
 
     private String listToString(Object[] objects){

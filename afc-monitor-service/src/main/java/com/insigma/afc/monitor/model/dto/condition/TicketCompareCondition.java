@@ -16,9 +16,9 @@ import java.util.List;
  * @Ticket :
  */
 @ApiModel("票卡对比查询条件")
-public class TicketCompareCondition extends PageBean {
+public class TicketCompareCondition  {
 
-    private String[] partNames = {"进站","出战","购票","充值"};
+    private final String[] partNames = {"进站","出战","购票","充值"};
 
     @ApiModelProperty("开始时间")
     @JsonProperty("start_time")
@@ -75,7 +75,4 @@ public class TicketCompareCondition extends PageBean {
         return partNames;
     }
 
-    public void setPartNames(String[] partNames) {
-        this.partNames = partNames;
-    }
 }

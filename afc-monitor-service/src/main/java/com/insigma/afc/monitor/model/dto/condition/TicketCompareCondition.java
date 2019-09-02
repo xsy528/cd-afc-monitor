@@ -18,7 +18,7 @@ import java.util.List;
 @ApiModel("票卡对比查询条件")
 public class TicketCompareCondition  {
 
-    private final String[] partNames = {"进站","出战","购票","充值"};
+    private final String[] partNames = {"进站","出站","购票","充值"};
 
     @ApiModelProperty("开始时间")
     @JsonProperty("start_time")

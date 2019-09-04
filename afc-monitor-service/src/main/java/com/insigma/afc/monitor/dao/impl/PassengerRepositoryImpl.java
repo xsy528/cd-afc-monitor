@@ -123,16 +123,12 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         selections.add(builder.sum(root.get("totalOut")).alias("totalOut"));
         selections.add(builder.sum(root.get("saleCount")).alias("saleCount"));
         selections.add(builder.sum(root.get("addCount")).alias("addCount"));
-        selections.add(root.get("stationId").alias("stationId"));
-        selections.add(root.get("lineId").alias("lineId"));
         //count
         Selection countSelection = null;
 
         //where
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("gatheringDate"), gatheringDate));
-        predicates.add(builder.greaterThanOrEqualTo(root.get("timeIntervalId"), startTimeInterval));
-        predicates.add(builder.lessThanOrEqualTo(root.get("timeIntervalId"), endTimeInterval));
+
         if (stations != null && !stations.isEmpty()) {
             predicates.add(root.get("stationId").in(stations));
         }
@@ -141,29 +137,43 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         }
         if (statType==0){
             //按票种分组
+
+            selections.add(root.get("stationId").alias("stationId"));
+
             selections.add(root.get("ticketFamily").alias("ticketFamily"));
-            query.groupBy(root.get("lineId"),root.get("ticketFamily"),root.get("stationId"));
-            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("ticketFamily")),builder.asc(root.get("stationId")));
-            countQuery.groupBy(root.get("lineId"),root.get("stationId"),root.get("ticketFamily"));
+            query.groupBy(root.get("ticketFamily"),root.get("stationId"));
+            query.orderBy(builder.asc(root.get("ticketFamily")),builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("stationId"),root.get("ticketFamily"));
             countSelection = builder.count(countRoot.get("stationId"));
         }else if (statType==1){
             //按车站分组
-            query.groupBy(root.get("lineId"),root.get("stationId"));
-            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("stationId")));
-            countQuery.groupBy(root.get("lineId"),root.get("stationId"));
+
+            selections.add(root.get("stationId").alias("stationId"));
+
+            query.groupBy(root.get("stationId"));
+            query.orderBy(builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("stationId"));
             countSelection = builder.count(countRoot.get("stationId"));
         }else if (statType==2){
+            selections.add(root.get("lineId").alias("lineId"));
+
             selections.add(root.get("ticketFamily").alias("ticketFamily"));
-            query.groupBy(root.get("lineId"),root.get("ticketFamily"),root.get("stationId"));
-            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("ticketFamily")),builder.asc(root.get("stationId")));
-            countQuery.groupBy(root.get("lineId"),root.get("stationId"),root.get("ticketFamily"));
+            query.groupBy(root.get("lineId"),root.get("ticketFamily"));
+            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("ticketFamily")));
+            countQuery.groupBy(root.get("lineId"),root.get("ticketFamily"));
             countSelection = builder.count(countRoot.get("lineId"));
         }else if (statType==3){
-            query.groupBy(root.get("lineId"),root.get("stationId"));
-            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("stationId")));
-            countQuery.groupBy(root.get("lineId"),root.get("stationId"));
+            selections.add(root.get("lineId").alias("lineId"));
+
+            query.groupBy(root.get("lineId"));
+            query.orderBy(builder.asc(root.get("lineId")));
+            countQuery.groupBy(root.get("lineId"));
             countSelection = builder.count(countRoot.get("lineId"));
         }
+        predicates.add(builder.equal(root.get("gatheringDate"), gatheringDate));
+        predicates.add(builder.greaterThanOrEqualTo(root.get("timeIntervalId"), startTimeInterval));
+        predicates.add(builder.lessThanOrEqualTo(root.get("timeIntervalId"), endTimeInterval));
+
         query.multiselect(selections.toArray(new Selection[0]));
         Predicate[] predicates1 = predicates.toArray(new Predicate[0]);
         query.where(predicates1);

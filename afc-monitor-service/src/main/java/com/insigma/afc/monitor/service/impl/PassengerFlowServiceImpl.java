@@ -183,13 +183,30 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             t.setOdOut(tuple.get("totalOut", Long.class));
             t.setOdBuy(tuple.get("saleCount", Long.class));
             t.setOdAdd(tuple.get("addCount", Long.class));
-            t.setLineId(tuple.get("lineId",Short.class));
-            t.setLineName(topologyService.getLineNode(t.getLineId().shortValue()).getData().getLineName());
-            t.setStationId(tuple.get("stationId",Integer.class));
-            t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
-            if (statType==1||statType==3){
+
+            if (statType==1){
                 t.setTicketFamily("全部票种/无");
-            }else if(statType==0||statType==2){
+                t.setStationId(tuple.get("stationId",Integer.class));
+                t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
+            }else if(statType==0){
+                t.setStationId(tuple.get("stationId",Integer.class));
+                t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
+
+                Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
+                String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
+                if (ticketFamilyName == null){
+                    t.setTicketFamily("票种未知/" + formatTicketFamilyType(ticketFamilyType));
+                }else {
+                    t.setTicketFamily(ticketFamilyName + "/" + formatTicketFamilyType(ticketFamilyType));
+                }
+            }else if(statType==3){
+                t.setTicketFamily("全部票种/无");
+                t.setLineId(tuple.get("lineId",Short.class));
+                t.setLineName(topologyService.getLineNode(t.getLineId().shortValue()).getData().getLineName()+"/"+t.getLineId());
+            }else if(statType==2){
+                t.setLineId(tuple.get("lineId",Short.class));
+                t.setLineName(topologyService.getLineNode(t.getLineId().shortValue()).getData().getLineName()+"/"+t.getLineId());
+
                 Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
                 String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
                 if (ticketFamilyName == null){

@@ -119,9 +119,11 @@ public class DicController {
     @PostMapping("/countType")
     public Result getCountType(){
 
-        List<Map> data = new ArrayList<>(2);
+        List<Map> data = new ArrayList<>(4);
         data.add(getMap(0,"按车站和票种"));
         data.add(getMap(1,"按车站"));
+        data.add(getMap(2,"按线路和票种"));
+        data.add(getMap(3,"按线路"));
         //时间间隔的选择个数
         return Result.success(data);
     }

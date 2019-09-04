@@ -169,6 +169,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         Date date = condition.getDate();
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
         List<Integer> stations = condition.getStations();
+        List<Short> lines = condition.getLines();
         Short statType = condition.getStatType();
 
         Integer page = condition.getPageNumber();
@@ -176,23 +177,19 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         int index = page*pageSize+1;
         Map<Object, String> ticketFamilyMap = AFCTicketFamily.getInstance().getCodeMap();
         return passengerDao.findAll(date, timeIntervals.get(0),timeIntervals.get(1),
-                stations,statType,PageRequest.of(page,pageSize)).map(tuple -> {
+                lines,stations,statType,PageRequest.of(page,pageSize)).map(tuple -> {
             ODSearchResultItem t = new ODSearchResultItem();
-            Long totalIn = tuple.get("totalIn", Long.class);
-            t.setOdIn(totalIn);
-            Long totalOut = tuple.get("totalOut", Long.class);
-            t.setOdOut(totalOut);
-            Long saleCount = tuple.get("saleCount", Long.class);
-            t.setOdBuy(saleCount);
-            Long addCount = tuple.get("addCount", Long.class);
-            t.setOdAdd(addCount);
-            Long totalCount = totalIn+totalOut+addCount+saleCount;
-            t.setTotalCount(totalCount);
+            t.setOdIn(tuple.get("totalIn", Long.class));
+            t.setOdOut(tuple.get("totalOut", Long.class));
+            t.setOdBuy(tuple.get("saleCount", Long.class));
+            t.setOdAdd(tuple.get("addCount", Long.class));
+            t.setLineId(tuple.get("lineId",Short.class));
+            t.setLineName(topologyService.getLineNode(t.getLineId().shortValue()).getData().getLineName());
             t.setStationId(tuple.get("stationId",Integer.class));
             t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
-            if (statType==1){
+            if (statType==1||statType==3){
                 t.setTicketFamily("全部票种/无");
-            }else if(statType==0){
+            }else if(statType==0||statType==2){
                 Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
                 String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
                 if (ticketFamilyName == null){

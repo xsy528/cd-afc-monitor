@@ -108,7 +108,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
     }
 
     @Override
-    public Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval, List<Integer> stations,
+    public Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval, List<Short> lines, List<Integer> stations,
                                Short statType, Pageable pageable) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = builder.createTupleQuery();
@@ -124,8 +124,9 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         selections.add(builder.sum(root.get("saleCount")).alias("saleCount"));
         selections.add(builder.sum(root.get("addCount")).alias("addCount"));
         selections.add(root.get("stationId").alias("stationId"));
+        selections.add(root.get("lineId").alias("lineId"));
         //count
-        Selection countSelection = builder.count(countRoot.get("stationId"));
+        Selection countSelection = null;
 
         //where
         List<Predicate> predicates = new ArrayList<>();
@@ -135,17 +136,33 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         if (stations != null && !stations.isEmpty()) {
             predicates.add(root.get("stationId").in(stations));
         }
+        if (lines != null && !lines.isEmpty()) {
+            predicates.add(root.get("lineId").in(lines));
+        }
         if (statType==0){
             //按票种分组
             selections.add(root.get("ticketFamily").alias("ticketFamily"));
-            query.groupBy(root.get("stationId"),root.get("ticketFamily"));
-            query.orderBy(builder.asc(root.get("stationId")),builder.asc(root.get("ticketFamily")));
-            countQuery.groupBy(root.get("stationId"),root.get("ticketFamily"));
+            query.groupBy(root.get("lineId"),root.get("ticketFamily"),root.get("stationId"));
+            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("ticketFamily")),builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("lineId"),root.get("stationId"),root.get("ticketFamily"));
+            countSelection = builder.count(countRoot.get("stationId"));
         }else if (statType==1){
             //按车站分组
-            query.groupBy(root.get("stationId"));
-            query.orderBy(builder.asc(root.get("stationId")));
-            countQuery.groupBy(root.get("stationId"));
+            query.groupBy(root.get("lineId"),root.get("stationId"));
+            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("lineId"),root.get("stationId"));
+            countSelection = builder.count(countRoot.get("stationId"));
+        }else if (statType==2){
+            selections.add(root.get("ticketFamily").alias("ticketFamily"));
+            query.groupBy(root.get("lineId"),root.get("ticketFamily"),root.get("stationId"));
+            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("ticketFamily")),builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("lineId"),root.get("stationId"),root.get("ticketFamily"));
+            countSelection = builder.count(countRoot.get("lineId"));
+        }else if (statType==3){
+            query.groupBy(root.get("lineId"),root.get("stationId"));
+            query.orderBy(builder.asc(root.get("lineId")),builder.asc(root.get("stationId")));
+            countQuery.groupBy(root.get("lineId"),root.get("stationId"));
+            countSelection = builder.count(countRoot.get("lineId"));
         }
         query.multiselect(selections.toArray(new Selection[0]));
         Predicate[] predicates1 = predicates.toArray(new Predicate[0]);

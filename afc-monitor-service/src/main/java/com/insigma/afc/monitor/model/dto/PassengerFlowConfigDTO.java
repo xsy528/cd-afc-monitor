@@ -3,6 +3,7 @@ package com.insigma.afc.monitor.model.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -17,13 +18,14 @@ public class PassengerFlowConfigDTO {
     public PassengerFlowConfigDTO() {
     }
 
-    public PassengerFlowConfigDTO(@NotNull @Min(1) Integer refresh) {
+    public PassengerFlowConfigDTO(@NotNull @Min(10) Integer refresh) {
         this.refresh = refresh;
     }
 
     @NotNull
-    @Min(1)
-    @ApiModelProperty("客流密度警告阈值[人次/分钟]")
+    @Min(10)
+    @Max(600)
+    @ApiModelProperty("客流刷新频率[秒/次]")
     private Integer refresh;
 
     public Integer getRefresh() {

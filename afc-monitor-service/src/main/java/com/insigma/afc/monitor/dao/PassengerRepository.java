@@ -50,5 +50,5 @@ public interface PassengerRepository {
      * @return 数据
      */
     Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval,
-                        List<Integer> stations, Short statType, Pageable pageable);
+                        List<Short> lines,List<Integer> stations, Short statType, Pageable pageable);
 }

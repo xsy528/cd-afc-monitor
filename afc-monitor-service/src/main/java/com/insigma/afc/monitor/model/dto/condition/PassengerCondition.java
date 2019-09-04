@@ -32,6 +32,18 @@ public class PassengerCondition extends PageBean {
     @JsonProperty("stations")
     protected List<Integer> stations;
 
+    @ApiModelProperty("线路编号")
+    @JsonProperty("lines")
+    protected List<Short> lines;
+
+    public List<Short> getLines() {
+        return lines;
+    }
+
+    public void setLines(List<Short> lines) {
+        this.lines = lines;
+    }
+
     public Date getDate() {
         return date;
     }

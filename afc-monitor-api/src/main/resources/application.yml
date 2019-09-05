@@ -12,7 +12,7 @@ spring:
   application:
     name: monitor
   profiles:
-    active: dev
+    active: pro
   #http编码配置
   http:
     encoding:

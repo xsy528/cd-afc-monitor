@@ -141,8 +141,9 @@ public class PassengerRepositoryImpl implements PassengerRepository {
             selections.add(root.get("stationId").alias("stationId"));
 
             selections.add(root.get("ticketFamily").alias("ticketFamily"));
-            query.groupBy(root.get("ticketFamily"),root.get("stationId"));
-            query.orderBy(builder.asc(root.get("ticketFamily")),builder.asc(root.get("stationId")));
+            query.groupBy(root.get("stationId"),root.get("ticketFamily"));
+            query.orderBy(builder.asc(root.get("stationId")),builder.asc(root.get("ticketFamily")));
+
             countQuery.groupBy(root.get("stationId"),root.get("ticketFamily"));
             countSelection = builder.count(countRoot.get("stationId"));
         }else if (statType==1){

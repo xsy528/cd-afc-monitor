@@ -337,8 +337,8 @@ public class NodeTreeServiceImpl implements NodeTreeService {
      * @param status   状态
      * @return 状态
      */
-    private int getDeviceStatus(int status,boolean notActive) {
-        if (notActive){
+    private int getDeviceStatus(int status,boolean active) {
+        if (!active){
             //暂停服务
             return 4;
         }else if (status == DeviceStatus.NORMAL) {

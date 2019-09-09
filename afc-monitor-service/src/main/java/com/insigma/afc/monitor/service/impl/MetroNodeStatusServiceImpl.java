@@ -313,10 +313,10 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 break;
             }
         }
-        Boolean notActive = tmoItemStatus.getItemActivity();
-        if (notActive != null&& onLine && isOnline) {
+        Boolean active = tmoItemStatus.getItemActivity();
+        if (active != null&& onLine && isOnline) {
             //暂停服务,并且查询包含了该状态
-            if (notActive){
+            if (!active){
                 if (statusLevel.contains(DeviceStatus.STOP_SERVICE)) {
                     hasStatus = true;
                 }
@@ -437,6 +437,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
             for (Integer sid : stationIDs) {
                 if (sid.equals(stationId)) {
                     isNeed = true;
+                    break;
                 }
             }
         }

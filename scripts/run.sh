@@ -2,7 +2,7 @@
 
 #项目名称
 APP_NAME="监控服务"
-
+JAR_NAME="afc-monitor*"
 #命令使用说明，给出提示
 usage() {
     echo "Usage: sh run.sh [start|stop|restart|status]"
@@ -21,8 +21,7 @@ is_exist(){
 
 #获取pid
 get_pid(){
-  jar_name=`ls|grep *jar`
-  pid=`ps -ef|grep ${jar_name}|grep -v grep|awk '{print $2}'`
+  pid=`ps -ef|grep ${JAR_NAME}|grep -v grep|awk '{print $2}'`
 }
 
 #打印pid
@@ -60,8 +59,8 @@ start(){
     command="nohup java
     -Djava.rmi.server.hostname=192.168.178.184
     -Dcom.sun.management.jmxremote
-    -Dcom.sun.management.jmxremote.port=18083
-    -Dcom.sun.management.jmxremote.rmi.port=18083
+    -Dcom.sun.management.jmxremote.port=18082
+    -Dcom.sun.management.jmxremote.rmi.port=18082
     -Dcom.sun.management.jmxremote.ssl=false
     -Dcom.sun.management.jmxremote.authenticate=false
     -Xms50M -Xmx1000M

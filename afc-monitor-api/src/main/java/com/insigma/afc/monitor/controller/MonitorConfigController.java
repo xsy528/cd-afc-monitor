@@ -1,6 +1,7 @@
 package com.insigma.afc.monitor.controller;
 
 import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
+import com.insigma.afc.monitor.model.dto.PassengerFlowConfigDTO;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.afc.monitor.service.MonitorConfigService;
 import com.insigma.commons.model.dto.Result;
@@ -56,6 +57,19 @@ public class MonitorConfigController {
     @PostMapping("/saveSectionFlowConfig")
     public Result<SectionFlowMonitorConfigDTO> saveSectionFlowConfig(@Valid @RequestBody SectionFlowMonitorConfigDTO
                                                                                  configDTO) {
+        return monitorConfigService.save(configDTO);
+    }
+
+    @ApiOperation("获取客流监控配置信息")
+    @PostMapping("/getPassengerFlowConfig")
+    public Result<PassengerFlowConfigDTO> getPassengerFlowConfig() {
+        return monitorConfigService.getPassengerFlowMonitorConfig();
+    }
+
+    @ApiOperation("保存客流监控配置信息")
+    @PostMapping("/savePassengerFlowConfig")
+    public Result<PassengerFlowConfigDTO> savePassengerFlowConfig(@Valid @RequestBody PassengerFlowConfigDTO
+                                                                             configDTO) {
         return monitorConfigService.save(configDTO);
     }
 }

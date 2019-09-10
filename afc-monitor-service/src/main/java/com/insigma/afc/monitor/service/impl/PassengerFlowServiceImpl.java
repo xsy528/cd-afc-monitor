@@ -3,14 +3,15 @@ package com.insigma.afc.monitor.service.impl;
 import com.insigma.afc.monitor.constant.SystemConfigKey;
 import com.insigma.afc.monitor.constant.dic.AFCTicketFamily;
 import com.insigma.afc.monitor.dao.PassengerDao;
+import com.insigma.afc.monitor.dao.TmetroLineDao;
 import com.insigma.afc.monitor.dao.TsyConfigDao;
+import com.insigma.afc.monitor.dao.util.JdbcTemplateDao;
+import com.insigma.afc.monitor.dao.util.PageList;
 import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesData;
-import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
-import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
-import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
-import com.insigma.afc.monitor.model.entity.TmoOdFlowStats;
+import com.insigma.afc.monitor.model.dto.condition.*;
+import com.insigma.afc.monitor.model.entity.TmetroLine;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import com.insigma.afc.monitor.service.PassengerFlowService;
 import com.insigma.afc.monitor.service.rest.TopologyService;
@@ -23,7 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
-import javax.persistence.criteria.Predicate;
+import java.sql.Time;
 import java.util.*;
 
 
@@ -40,6 +41,8 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
     private PassengerDao passengerDao;
     private TopologyService topologyService;
+    private TmetroLineDao lineDao;
+    private JdbcTemplateDao jdbcDao;
 
     @Autowired
     public PassengerFlowServiceImpl(TsyConfigDao tsyConfigDao){
@@ -56,13 +59,13 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
         List<Tuple> bars = passengerDao.findAllBarAndPie(condition.getDate(), timeIntervals.get(0),
-                timeIntervals.get(1),condition.getStationIds(), condition.getTicketFamily());
+                timeIntervals.get(1),condition.getLines(), condition.getTicketFamily());
 
         //柱状数据
         List<BarPieChartDTO> barPieChartDTOS = new ArrayList<>();
         for (Tuple t : bars) {
             //车站id
-            Integer stationId = t.get("stationId",Integer.class);
+            Short lineId = t.get("lineId",Short.class);
             //进站
             long odin = t.get("totalIn",Long.class);
             //出站
@@ -75,8 +78,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
             long total = odin+odout+odbuy+odadd;
             List<Long> valueOfRows = Arrays.asList(odin,odout,odbuy,odadd,total);
             //车站名称
-            String culumnName = topologyService.getStationNode(stationId).getData().getStationName();
-            barPieChartDTOS.add(new BarPieChartDTO(culumnName, valueOfRows));
+            try {
+                String columnName = getLineNameById(lineId);
+                barPieChartDTOS.add(new BarPieChartDTO(columnName, valueOfRows));
+            }catch (Exception e){
+                LOGGER.error("获取车站节点失败:{}",e.getMessage());
+            }
         }
         return barPieChartDTOS;
     }
@@ -84,12 +91,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
     @Override
     public List<SeriesChartDTO> getSeriesChart(SeriesCondition condition) {
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
-        List<Integer> stationIds = condition.getStationIds();
+        List<Short> lines = condition.getLines();
         Date date = condition.getDate();
         List<Tuple> tmoOdFlowStats = passengerDao.findAllSeries(condition.getDate(), timeIntervals.get(0),
-                timeIntervals.get(1),condition.getStationIds(), condition.getTicketFamily());
+                timeIntervals.get(1),lines, condition.getTicketFamily());
 
-        Map<Integer, List<Tuple>> sortData = sortData(tmoOdFlowStats, stationIds);
+        Map<Short, List<Tuple>> sortData = sortData(tmoOdFlowStats, lines);
         // 每个曲线上的点包含timeIntervalId的个数inclueTimeIdCount(默认值为1)
         int inclueTimeIdCount = 1;
         if (condition.getIntervalCount() > 1) {
@@ -98,7 +105,7 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         Calendar cal = Calendar.getInstance();
         List<SeriesChartDTO> seriersItems = new ArrayList<>();
         // 生成各条曲线数据
-        for(Map.Entry<Integer,List<Tuple>> entry:sortData.entrySet()){
+        for(Map.Entry<Short,List<Tuple>> entry:sortData.entrySet()){
             List<Tuple> dataList = entry.getValue();
             if (dataList.isEmpty()){
                 continue;
@@ -146,9 +153,12 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
                 points.add(new SeriesData(cal.getTime(), Arrays.asList(pointodin, pointodout, pointodbuy, pointodadd)));
             }
-
-            String seriesName = topologyService.getStationNode(entry.getKey()).getData().getStationName();
-            seriersItems.add(new SeriesChartDTO(seriesName, points));
+            try {
+                String seriesName = getLineNameById(entry.getKey());
+                seriersItems.add(new SeriesChartDTO(seriesName, points));
+            }catch (Exception e){
+                LOGGER.error("获取车站节点失败:{}",e.getMessage());
+            }
         }
         return seriersItems;
     }
@@ -158,48 +168,172 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
 
         Date date = condition.getDate();
         List<Integer> timeIntervals = getTimeInterval(condition.getTime());
-        List<Integer> stationIds = condition.getStationIds();
+        List<Integer> stations = condition.getStations();
+        List<Short> lines = condition.getLines();
         Short statType = condition.getStatType();
 
         Integer page = condition.getPageNumber();
         Integer pageSize = condition.getPageSize();
-        Map<Object, String> ticketFamily = AFCTicketFamily.getInstance().getCodeMap();
+        int index = page*pageSize+1;
+        Map<Object, String> ticketFamilyMap = AFCTicketFamily.getInstance().getCodeMap();
         return passengerDao.findAll(date, timeIntervals.get(0),timeIntervals.get(1),
-                stationIds,statType,PageRequest.of(page,pageSize)).map(tuple -> {
+                lines,stations,statType,PageRequest.of(page,pageSize)).map(tuple -> {
             ODSearchResultItem t = new ODSearchResultItem();
-            t.setOdIn(tuple.get("totalIn",Long.class));
-            t.setOdOut(tuple.get("totalOut",Long.class));
-            t.setOdBuy(tuple.get("saleCount",Long.class));
-            t.setOdAdd(tuple.get("addCount",Long.class));
-            t.setStationId(tuple.get("stationId",Integer.class));
-            t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
+            t.setOdIn(tuple.get("totalIn", Long.class));
+            t.setOdOut(tuple.get("totalOut", Long.class));
+            t.setOdBuy(tuple.get("saleCount", Long.class));
+            t.setOdAdd(tuple.get("addCount", Long.class));
+
             if (statType==1){
                 t.setTicketFamily("全部票种/无");
+                t.setStationId(tuple.get("stationId",Integer.class));
+                t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
             }else if(statType==0){
+                t.setStationId(tuple.get("stationId",Integer.class));
+                t.setStationName(topologyService.getNodeText(t.getStationId().longValue()).getData());
+
                 Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
-                if (ticketFamily == null || ticketFamily.get(ticketFamilyType) == null){
-                    t.setTicketFamily("票种未知/" + ticketFamilyType);
+                String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
+                if (ticketFamilyName == null){
+                    t.setTicketFamily("票种未知/" + formatTicketFamilyType(ticketFamilyType));
                 }else {
-                    t.setTicketFamily(ticketFamily.get(ticketFamilyType) + "/" + ticketFamilyType);
+                    t.setTicketFamily(ticketFamilyName + "/" + formatTicketFamilyType(ticketFamilyType));
+                }
+            }else if(statType==3){
+                t.setTicketFamily("全部票种/无");
+                t.setLineId(tuple.get("lineId",Short.class));
+                t.setLineName(topologyService.getLineNode(t.getLineId().shortValue()).getData().getLineName()+"/"+t.getLineId());
+            }else if(statType==2){
+                t.setLineId(tuple.get("lineId",Short.class));
+                t.setLineName(topologyService.getLineNode(t.getLineId().shortValue()).getData().getLineName()+"/"+t.getLineId());
+
+                Integer ticketFamilyType = tuple.get("ticketFamily",Short.class).intValue();
+                String ticketFamilyName = ticketFamilyMap.get(ticketFamilyType);
+                if (ticketFamilyName == null){
+                    t.setTicketFamily("票种未知/" + formatTicketFamilyType(ticketFamilyType));
+                }else {
+                    t.setTicketFamily(ticketFamilyName + "/" + formatTicketFamilyType(ticketFamilyType));
                 }
             }
             return t;
         });
     }
 
+    @Override
+    public PageList getShareODSerchResult(TimeShareCondition condition) {
+        Integer intervalCount = condition.getIntervalCount();
+        Integer nodeId = condition.getNodeId();
+        Short ticketType = condition.getTicketType();
+        Date date = condition.getDate();
+        String time = condition.getTime();
+        List<Integer> timeInterval = getTimeInterval(time);
+        Integer startTimeIndex = timeInterval.get(0);
+        Integer endTimeIndex = timeInterval.get(1);
+
+        StringBuilder sql = new StringBuilder("select ");
+        StringBuilder timeSql = new StringBuilder("TO_CHAR(to_date(TO_CHAR(t.REF_DATE_TIME, 'yyyy-mm-dd hh24') || ':' || (to_number(TO_CHAR(t.REF_DATE_TIME, 'mi')) - mod(to_number(TO_CHAR(t.REF_DATE_TIME, 'mi')), " +
+                + intervalCount + ")) || ':' || '00','yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')");
+
+        sql.append(timeSql);
+        sql.append("  AS TIME, SUM(t.TOTAL_IN) AS TOTAL_IN, SUM(t.TOTAL_OUT) AS TOTAL_OUT, SUM(t.SALE_COUNT) AS SALE_COUNT, SUM(t.ADD_COUNT) AS ADD_COUNT " +
+                " FROM TMO_OD_FLOW_STATS t WHERE 1=1");
+
+        if (nodeId != null && nodeId != 4) {
+            sql.append(" and t.station_id = " + nodeId);
+        }
+        if (ticketType != null) {
+            sql.append(" and t.ticket_family = " + ticketType);
+        }
+        if (date != null) {
+            sql.append(" and t.gathering_date = TO_DATE('"+new java.sql.Date(date.getTime())+"','YY-MM-DD')");
+        }
+        if (startTimeIndex != null) {
+            sql.append(" and t.time_interval_id >= " + startTimeIndex);
+        }
+        if (endTimeIndex != null) {
+            sql.append(" and t.time_interval_id <= " + endTimeIndex);
+        }
+
+        sql.append(" group by ");
+        sql.append(timeSql);
+
+        return jdbcDao.queryByPageForOracle(sql.toString(), null, condition.getPageNumber(), condition.getPageSize(), null);
+    }
+
+    @Override
+    public PageList getTicketCompareResult(TicketCompareCondition condition) {
+
+        Date startTime = condition.getStartTime();
+        Date endTime = condition.getEndTime();
+        List<Integer> stations = condition.getStations();
+        Integer timeInterval = 5;
+        int beginInterval = DateTimeUtil.convertTimeToIndex(startTime, timeInterval);
+        int endInterval = DateTimeUtil.convertTimeToIndex(endTime, timeInterval);
+        boolean sameDate = sameDate(startTime, endTime);
+
+        StringBuilder sql = new StringBuilder("select t.ticket_family AS TICKETFAMILY ,sum(t.total_in) AS TOTAL_IN ,sum(t.total_out) " +
+                "AS TOTAL_OUT ,sum(t.sale_count) AS SALE_COUNT ,sum(t.add_count) AS ADD_COUNT  from tmo_od_flow_stats t where 1= 1 ");
+
+        String startDate = DateTimeUtil.formatDateToString(startTime, "yyyy-MM-dd");
+        String endDate = DateTimeUtil.formatDateToString(endTime, "yyyy-MM-dd");
+        if (sameDate) {
+            sql.append(" and (t.gathering_date =TO_DATE('"+ startDate +"','YY-MM-DD')" );
+            sql.append( " and t.time_interval_id >=" +beginInterval );
+            sql.append(" and t.time_interval_id< "+endInterval+") ");
+        } else {
+            sql.append(" and ((t.gathering_date = TO_DATE('"+ startDate +"','YY-MM-DD')"+
+                    " and t.time_interval_id >="+beginInterval);
+            sql.append(") or (t.gathering_date>TO_DATE('"+ startDate +"','YY-MM-DD')"+
+                    " and t.gathering_date<TO_DATE('"+ endDate +"','YY-MM-DD')");
+            sql.append(") or (t.gathering_date =TO_DATE('"+ endDate +"','YY-MM-DD')"+
+                    " and t.time_interval_id<"+endInterval+" ))");
+        }
+        sql.append(" and t.station_id in("+listToString(stations.toArray())+") ");
+        sql.append(" group by t.ticket_family ");
+
+        System.out.println(sql.toString());
+        return jdbcDao.queryByPageForOracle(sql.toString(), null, 0, 100, null);
+    }
+
+    private String listToString(Object[] objects){
+        StringBuilder builder = new StringBuilder();
+        for (Object object:objects){
+            builder.append(object+",");
+        }
+        builder.append("-1");
+        return builder.toString();
+    }
+    private boolean sameDate(Date beforeDate, Date endDate) {
+        String beforeDateString = DateTimeUtil.formatDateToString(beforeDate, "yyyy-MM-dd");
+        String endDateString = DateTimeUtil.formatDateToString(endDate, "yyyy-MM-dd");
+        if (beforeDateString.equals(endDateString)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 格式化票种编号
+     * @param ticketFamilyType 票种编号
+     * @return 名称
+     */
+    private String formatTicketFamilyType(Integer ticketFamilyType){
+        return String.format("%02x",ticketFamilyType).toUpperCase();
+    }
+
     /**
      * 梳理信息
      *
      * @param data       查找的数据
-     * @param stationIds 站点集合
+     * @param lines 线路集合
      * @return 有序数据
      */
-    private Map<Integer, List<Tuple>> sortData(List<Tuple> data, List<Integer> stationIds) {
-        Map<Integer, List<Tuple>> dataMap = new HashMap<>(stationIds.size());
-        stationIds.forEach(id->dataMap.put(id,new ArrayList<>()));
+    private Map<Short, List<Tuple>> sortData(List<Tuple> data, List<Short> lines) {
+        Map<Short, List<Tuple>> dataMap = new HashMap<>(lines.size());
+        lines.forEach(id->dataMap.put(id,new ArrayList<>()));
         // 将数据按照各自的车站分配到数组中
         for (Tuple odData : data) {
-            Integer stationId = odData.get("stationId",Integer.class);
+            Short stationId = odData.get("lineId",Short.class);
             if (dataMap.containsKey(stationId)){
                 dataMap.get(stationId).add(odData);
             }
@@ -239,6 +373,17 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
         return timeIntervalIds;
     }
 
+    private String getLineNameById(Short lineId){
+        if(lineId==null){
+            return "未知线路";
+        }
+        TmetroLine line = lineDao.findByLineId(lineId);
+        if(line == null){
+            return "未知线路";
+        }
+        return line.getLineName();
+    }
+
     @Autowired
     public void setPassengerDao(PassengerDao passengerDao) {
         this.passengerDao = passengerDao;
@@ -247,5 +392,13 @@ public class PassengerFlowServiceImpl implements PassengerFlowService {
     @Autowired
     public void setTopologyService(TopologyService topologyService) {
         this.topologyService = topologyService;
+    }
+    @Autowired
+    public void setLineDao(TmetroLineDao lineDao) {
+        this.lineDao = lineDao;
+    }
+    @Autowired
+    public void setJdbcDao(JdbcTemplateDao jdbcDao) {
+        this.jdbcDao = jdbcDao;
     }
 }

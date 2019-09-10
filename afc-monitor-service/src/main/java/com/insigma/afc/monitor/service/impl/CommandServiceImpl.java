@@ -292,6 +292,11 @@ public class CommandServiceImpl implements CommandService {
         return Result.success(commandResults);
     }
 
+    @Override
+    public Result<List<CommandResultDTO>> sendQueryDeviceCommand(List<Long> deviceIds) {
+        return null;
+    }
+
     /**
      * 从传过来的节点id中获取目标节点
      *

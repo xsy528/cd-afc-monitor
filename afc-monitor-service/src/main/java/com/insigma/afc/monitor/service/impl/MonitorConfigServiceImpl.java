@@ -7,6 +7,7 @@ import com.insigma.afc.monitor.constant.SystemConfigKey;
 import com.insigma.afc.monitor.dao.TsyConfigDao;
 import com.insigma.afc.monitor.exception.ErrorCode;
 import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
+import com.insigma.afc.monitor.model.dto.PassengerFlowConfigDTO;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.afc.monitor.model.entity.TsyConfig;
 import com.insigma.afc.monitor.service.MonitorConfigService;
@@ -134,6 +135,29 @@ public class MonitorConfigServiceImpl implements MonitorConfigService {
         logService.log(LogDefines.NORMAL_LOG,"修改断面客流监控配置",SecurityUtils.getUserId(),
                 SecurityUtils.getIp(),LogModuleCode.MONITOR_SECTION_CONFIG);
         return Result.success(monitorConfigDTO);
+    }
+
+    @Override
+    public Result<PassengerFlowConfigDTO> getPassengerFlowMonitorConfig() {
+        List<TsyConfig> tsyConfigs = tsyConfigDao.findAllById(Arrays.asList(
+                SystemConfigKey.PASSENGER_OD_REFRESH_INTERVAL));
+
+        Integer refresh = 5;
+        for (TsyConfig tsyConfig:tsyConfigs){
+            refresh = Integer.valueOf(tsyConfig.getConfigValue());
+        }
+        return Result.success(new PassengerFlowConfigDTO(refresh));
+    }
+
+    @Override
+    public Result<PassengerFlowConfigDTO> save(PassengerFlowConfigDTO configDTO) {
+        Integer refresh = configDTO.getRefresh();
+        List<TsyConfig> tsyConfigList = new ArrayList<>();
+        tsyConfigList.add(new TsyConfig(SystemConfigKey.PASSENGER_OD_REFRESH_INTERVAL,String.valueOf(refresh)));
+        tsyConfigDao.saveAll(tsyConfigList);
+        logService.log(LogDefines.NORMAL_LOG,"修改客流监控配置",SecurityUtils.getUserId(),
+                SecurityUtils.getIp(),LogModuleCode.MONITOR_SECTION_CONFIG);
+        return Result.success(configDTO);
     }
 
 }

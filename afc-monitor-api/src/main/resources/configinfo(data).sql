@@ -1,0 +1,1 @@
+insert into tsy_config (CONFIG_KEY, CONFIG_VALUE, REMARK)values ('PASSENGER_OD_REFRESH_INTERVAL', '30', '客流监控刷新配置（秒/次）');

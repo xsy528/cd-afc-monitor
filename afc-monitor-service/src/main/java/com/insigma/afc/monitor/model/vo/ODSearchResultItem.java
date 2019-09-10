@@ -16,6 +16,14 @@ import java.io.Serializable;
 public class ODSearchResultItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("线路ID")
+    @JsonProperty("line_id")
+    private Short lineId;
+
+    @ApiModelProperty("线路名称")
+    @JsonProperty("line_name")
+    private String lineName;
+
     @ApiModelProperty("车站ID")
     @JsonProperty("station_id")
     private Integer stationId;
@@ -43,6 +51,22 @@ public class ODSearchResultItem implements Serializable {
     @ApiModelProperty("充值客流")
     @JsonProperty("od_add")
     private Long odAdd;
+
+    public Short getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(Short lineId) {
+        this.lineId = lineId;
+    }
+
+    public String getLineName() {
+        return lineName;
+    }
+
+    public void setLineName(String lineName) {
+        this.lineName = lineName;
+    }
 
     public Integer getStationId() {
         return stationId;

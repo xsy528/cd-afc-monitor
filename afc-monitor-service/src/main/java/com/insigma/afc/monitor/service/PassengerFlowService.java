@@ -1,10 +1,9 @@
 package com.insigma.afc.monitor.service;
 
+import com.insigma.afc.monitor.dao.util.PageList;
 import com.insigma.afc.monitor.model.dto.BarPieChartDTO;
 import com.insigma.afc.monitor.model.dto.SeriesChartDTO;
-import com.insigma.afc.monitor.model.dto.condition.BarAndPieCondition;
-import com.insigma.afc.monitor.model.dto.condition.PassengerCondition;
-import com.insigma.afc.monitor.model.dto.condition.SeriesCondition;
+import com.insigma.afc.monitor.model.dto.condition.*;
 import com.insigma.afc.monitor.model.vo.ODSearchResultItem;
 import org.springframework.data.domain.Page;
 
@@ -39,5 +38,20 @@ public interface PassengerFlowService {
      * @return 分页数据
      */
     Page<ODSearchResultItem> getODSerchResult(PassengerCondition condition);
+
+    /**
+     * 分时查询
+     * @param condition 查询条件
+     * @return 分页数据
+     */
+    PageList getShareODSerchResult(TimeShareCondition condition);
+
+    /**
+     * 票卡对比
+     * @param condition
+     * @return
+     */
+    PageList getTicketCompareResult(TicketCompareCondition condition);
+
 
 }

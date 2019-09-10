@@ -1,6 +1,7 @@
 package com.insigma.afc.monitor.service;
 
 import com.insigma.afc.monitor.model.dto.NodeStatusMonitorConfigDTO;
+import com.insigma.afc.monitor.model.dto.PassengerFlowConfigDTO;
 import com.insigma.afc.monitor.model.dto.SectionFlowMonitorConfigDTO;
 import com.insigma.commons.model.dto.Result;
 
@@ -36,4 +37,18 @@ public interface MonitorConfigService {
      * @return 配置信息
      */
     Result<SectionFlowMonitorConfigDTO> save(SectionFlowMonitorConfigDTO monitorConfigDTO);
+
+    /**
+     * 获取客流监控配置
+     * @return 配置信息
+     */
+    Result<PassengerFlowConfigDTO> getPassengerFlowMonitorConfig();
+
+    /**
+     * 保存客流监控配置
+     * @param configDTO 配置信息
+     * @return 配置信息
+     */
+    Result<PassengerFlowConfigDTO> save(PassengerFlowConfigDTO
+                                                      configDTO);
 }

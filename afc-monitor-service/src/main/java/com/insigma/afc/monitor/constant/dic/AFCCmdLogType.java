@@ -23,16 +23,16 @@ public class AFCCmdLogType extends Definition {
 		return instance;
 	}
 
-	@DicItem(name = "模式日志")
+	@DicItem(name = "模式日志",index = 0)
 	public static Integer LOG_MODE = 0;
 
-	@DicItem(name = "设备命令日志")
+	@DicItem(name = "设备命令日志",index = 1)
 	public static Integer LOG_DEVICE_CMD = 1;
 
-	@DicItem(name = "时钟同步命令日志")
+	@DicItem(name = "时钟同步命令日志",index = 2)
 	public static Integer LOG_TIME_SYNC = 2;
 
-	@DicItem(name = "其他命令日志")
+	@DicItem(name = "其他命令日志",index = 3)
 	public static Integer LOG_OTHER = 3;
 
 }

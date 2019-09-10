@@ -56,10 +56,36 @@ public class NodeItem implements Serializable {
     @ApiModelProperty("节点在父节点底图的文字位置")
     private TextLocation text;
 
+    @JsonView(monitor.class)
+    @ApiModelProperty("节点图片在线网底图的位置")
+    @JsonProperty("net_icon")
+    private ImageLocation netIcon;
+
+    @JsonView(monitor.class)
+    @ApiModelProperty("节点文字在线网底图的位置")
+    @JsonProperty("net_text")
+    private TextLocation netText;
+
     @JsonView(required.class)
     @ApiModelProperty("字节点")
     @JsonProperty("sub_items")
     private List<NodeItem> subItems;
+
+    public ImageLocation getNetIcon() {
+        return netIcon;
+    }
+
+    public void setNetIcon(ImageLocation netIcon) {
+        this.netIcon = netIcon;
+    }
+
+    public TextLocation getNetText() {
+        return netText;
+    }
+
+    public void setNetText(TextLocation netText) {
+        this.netText = netText;
+    }
 
     public Long getPid() {
         return pid;

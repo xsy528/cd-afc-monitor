@@ -1,44 +1,40 @@
-/*
- * 日期：2018年12月10日
- *
- * 版权所有：浙江浙大网新众合轨道交通工程有限公司
- */
-/*
-
- */
 package com.insigma.afc.monitor.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
 /**
- * Ticket:饼图柱状图数据模型
- *
- * @author xuzhemin
- * 2019/4/24 10:14
+ * @Author by Xinshao,
+ * @Email xingshaoya@unittec.com,
+ * @Time on 2019/8/30 16:32.
+ * @Ticket :
  */
-@ApiModel("饼图柱状图")
-public class BarPieChartDTO {
-    public BarPieChartDTO() {
+@ApiModel("票卡对比饼图柱状图")
+public class TicketComparePieDTO {
+
+    public TicketComparePieDTO() {
     }
 
-    public BarPieChartDTO(String name, List<Long> values) {
+    public TicketComparePieDTO(List<String> name, List<Long> values) {
         this.name = name;
         this.values = values;
     }
 
     @ApiModelProperty("名称")
-    private String name;
+    @JsonProperty("name")
+    private List<String> name;
     @ApiModelProperty("记录所有项值")
+    @JsonProperty("values")
     private List<Long> values;
 
-    public String getName() {
+    public List<String> getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(List<String> name) {
         this.name = name;
     }
 

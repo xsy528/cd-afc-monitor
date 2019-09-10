@@ -313,9 +313,15 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 break;
             }
         }
-        Boolean itemActivity = tmoItemStatus.getItemActivity();
-        if (itemActivity != null && itemActivity && onLine && isOnline) {
-            if (tmoItemStatus.getItemStatus() != null) {
+        Boolean notActive = tmoItemStatus.getItemActivity();
+        if (notActive != null&& onLine && isOnline) {
+            //暂停服务,并且查询包含了该状态
+            if (notActive){
+                if (statusLevel.contains(DeviceStatus.STOP_SERVICE)) {
+                    hasStatus = true;
+                }
+                temp.setStatus(DeviceStatus.STOP_SERVICE);
+            }else if (tmoItemStatus.getItemStatus() != null) {
                 for (Short status : statusLevel) {
                     if (tmoItemStatus.getItemStatus().equals(status)) {
                         hasStatus = true;
@@ -332,10 +338,7 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
 
         temp.setNodeId(tmoItemStatus.getNodeId());
         temp.setUpdateTime(tmoItemStatus.getUpdateTime());
-        temp.setOnline(false);
-        if (!temp.getStatus().equals(DeviceStatus.OFF_LINE)) {
-            temp.setOnline(tmoItemStatus.getItemActivity());
-        }
+        temp.setOnline(tmoItemStatus.getItemActivity());
         long total = 1;
         normalRate = (int) (normal * 100.0 / total + 0.5);
         warningRate = (int) (warning * 100.0 / total + 0.5);
@@ -479,10 +482,10 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 equViewItem.setNodeId(metroDevice.getDeviceId());
                 if (deviceStatusMaps.containsKey(metroDevice.id()) && onLine) {
                     TmoItemStatus deviceStatus = deviceStatusMaps.get(metroDevice.id());
-                    equViewItem.setOnline(deviceStatus.getItemActivity());
+                    Boolean notActive = deviceStatus.getItemActivity();
+                    equViewItem.setOnline(notActive);
                     //启用设备才纳入报警，警告的设备数的计算
-                    if (null != deviceStatus.getItemActivity() && deviceStatus.getItemActivity()
-                            && null != deviceStatus.getItemStatus()) {
+                    if (null != notActive && !notActive && null != deviceStatus.getItemStatus()) {
                         equViewItem.setStatus(deviceStatus.getItemStatus());
                         if (deviceStatus.getItemStatus().equals(DeviceStatus.NORMAL)
                                 && metroDevice.getStatus() == 0) {
@@ -493,10 +496,11 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                         } else if (deviceStatus.getItemStatus().equals(DeviceStatus.ALARM)
                                 && metroDevice.getStatus() == 0) {
                             ++alarmEvent;
-                        } else if (deviceStatus.getItemStatus().equals(DeviceStatus.STOP_SERVICE)
-                                && metroDevice.getStatus() == 0) {
-                            ++alarmEvent;
                         }
+//                        else if (deviceStatus.getItemStatus().equals(DeviceStatus.STOP_SERVICE)
+//                                && metroDevice.getStatus() == 0) {
+//                            ++alarmEvent;
+//                        }
                     } else if (metroDevice.getStatus() == 0) {
                         ++alarmEvent;
                     }

@@ -20,35 +20,35 @@ public interface PassengerRepository {
      * @param gatheringDate 运营日
      * @param startTimeInterval 开始时间段
      * @param endTimeInterval 结束时间段
-     * @param stationIds 车站id
+     * @param lines 线路id
      * @param ticketFamily 票种类行
      * @return 数据
      */
     List<Tuple> findAllBarAndPie(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval,
-                                 List<Integer> stationIds, Short ticketFamily);
+                                 List<Short> lines, Short ticketFamily);
 
     /**
      * 获取曲线图数据
      * @param gatheringDate 运营日
      * @param startTimeInterval 开始时间段
      * @param endTimeInterval 结束时间段
-     * @param stationIds 车站id
+     * @param lines 线路id
      * @param ticketFamily 票种类行
      * @return 数据
      */
     List<Tuple> findAllSeries(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval,
-                                          List<Integer> stationIds, Short ticketFamily);
+                              List<Short> lines, Short ticketFamily);
 
     /**
      * 获取表格数据
      * @param gatheringDate 运营日
      * @param startTimeInterval 开始时间段
      * @param endTimeInterval 结束时间段
-     * @param stationIds 车站id
+     * @param stations 车站id
      * @param statType 分组类行
      * @param pageable 分页信息
      * @return 数据
      */
     Page<Tuple> findAll(Date gatheringDate, Integer startTimeInterval, Integer endTimeInterval,
-                        List<Integer> stationIds, Short statType, Pageable pageable);
+                        List<Short> lines,List<Integer> stations, Short statType, Pageable pageable);
 }

@@ -483,10 +483,10 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                 equViewItem.setNodeId(metroDevice.getDeviceId());
                 if (deviceStatusMaps.containsKey(metroDevice.id()) && onLine) {
                     TmoItemStatus deviceStatus = deviceStatusMaps.get(metroDevice.id());
-                    Boolean notActive = deviceStatus.getItemActivity();
-                    equViewItem.setOnline(notActive);
+                    Boolean active = deviceStatus.getItemActivity();
+                    equViewItem.setOnline(active);
                     //启用设备才纳入报警，警告的设备数的计算
-                    if (null != notActive && !notActive && null != deviceStatus.getItemStatus()) {
+                    if (null != active && !active && null != deviceStatus.getItemStatus()) {
                         equViewItem.setStatus(deviceStatus.getItemStatus());
                         if (deviceStatus.getItemStatus().equals(DeviceStatus.NORMAL)
                                 && metroDevice.getStatus() == 0) {

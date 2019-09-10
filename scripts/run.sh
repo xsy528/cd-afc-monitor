@@ -59,8 +59,8 @@ start(){
     command="nohup java
     -Djava.rmi.server.hostname=192.168.178.184
     -Dcom.sun.management.jmxremote
-    -Dcom.sun.management.jmxremote.port=18082
-    -Dcom.sun.management.jmxremote.rmi.port=18082
+    -Dcom.sun.management.jmxremote.port=18083
+    -Dcom.sun.management.jmxremote.rmi.port=18083
     -Dcom.sun.management.jmxremote.ssl=false
     -Dcom.sun.management.jmxremote.authenticate=false
     -Xms50M -Xmx1000M

@@ -2,7 +2,7 @@
 
 #项目名称
 APP_NAME="监控服务"
-
+JAR_NAME="afc-monitor*"
 #命令使用说明，给出提示
 usage() {
     echo "Usage: sh run.sh [start|stop|restart|status]"
@@ -11,7 +11,8 @@ usage() {
 
 #检查程序是否在运行
 is_exist(){
-  if [[ ! -f "application.pid" ]]; then
+  get_pid
+  if [[ -z "${pid}" ]]; then
    return 1
   else
    return 0
@@ -20,7 +21,7 @@ is_exist(){
 
 #获取pid
 get_pid(){
-  pid=`cat application.pid`
+  pid=`ps -ef|grep ${JAR_NAME}|grep -v grep|awk '{print $2}'`
 }
 
 #打印pid
@@ -55,7 +56,14 @@ start(){
     print_pid
   else
     echo "开始启动${APP_NAME}"
-    command="nohup java -Xms50M -Xmx1000M 
+    command="nohup java
+    -Djava.rmi.server.hostname=192.168.178.184
+    -Dcom.sun.management.jmxremote
+    -Dcom.sun.management.jmxremote.port=18083
+    -Dcom.sun.management.jmxremote.rmi.port=18083
+    -Dcom.sun.management.jmxremote.ssl=false
+    -Dcom.sun.management.jmxremote.authenticate=false
+    -Xms50M -Xmx1000M
     -XX:+UseConcMarkSweepGC 
     -XX:+UseParNewGC 
     -XX:+HeapDumpOnOutOfMemoryError 

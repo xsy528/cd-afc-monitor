@@ -21,7 +21,7 @@ is_exist(){
 
 #获取pid
 get_pid(){
-  pid=`ps -ef|grep ${JAR_NAME}|grep -v grep|awk '{print $2}'`
+  pid=`ps -ef|grep "${JAR_NAME}"|grep -v grep|awk '{print $2}'`
 }
 
 #打印pid

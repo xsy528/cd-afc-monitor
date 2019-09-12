@@ -428,13 +428,13 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
     public void getStationStatusView(MetroStation station, Map<Integer, TmoItemStatus> stationStatusMaps,
                                      Map<Long, TmoItemStatus> deviceStatusMaps,Map<Integer,List<MetroDevice>> deviceMap,
                                      boolean onLine, Integer alarmNum, Integer warningNum,
-                                     List<StationStatustViewItem> result, List<Integer> stationIDs) {
+                                     List<StationStatustViewItem> result, List<Integer> stationIds) {
 
         Integer stationId = station.getStationId();
         boolean isNeed = true;
-        if (stationIDs != null) {
+        if (stationIds != null) {
             isNeed = false;
-            for (Integer sid : stationIDs) {
+            for (Integer sid : stationIds) {
                 if (sid.equals(stationId)) {
                     isNeed = true;
                     break;
@@ -477,35 +477,54 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         List<MetroDevice> metroDevices = deviceMap.get(stationId);
         if (metroDevices!=null) {
             for (MetroDevice metroDevice : deviceMap.get(stationId)) {
+
+                //设备未启用，跳过
+                if (metroDevice.getStatus()!=0){
+                    continue;
+                }
+
                 EquStatusViewItem equViewItem = new EquStatusViewItem();
                 equViewItem.setLineId(lineId);
                 equViewItem.setStationId(stationId);
                 equViewItem.setNodeId(metroDevice.getDeviceId());
-                if (deviceStatusMaps.containsKey(metroDevice.id()) && onLine) {
+
+                if (deviceStatusMaps.containsKey(metroDevice.getDeviceId()) && onLine) {
                     TmoItemStatus deviceStatus = deviceStatusMaps.get(metroDevice.id());
                     Boolean active = deviceStatus.getItemActivity();
                     equViewItem.setOnline(active);
-                    //启用设备才纳入报警，警告的设备数的计算
-                    if (null != active && active && null != deviceStatus.getItemStatus()) {
-                        equViewItem.setStatus(deviceStatus.getItemStatus());
-                        if (deviceStatus.getItemStatus().equals(DeviceStatus.NORMAL)
-                                && metroDevice.getStatus() == 0) {
-                            ++normalEvent;
-                        } else if (deviceStatus.getItemStatus().equals(DeviceStatus.WARNING)
-                                && metroDevice.getStatus() == 0) {
-                            ++warnEvent;
-                        } else if (deviceStatus.getItemStatus().equals(DeviceStatus.ALARM)
-                                && metroDevice.getStatus() == 0) {
+                    //正常服务
+                    if(active!=null&&active){
+                        Short itemStatus = deviceStatus.getItemStatus();
+                        if(itemStatus!=null){
+                            if(DeviceStatus.NORMAL.equals(itemStatus)){
+                                ++normalEvent;
+                            }else if(DeviceStatus.WARNING.equals(itemStatus)){
+                                ++warnEvent;
+                            }else if(DeviceStatus.OFF_LINE.equals(itemStatus)){
+                                ++alarmEvent;
+                            }
+                        }else{
+                            //无状态属于报警
                             ++alarmEvent;
                         }
-//                        else if (deviceStatus.getItemStatus().equals(DeviceStatus.STOP_SERVICE)
-//                                && metroDevice.getStatus() == 0) {
-//                            ++alarmEvent;
-//                        }
-                    } else if (metroDevice.getStatus() == 0) {
-                        ++alarmEvent;
+                    }else{
+                        //暂停服务
+                        Short itemStatus = deviceStatus.getItemStatus();
+                        if(itemStatus!=null){
+                            if(DeviceStatus.OFF_LINE.equals(itemStatus)){
+                                //离线报警
+                                ++alarmEvent;
+                            }else{
+                                //除了离线都是警告
+                                ++warnEvent;
+                            }
+                        }else{
+                            //无状态报警
+                            ++alarmEvent;
+                        }
                     }
-                } else if (metroDevice.getStatus() == 0) {
+                } else {
+                    //数据库无状态记录或者车站离线
                     ++alarmEvent;
                 }
             }

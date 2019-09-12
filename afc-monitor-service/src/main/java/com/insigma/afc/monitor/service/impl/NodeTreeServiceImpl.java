@@ -334,25 +334,35 @@ public class NodeTreeServiceImpl implements NodeTreeService {
     /**
      * 获取设备状态
      *
-     * @param status   状态
+     * @param status  设备整体状态
+     * @param active 设备运行状态
      * @return 状态
      */
     private int getDeviceStatus(int status,boolean active) {
+        //暂停服务
         if (!active){
-            //暂停服务
-            return 4;
-        }else if (status == DeviceStatus.NORMAL) {
-            // 正常
-            return 0;
-        } else if (status == DeviceStatus.WARNING) {
-            // 警告
-            return 1;
-        } else if (status == DeviceStatus.ALARM) {
-            // 报警
-            return 2;
-        } else if (status == DeviceStatus.OFF_LINE) {
-            // 离线
-            return 3;
+            if (DeviceStatus.OFF_LINE==status){
+                //离线
+                return 3;
+            } else {
+                //暂停服务
+                return 4;
+            }
+        }else{
+        //正常服务
+            if (status == DeviceStatus.NORMAL) {
+                // 正常
+                return 0;
+            } else if (status == DeviceStatus.WARNING) {
+                // 警告
+                return 1;
+            } else if (status == DeviceStatus.ALARM) {
+                // 报警
+                return 2;
+            } else if (status == DeviceStatus.OFF_LINE) {
+                // 离线
+                return 3;
+            }
         }
         return DEVICE_OFFLINE;
     }

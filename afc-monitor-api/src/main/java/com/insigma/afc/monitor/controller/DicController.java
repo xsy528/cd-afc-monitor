@@ -80,16 +80,16 @@ public class DicController {
     @ApiOperation("获取票种类型列表")
     @PostMapping("/ticketTypeList")
     public Result getTicketTypeList(){
-        List<Map> lists = new ArrayList<>();
-        String[] nameList = CDTicketFamily.getInstance().getNameList();
-        int index = 0;
-        Map<String, DicitemEntry> dicItecEntryMap = CDTicketFamily.getInstance().getDicItecEntryMap();
-        for (DicitemEntry v : dicItecEntryMap.values()) {
-            DicItem dicItem = v.dicitem;
-            lists.add(getMap(Integer.valueOf(dicItem.desc() + String.format("%02d", v.value)),nameList[index]));
-            index++;
-        }
-        return Result.success(lists);
+//        List<Map> lists = new ArrayList<>();
+//        String[] nameList = CDTicketFamily.getInstance().getNameList();
+//        int index = 0;
+//        Map<String, DicitemEntry> dicItecEntryMap = CDTicketFamily.getInstance().getDicItecEntryMap();
+//        for (DicitemEntry v : dicItecEntryMap.values()) {
+//            DicItem dicItem = v.dicitem;
+//            lists.add(getMap(Integer.valueOf(v.value+""),nameList[index]));
+//            index++;
+//        }
+        return Result.success(CDTicketFamily.getInstance().getByGroup(""));
     }
 
     @ApiOperation("获取交易类型列表")

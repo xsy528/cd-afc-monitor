@@ -49,17 +49,17 @@
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-service</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-api</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.insigma.product</groupId>
                 <artifactId>afc-monitor-rmi</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

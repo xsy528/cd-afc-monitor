@@ -30,8 +30,8 @@ public class StationServiceImpl implements StationService {
 
         Map<Integer, String> data = new HashMap<>();
 
-        data.put(4,"成都"+lineId+"号线");
-
+        data.put(4,"MLC-00");
+//"成都"+lineId+"号线"
         List<Map<String, Object>> maps = templateDao.queryForMaps(sql, null);
 
         for(Map<String, Object> map:maps){

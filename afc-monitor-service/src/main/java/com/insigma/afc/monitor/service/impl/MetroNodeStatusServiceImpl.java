@@ -317,20 +317,29 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
         if (active != null&& onLine && isOnline) {
             //暂停服务,并且查询包含了该状态
             if (!active){
-                if (statusLevel.contains(DeviceStatus.STOP_SERVICE)) {
-                    hasStatus = true;
-                }
-                temp.setStatus(DeviceStatus.STOP_SERVICE);
-            }else if (tmoItemStatus.getItemStatus() != null) {
-                for (Short status : statusLevel) {
-                    if (tmoItemStatus.getItemStatus().equals(status)) {
+                //离线
+                if(DeviceStatus.OFF_LINE.equals(tmoItemStatus.getItemStatus())){
+                    temp.setStatus(DeviceStatus.OFF_LINE);
+                }else {
+                    if (statusLevel.contains(DeviceStatus.STOP_SERVICE)) {
                         hasStatus = true;
-                        break;
                     }
+                    temp.setStatus(DeviceStatus.STOP_SERVICE);
                 }
-                temp.setStatus(tmoItemStatus.getItemStatus());
-            } else {
-                temp.setStatus(DeviceStatus.OFF_LINE);
+            }else {
+                //正常服务
+                if (tmoItemStatus.getItemStatus() != null) {
+                    for (Short status : statusLevel) {
+                        if (tmoItemStatus.getItemStatus().equals(status)) {
+                            hasStatus = true;
+                            break;
+                        }
+                    }
+                    temp.setStatus(tmoItemStatus.getItemStatus());
+                } else {
+                    //无状态，视为离线
+                    temp.setStatus(DeviceStatus.OFF_LINE);
+                }
             }
         } else {
             temp.setStatus(DeviceStatus.OFF_LINE);

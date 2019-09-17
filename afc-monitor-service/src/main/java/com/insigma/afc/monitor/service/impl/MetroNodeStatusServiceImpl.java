@@ -506,11 +506,13 @@ public class MetroNodeStatusServiceImpl implements IMetroNodeStatusService {
                         Short itemStatus = deviceStatus.getItemStatus();
                         if(itemStatus!=null){
                             if(DeviceStatus.NORMAL.equals(itemStatus)){
-                                ++normalEvent;
+                                ++normalEvent;//正常
                             }else if(DeviceStatus.WARNING.equals(itemStatus)){
-                                ++warnEvent;
+                                ++warnEvent;//警告
+                            }else if(DeviceStatus.ALARM.equals(itemStatus)){
+                                ++alarmEvent;//报警
                             }else if(DeviceStatus.OFF_LINE.equals(itemStatus)){
-                                ++alarmEvent;
+                                ++alarmEvent;//离线
                             }
                         }else{
                             //无状态属于报警

@@ -8,8 +8,8 @@ public interface TicketFamily_t {
 	public final static int TicketFamily_SJTUL = 0x01;
 	//日期类票（UL）;
 	public final static int TicketFamily_SJTULRQ = 0x02;
-	//计程票;
-	public final static int TicketFamily_JCPCHENGCPU = 0x03;
+	//员工票;
+	public final static int TicketFamily_YGPCHICPU = 0x03;
 	//计次票;
 	public final static int TicketFamily_JCPCHICPU = 0x04;
 	//计时票;
@@ -24,4 +24,6 @@ public interface TicketFamily_t {
 	public final static int TicketFamily_QTIC = 0x09;
 	//银联卡;
 	public final static int TicketFamily_BCIC = 0x0A;
+	//计程票;
+	public final static int TicketFamily_JCPCHENGCPU = 0x0B;
 }

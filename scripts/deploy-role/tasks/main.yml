@@ -1,0 +1,17 @@
+---
+- name: clean
+  shell: rm -fr *.jar
+  args:
+    chdir: "{{APP_HOME}}/{{APP_NAME}}"
+    warn: no
+#传输安装包，解压
+- name: deploy
+  unarchive:
+    src: "{{APP_NAME}}-{{VERSION}}.tar.gz"
+    dest: "{{APP_HOME}}"
+#修改启动脚本
+- name: config run.sh
+  template:
+    src: run.sh.j2
+    dest: "{{APP_HOME}}/{{APP_NAME}}/run.sh"
+    mode: u=rwx,g=rw,o=rw

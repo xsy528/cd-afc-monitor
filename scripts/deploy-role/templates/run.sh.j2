@@ -57,23 +57,23 @@ start(){
   else
     echo "开始启动${APP_NAME}"
     command="nohup java
-    -Djava.rmi.server.hostname=192.168.178.184
+    -Djava.rmi.server.hostname={{ansible_host}}
     -Dcom.sun.management.jmxremote
-    -Dcom.sun.management.jmxremote.port=18083
-    -Dcom.sun.management.jmxremote.rmi.port=18083
+    -Dcom.sun.management.jmxremote.port={{JMX_PORT}}
+    -Dcom.sun.management.jmxremote.rmi.port={{JMX_PORT}}
     -Dcom.sun.management.jmxremote.ssl=false
     -Dcom.sun.management.jmxremote.authenticate=false
     -Xms50M -Xmx1000M
-    -XX:+UseConcMarkSweepGC 
-    -XX:+UseParNewGC 
-    -XX:+HeapDumpOnOutOfMemoryError 
-    -XX:+PrintGCDateStamps 
-    -XX:+PrintGCDetails 
-    -XX:+UseGCLogFileRotation 
-    -XX:NumberOfGCLogFiles=10 
-    -XX:GCLogFileSize=10M 
-    -Xloggc:logs/gc.log 
-    -verbose:gc 
+    -XX:+UseConcMarkSweepGC
+    -XX:+UseParNewGC
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:+PrintGCDateStamps
+    -XX:+PrintGCDetails
+    -XX:+UseGCLogFileRotation
+    -XX:NumberOfGCLogFiles=10
+    -XX:GCLogFileSize=10M
+    -Xloggc:logs/gc.log
+    -verbose:gc
     -Dlogging.config=config/log4j2-spring.xml "
     if [[ -n "${profile}" ]];then
       command="${command} -Dspring.profiles.active=${profile}"

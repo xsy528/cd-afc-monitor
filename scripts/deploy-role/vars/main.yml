@@ -1,0 +1,5 @@
+---
+APP_HOME: /home/afc/APP
+APP_NAME: cd-afc-monitor
+PROFILE: pro
+JMX_PORT: 18083

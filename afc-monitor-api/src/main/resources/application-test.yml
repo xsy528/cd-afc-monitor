@@ -8,9 +8,9 @@ server:
   address: 192.168.178.183
   port: 8083
 #节点服务地址
-topologyServerUrl:  http://192.168.178.184:8082
+topologyServerUrl:  http://192.168.178.180:8082
 #ms地址
 rmiHostIpAddr: 192.168.178.182
 #权限服务地址
 security:
-  server:  http://192.168.178.184:8081
+  server:  http://192.168.178.180:8081
